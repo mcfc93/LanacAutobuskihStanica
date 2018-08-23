@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="org.unibl.etf.prijava.PrijavaController">
-	<!-- TODO Add Nodes -->
+<AnchorPane fx:id="anchorPane" prefHeight="130.0" prefWidth="180.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.prijava.PrijavaController">
+   <children>
+      <TextField fx:id="korisnickoImeTextField" layoutX="14.0" layoutY="14.0" promptText="Korisničko ime" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+      <PasswordField fx:id="lozinkaTextField" layoutX="14.0" layoutY="50.0" promptText="Lozinka" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+      <Button fx:id="prijavaButton" layoutX="112.0" layoutY="84.0" mnemonicParsing="false" onAction="#prijava" prefHeight="25.0" prefWidth="75.0" text="Prijava" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0" />
+   </children>
 </AnchorPane>

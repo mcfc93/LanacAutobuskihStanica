@@ -1,5 +1,7 @@
 package org.unibl.etf;
 	
+//import java.util.logging.Level;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -12,17 +14,19 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("prijava/Prijava.fxml"));
-			Scene scene = new Scene(root,400,400);
+			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
+			primaryStage.setTitle("Prijava");
+			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
+//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 	}
 	
 	public static void main(String[] args) {
 		launch(args);
-		System.out.println("A");
 	}
 }
