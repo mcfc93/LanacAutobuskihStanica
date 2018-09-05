@@ -3,6 +3,9 @@ package org.unibl.etf.prijava;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+
+import java.sql.CallableStatement;
+
 //import za BAZU
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -52,18 +55,30 @@ public class PrijavaController implements Initializable {
 	@FXML
     void prijava(ActionEvent event) {
 			//try-with-resources
-	        try (
+		Connection c = null;
+        CallableStatement s = null;
+        ResultSet r = null;
+	        /*try (
 	        		// 1.Get a connection to database
 	        		Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/bus?autoReconnect=true&useSSL=false","root","student");
 	        		// 2.Create a statement
-	        		Statement s = c.createStatement();
-	        		// 3.Execute a SQL query
-	        		ResultSet r = s.executeQuery("select KorisnickoIme, Lozinka from nalog");
-	        	) {
+	        		CallableStatement s = c.prepareCall("{call checkAuthentication(?,?)}")
+	        		
+	        	) {*/
 	            // 4.Process the result set
-	            while(r.next()) {
-	            	//System.out.println(r.getString("KorisnickoIme") + " " + r.getString("Lozinka"));
-	                if(r.getString("KorisnickoIme").equals(korisnickoImeTextField.getText()) && r.getString("Lozinka").equals(lozinkaTextField.getText())) {
+	        try {
+	        	// 1.Get a connection to database
+	        	c = DriverManager.getConnection("jdbc:mysql://localhost:3306/bus","root","student");
+        		// 2.Create a statement
+        		s = c.prepareCall("{call checkAuthentication(?,?)}");
+	        	s.setString(1,korisnickoImeTextField.getText());
+	        	s.setString(2,lozinkaTextField.getText());
+	        	// 3.Execute a SQL query
+	        	r = s.executeQuery();
+	        	if(r.next()) {
+	        	
+	        //r = s.executeQuery();
+	           if("Administrator".equals(r.getString("Tip"))){
 	                	try {
 	            			//																//org.unibl.etf.prijava.
 	            			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("SalterskiRadnikView.fxml"));
@@ -81,7 +96,7 @@ public class PrijavaController implements Initializable {
 	            			((Stage)anchorPane.getScene().getWindow()).close();
 	            			//((Stage)anchorPane.getScene().getWindow()).hide();
 	            			
-	            			break;
+	            			//break;
 	            			
 	            			//Modality.NONE, Modality.WINDOW_MODAL, Modality.APPLICATION_MODAL
 	            			//stage.initModality(Modality.APPLICATION_MODAL);
@@ -90,7 +105,7 @@ public class PrijavaController implements Initializable {
 	            			e.printStackTrace();
 	            //Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 	            		}
-	                }
+	           }
 	                else {
 	                	greskaLabel.setVisible(true);
 	                	korisnickoImeTextField.clear();
@@ -98,11 +113,17 @@ public class PrijavaController implements Initializable {
 	                	//korisnickoImeTextField.requestFocus();
 	                }
 	                    
-	            }
+	        	} 
+	        	else {
+                	greskaLabel.setVisible(true);
+                	korisnickoImeTextField.clear();
+                	lozinkaTextField.clear();
+                	//korisnickoImeTextField.requestFocus();
+                }
 	        }catch(SQLException e) {
 	        	e.printStackTrace();
 	        }
-	        /*finally {
+	        finally {
 	             if(r != null)
 	                try { r.close(); } catch (SQLException e) {}
 	             if( s != null)
@@ -110,7 +131,7 @@ public class PrijavaController implements Initializable {
 	             if(c != null)
 	                 try { c.close(); } catch (SQLException e) { e.printStackTrace(); }
 	         }
-	        */
+	        
 		/*try {
 			//																//org.unibl.etf.prijava.
 			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("SalterskiRadnikView.fxml"));
