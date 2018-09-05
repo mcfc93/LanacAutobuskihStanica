@@ -3,8 +3,6 @@ package org.unibl.etf.prijava;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javax.swing.JOptionPane;
-
 //import za BAZU
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,8 +19,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -36,38 +36,41 @@ public class PrijavaController implements Initializable {
 
     @FXML
     private PasswordField lozinkaTextField;
+    
+    @FXML
+    private Label greskaLabel;
 
     @FXML
     private Button prijavaButton;
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		
+		greskaLabel.setText("Korisničko ime ili lozinka pogrešni!");
+		greskaLabel.setVisible(false);
 	}
 	
 	@FXML
     void prijava(ActionEvent event) {
-		   	String ispis;
-			Connection c = null;
-	        Statement s = null;
-	        ResultSet r = null; 
-	        try{
-	            // 1.Get a connection to database
-	            c = DriverManager.getConnection("jdbc:mysql://localhost:3306/bus","root","student");
-	            // 2.Create a statement
-	            s = c.createStatement();
-	            // 3.Execute a sql query
-	            r = s.executeQuery("select Ime, lozinka from zaposleni");
-	            // 4.Process the result set 
-	            while(r.next()){
-	                if(r.getString("Ime").equals(korisnickoImeTextField.getText()) && r.getString("lozinka").equals(lozinkaTextField.getText())){
+			//try-with-resources
+	        try (
+	        		// 1.Get a connection to database
+	        		Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/bus?autoReconnect=true&useSSL=false","root","student");
+	        		// 2.Create a statement
+	        		Statement s = c.createStatement();
+	        		// 3.Execute a SQL query
+	        		ResultSet r = s.executeQuery("select KorisnickoIme, Lozinka from nalog");
+	        	) {
+	            // 4.Process the result set
+	            while(r.next()) {
+	            	//System.out.println(r.getString("KorisnickoIme") + " " + r.getString("Lozinka"));
+	                if(r.getString("KorisnickoIme").equals(korisnickoImeTextField.getText()) && r.getString("Lozinka").equals(lozinkaTextField.getText())) {
 	                	try {
 	            			//																//org.unibl.etf.prijava.
 	            			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("SalterskiRadnikView.fxml"));
 	            			Scene scene = new Scene(root);
 	            			Stage stage=new Stage();
 	            			stage.setScene(scene);
-	            			stage.setTitle("�alterski radnik");
+	            			stage.setTitle("Šalterski radnik");
 	            			stage.setResizable(false);
 	            			//primaryStage.initStyle(StageStyle.DECORATED);
 	            			//primaryStage.initStyle(StageStyle.UNDECORATED);    //brisanje _ [] X
@@ -75,7 +78,10 @@ public class PrijavaController implements Initializable {
 	            			//primaryStage.initStyle(StageStyle.UTILITY);
 	            			
 	            			stage.show();
+	            			((Stage)anchorPane.getScene().getWindow()).close();
+	            			//((Stage)anchorPane.getScene().getWindow()).hide();
 	            			
+	            			break;
 	            			
 	            			//Modality.NONE, Modality.WINDOW_MODAL, Modality.APPLICATION_MODAL
 	            			//stage.initModality(Modality.APPLICATION_MODAL);
@@ -85,12 +91,18 @@ public class PrijavaController implements Initializable {
 	            //Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 	            		}
 	                }
-	                else 
-	                   ispis = JOptionPane.showInputDialog("Pogrsno korisnicko ime ili lozinka! Pokusajte ponovo");
+	                else {
+	                	greskaLabel.setVisible(true);
+	                	korisnickoImeTextField.clear();
+	                	lozinkaTextField.clear();
+	                	//korisnickoImeTextField.requestFocus();
+	                }
 	                    
 	            }
-	        }catch(SQLException e) { e.printStackTrace(); }
-	        finally {
+	        }catch(SQLException e) {
+	        	e.printStackTrace();
+	        }
+	        /*finally {
 	             if(r != null)
 	                try { r.close(); } catch (SQLException e) {}
 	             if( s != null)
@@ -98,14 +110,14 @@ public class PrijavaController implements Initializable {
 	             if(c != null)
 	                 try { c.close(); } catch (SQLException e) { e.printStackTrace(); }
 	         }
-	        
+	        */
 		/*try {
 			//																//org.unibl.etf.prijava.
 			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("SalterskiRadnikView.fxml"));
 			Scene scene = new Scene(root);
 			Stage stage=new Stage();
 			stage.setScene(scene);
-			stage.setTitle("�alterski radnik");
+			stage.setTitle("Šalterski radnik");
 			stage.setResizable(false);
 			//primaryStage.initStyle(StageStyle.DECORATED);
 			//primaryStage.initStyle(StageStyle.UNDECORATED);    //brisanje _ [] X
@@ -183,15 +195,17 @@ public class PrijavaController implements Initializable {
 		
 		
 		
-		
-		((Stage)anchorPane.getScene().getWindow()).close();
+	
     }
 	
-	
+	@FXML
+	void sakrijLabelu(MouseEvent event) {
+		greskaLabel.setVisible(false);
+	}
 	
 	/*
 	 		Alert alert=new Alert(AlertType.ERROR);
-    		alert.setTitle("Gre�ka");
+    		alert.setTitle("Greška");
     		alert.setHeaderText(null);
     		alert.setContentText("Poruka.");
     		alert.showAndWait();
