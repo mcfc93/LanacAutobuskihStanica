@@ -1,12 +1,14 @@
 package org.unibl.etf;
 	
-//import java.util.logging.Level;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.fxml.FXMLLoader;
+
+import java.util.logging.Level;
+
+import org.unibl.etf.util.Util;
 
 
 public class Main extends Application {
@@ -21,8 +23,8 @@ public class Main extends Application {
 			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch(Exception e) {
-			e.printStackTrace();
-//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			//e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 	}
 	
