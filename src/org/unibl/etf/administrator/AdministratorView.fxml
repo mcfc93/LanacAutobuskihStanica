@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.prijava.AdministratorController">
+<AnchorPane fx:id="anchorPane" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.AdministratorController">
    <children>
       <Button fx:id="odjavaButton" layoutX="333.0" layoutY="50.0" mnemonicParsing="false" onAction="#odjava" text="Odjava" />
       <Label fx:id="informacijeLabel" layoutX="126.0" layoutY="6.0" text="Prijavljeni ste kao:" />

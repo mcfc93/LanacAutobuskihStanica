@@ -65,8 +65,7 @@ public class PrijavaController implements Initializable {
 			if(nalog.getZaposleni() instanceof Administrator) {
 				//administrator
     			try {
-    				//																//org.unibl.etf.prijava.
-    				Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("AdministratorView.fxml"));
+    				Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/AdministratorView.fxml"));
     				Scene scene = new Scene(root);
     				Stage stage=new Stage();
     				stage.setScene(scene);
@@ -89,8 +88,7 @@ public class PrijavaController implements Initializable {
 			} else if(nalog.getZaposleni() instanceof AdministrativniRadnik) {
 				//administrativni radnik
     			try {
-    				//																//org.unibl.etf.prijava.
-    				Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("AdministrativniRadnikView.fxml"));
+    				Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/AdministrativniRadnikView.fxml"));
     				Scene scene = new Scene(root);
     				Stage stage=new Stage();
     				stage.setScene(scene);
@@ -114,8 +112,7 @@ public class PrijavaController implements Initializable {
 				//if("SalterskiRadnik".equals(r.getString("Tip"))) {
         		//salterski radnik
                	try {
-            		//																//org.unibl.etf.prijava.
-           			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("SalterskiRadnikView.fxml"));
+            		Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/SalterskiRadnikView.fxml"));
            			Scene scene = new Scene(root);
            			Stage stage=new Stage();
            			stage.setScene(scene);

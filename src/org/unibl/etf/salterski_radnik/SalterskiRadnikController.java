@@ -1,16 +1,16 @@
-package org.unibl.etf.prijava;
+package org.unibl.etf.salterski_radnik;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
+import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,7 +18,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public class AdministratorController implements Initializable {
+public class SalterskiRadnikController implements Initializable {
 	@FXML
 	private AnchorPane anchorPane;
 	
@@ -38,7 +38,7 @@ public class AdministratorController implements Initializable {
 		if(PrijavaController.nalog.odjava()) {
 			PrijavaController.nalog=null;
 			try {
-				Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("Prijava.fxml"));
+				Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/prijava/Prijava.fxml"));
 				Scene scene = new Scene(root);
 				Stage stage=new Stage();
 				stage.setScene(scene);

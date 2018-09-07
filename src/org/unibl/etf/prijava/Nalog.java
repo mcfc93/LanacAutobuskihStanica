@@ -1,30 +1,22 @@
 package org.unibl.etf.prijava;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.DriverManager;
+import java.sql.Statement;
+import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.nio.charset.StandardCharsets;
 //import java.util.Base64;
-import java.util.logging.Level;
 
-import org.unibl.etf.zaposleni.AdministrativniRadnik;
-import org.unibl.etf.zaposleni.Administrator;
-import org.unibl.etf.zaposleni.SalterskiRadnik;
 import org.unibl.etf.zaposleni.Zaposleni;
-
-
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-
+import org.unibl.etf.zaposleni.Administrator;
+import org.unibl.etf.zaposleni.AdministrativniRadnik;
+import org.unibl.etf.zaposleni.SalterskiRadnik;
 import org.unibl.etf.util.Util;
+import java.util.logging.Level;
 
 public class Nalog {
 	private String korisnickoIme;
@@ -195,7 +187,21 @@ public class Nalog {
 		return true;
 	}
 	
+	
+	
+	
+	public boolean dodavanjeNaloga() {
+		return true;
+	}
+	
+	public boolean izmjenaNaloga() {
+		return true;
+	}
+	
+	public boolean brisanjeNaloga() {
+		return true;
+	}
+	
 	//boolean provjeriKorisnickoIme(String korisnickoIme)
 	//boolean provjeriLozinku(String lozinka)
-	//hash code
 }
