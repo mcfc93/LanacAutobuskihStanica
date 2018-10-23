@@ -8,9 +8,12 @@ import org.unibl.etf.util.Util;
 import org.unibl.etf.zaposleni.AdministrativniRadnik;
 import org.unibl.etf.zaposleni.Administrator;
 
+import com.jfoenix.controls.JFXSpinner;
+
 //import java.util.logging.Level;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,7 +26,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class PrijavaController implements Initializable {
 	
@@ -39,18 +44,57 @@ public class PrijavaController implements Initializable {
     private PasswordField lozinkaTextField;
     
     @FXML
-    private Label greskaLabel;
+    private Label greskaTextLabel;
+    
+    @FXML
+    private Label greskaBackgroundLabel;
 
     @FXML
     private Button prijavaButton;
+    
+    //@FXML
+    //private JFXSpinner spinner;
+    
+    private double xOffset=0;
+    private double yOffset=0;
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		greskaLabel.setVisible(false);
+		greskaTextLabel.setVisible(false);
+		greskaBackgroundLabel.setVisible(false);
+		//spinner.setVisible(false);
+		
+		//DragAndDrop
+		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+				xOffset = stage.getX() - event.getScreenX();
+		        yOffset = stage.getY() - event.getScreenY();
+			}
+		});
+				
+		anchorPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
+	       @Override
+		   public void handle(MouseEvent event) {
+	    	   Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+		       stage.setX(event.getScreenX() + xOffset);
+		       stage.setY(event.getScreenY() + yOffset);
+		       stage.setOpacity(0.8);
+		   }
+		});
+				
+		anchorPane.setOnMouseReleased((event) -> {
+			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+		    stage.setOpacity(1.0);
+		});
 	}
 	
 	@FXML
     void prijava(ActionEvent event) {
+		
+		//prijavaButton.setText("");
+		//spinner.setVisible(true);
 		
 		if ((nalog=Nalog.prijava(korisnickoImeTextField.getText(), lozinkaTextField.getText())) != null) {
 			//((Stage)anchorPane.getScene().getWindow()).close();
@@ -62,6 +106,21 @@ public class PrijavaController implements Initializable {
 			//nalog.setLozinka(lozinkaTextField.getText());
 			
 			
+			
+			
+			
+			
+			//
+			
+			//MOZDA BOLJE DA SE UCITA PREKO LOGIN FORME
+			//A NE OTVARANJE NOVOG PROZORA ZA ADMINISTRATORA,...
+			
+			//
+			
+			
+			
+			
+			
 			if(nalog.getZaposleni() instanceof Administrator) {
 				//administrator
     			try {
@@ -69,13 +128,9 @@ public class PrijavaController implements Initializable {
     				Scene scene = new Scene(root);
     				Stage stage=new Stage();
     				stage.setScene(scene);
-    				stage.setTitle("Administrator");
+    				//stage.setTitle("Administrator");
     				stage.setResizable(false);
-    				//primaryStage.initStyle(StageStyle.DECORATED);
-    				//primaryStage.initStyle(StageStyle.UNDECORATED);    //brisanje _ [] X
-    				//primaryStage.initStyle(StageStyle.UNIFIED);
-    				//primaryStage.initStyle(StageStyle.UTILITY);
-    				
+    				stage.initStyle(StageStyle.UNDECORATED);
     				stage.show();
 
     				//Modality.NONE, Modality.WINDOW_MODAL, Modality.APPLICATION_MODAL
@@ -133,15 +188,11 @@ public class PrijavaController implements Initializable {
            			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
             	}
 			}
-			
-			
-			
-			
-			
-			
+
 		} else {
-			greskaLabel.setText("Korisničko ime ili lozinka pogrešni!");
-			greskaLabel.setVisible(true);
+			greskaTextLabel.setText("Korisničko ime ili lozinka pogrešni!");
+			greskaTextLabel.setVisible(true);
+			greskaBackgroundLabel.setVisible(true);
 			korisnickoImeTextField.clear();
 			lozinkaTextField.clear();
 			//korisnickoImeTextField.requestFocus();
@@ -154,7 +205,21 @@ public class PrijavaController implements Initializable {
 	
 	@FXML
 	void sakrijLabelu(MouseEvent event) {
-		greskaLabel.setVisible(false);
+		greskaTextLabel.setVisible(false);
+		greskaBackgroundLabel.setVisible(false);
+	}
+	
+	@FXML
+	void close(MouseEvent event) {
+		//System.exit(0);
+		Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+		stage.close();
+	}
+	
+	@FXML
+	void minimize(MouseEvent event) {
+		Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+		stage.setIconified(true);
 	}
 	
 	/*

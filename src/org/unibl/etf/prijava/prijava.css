@@ -1,0 +1,126 @@
+.root {
+	/*-fx-background-color:rgba(0,100,100,0);*/
+	/*-fx-background-color: transparent;*/
+	
+	
+	-fx-background-image: url('file:src/org/unibl/etf/prijava/img/background.png');
+/*-fx-background-image: url('file:C:/JavaProjects/LanacAutobuskihStanica/src/org/unibl/etf/prijava/img/background.png');*/
+	/*-fx-background-size: 100% 100%;*/
+	/*-fx-background-repeat: stretch;*/
+    -fx-background-size: 500 500;
+    -fx-background-position: center center;
+    /*-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);*/
+}
+
+#korisnickoImeTextField {
+/*
+	-fx-background-image: url('file:src/login/images/icons8-customer-60.png');
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: left center;
+	-fx-background-size: 25 25;
+*/
+	
+	
+	/*-fx-background-color: #494949;*/
+	-fx-background-color: #FFFFFF;
+	-fx-background-radius: 0px;
+	/*-fx-prompt-text-fill: #FFFFFF;*/
+	-fx-prompt-text-fill: #ff0095;
+	-fx-text-fill: #ff0095;
+	-fx-font-weight: bold;
+}
+
+#korisnickoImeTextField:focused {
+/*
+	-fx-background-image: url('file:src/login/images/icons8-customer-60.png');
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: left center;
+	-fx-background-size: 25 25;
+*/
+	
+	-fx-background-color: #000000;
+	-fx-background-radius: 0px;
+	-fx-prompt-text-fill: #FFFFFF;
+	-fx-text-fill: #ff0095;
+	-fx-font-weight: normal;
+}
+
+#lozinkaTextField {
+	/*-fx-background-color: #494949;*/
+	-fx-background-color: #FFFFFF;
+	-fx-background-radius: 0px;
+	/*-fx-prompt-text-fill: #FFFFFF;*/
+	-fx-prompt-text-fill: #ff0095;
+	-fx-text-fill: #ff0095;
+	-fx-font-weight:bold;
+}
+
+#lozinkaTextField:focused {
+	-fx-background-color: #000000;
+	-fx-background-radius: 0px;
+	-fx-prompt-text-fill: #FFFFFF;
+	-fx-text-fill: #ff0095;
+	-fx-font-weight: normal;
+}
+
+#prijavaButton {
+	-fx-background-color: #EA4C88;
+	-fx-text-fill: WHITE;
+	-fx-background-radius: 0px;
+}
+
+#prijavaButton:hover {
+	-fx-background-color: #ff0095;
+	-fx-text-fill: WHITE;
+}
+
+#zaboravljenaLozinkaLabel {
+	-fx-text-fill: WHITE;
+}
+
+#zaboravljenaLozinkaLabel:hover {
+	-fx-text-fill: #0f06b5;
+	-fx-cursor: hand;
+}
+
+#greskaBackgroundLabel {
+	-fx-prompt-text-fill: WHITE;
+	-fx-font-weight:bold;
+	-fx-background-color: RED;
+	-fx-opacity: 0.6;
+	-fx-background-radius: 3px;
+	
+}
+
+#greskaTextLabel {
+	-fx-prompt-text-fill: WHITE;
+	-fx-font-weight:bold;
+}
+
+/*.anchor {
+    -fx-background-image:url('file:/login/images/LoginBackground_1.jpg');
+}*/
+/*
+.close {
+	-fx-background-color: transparent;
+}
+*/
+.close:hover {
+	-fx-background-color: #E61123;
+}
+/*
+.minimize {
+	-fx-background-color: transparent;
+}
+*/
+.minimize:hover {
+	-fx-background-color: #2800ae;
+}
+
+#usernameLabel {
+	-fx-background-color: #ff0095;
+}
+
+#passwordLabel {
+	-fx-background-color: #ff0095;
+}

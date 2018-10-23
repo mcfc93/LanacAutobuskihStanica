@@ -1,0 +1,51 @@
+
+.anchorPane {
+	
+	-fx-border-color: RED;
+	-fx-border-width: 2px;
+	/*
+	 top-left, top-right, bottom-right, and bottom-left corners, in that order.
+	-fx-border-radius: 10 10 10 10;
+ 	-fx-background-radius: 10 10 10 10;
+ 	-fx-background-color: transparent;
+ 	* //scene.setFill(Color.TRANSPARENT);
+    * //stage.initStyle(StageStyle.TRANSPARENT);
+ 	*/
+}
+
+.button {
+	-fx-background-color: transparent;
+	-fx-text-fill: white;
+	-fx-font-weight: bold;
+	-fx-border: none;
+	-fx-border-radius: 0px;
+	-fx-background-radius: 0px;
+}
+
+.buttonMenu:hover {
+	-fx-background-color: #9c27b0;
+	-fx-cursor: hand;
+}
+
+.buttonRightBorder:hover {
+	-fx-border-color: #2196f3;
+	-fx-border-width: 0px 4px 0px 0px;
+}
+
+.buttonPressed {
+	-fx-background-color: #000000;
+	-fx-border-color: RED;
+	-fx-border-width: 0px 4px 0px 0px;
+}
+
+.close:hover {
+	-fx-background-color: #E61123;
+}
+
+.maximize:hover {
+	-fx-background-color: #2800ae;
+}
+
+.minimize:hover {
+	-fx-background-color: #2800ae;
+}
