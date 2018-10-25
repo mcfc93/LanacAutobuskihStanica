@@ -25,8 +25,8 @@ INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona
 INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `IdStanice`, `BrojPoste`, `Email`) VALUES ('2509994362654', 'Milan', 'Paspalj', 'Dusanovov bb', '065/123-456', 'SSS', '8', '55000', 'milanpaspalj@gmail.com');
 
 #NALOG
-INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `Lozinka`, `Tip`, `JMBG`) VALUES ('mknezic', '111', 'Administrator', '1506988196387');
-INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `Lozinka`, `Tip`, `JMBG`) VALUES ('mpaspalj', '222', 'Administrator', '2509994362654');
+INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `Lozinka`, `Tip`, `JMBG`) VALUES ('mknezic', '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8', 'Administrator', '1506988196387');
+INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `Lozinka`, `Tip`, `JMBG`) VALUES ('mpaspalj', '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8', 'Administrator', '2509994362654');
 
 #REZERVACIJA
 INSERT INTO `bus`.`rezervacija` (`IdRezervacije`, `DatumRezervacije`, `BrojKarata`, `ImePrezimePutnika`, `KontaktOsoba`, `IdStanice`) VALUES ('0001', '2018-09-15', '10', 'Janko Jankovic', 'Petar', '7');
