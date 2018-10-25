@@ -206,7 +206,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bus`.`nalog` (
   `KorisnickoIme` VARCHAR(35) NULL DEFAULT NULL,
-  `Lozinka` VARCHAR(35) NULL DEFAULT NULL,
+  `Lozinka` VARCHAR(120) NULL DEFAULT NULL,
   `Tip` VARCHAR(25) NULL DEFAULT NULL,
   `JMBG` CHAR(13) NOT NULL,
   PRIMARY KEY (`JMBG`),
