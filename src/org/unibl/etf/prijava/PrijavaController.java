@@ -8,7 +8,7 @@ import org.unibl.etf.util.Util;
 import org.unibl.etf.zaposleni.AdministrativniRadnik;
 import org.unibl.etf.zaposleni.Administrator;
 
-import com.jfoenix.controls.JFXSpinner;
+//import com.jfoenix.controls.JFXSpinner;
 
 //import java.util.logging.Level;
 
@@ -26,7 +26,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -147,8 +146,9 @@ public class PrijavaController implements Initializable {
     				Scene scene = new Scene(root);
     				Stage stage=new Stage();
     				stage.setScene(scene);
-    				stage.setTitle("Administrativni radnik");
+    				//stage.setTitle("Administrativni radnik");
     				stage.setResizable(false);
+    				stage.initStyle(StageStyle.UNDECORATED);
     				//primaryStage.initStyle(StageStyle.DECORATED);
     				//primaryStage.initStyle(StageStyle.UNDECORATED);    //brisanje _ [] X
     				//primaryStage.initStyle(StageStyle.UNIFIED);
@@ -171,8 +171,9 @@ public class PrijavaController implements Initializable {
            			Scene scene = new Scene(root);
            			Stage stage=new Stage();
            			stage.setScene(scene);
-           			stage.setTitle("Šalterski radnik");
+           			//stage.setTitle("Šalterski radnik");
            			stage.setResizable(false);
+           			stage.initStyle(StageStyle.UNDECORATED);
            			//primaryStage.initStyle(StageStyle.DECORATED);
            			//primaryStage.initStyle(StageStyle.UNDECORATED);    //brisanje _ [] X
            			//primaryStage.initStyle(StageStyle.UNIFIED);

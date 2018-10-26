@@ -154,7 +154,8 @@ public class Nalog {
 	        	return null;
             }*/
 	    } catch(SQLException e) {
-	       	e.printStackTrace();
+	       	//e.printStackTrace();
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 	    } finally {
 	    	if(r != null) {
 	    		try {

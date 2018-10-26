@@ -1,8 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="470.0" prefWidth="600.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.DodajNalogController">
-	<!-- TODO Add Nodes -->
+<AnchorPane prefHeight="470.0" prefWidth="600.0" style="-fx-background-color: #5CBFEB;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.DodajNalogController">
+   <children>
+      <JFXTextField fx:id="korisnickoIme" labelFloat="true" layoutX="50.0" layoutY="50.0" promptText="Korisničko ime" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="lozinka" labelFloat="true" layoutX="50.0" layoutY="125.0" promptText="Lozinka" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="ime" labelFloat="true" layoutX="50.0" layoutY="200.0" promptText="Ime" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="prezime" labelFloat="true" layoutX="50.0" layoutY="275.0" promptText="Prezime" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="jmbg" labelFloat="true" layoutX="50.0" layoutY="350.0" promptText="JMBG" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="adresa" labelFloat="true" layoutX="300.0" layoutY="50.0" promptText="Adresa" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="brojPoste" labelFloat="true" layoutX="300.0" layoutY="125.0" promptText="Broj pošte" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="brojTelefona" labelFloat="true" layoutX="300.0" layoutY="200.0" promptText="Broj telefona" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="email" labelFloat="true" layoutX="300.0" layoutY="275.0" promptText="E-mail" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="strucnaSprema" labelFloat="true" layoutX="300.0" layoutY="350.0" promptText="Stručna sprema" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+   </children>
 </AnchorPane>
