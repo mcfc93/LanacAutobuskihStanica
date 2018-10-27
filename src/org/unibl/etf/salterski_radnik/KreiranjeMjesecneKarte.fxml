@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
@@ -8,6 +9,7 @@
 
 <AnchorPane prefHeight="470.0" prefWidth="600.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.salterski_radnik.KreiranjeMjesecneKarteController">
    <children>
+      <JFXButton fx:id="kreirajButton" defaultButton="true" layoutX="434.0" layoutY="309.0" prefHeight="25.0" prefWidth="100.0" style="-fx-background-color: BLACK;" text="Potvrdi" />
       <Label fx:id="imeLabel" layoutX="53.0" layoutY="71.0" text="Ime:" />
       <Label fx:id="prezimeLabel" layoutX="42.0" layoutY="111.0" text="Prezime:" />
       <Label fx:id="slikaLabel" layoutX="52.0" layoutY="172.0" text="Slika" />

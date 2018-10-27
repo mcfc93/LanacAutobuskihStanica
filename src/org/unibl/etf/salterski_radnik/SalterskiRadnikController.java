@@ -150,7 +150,7 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	}
 	
 	@FXML
-	void kreirajMjesecnuKartu() {
+	void kreirajMjesecnuKartu(ActionEvent event) {
 		resetButtons();
 		kreirajMjesecnuKartuButton.getStyleClass().removeAll("buttonMenu");
 		kreirajMjesecnuKartuButton.getStyleClass().add("buttonPressed");
