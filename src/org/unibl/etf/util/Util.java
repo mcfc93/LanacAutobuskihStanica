@@ -37,11 +37,11 @@ public class Util {
 	    //ucitavanje properties fajla
 		try {
 			//p.load(new FileInputStream(System.getProperty("user.home") + File.separator + "config.properties"));
-			PROPERTY.load(new FileInputStream("config.properties"));
+			PROPERTY.load(new FileInputStream("src/org/unibl/etf/config.properties"));
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		
-//System.out.println(PROPERTY);
+System.out.println(PROPERTY);
 	}
 }

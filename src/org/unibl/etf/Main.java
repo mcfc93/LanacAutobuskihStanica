@@ -15,6 +15,10 @@ import org.unibl.etf.util.Util;
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
+		//
+		//if("src/org/unibl/etf/config.properties" !exists())
+		//otvori formu za config
+		
 		try {
 			AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/prijava/Prijava.fxml"));
 			Scene scene = new Scene(root);

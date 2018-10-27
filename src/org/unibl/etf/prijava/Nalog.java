@@ -106,11 +106,12 @@ public class Nalog {
 		ResultSet r = null;
 	    try {
 	       	// 1.Get a connection to database
-	       	c = DriverManager.getConnection("jdbc:mysql://localhost:3306/bus?autoReconnect=true&useSSL=false","root","student");
+	       	//c = DriverManager.getConnection("jdbc:mysql://localhost:3306/bus?autoReconnect=true&useSSL=false","root","student");
+	    	c = DriverManager.getConnection(Util.PROPERTY.getProperty("jdbc.url"), Util.PROPERTY.getProperty("db.username"), Util.PROPERTY.getProperty("db.password"));
 	       	// 2.Create a statement
 	       	s = c.prepareCall("{call checkAuthentication(?,?)}");
-	       	s.setString(1,korisnickoIme);
-	       	s.setString(2,lozinka);
+	       	s.setString(1, korisnickoIme);
+	       	s.setString(2, lozinka);
 	       	// 3.Execute a SQL query
 	       	r = s.executeQuery();
 	        // 4.Process the result set

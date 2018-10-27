@@ -53,8 +53,12 @@ public class KreiranjeMjesecneKarteController implements Initializable {
 	private  JFXComboBox<TipKarte> tipKarteComboBox;
 	
 
+
 	@FXML
-	private ImageView slikaKorisnika;
+	public JFXButton kreirajButton;
+	
+	@FXML
+	public ImageView slikaKorisnika;
 	
 	
 	@Override
