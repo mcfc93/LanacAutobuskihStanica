@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -32,13 +33,19 @@ public class SalterskiRadnikController implements Initializable {
 	private AnchorPane dataAnchorPane;
 	
 	@FXML
+	private AnchorPane menuAnchorPane;
+	
+	@FXML
+	private AnchorPane infoAnchorPane;
+	
+	@FXML
 	private Label informacijeLabel;
 	
 	@FXML
 	private Button odjavaButton;
 	
 	@FXML
-	private Button popuniKartuButton;
+	private Button kreirajMjesecnuKartuButton;
 	
 	private double xOffset=0;
     private double yOffset=0;
@@ -46,7 +53,7 @@ public class SalterskiRadnikController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " + PrijavaController.nalog.getZaposleni().getPrezime());
-	
+		
 		//DragAndDrop
 		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
@@ -136,21 +143,21 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 		//System.out.println("LISTA:" + listaNalogaButton.getStyleClass());
 		
 		odjavaButton.getStyleClass().clear();
-		popuniKartuButton.getStyleClass().clear();
+		kreirajMjesecnuKartuButton.getStyleClass().clear();
 
 		odjavaButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
-		popuniKartuButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
+		kreirajMjesecnuKartuButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
 	}
 	
 	@FXML
-	void popuniKartu(ActionEvent event) {
+	void kreirajMjesecnuKartu() {
 		resetButtons();
-		popuniKartuButton.getStyleClass().removeAll("buttonMenu");
-		popuniKartuButton.getStyleClass().add("buttonPressed");
+		kreirajMjesecnuKartuButton.getStyleClass().removeAll("buttonMenu");
+		kreirajMjesecnuKartuButton.getStyleClass().add("buttonPressed");
 		
 		
 		try {
-			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/PopunjavanjeKarte.fxml"));
+			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/KreiranjeMjesecneKarte.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
 			AnchorPane.setBottomAnchor(root,0.0);
 			AnchorPane.setLeftAnchor(root,0.0);

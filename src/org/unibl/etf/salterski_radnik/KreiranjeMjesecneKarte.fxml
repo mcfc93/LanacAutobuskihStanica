@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="470.0" prefWidth="600.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.salterski_radnik.KreiranjeMjesecneKarteController">
+   <children>
+      <Label fx:id="imeLabel" layoutX="53.0" layoutY="71.0" text="Ime:" />
+      <Label fx:id="prezimeLabel" layoutX="42.0" layoutY="111.0" text="Prezime:" />
+      <Label fx:id="slikaLabel" layoutX="52.0" layoutY="172.0" text="Slika" />
+      <Label fx:id="tipKarteLabel" layoutX="40.0" layoutY="227.0" text="Tip karte:" />
+      <Label fx:id="mjesecVazenjaLabel" layoutX="23.0" layoutY="291.0" text="Mjesec vazenja:" />
+      <JFXTextField fx:id="imeTextField" layoutX="120.0" layoutY="54.0" />
+      <JFXTextField fx:id="prezimeTextField" layoutX="120.0" layoutY="107.0" />
+      <JFXTextField fx:id="nazivSlikeTextField" layoutX="120.0" layoutY="168.0" />
+      <ImageView fx:id="slikaKorisnika" fitHeight="150.0" fitWidth="200.0" layoutX="375.0" layoutY="66.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="slikaKorisnikaLabel" layoutX="422.0" layoutY="249.0" text="Slika korisnika" />
+      <JFXComboBox fx:id="tipKarteComboBox" layoutX="153.0" layoutY="232.0" />
+      <JFXComboBox fx:id="mjesecVazenjaComboBox" layoutX="153.0" layoutY="296.0" />
+   </children>
+</AnchorPane>
