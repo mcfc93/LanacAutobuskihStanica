@@ -1,3 +1,4 @@
 -kreirati schemu u workbench-u pod nazivom "bus"
--kopirati sve iz fajla KreiranjeBaze04.09.2018.sql i izvrsiti
--kopirati  sve iz fajla PopunjavanjeBaze04.09.2018.sql i izvrsiti
+-kopirati sve iz fajla KreiranjeBaze26.10.2018.sql i izvrsiti
+-kopirati  sve iz fajla PopunjavanjeBaze27.10.2018.sql i izvrsiti
+-kopirati  sve iz fajla PopunjavanjeBaze28.10.2018.sql i izvrsiti
