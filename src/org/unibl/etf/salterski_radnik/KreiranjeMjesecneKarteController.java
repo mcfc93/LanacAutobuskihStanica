@@ -16,6 +16,7 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,46 +24,47 @@ import javafx.scene.image.ImageView;
 public class KreiranjeMjesecneKarteController implements Initializable {
 	
 	@FXML
-	public Label imeLabel;
+	private JFXButton kreirajKartuButton = new JFXButton();
 	@FXML
-	public Label prezimeLabel;
+	private Button button = new Button();
 	@FXML
-	public Label mjesecVazenjaLabel;
+	private Label imeLabel;
 	@FXML
-	public Label slikaLabel;
+	private Label prezimeLabel;
 	@FXML
-	public Label tipKarteLabel;
+	private Label mjesecVazenjaLabel;
 	@FXML
-	public Label slikaKorisnikaLabel;
+	private Label slikaLabel;
+	@FXML
+	private Label tipKarteLabel;
+	@FXML
+	private Label slikaKorisnikaLabel;
 	
 	@FXML
-	public JFXTextField imeTextField;
+	private JFXTextField imeTextField;
 	@FXML
-	public JFXTextField prezimeTextField;
+	private JFXTextField prezimeTextField;
 	@FXML
-	public JFXTextField nazivSlikeTextField;
+	private JFXTextField nazivSlikeTextField;
 	
 	@FXML
-	public JFXComboBox<MjesecVazenja> mjesecVazenjaComboBox;
+	private JFXComboBox<MjesecVazenja> mjesecVazenjaComboBox;
 	@FXML
-	public JFXComboBox<TipKarte> tipKarteComboBox;
+	private  JFXComboBox<TipKarte> tipKarteComboBox;
 	
+
 	@FXML
-	public JFXButton kreirajButton = new JFXButton();
-	
-	@FXML
-	public ImageView slikaKorisnika;
+	private ImageView slikaKorisnika;
 	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		kreirajButton.setVisible(true);
-		/*try {
+		try {
 			slikaKorisnika.setImage(new Image(new FileInputStream(new File("C:\\Users\\93van\\Desktop\\Fakultet\\stalker.png"))));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 		mjesecVazenjaComboBox.setPromptText("Odaberite mjesec vazenja");
 		tipKarteComboBox.setPromptText("Odaberite tip karte");
 		mjesecVazenjaComboBox.setItems(FXCollections.observableArrayList(MjesecVazenja.values()));
@@ -73,6 +75,14 @@ public class KreiranjeMjesecneKarteController implements Initializable {
 		
 	}
 	
+	@FXML
+	public void test() {
+		System.out.println("AFsfas");
+	}
+	@FXML
+	public void test2() {
+		System.out.println("opa");
+	}
 	
 
 }
