@@ -23,10 +23,12 @@ INSERT INTO `bus`.`prevoznik` (`IdPrevoznika`,`NazivPrevoznika`,`Telefon`,`Email
 #ZAPOSLENI
 INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `IdStanice`, `BrojPoste`, `Email`) VALUES ('1506988196387', 'Marko', 'Knezic', 'Dragocaj bb', '065/767-748', 'tehnicar', '10', '78000', 'mknezic88@gmail.com');
 INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `IdStanice`, `BrojPoste`, `Email`) VALUES ('2509994362654', 'Milan', 'Paspalj', 'Dusanovov bb', '065/123-456', 'SSS', '11', '55000', 'milanpaspalj@gmail.com');
+INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `IdStanice`, `BrojPoste`, `Email`) VALUES ('1012993103251', 'Vanja', 'Culum', 'Cara Lazara 100', '055/444-333', 'mulac', '10', '78000', '93vanja@gmail.com');
 
 #NALOG
 INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `Lozinka`, `Tip`, `JMBG`,`IdStanice`) VALUES ('mknezic', '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8', 'Administrator', '1506988196387',10);
 INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `Lozinka`, `Tip`, `JMBG`,`IdStanice`) VALUES ('mpaspalj', '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8', 'Administrator', '2509994362654',10);
+INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `Lozinka`, `Tip`, `JMBG`,`IdStanice`) VALUES ('vculum', '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8', 'SalterRadnik', '1012993103251',10);
 
 #REZERVACIJA
 INSERT INTO `bus`.`rezervacija` (`IdRezervacije`, `DatumRezervacije`, `BrojKarata`, `ImePrezimePutnika`, `KontaktOsoba`, `IdStanice`) VALUES ('0001', '2018-09-15', '10', 'Janko Jankovic', 'Petar', '10');
