@@ -40,7 +40,7 @@
                   <String fx:value="buttonRightBorder" />
                </styleClass>
             </Button>
-            <Button fx:id="Button777" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="224.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Otkazivanje karata">
+            <Button fx:id="otkazivanjeRezervacijaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="224.0" mnemonicParsing="false" onAction="#otkazivanjeKarata" prefHeight="30.0" prefWidth="200.0" text="Otkazivanje rezervacije">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -72,7 +72,7 @@
                   <String fx:value="buttonRightBorder" />
                </styleClass>
             </Button>
-            <Button alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="164.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Prodaja karata">
+            <Button fx:id="prodajaKarataButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="164.0" mnemonicParsing="false" onAction="#prodajaKarata" prefHeight="30.0" prefWidth="200.0" text="Prodaja karata">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -88,7 +88,7 @@
                   <String fx:value="buttonRightBorder" />
                </styleClass>
             </Button>
-            <Button fx:id="kreirajMjesecnuKartuButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="254.0" mnemonicParsing="false" onAction="#kreirajMjesecnuKartu" prefHeight="30.0" prefWidth="200.0" text="Nova mjesecna karta">
+            <Button fx:id="kreirajMjesecnuKartuButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="254.0" mnemonicParsing="false" onAction="#mjesecnaKarta" prefHeight="30.0" prefWidth="200.0" text="Nova mjesecna karta">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
