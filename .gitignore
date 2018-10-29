@@ -1,3 +1,3 @@
-/bin/
+/logs/
 # ignore all logs
 *.log
