@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="800.0" styleClass="anchorPane" stylesheets="@../salterski_radnik/salterski_radnik.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.AdministratorController">
+<AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="800.0" stylesheets="@administrator.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.AdministratorController">
    <children>
-      <AnchorPane layoutY="5.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: GRAY;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="anchorMenu" layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="anchorMenu" stylesheets="@administrator.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="50.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -163,7 +163,7 @@
             </JFXButton>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="menuLine" layoutX="200.0" layoutY="14.0" onMouseClicked="#doubleClick" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: GRAY;" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="menuLine" layoutX="200.0" layoutY="14.0" onMouseClicked="#doubleClick" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: BLACK;" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label fx:id="close" layoutX="576.0" layoutY="4.0" onMouseClicked="#close" prefHeight="20.0" prefWidth="20.0" styleClass="close" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                <graphic>
@@ -194,6 +194,6 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="dataAnchorPane" layoutX="200.0" layoutY="30.0" prefHeight="470.0" prefWidth="600.0" style="-fx-background-color: #9c27b0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
+      <AnchorPane fx:id="dataAnchorPane" layoutX="200.0" layoutY="30.0" prefHeight="470.0" prefWidth="600.0" stylesheets="@administrator.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
    </children>
 </AnchorPane>

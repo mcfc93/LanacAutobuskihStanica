@@ -8,6 +8,10 @@ import org.unibl.etf.util.Util;
 import org.unibl.etf.zaposleni.AdministrativniRadnik;
 import org.unibl.etf.zaposleni.Administrator;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+
 //import com.jfoenix.controls.JFXSpinner;
 
 //import java.util.logging.Level;
@@ -87,6 +91,39 @@ public class PrijavaController implements Initializable {
 			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 		    stage.setOpacity(1.0);
 		});
+		
+		
+		/*
+		prijavaButton.disableProperty().bind(Bindings.createBooleanBinding(
+	    		() -> korisnickoImeTextField.getText().trim().isEmpty()
+	    				|| lozinkaTextField.getText().trim().isEmpty()
+	    						, korisnickoImeTextField.textProperty()
+	    							, lozinkaTextField.textProperty()
+	    									));
+	   */
+		/*
+		prijavaButton.setDisable(true);
+	    
+	    ChangeListener<String> changeListener=new ChangeListener<String>() {
+	        @Override
+	        public void changed(ObservableValue<? extends String> observable,
+	        						String oldValue, String newValue) {
+	        	if((korisnickoImeTextField.getText().trim().length() < 6)
+		        	|| (lozinkaTextField.getText().trim().length() < 6)) {
+		        	prijavaButton.setDisable(true);
+		        } else {
+		        	prijavaButton.setDisable(false);
+		        }
+	        }
+	    };
+	    
+	    korisnickoImeTextField.textProperty().addListener(changeListener);
+	    lozinkaTextField.textProperty().addListener(changeListener);
+	    */
+		prijavaButton.disableProperty().bind(
+	    		korisnickoImeTextField.textProperty().isEmpty()
+	    			.or(lozinkaTextField.textProperty().isEmpty())
+	    		);
 	}
 	
 	@FXML

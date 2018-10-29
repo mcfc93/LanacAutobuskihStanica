@@ -1,5 +1,5 @@
 
-.anchorPane {
+.root {
 	
 	-fx-border-color: RED;
 	-fx-border-width: 2px;
@@ -11,6 +11,20 @@
  	* //scene.setFill(Color.TRANSPARENT);
     * //stage.initStyle(StageStyle.TRANSPARENT);
  	*/
+}
+
+.anchorMenu {
+	-fx-background-color: linear-gradient(black 20%, red 80%);
+}
+
+#dataAnchorPane {
+	/*linear-gradient( [ [from <point> to <point>] | [ to <side-or-corner>], ]? [ [ repeat | reflect ], ]? <color-stop>[, <color-stop>]+)
+	 *where <side-or-corner> = [left | right] || [top | bottom]
+	 */
+ 	
+ 	/*-fx-background-color: linear-gradient(#9c27b0, BLUE);*/
+ 	/*-fx-background-color: linear-gradient(to left bottom, gray, darkgray 50%, dimgray 99%, white);*/
+ 	-fx-background-color: linear-gradient(to right bottom, #4b0082, #8b008b 50%, #9c27b0 80%, #9932cc);
 }
 
 .button {
@@ -48,4 +62,94 @@
 
 .minimize:hover {
 	-fx-background-color: #2800ae;
+}
+
+.jfx-text-field {
+	-jfx-focus-color: BLUE;
+	-jfx-unfocus-color: WHITE;
+	-jfx-label-float: true;
+	-jfx-disable-animation: false;
+}
+
+.text-field {
+	-fx-text-fill: white;
+	-fx-prompt-text-fill: white;
+	-fx-highlight-fill: blue;
+}
+
+.jfx-text-field:error {
+    -jfx-focus-color: red;
+    -jfx-unfocus-color: red;
+    -fx-highlight-fill: red;
+}
+
+.jfx-text-field .error-label {
+    -fx-text-fill: red;
+    -fx-font-size: 7pt;
+    -fx-pref-height: 20;
+    /*-fx-border-color: white;*/
+    -fx-alignment: top-left;
+}
+
+.jfx-text-field .error-icon {
+    /*-fx-fill: red;*/
+   	-fx-image: url("/menu/images/warning-24.png");
+}
+
+.jfx-autocomplete-popup {
+	-fx-fixed-cell-size: 24;
+	-jfx-cell-limit: 3;
+   	-fx-pref-width: 150.0px;
+	-fx-text-fill: RED;
+	-fx-background-color: BLACK;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0.0em;
+    -fx-border-radius: 2.0em;
+}
+
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.0em;
+    -fx-padding: 0.0 0.0 10.0 0.0;
+
+}
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.0em;
+    -fx-padding: 0.0 10.0 0.0 0.0;
+
+}
+
+ .scroll-bar:horizontal .increment-arrow,
+ .scroll-bar:horizontal .decrement-arrow {
+    -fx-shape: " ";    
+    -fx-padding: 0.1em 0.0;
+}
+
+ .scroll-bar:vertical .increment-arrow,
+ .scroll-bar:vertical .decrement-arrow {
+    -fx-shape: " ";    
+    -fx-padding: 0.0 0.1em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: derive(black,90.0%);
+    -fx-background-insets: 2.0, 0.0, 0.0;
+    -fx-background-radius: 2.0em;
+}
+
+.scroll-bar:horizontal .thumb:hover,
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: derive(#4D4C4F,10.0%);
+    -fx-background-insets: 2.0, 0.0, 0.0;
+    -fx-background-radius: 2.0em;
 }
