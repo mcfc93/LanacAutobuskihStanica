@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.DatePicker?>
@@ -9,26 +9,29 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="470.0" prefWidth="600.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.salterski_radnik.ProdajaKarataController">
+<AnchorPane prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.salterski_radnik.ProdajaKarataController">
    <children>
-      <JFXDatePicker fx:id="datum" layoutX="88.0" layoutY="339.0" promptText="Odaberite datum" />
-      <JFXTextField fx:id="odredisteTextField" labelFloat="true" layoutX="120.0" layoutY="231.0" promptText="Odaberite odrediste" />
-      <TableView fx:id="linijeTable" layoutY="7.0" prefHeight="200.0" prefWidth="310.0" style="-fx-background-color: #cce6ff;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <JFXTextField fx:id="odredisteTextField" labelFloat="true" layoutX="14.0" layoutY="223.0" promptText="Odaberite odrediste" />
+      <TableView fx:id="linijeTable" layoutY="7.0" prefHeight="200.0" prefWidth="310.0" stylesheets="@salterski_radnik.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columns>
-          <TableColumn fx:id="nazivLinijeColumn" prefWidth="110.0" text="Naziv linije" />
-          <TableColumn fx:id="cijenaColumn" prefWidth="45.0" text="Cijena" />
-            <TableColumn fx:id="vrijemePolaskaColumn" prefWidth="95.0" text="Vrijeme polaska" />
-            <TableColumn fx:id="peronColumn" prefWidth="48.0" text="Peron" />
+          <TableColumn fx:id="nazivLinijeColumn" prefWidth="64.0" text="Naziv linije" />
+          <TableColumn fx:id="cijenaColumn" prefWidth="41.0" text="Cijena" />
+            <TableColumn fx:id="vrijemePolaskaColumn" prefWidth="62.0" text="Vrijeme polaska" />
+            <TableColumn fx:id="peronColumn" prefWidth="137.0" text="Peron" />
             <TableColumn fx:id="brojSjedistaColumn" prefWidth="75.0" text="Sjediste" />
             <TableColumn fx:id="prevoznikColumn" prefWidth="101.0" text="Prevoznik" />
+            <TableColumn fx:id="idLinijeColumn" prefWidth="75.0" text="ID linije" />
+            <TableColumn fx:id="idStaniceColumn" prefWidth="75.0" text="ID stanice" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <JFXButton fx:id="pretragaButton" layoutX="62.0" layoutY="380.0" style="-fx-background-color: PURPLE;" text="Pretraga" textFill="RED" />
+      <JFXButton fx:id="pretragaButton" layoutX="62.0" layoutY="380.0" onAction="#pretragaRelacija" style="-fx-background-color: PURPLE;" text="Pretraga" textFill="RED" />
       <JFXTextArea layoutX="325.0" layoutY="210.0" prefHeight="185.0" prefWidth="221.0" />
       <JFXButton layoutX="410.0" layoutY="419.0" text="Prodaja" />
-      <DatePicker fx:id="ddd" layoutX="86.0" layoutY="299.0" />
+      <DatePicker fx:id="datum" layoutX="167.0" layoutY="223.0" style="-fx-background-color: pink;" />
+      <JFXTextField fx:id="brojKarata" labelFloat="true" layoutX="14.0" layoutY="290.0" promptText="Broj karata" />
+      <JFXRadioButton fx:id="djecijaKarta" layoutX="208.0" layoutY="294.0" text="Djecija karta" />
    </children>
 </AnchorPane>

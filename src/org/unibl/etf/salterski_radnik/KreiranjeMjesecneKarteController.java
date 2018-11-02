@@ -4,38 +4,28 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.sql.*;
 import java.util.ResourceBundle;
-import java.util.concurrent.Callable;
 
 import org.unibl.etf.karta.MjesecVazenja;
-import org.unibl.etf.karta.MjesecnaKarta;
 import org.unibl.etf.karta.TipKarte;
-
+import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-
-import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableBooleanValue;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 public class KreiranjeMjesecneKarteController implements Initializable {	
+	
+	public static File odabranaSlika = null;
 	
 	@FXML
 	private JFXButton odaberiSlikuButton = new JFXButton();
@@ -51,9 +41,6 @@ public class KreiranjeMjesecneKarteController implements Initializable {
 	@FXML
 	private JFXButton kreirajButton = new JFXButton();
 	
-	
-	@FXML
-	private JFXComboBox<MjesecVazenja> mjesecVazenjaComboBox;
 	@FXML
 	private JFXComboBox<TipKarte> tipKarteComboBox;
 	
@@ -65,19 +52,14 @@ public class KreiranjeMjesecneKarteController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {	
 		kreirajButton.setDisable(true);
 		nazivSlikeTextField.setEditable(false);
-		mjesecVazenjaComboBox.setItems(FXCollections.observableArrayList(MjesecVazenja.values()));
 		tipKarteComboBox.setItems(FXCollections.observableArrayList(TipKarte.values()));
 		kreirajButton.disableProperty().bind(Bindings.createBooleanBinding(
 			    () -> imeField.getText().isEmpty() || prezimeField.getText().isEmpty() || 
 			    	  nazivSlikeTextField.getText().isEmpty() || 
-			    	  mjesecVazenjaComboBox.getSelectionModel().getSelectedItem() == null ||
 			    	  tipKarteComboBox.getSelectionModel().getSelectedItem() == null, 
 			    imeField.textProperty(), prezimeField.textProperty(), nazivSlikeTextField.textProperty(),
-			    mjesecVazenjaComboBox.getSelectionModel().selectedItemProperty(),
 			    tipKarteComboBox.getSelectionModel().selectedItemProperty()
 			    ));
-		
-		System.out.println(mjesecVazenjaComboBox.getSelectionModel().getSelectedItem());
 	}
 	
 	@FXML
@@ -85,7 +67,7 @@ public class KreiranjeMjesecneKarteController implements Initializable {
 		System.out.println("fasf");
 		FileChooser fc  = new FileChooser();
 		fc.getExtensionFilters().add(new ExtensionFilter("PNG Files", "*.png"));
-		File odabranaSlika = fc.showOpenDialog(null);
+	    odabranaSlika = fc.showOpenDialog(null);
 		if(odabranaSlika!=null) {
 			try {
 				slikaKorisnika.setImage(new Image(new FileInputStream(odabranaSlika)));
@@ -99,11 +81,8 @@ public class KreiranjeMjesecneKarteController implements Initializable {
 	
 	@FXML
 	public void kreirajKartu() {
-		/*
-		DODATI LOGIKU ZA PROVJERU UNOSA
-		
-		*/
-		
+    	
+
 	}
 	
 

@@ -1,6 +1,10 @@
 package org.unibl.etf.salterski_radnik;
 
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
@@ -57,6 +61,22 @@ public class SalterskiRadnikController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " + PrijavaController.nalog.getZaposleni().getPrezime());
+		
+		Connection c = null;
+		String query = "SELECT * FROM autobuska_stanica";
+		Statement s = null;
+		ResultSet r = null;
+		try {
+			c = Util.getConnection();
+			System.out.println("Broj stanice: " + PrijavaController.nalog.getIdStanice());
+			r = s.executeQuery(query);
+			while(r.next()) {
+				System.out.println("fas");
+				System.out.println(r.toString());
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		
 		//DragAndDrop
 		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {

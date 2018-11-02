@@ -11,12 +11,11 @@
    <children>
       <JFXTextField fx:id="imeField" labelFloat="true" layoutX="55.0" layoutY="66.0" promptText="Unesite ime" />
       <JFXTextField fx:id="prezimeField" labelFloat="true" layoutX="55.0" layoutY="132.0" promptText="Unesite prezime" />
-      <JFXButton fx:id="kreirajButton" layoutX="83.0" layoutY="365.0" onAction="#kreirajKartu" text="Kreiraj kartu" />
+      <JFXButton fx:id="kreirajButton" layoutX="243.0" layoutY="294.0" onAction="#kreirajKartu" text="Kreiraj kartu" />
       <JFXButton fx:id="odaberiSlikuButton" layoutX="217.0" layoutY="195.0" onAction="#odaberiSliku" text="Odaberi sliku" />
       <JFXTextField fx:id="nazivSlikeTextField" labelFloat="true" layoutX="56.0" layoutY="195.0" promptText="Naziv slike" />
-      <JFXComboBox fx:id="mjesecVazenjaComboBox" layoutX="62.0" layoutY="257.0" promptText="Mjesec vazenja" />
-      <JFXComboBox fx:id="tipKarteComboBox" layoutX="68.0" layoutY="321.0" promptText="Tip karte" />
-      <ImageView fx:id="slikaKorisnika" fitHeight="150.0" fitWidth="200.0" layoutX="332.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="slikaKorisnikaLabel" layoutX="404.0" layoutY="235.0" text="Slika korisnika" />
+      <JFXComboBox fx:id="tipKarteComboBox" labelFloat="true" layoutX="79.0" layoutY="252.0" promptText="Tip karte" />
+      <ImageView fx:id="slikaKorisnika" fitHeight="224.0" fitWidth="283.0" layoutX="310.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Label fx:id="slikaKorisnikaLabel" layoutX="421.0" layoutY="235.0" text="Slika korisnika" />
    </children>
 </AnchorPane>

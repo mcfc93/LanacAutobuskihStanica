@@ -21,8 +21,6 @@ public class OtkazivanjeRezervacijaController implements Initializable {
 	@FXML
 	private JFXTextField idRezervacijeTextField = new JFXTextField();
 	@FXML
-	private JFXTextField test2 = new JFXTextField();
-	@FXML
 	private JFXButton pretragaButton = new JFXButton();
 	@FXML
 	private JFXButton otkazivanjeButton = new JFXButton();
@@ -35,9 +33,8 @@ public class OtkazivanjeRezervacijaController implements Initializable {
 		pretragaButton.setDisable(true);
 		otkazivanjeButton.setDisable(true);
 		pretragaButton.disableProperty().bind(Bindings.createBooleanBinding(
-			    () -> idRezervacijeTextField.getText().isEmpty() || test2.getText().isEmpty(), 
-			    idRezervacijeTextField.textProperty(), test2.textProperty()));
-		
+			    () -> idRezervacijeTextField.getText().isEmpty(), 
+			    idRezervacijeTextField.textProperty()));
 	}
 	
 	@FXML

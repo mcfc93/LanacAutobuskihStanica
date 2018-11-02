@@ -13,6 +13,5 @@
       <JFXTextArea fx:id="podaciTextArea" editable="false" layoutX="136.0" layoutY="6.0" prefHeight="175.0" prefWidth="263.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <Label layoutX="324.0" layoutY="204.0" text="Podaci o rezervaciji" />
       <JFXButton fx:id="pretragaButton" layoutX="229.0" layoutY="27.0" text="Pretraga" />
-      <JFXTextField fx:id="test2" layoutX="14.0" layoutY="88.0" />
    </children>
 </AnchorPane>
