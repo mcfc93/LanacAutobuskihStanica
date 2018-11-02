@@ -3,7 +3,7 @@ use bus;
 delimiter $$
 create procedure checkAuthentication(in pUserName varchar(35), in pPassword varchar(120))
 begin 
-	select Tip from nalog where KorisnickoIme=pUserName and Lozinka=pPassword ;
+	select IdStanice,Tip from nalog where KorisnickoIme=pUserName and Lozinka=pPassword ;
 	
 end $$
 delimiter ;
