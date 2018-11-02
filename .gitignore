@@ -2,3 +2,4 @@ logs/
 /config.properties
 # ignore all logs
 *.log
+/bin/
