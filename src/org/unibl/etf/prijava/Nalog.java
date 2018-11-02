@@ -143,8 +143,11 @@ public class Nalog {
 	    		
 	    		
 	    		
-	    		nalog=new Nalog(korisnickoIme, lozinka, 0, true, null);
-	       		if("Administrator".equals(r.getString("Tip"))) {
+	    		nalog=new Nalog(korisnickoIme, lozinka, r.getInt("IdStanice"), true, null);
+	       		
+	    		System.out.println(nalog);
+	    		
+	    		if("Administrator".equals(r.getString("Tip"))) {
 	       			nalog.zaposleni=new Administrator(rr.getString("Ime"), rr.getString("Prezime"));
 	       			//System.out.println(nalog.zaposleni.getIme());
 	       		} else if("AdministrativniRadnik".equals(r.getString("Tip"))) {
@@ -159,6 +162,7 @@ public class Nalog {
 	       	//e.printStackTrace();
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 	    } finally {
+	    	/*
 	    	if(r != null) {
 	    		try {
 	    			r.close();
@@ -180,6 +184,8 @@ public class Nalog {
 	            	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 	            }
 	        }
+	        */
+	    	Util.close(r,s,c);
 	    }
 	    return nalog;
 	}

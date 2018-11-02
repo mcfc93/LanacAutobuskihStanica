@@ -1,11 +1,21 @@
 package org.unibl.etf.administrator;
 
 import java.net.URL;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
+import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
+import org.unibl.etf.prijava.Nalog;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
+import org.unibl.etf.zaposleni.AdministrativniRadnik;
+import org.unibl.etf.zaposleni.Administrator;
+import org.unibl.etf.zaposleni.SalterskiRadnik;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -42,6 +52,12 @@ public class AdministratorController implements Initializable {
 	
 	@FXML
 	private Button dodajNalogButton;
+	
+	@FXML
+	private Button listaStanicaButton;
+	
+	@FXML
+	private Button dodajStanicuButton;
 	
 	private double xOffset=0;
     private double yOffset=0;
@@ -80,6 +96,8 @@ public class AdministratorController implements Initializable {
 	
 	@FXML
 	public void odjava(ActionEvent event) {
+		resetButtons();
+		setCss((Button)event.getSource());
 		if(PrijavaController.nalog.odjava()) {
 			PrijavaController.nalog=null;
 			try {
@@ -140,23 +158,57 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 		//System.out.println("LISTA:" + listaNalogaButton.getStyleClass());
 		
 		odjavaButton.getStyleClass().clear();
-		dodajNalogButton.getStyleClass().clear();
+		listaStanicaButton.getStyleClass().clear();
+		dodajStanicuButton.getStyleClass().clear();
 		listaNalogaButton.getStyleClass().clear();
+		dodajNalogButton.getStyleClass().clear();
 
-		dodajNalogButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
 		odjavaButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
+		listaStanicaButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
+		dodajStanicuButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
 		listaNalogaButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
+		dodajNalogButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
+	}
+	
+	private void setCss(Button button) {
+		button.getStyleClass().removeAll("buttonMenu");
+		button.getStyleClass().add("buttonPressed");
 	}
 	
 	@FXML
-	void dodajNalog(ActionEvent event) {
+	void listaStanica(ActionEvent event) {
 		resetButtons();
-		dodajNalogButton.getStyleClass().removeAll("buttonMenu");
-		dodajNalogButton.getStyleClass().add("buttonPressed");
+		setCss((Button)event.getSource());
+		//listaStanicaButton.getStyleClass().removeAll("buttonMenu");
+		//listaStanicaButton.getStyleClass().add("buttonPressed");
+		
+		AutobuskaStanica.listaStanica();
+		
 		
 		
 		try {
-			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/DodajNalog.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/ListaStanica.fxml"));
+			AnchorPane.setTopAnchor(root,0.0);
+			AnchorPane.setBottomAnchor(root,0.0);
+			AnchorPane.setLeftAnchor(root,0.0);
+			AnchorPane.setRightAnchor(root,0.0);
+			dataAnchorPane.getChildren().removeAll();
+			dataAnchorPane.getChildren().setAll(root);
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+	}
+	
+	@FXML
+	void dodajStanicu(ActionEvent event) {
+		resetButtons();
+		setCss((Button)event.getSource());
+		//dodajStanicuButton.getStyleClass().removeAll("buttonMenu");
+		//dodajStanicuButton.getStyleClass().add("buttonPressed");
+		
+		
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/DodajStanicu.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
 			AnchorPane.setBottomAnchor(root,0.0);
 			AnchorPane.setLeftAnchor(root,0.0);
@@ -171,7 +223,29 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	@FXML
 	void listaNaloga(ActionEvent event) {
 		resetButtons();
-		listaNalogaButton.getStyleClass().removeAll("buttonMenu");
-		listaNalogaButton.getStyleClass().add("buttonPressed");
+		setCss((Button)event.getSource());
+		//listaNalogaButton.getStyleClass().removeAll("buttonMenu");
+		//listaNalogaButton.getStyleClass().add("buttonPressed");
+	}
+	
+	@FXML
+	void dodajNalog(ActionEvent event) {
+		resetButtons();
+		setCss((Button)event.getSource());
+		//dodajNalogButton.getStyleClass().removeAll("buttonMenu");
+		//dodajNalogButton.getStyleClass().add("buttonPressed");
+		
+		
+		try {
+			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/DodajNalog.fxml"));
+			AnchorPane.setTopAnchor(root,0.0);
+			AnchorPane.setBottomAnchor(root,0.0);
+			AnchorPane.setLeftAnchor(root,0.0);
+			AnchorPane.setRightAnchor(root,0.0);
+			dataAnchorPane.getChildren().removeAll();
+			dataAnchorPane.getChildren().setAll(root);
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
 	}
 }

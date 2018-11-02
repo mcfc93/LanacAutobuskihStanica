@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="470.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="org.unibl.etf.administrator.ListaStanicaController">
+   <children>
+      <TableView fx:id="autobuskeStaniceTable" layoutX="15.0" layoutY="15.0" prefHeight="440.0" prefWidth="570.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+        <columns>
+          <TableColumn fx:id="nazivColumn" minWidth="20.0" text="Naziv" />
+          <TableColumn fx:id="adresaColumn" minWidth="20.0" text="Adresa" />
+            <TableColumn fx:id="brojPosteColumn" minWidth="20.0" text="Broj poste" />
+            <TableColumn fx:id="brojTelefonaColumn" minWidth="20.0" text="Broj telefona" />
+            <TableColumn fx:id="brojPeronaColumn" minWidth="20.0" text="Broj perona" />
+            <TableColumn fx:id="izmijeniColum" minWidth="20.0" text="EDIT" />
+            <TableColumn minWidth="20.0" text="REMOVE" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </children>
+</AnchorPane>

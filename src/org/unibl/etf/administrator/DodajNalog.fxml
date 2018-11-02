@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane fx:id="anchorPane" prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.DodajNalogController">
@@ -9,5 +10,6 @@
       <JFXButton fx:id="potvrdiButton" layoutX="519.0" layoutY="410.0" text="Potvrdi" />
       <JFXTextField fx:id="korisnickoImeTextField" layoutX="61.0" layoutY="48.0" promptText="Korisnicko ime" />
       <JFXTextField fx:id="lozinkaTextField" layoutX="61.0" layoutY="129.0" promptText="Lozinka" />
+      <TextField layoutX="424.0" layoutY="23.0" style="-fx-border-radius: 20px; -fx-border-color: RED; -fx-background-radius: 20px; -fx-background-color: GRAY;" />
    </children>
 </AnchorPane>

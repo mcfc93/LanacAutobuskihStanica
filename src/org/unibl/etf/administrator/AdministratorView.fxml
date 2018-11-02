@@ -56,7 +56,7 @@
                   <String fx:value="buttonRightBorder" />
                </styleClass>
             </Button>
-            <Button alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="194.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Dodaj stanicu">
+            <Button fx:id="dodajStanicuButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="194.0" mnemonicParsing="false" onAction="#dodajStanicu" prefHeight="30.0" prefWidth="200.0" text="Dodaj stanicu">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -72,7 +72,7 @@
                   <String fx:value="buttonRightBorder" />
                </styleClass>
             </Button>
-            <Button alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="164.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Lista stanica">
+            <Button fx:id="listaStanicaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="164.0" mnemonicParsing="false" onAction="#listaStanica" prefHeight="30.0" prefWidth="200.0" text="Lista stanica">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
