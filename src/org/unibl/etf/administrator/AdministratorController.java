@@ -163,11 +163,11 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 		listaNalogaButton.getStyleClass().clear();
 		dodajNalogButton.getStyleClass().clear();
 
-		odjavaButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
-		listaStanicaButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
-		dodajStanicuButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
-		listaNalogaButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
-		dodajNalogButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
+		odjavaButton.getStyleClass().addAll("buttonMenu", "buttonRightBorder");
+		listaStanicaButton.getStyleClass().addAll("buttonMenu", "buttonRightBorder");
+		dodajStanicuButton.getStyleClass().addAll("buttonMenu", "buttonRightBorder");
+		listaNalogaButton.getStyleClass().addAll("buttonMenu", "buttonRightBorder");
+		dodajNalogButton.getStyleClass().addAll("buttonMenu", "buttonRightBorder");
 	}
 	
 	private void setCss(Button button) {

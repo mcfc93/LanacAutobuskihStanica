@@ -25,8 +25,19 @@
  	/*-fx-background-color: linear-gradient(to left bottom, gray, darkgray 50%, dimgray 99%, white);*/
  	-fx-background-color: linear-gradient(to right bottom, #4b0082, #8b008b 50%, #9c27b0 80%, #9932cc);
 }
-
+/*
 .button {
+	-fx-background-color: yellow;
+	-fx-border: none;
+	-fx-border-radius: 0px;
+	-fx-background-radius: 0px;
+}
+
+.button:hover {
+	-fx-background-color: #9c27b0;
+}
+*/
+.buttonMenu {
 	-fx-background-color: transparent;
 	-fx-text-fill: white;
 	-fx-font-weight: bold;
@@ -47,6 +58,8 @@
 
 .buttonPressed {
 	-fx-background-color: #000000;
+	-fx-text-fill: white;
+	-fx-font-weight: bold;
 	-fx-border-color: RED;
 	-fx-border-width: 0px 4px 0px 0px;
 }
@@ -177,7 +190,7 @@
 }
 
 .table-view .column-header {
-    -fx-background-color: transparent;
+    -fx-background-color: yellow;
 }
 
 .table-view .table-cell{
@@ -236,4 +249,46 @@
  */
 .table-view .column-header .label {
     -fx-text-fill : green;
+}
+
+.buttonTableEdit {
+	-fx-background-image: url('img/edit.png');
+	-fx-background-position: center;
+	-fx-background-repeat: no-repeat;
+	-fx-background-size: 20,20;
+	-fx-pref-height: 25px;
+    -fx-pref-width: 25px;
+	-fx-background-color: transparent;
+	-fx-border: none;
+	-fx-border-radius: 0px;
+	-fx-background-radius: 0px;
+	-fx-focus-traversable: false;
+}
+
+.buttonTableEdit:hover {
+	/*DRUGA SLIKA */
+	/*-fx-background-color: #9c27b0;*/
+	-fx-background-color: black;
+	-fx-cursor: hand;
+}
+
+.buttonTableDelete {
+	-fx-background-image: url('img/delete.png');
+	-fx-background-position: center;
+	-fx-background-repeat: no-repeat;
+	-fx-background-size: 20,20;
+	-fx-pref-height: 25px;
+    -fx-pref-width: 25px;
+	-fx-background-color: transparent;
+	-fx-border: none;
+	-fx-border-radius: 0px;
+	-fx-background-radius: 0px;
+	-fx-focus-traversable: false;
+}
+
+.buttonTableDelete:hover {
+	/*DRUGA SLIKA */
+	/*-fx-background-color: #9c27b0;*/
+	-fx-background-color: black;
+	-fx-cursor: hand;
 }
