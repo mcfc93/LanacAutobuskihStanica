@@ -219,6 +219,10 @@
     -fx-background-radius: 1;
 }
 
+.table-view .filler {
+	-fx-background-color: #005797;
+}
+
 .table-view > .virtual-flow > .scroll-bar:vertical,
 .table-view > .virtual-flow > .scroll-bar:vertical > .track,
 .table-view > .virtual-flow > .scroll-bar:vertical > .track-background, 
@@ -240,15 +244,14 @@
  * For styling only the "+" button on the right top corner
  */
  .table-view > .column-header-background > .show-hide-columns-button {
-    -fx-background-color: black;
+    -fx-background-color: yellow;
 }
-
 
 /**
  * For styling column header's labels
  */
 .table-view .column-header .label {
-    -fx-text-fill : green;
+    -fx-text-fill: green;
 }
 
 .buttonTableEdit {

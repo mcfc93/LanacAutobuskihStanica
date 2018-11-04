@@ -120,6 +120,11 @@ public class ListaStanicaController implements Initializable {
             return cell;
         });
         
+        nazivColumn.setMinWidth(100);
+        
+        adresaColumn.setMinWidth(100);
+        
+        
         izmijeniColumn.setText("");
         //izmijeniColumn.setPrefWidth(50);
         izmijeniColumn.setMinWidth(50);
@@ -132,6 +137,9 @@ public class ListaStanicaController implements Initializable {
         obrisiColumn.setResizable(false);
         obrisiColumn.setSortable(false);
         
+        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
         listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
         listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
         listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());

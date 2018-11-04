@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.ListaStanicaController">
    <children>
-      <TableView fx:id="autobuskeStaniceTable" layoutX="15.0" layoutY="15.0" prefHeight="440.0" prefWidth="570.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+      <TableView fx:id="autobuskeStaniceTable" layoutX="15.0" layoutY="15.0" prefHeight="440.0" prefWidth="570.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
         <columns>
           <TableColumn fx:id="nazivColumn" minWidth="20.0" text="Naziv" />
           <TableColumn fx:id="adresaColumn" minWidth="20.0" text="Adresa" />
@@ -21,4 +22,7 @@
          </columnResizePolicy>
       </TableView>
    </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
 </AnchorPane>

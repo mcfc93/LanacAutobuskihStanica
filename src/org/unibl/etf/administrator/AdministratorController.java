@@ -226,6 +226,18 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 		setCss((Button)event.getSource());
 		//listaNalogaButton.getStyleClass().removeAll("buttonMenu");
 		//listaNalogaButton.getStyleClass().add("buttonPressed");
+		
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/ListaNaloga.fxml"));
+			AnchorPane.setTopAnchor(root,0.0);
+			AnchorPane.setBottomAnchor(root,0.0);
+			AnchorPane.setLeftAnchor(root,0.0);
+			AnchorPane.setRightAnchor(root,0.0);
+			dataAnchorPane.getChildren().removeAll();
+			dataAnchorPane.getChildren().setAll(root);
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
 	}
 	
 	@FXML

@@ -28,6 +28,7 @@
 	-fx-prompt-text-fill: #ff0095;
 	-fx-text-fill: #ff0095;
 	-fx-font-weight: bold;
+	-fx-highlight-fill: #ff0095;
 }
 
 #korisnickoImeTextField:focused {
@@ -53,6 +54,7 @@
 	-fx-prompt-text-fill: #ff0095;
 	-fx-text-fill: #ff0095;
 	-fx-font-weight:bold;
+	-fx-highlight-fill: #ff0095;
 }
 
 #lozinkaTextField:focused {
@@ -79,7 +81,9 @@
 }
 
 #zaboravljenaLozinkaLabel:hover {
-	-fx-text-fill: #0f06b5;
+	-fx-text-fill: #0645AD;
+	/*-fx-text-fill: #ff0095;*/
+	/*-fx-text-fill: #5cbfeb;*/
 	-fx-cursor: hand;
 }
 

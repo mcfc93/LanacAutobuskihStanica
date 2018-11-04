@@ -2,14 +2,68 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="anchorPane" prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.DodajNalogController">
    <children>
       <JFXButton fx:id="potvrdiButton" layoutX="519.0" layoutY="410.0" text="Potvrdi" />
-      <JFXTextField fx:id="korisnickoImeTextField" layoutX="61.0" layoutY="48.0" promptText="Korisnicko ime" />
-      <JFXTextField fx:id="lozinkaTextField" layoutX="61.0" layoutY="129.0" promptText="Lozinka" />
-      <TextField layoutX="424.0" layoutY="23.0" style="-fx-border-radius: 20px; -fx-border-color: RED; -fx-background-radius: 20px; -fx-background-color: GRAY;" />
+      <JFXTextField fx:id="korisnickoImeTextField" labelFloat="true" layoutX="61.0" layoutY="48.0" promptText="Korisnicko ime" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></JFXTextField>
+      <JFXTextField fx:id="lozinkaTextField" labelFloat="true" layoutX="61.0" layoutY="129.0" promptText="Lozinka" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></JFXTextField>
+      <TextField fx:id="traziTextField" layoutX="425.0" layoutY="25.0" prefHeight="25.0" prefWidth="150.0" promptText="Search" style="-fx-border-radius: 20px; -fx-border-color: RED; -fx-background-radius: 20px; -fx-background-color: transparent; -fx-border-width: 1.5px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets left="30.0" right="20.0" />
+         </padding></TextField>
+      <JFXTextField fx:id="imeTextField" labelFloat="true" layoutX="60.0" layoutY="210.0" promptText="Ime" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="prezimeTextField" labelFloat="true" layoutX="60.0" layoutY="285.0" promptText="Prezime" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="jmbgTextField" labelFloat="true" layoutX="60.0" layoutY="360.0" promptText="JMBG" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="adresaTextField" labelFloat="true" layoutX="310.0" layoutY="60.0" promptText="Adresa" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="brojPosteTextField" labelFloat="true" layoutX="310.0" layoutY="135.0" promptText="Broj pošte" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="brojTelefonaTextField" labelFloat="true" layoutX="310.0" layoutY="210.0" promptText="Broj telefona" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="emailTextField" labelFloat="true" layoutX="310.0" layoutY="285.0" promptText="E-mail" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="strucnaSpremaTextField" labelFloat="true" layoutX="310.0" layoutY="360.0" promptText="Stručna sprema" unFocusColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXTextField>
    </children>
 </AnchorPane>

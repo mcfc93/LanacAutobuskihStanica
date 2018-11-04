@@ -8,6 +8,7 @@ import org.unibl.etf.util.Util;
 import org.unibl.etf.zaposleni.AdministrativniRadnik;
 import org.unibl.etf.zaposleni.Administrator;
 
+import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -27,6 +28,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -34,6 +36,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 public class PrijavaController implements Initializable {
 	
@@ -60,6 +63,9 @@ public class PrijavaController implements Initializable {
     //@FXML
     //private JFXSpinner spinner;
     
+    //@FXML
+    //private ProgressBar progressBar;
+    
     private double xOffset=0;
     private double yOffset=0;
 	
@@ -68,6 +74,7 @@ public class PrijavaController implements Initializable {
 		greskaTextLabel.setVisible(false);
 		greskaBackgroundLabel.setVisible(false);
 		//spinner.setVisible(false);
+		//progressBar.setVisible(false);
 		
 		//DragAndDrop
 		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -142,7 +149,15 @@ public class PrijavaController implements Initializable {
 		
 		//prijavaButton.setText("");
 		//spinner.setVisible(true);
-		
+		/*
+		progressBar.setVisible(true);
+		PauseTransition pause=new PauseTransition();
+		pause.setDuration(Duration.seconds(3));
+		pause.setOnFinished(e ->
+			System.out.println("Login Successfully")
+		);
+		pause.play();
+		*/
 		if ((nalog=Nalog.prijava(korisnickoImeTextField.getText(), lozinkaTextField.getText())) != null) {
 			//((Stage)anchorPane.getScene().getWindow()).close();
 			//((Stage)anchorPane.getScene().getWindow()).hide();
@@ -245,6 +260,7 @@ public class PrijavaController implements Initializable {
 			korisnickoImeTextField.clear();
 			lozinkaTextField.clear();
 			//korisnickoImeTextField.requestFocus();
+			//progressBar.setVisible(false);
 		}
     }
 	
