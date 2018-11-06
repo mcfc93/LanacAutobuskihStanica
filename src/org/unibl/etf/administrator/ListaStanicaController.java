@@ -148,21 +148,34 @@ public class ListaStanicaController implements Initializable {
         listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
 	}
 
-}
-
-class TableImage {
-	private ImageView image;
-
-	public TableImage(ImageView image) {
-		super();
-		this.image = image;
+	/*
+	public <S, T> void setButtonInColumn(TableColumn<AutobuskaStanica, AutobuskaStanica> tableColumn, ImageView url) {
+		tableColumn.setCellValueFactory(
+                param -> new ReadOnlyObjectWrapper<>(param.getValue())
+            );
+        
+        tableColumn.setCellFactory(tableCell -> {
+            TableCell<AutobuskaStanica, AutobuskaStanica> cell = new TableCell<AutobuskaStanica, AutobuskaStanica>() {
+                //private ImageView imageView = new ImageView("org/unibl/etf/administrator/img/edit.png");
+            	private Button imageView = new Button("");
+            	//postaviti dimenzije
+                @Override
+                protected void updateItem(AutobuskaStanica item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (!empty) {
+                    	//imageView.setStyle("-fx-background-image: url('org/unibl/etf/administrator/img/edit.png')");
+                    	imageView.getStyleClass().addAll("buttonTable", "buttonTableEdit");
+                    	setGraphic(imageView);
+                    	imageView.setOnMouseClicked(
+                    			event -> getTableView().getItems().remove(item)
+                    		);
+                    } else {
+                    	setGraphic(null);
+                    }
+                }
+            };
+            return cell;
+        });
 	}
-
-	public ImageView getImage() {
-		return image;
-	}
-
-	public void setImage(ImageView image) {
-		this.image = image;
-	}
+	*/
 }
