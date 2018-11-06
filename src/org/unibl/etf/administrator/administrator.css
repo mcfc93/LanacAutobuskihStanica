@@ -37,6 +37,7 @@
 	-fx-background-color: #9c27b0;
 }
 */
+/*
 .buttonMenu {
 	-fx-background-color: transparent;
 	-fx-text-fill: white;
@@ -60,6 +61,28 @@
 	-fx-background-color: #000000;
 	-fx-text-fill: white;
 	-fx-font-weight: bold;
+	-fx-border-color: RED;
+	-fx-border-width: 0px 4px 0px 0px;
+}
+*/
+.toggle-button {
+	-fx-background-color: transparent;
+	-fx-text-fill: white;
+	-fx-font-weight: bold;
+	-fx-border: none;
+	-fx-border-radius: 0px;
+	-fx-background-radius: 0px;
+}
+
+.toggle-button:hover {
+	-fx-background-color: #9c27b0;
+	-fx-cursor: hand;
+	-fx-border-color: #2196f3;
+	-fx-border-width: 0px 4px 0px 0px;
+}
+
+.toggle-button:selected {
+	-fx-background-color: #000000;
 	-fx-border-color: RED;
 	-fx-border-width: 0px 4px 0px 0px;
 }

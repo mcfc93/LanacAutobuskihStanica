@@ -17,6 +17,7 @@ import org.unibl.etf.zaposleni.AdministrativniRadnik;
 import org.unibl.etf.zaposleni.Administrator;
 import org.unibl.etf.zaposleni.SalterskiRadnik;
 
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -28,6 +29,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -45,19 +49,22 @@ public class AdministratorController implements Initializable {
 	private Label informacijeLabel;
 	
 	@FXML
-	private Button odjavaButton;
+    private ToggleGroup toggleGroup;
 	
 	@FXML
-	private Button listaNalogaButton;
+	private ToggleButton odjavaButton;
 	
 	@FXML
-	private Button dodajNalogButton;
+	private ToggleButton listaNalogaButton;
 	
 	@FXML
-	private Button listaStanicaButton;
+	private ToggleButton dodajNalogButton;
 	
 	@FXML
-	private Button dodajStanicuButton;
+	private ToggleButton listaStanicaButton;
+	
+	@FXML
+	private ToggleButton dodajStanicuButton;
 	
 	private double xOffset=0;
     private double yOffset=0;
@@ -92,12 +99,22 @@ public class AdministratorController implements Initializable {
 			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 			stage.setOpacity(1.0);
 		});
+		
+		//toggleGroup
+		toggleGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
+		    if (newValue == null) {
+		        oldValue.setSelected(true);
+		    }
+		});
+		
+		//toggleGroup.getSelectedToggle().
+		listaStanica(null);
 	}
 	
 	@FXML
 	public void odjava(ActionEvent event) {
-		resetButtons();
-		setCss((Button)event.getSource());
+		//resetButtons();
+		//setCss((Button)event.getSource());
 		if(PrijavaController.nalog.odjava()) {
 			PrijavaController.nalog=null;
 			try {
@@ -151,7 +168,7 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 			maximize(event);
 		}
 	}
-	
+	/*
 	private void resetButtons() {
 		//System.out.println("ODJAVA:" + odjavaButton.getStyleClass());
 		//System.out.println("DODAJ:" + dodajNalogButton.getStyleClass());
@@ -174,11 +191,11 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 		button.getStyleClass().removeAll("buttonMenu");
 		button.getStyleClass().add("buttonPressed");
 	}
-	
+	*/
 	@FXML
 	void listaStanica(ActionEvent event) {
-		resetButtons();
-		setCss((Button)event.getSource());
+		//resetButtons();
+		//setCss((Button)event.getSource());
 		//listaStanicaButton.getStyleClass().removeAll("buttonMenu");
 		//listaStanicaButton.getStyleClass().add("buttonPressed");
 		
@@ -201,8 +218,8 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	
 	@FXML
 	void dodajStanicu(ActionEvent event) {
-		resetButtons();
-		setCss((Button)event.getSource());
+		//resetButtons();
+		//setCss((Button)event.getSource());
 		//dodajStanicuButton.getStyleClass().removeAll("buttonMenu");
 		//dodajStanicuButton.getStyleClass().add("buttonPressed");
 		
@@ -222,8 +239,8 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	
 	@FXML
 	void listaNaloga(ActionEvent event) {
-		resetButtons();
-		setCss((Button)event.getSource());
+		//resetButtons();
+		//setCss((Button)event.getSource());
 		//listaNalogaButton.getStyleClass().removeAll("buttonMenu");
 		//listaNalogaButton.getStyleClass().add("buttonPressed");
 		
@@ -242,8 +259,8 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	
 	@FXML
 	void dodajNalog(ActionEvent event) {
-		resetButtons();
-		setCss((Button)event.getSource());
+		//resetButtons();
+		//setCss((Button)event.getSource());
 		//dodajNalogButton.getStyleClass().removeAll("buttonMenu");
 		//dodajNalogButton.getStyleClass().add("buttonPressed");
 		

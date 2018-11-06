@@ -137,15 +137,21 @@ public class ListaStanicaController implements Initializable {
         obrisiColumn.setResizable(false);
         obrisiColumn.setSortable(false);
         
-        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+        new Thread() {
+        	@Override
+        	public void run() {
+		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+		        
+        	}
+        }.run();
 	}
 
 	/*

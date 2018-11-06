@@ -37,7 +37,7 @@
 	-fx-background-color: #9c27b0;
 }
 */
-.buttonMenu {
+.toggle-button {
 	-fx-background-color: transparent;
 	-fx-text-fill: white;
 	-fx-font-weight: bold;
@@ -46,20 +46,15 @@
 	-fx-background-radius: 0px;
 }
 
-.buttonMenu:hover {
+.toggle-button:hover {
 	-fx-background-color: #9c27b0;
 	-fx-cursor: hand;
-}
-
-.buttonRightBorder:hover {
 	-fx-border-color: #2196f3;
 	-fx-border-width: 0px 4px 0px 0px;
 }
 
-.buttonPressed {
+.toggle-button:selected {
 	-fx-background-color: #000000;
-	-fx-text-fill: white;
-	-fx-font-weight: bold;
 	-fx-border-color: RED;
 	-fx-border-width: 0px 4px 0px 0px;
 }

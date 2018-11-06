@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
 
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,6 +19,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -34,7 +38,22 @@ public class AdministrativniRadnikController implements Initializable {
 	private Label informacijeLabel;
 	
 	@FXML
-	private Button odjavaButton;
+    private ToggleGroup toggleGroup;
+	
+	@FXML
+	private ToggleButton odjavaButton;
+	
+	@FXML
+	private ToggleButton a;
+	
+	@FXML
+	private ToggleButton b;
+	
+	@FXML
+	private ToggleButton c;
+	
+	@FXML
+	private ToggleButton d;
 	
 	private double xOffset=0;
     private double yOffset=0;
@@ -69,12 +88,26 @@ informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " +
 			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 			stage.setOpacity(1.0);
 		});
+		
+		//toggleGroup
+		toggleGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
+		    if (newValue == null) {
+		        oldValue.setSelected(true);
+		    }
+		});
+		
+		/**********************************************
+		 * OVDJE DODAJES METODU SA PRVOG BUTTON
+		 * KOJA CE SE AUTOMATSKI POKRETATI KAD SE
+		 * OTVORI FORMA
+		 * 
+		 * startMethod(null);
+		 * 
+		 **********************************************/
 	}
 	
 	@FXML
 	public void odjava(ActionEvent event) {
-		resetButtons();
-		setCss((Button)event.getSource());
 		if(PrijavaController.nalog.odjava()) {
 			PrijavaController.nalog=null;
 			try {
@@ -123,26 +156,8 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	
 	@FXML
 	void doubleClick(MouseEvent event) {
-		//System.out.println("Broj klikova: " + event.getClickCount());
 		if(event.getClickCount() > 1) {
 			maximize(event);
 		}
-	}
-	
-	private void resetButtons() {
-		odjavaButton.getStyleClass().clear();
-		//xButton.getStyleClass().clear();
-		//yButton.getStyleClass().clear();
-		//z.getStyleClass().clear();
-
-		odjavaButton.getStyleClass().addAll("buttonMenu", "buttonRightBorder");
-		//xButton.getStyleClass().addAll("buttonMenu", "buttonRightBorder");
-		//yButton.getStyleClass().addAll("buttonMenu", "buttonRightBorder");
-		//zButton.getStyleClass().addAll("buttonMenu", "buttonRightBorder");
-	}
-	
-	private void setCss(Button button) {
-		button.getStyleClass().removeAll("buttonMenu");
-		button.getStyleClass().add("buttonPressed");
 	}
 }
