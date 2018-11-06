@@ -116,7 +116,6 @@ System.out.println("nalog.ser");
 			Platform.runLater(() -> korisnickoImeTextField.requestFocus());
 		} else {
 			Platform.runLater(() -> lozinkaTextField.requestFocus());
-			System.out.println("LOZINKA FOCUS");
 		}
 		
 		//DragAndDrop
@@ -238,12 +237,13 @@ System.out.println("nalog.ser");
 						)
 				)
 				{
-					/*********
+					/****************************
 					 * TREBA NESTO DRUGO ODRADITI
+					 * TRENUTNO DOSTUPNA LOZINKA
 					 * 
-					 * 
-					 */
+					 ***************************/
 					nalog.setLozinka(lozinkaTextField.getText());
+					
 					oos.writeObject(nalog);
 				} catch(IOException e) {
 					Util.LOGGER.log(Level.SEVERE, e.toString(), e);

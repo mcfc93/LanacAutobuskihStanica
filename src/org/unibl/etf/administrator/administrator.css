@@ -85,6 +85,7 @@
 	-fx-background-color: #000000;
 	-fx-border-color: RED;
 	-fx-border-width: 0px 4px 0px 0px;
+	-fx-cursor: normal;
 }
 
 .close:hover {
@@ -276,6 +277,12 @@
 .table-view .column-header .label {
     -fx-text-fill: green;
 }
+
+.table-view .placeholder .label {
+     -fx-text-fill: white;
+     -fx-font-size: 15px;
+     -fx-font-weight: bold;
+ }
 
 .buttonTableEdit {
 	-fx-background-image: url('img/edit.png');

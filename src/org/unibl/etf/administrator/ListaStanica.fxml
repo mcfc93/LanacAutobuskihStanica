@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.ListaStanicaController">
+<AnchorPane fx:id="anchorPane" prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.ListaStanicaController">
    <children>
       <TableView fx:id="autobuskeStaniceTable" layoutX="15.0" layoutY="15.0" prefHeight="440.0" prefWidth="570.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
         <columns>

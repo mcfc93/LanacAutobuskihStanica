@@ -27,9 +27,10 @@ public class Util {
 	
 	static {
 		//postavljanje Logger-a
+		FileHandler fileHandler=null;
 	    try {
 	    	//FileHandler fileHandler = new FileHandler(System.getProperty("user.home") + File.separator + "error.log", true);
-	    	FileHandler fileHandler = new FileHandler("logs/error.log", true);	//append
+	    	fileHandler = new FileHandler("logs/error.log", true);	//append
 	        LOGGER.addHandler(fileHandler);
 	        SimpleFormatter formatter = new SimpleFormatter();	//za formatiran ispis
 	        fileHandler.setFormatter(formatter);
@@ -38,6 +39,8 @@ public class Util {
 	        e.printStackTrace();
 	    } catch (IOException e) {
 	        e.printStackTrace();
+	    } finally {
+	    	fileHandler.close();
 	    }
 		
 	    //ucitavanje properties fajla

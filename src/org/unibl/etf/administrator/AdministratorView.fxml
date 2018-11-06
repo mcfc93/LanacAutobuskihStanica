@@ -11,7 +11,7 @@
 
 <AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="800.0" stylesheets="@administrator.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.AdministratorController">
    <children>
-      <AnchorPane fx:id="anchorMenu" layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="anchorMenu" stylesheets="@administrator.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="anchorMenu" layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="anchorMenu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="50.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -23,7 +23,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <ToggleButton fx:id="listaStanicaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="185.0" mnemonicParsing="false" onAction="#listaStanica" prefHeight="30.0" prefWidth="200.0" selected="true" text="Lista stanoca">
+            <ToggleButton fx:id="listaAutobuskihStanicaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="185.0" mnemonicParsing="false" onAction="#listaAutobuskihStanica" prefHeight="40.0" prefWidth="200.0" selected="true" text="Lista autobuskih stanica">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -38,7 +38,7 @@
                   <ToggleGroup fx:id="toggleGroup" />
                </toggleGroup>
             </ToggleButton>
-            <ToggleButton fx:id="dodajStanicuButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="215.0" mnemonicParsing="false" onAction="#dodajStanicu" prefHeight="30.0" prefWidth="200.0" text="Dodaj stanicu" toggleGroup="$toggleGroup">
+            <ToggleButton fx:id="dodavanjeAutobuskeStaniceButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="225.0" mnemonicParsing="false" onAction="#dodavanjeAutobuskeStanice" prefHeight="40.0" prefWidth="200.0" text="Dodavanje autobuske stanice" toggleGroup="$toggleGroup" wrapText="true">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -50,7 +50,19 @@
                   <Insets left="20.0" />
                </padding>
             </ToggleButton>
-            <ToggleButton fx:id="listaNalogaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="245.0" mnemonicParsing="false" onAction="#listaNaloga" prefHeight="30.0" prefWidth="200.0" text="Lista naloga" toggleGroup="$toggleGroup">
+            <ToggleButton fx:id="privremenoBlokiranjeAutobuskeStaniceButton" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="265.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Privremeno blokiranje autobuske stanice" toggleGroup="$toggleGroup" wrapText="true">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/logout.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </ToggleButton>
+            <ToggleButton fx:id="listaKorisnickihNalogaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="305.0" mnemonicParsing="false" onAction="#listaKorisnickihNaloga" prefHeight="40.0" prefWidth="200.0" text="Lista korisničkih naloga" toggleGroup="$toggleGroup">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -62,7 +74,7 @@
                   <Insets left="20.0" />
                </padding>
             </ToggleButton>
-            <ToggleButton fx:id="dodajNalogButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="275.0" mnemonicParsing="false" onAction="#dodajNalog" prefHeight="30.0" prefWidth="200.0" text="Dodaj nalog" toggleGroup="$toggleGroup">
+            <ToggleButton fx:id="dodavanjeKorisnickogNalogaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="345.0" mnemonicParsing="false" onAction="#dodavanjeKorisnickogNaloga" prefHeight="40.0" prefWidth="200.0" text="Dodavanje korisničkog naloga" toggleGroup="$toggleGroup" wrapText="true">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -74,7 +86,7 @@
                   <Insets left="20.0" />
                </padding>
             </ToggleButton>
-            <ToggleButton fx:id="odjavaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="450.0" mnemonicParsing="false" onAction="#odjava" prefHeight="30.0" prefWidth="200.0" text="Odjava" toggleGroup="$toggleGroup" AnchorPane.bottomAnchor="16.0">
+            <ToggleButton fx:id="odjavaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="446.0" mnemonicParsing="false" onAction="#odjava" prefHeight="40.0" prefWidth="200.0" text="Odjava" toggleGroup="$toggleGroup" AnchorPane.bottomAnchor="14.0">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -88,7 +100,7 @@
             </ToggleButton>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="menuLine" layoutX="200.0" layoutY="14.0" onMouseClicked="#doubleClick" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: BLACK;" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="menuLine" layoutX="200.0" layoutY="14.0" onMouseClicked="#doubleClickMaximize" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: BLACK;" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label fx:id="close" layoutX="576.0" layoutY="4.0" onMouseClicked="#close" prefHeight="20.0" prefWidth="20.0" styleClass="close" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                <graphic>

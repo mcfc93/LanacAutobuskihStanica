@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -15,10 +16,15 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 
+import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.autobuska_stanica.*;
 
 public class ListaStanicaController implements Initializable {
+	
+	@FXML
+	AnchorPane anchorPane;
 	
 	@FXML
 	private TableView<AutobuskaStanica> autobuskeStaniceTable;
@@ -117,8 +123,20 @@ public class ListaStanicaController implements Initializable {
         });
         
         nazivColumn.setMinWidth(100);
+        nazivColumn.setReorderable(false);
         
         adresaColumn.setMinWidth(100);
+        adresaColumn.setReorderable(false);
+        
+        brojPosteColumn.setReorderable(false);
+        
+        brojTelefonaColumn.setReorderable(false);
+        brojTelefonaColumn.setMinWidth(100);
+        brojTelefonaColumn.setMaxWidth(100);
+        
+        brojPeronaColumn.setReorderable(false);
+        brojPeronaColumn.setMinWidth(50);
+        brojPeronaColumn.setMaxWidth(50);
         
         
         izmijeniColumn.setText("");
@@ -127,17 +145,32 @@ public class ListaStanicaController implements Initializable {
         izmijeniColumn.setMaxWidth(50);
         izmijeniColumn.setResizable(false);
         izmijeniColumn.setSortable(false);
+        izmijeniColumn.setReorderable(false);
         obrisiColumn.setText("");
         obrisiColumn.setMinWidth(50);
         obrisiColumn.setMaxWidth(50);
         obrisiColumn.setResizable(false);
         obrisiColumn.setSortable(false);
+        obrisiColumn.setReorderable(false);
         
         
-        new Thread() {
+        
+        MaskerPane progressPane = new MaskerPane();
+		progressPane.setText("Molimo sačekajte...");
+		progressPane.setVisible(false);
+		anchorPane.getChildren().add(progressPane);
+		AnchorPane.setTopAnchor(progressPane,0.0);
+		AnchorPane.setBottomAnchor(progressPane,0.0);
+		AnchorPane.setLeftAnchor(progressPane,0.0);
+		AnchorPane.setRightAnchor(progressPane,0.0);
+		
+		System.out.println(Thread.currentThread());
+        /*
+		new Thread() {
         	@Override
         	public void run() {
         		Platform.runLater(() -> {
+        			System.out.println(Thread.currentThread());
 			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
 			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
 			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
@@ -159,9 +192,36 @@ public class ListaStanicaController implements Initializable {
 			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
 			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
 			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        
+			        try {
+			        	Thread.sleep(5000);
+			        } catch(Exception e) {
+			        	
+			        }
+			        
+			        progressPane.setVisible(false);
         		});
         	}
         }.run();
+        */
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() /*throws Exception*/ {
+            	System.out.println(Thread.currentThread());
+                progressPane.setVisible(true);
+                for(int i=0; i<30; i++) {
+                listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+            	}
+                //Thread.sleep(2000);
+                return null;
+            }
+            @Override
+            protected void succeeded(){
+                super.succeeded();
+                progressPane.setVisible(false);
+            }
+        };
+new Thread(task).start();
 	}
 	/*
 	public <S, T> void setButtonInColumn(TableColumn<AutobuskaStanica, AutobuskaStanica> tableColumn, ImageView url) {

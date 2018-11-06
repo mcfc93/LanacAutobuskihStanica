@@ -55,16 +55,19 @@ public class AdministratorController implements Initializable {
 	private ToggleButton odjavaButton;
 	
 	@FXML
-	private ToggleButton listaNalogaButton;
+	private ToggleButton listaKorisnickihNalogaButton;
 	
 	@FXML
-	private ToggleButton dodajNalogButton;
+	private ToggleButton dodavanjeKorisnickogNalogaButton;
 	
 	@FXML
-	private ToggleButton listaStanicaButton;
+	private ToggleButton listaAutobuskihStanicaButton;
 	
 	@FXML
-	private ToggleButton dodajStanicuButton;
+	private ToggleButton dodavanjeAutobuskeStaniceButton;
+	
+	@FXML
+	private ToggleButton privremenoBlokiranjeAutobuskeStaniceButton;
 	
 	private double xOffset=0;
     private double yOffset=0;
@@ -108,7 +111,7 @@ public class AdministratorController implements Initializable {
 		});
 		
 		//toggleGroup.getSelectedToggle().
-		listaStanica(null);
+		listaAutobuskihStanica(null);
 	}
 	
 	@FXML
@@ -162,7 +165,7 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	}
 	
 	@FXML
-	void doubleClick(MouseEvent event) {
+	void doubleClickMaximize(MouseEvent event) {
 		//System.out.println("Broj klikova: " + event.getClickCount());
 		if(event.getClickCount() > 1) {
 			maximize(event);
@@ -193,7 +196,7 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	}
 	*/
 	@FXML
-	void listaStanica(ActionEvent event) {
+	void listaAutobuskihStanica(ActionEvent event) {
 		//resetButtons();
 		//setCss((Button)event.getSource());
 		//listaStanicaButton.getStyleClass().removeAll("buttonMenu");
@@ -217,7 +220,7 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	}
 	
 	@FXML
-	void dodajStanicu(ActionEvent event) {
+	void dodavanjeAutobuskeStanice(ActionEvent event) {
 		//resetButtons();
 		//setCss((Button)event.getSource());
 		//dodajStanicuButton.getStyleClass().removeAll("buttonMenu");
@@ -238,7 +241,7 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	}
 	
 	@FXML
-	void listaNaloga(ActionEvent event) {
+	void listaKorisnickihNaloga(ActionEvent event) {
 		//resetButtons();
 		//setCss((Button)event.getSource());
 		//listaNalogaButton.getStyleClass().removeAll("buttonMenu");
@@ -258,7 +261,7 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	}
 	
 	@FXML
-	void dodajNalog(ActionEvent event) {
+	void dodavanjeKorisnickogNaloga(ActionEvent event) {
 		//resetButtons();
 		//setCss((Button)event.getSource());
 		//dodajNalogButton.getStyleClass().removeAll("buttonMenu");
