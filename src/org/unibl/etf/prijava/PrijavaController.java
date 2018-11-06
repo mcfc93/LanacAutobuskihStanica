@@ -1,5 +1,11 @@
 package org.unibl.etf.prijava;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -8,7 +14,10 @@ import org.unibl.etf.util.Util;
 import org.unibl.etf.zaposleni.AdministrativniRadnik;
 import org.unibl.etf.zaposleni.Administrator;
 
+import com.jfoenix.controls.JFXCheckBox;
+
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -42,6 +51,8 @@ public class PrijavaController implements Initializable {
 	
 	public static Nalog nalog=null;
 	
+	private static final String SER_FILE="logs/nalog.ser";
+	
 	@FXML
 	private AnchorPane anchorPane;
 	
@@ -50,6 +61,9 @@ public class PrijavaController implements Initializable {
 
     @FXML
     private PasswordField lozinkaTextField;
+    
+    @FXML
+    private JFXCheckBox zapamtiMeCheckBox;
     
     @FXML
     private Label greskaTextLabel;
@@ -71,10 +85,39 @@ public class PrijavaController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		//ucitavanje nalog.ser, ako postojis
+    	File f=new File(SER_FILE);
+    	if(f.exists()) {
+    		try (ObjectInputStream ois = 
+    				new ObjectInputStream(
+    						new FileInputStream(f.getAbsolutePath())
+    				)
+    			)
+    		{
+    			PrijavaController.nalog=(Nalog)ois.readObject();
+    			korisnickoImeTextField.setText(nalog.getKorisnickoIme());
+    			lozinkaTextField.setText(nalog.getLozinka());
+System.out.println("nalog.ser");
+    		} catch(IOException e) {
+    			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+    		} catch(ClassNotFoundException e) {
+    			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+    		}
+    	}
+		
 		greskaTextLabel.setVisible(false);
 		greskaBackgroundLabel.setVisible(false);
+		zapamtiMeCheckBox.setSelected(true);
 		//spinner.setVisible(false);
 		//progressBar.setVisible(false);
+		
+		if(korisnickoImeTextField.getText().trim().isEmpty()) {
+			//focus se moze traziti samo nakon sto se Stage inicijalizuje
+			Platform.runLater(() -> korisnickoImeTextField.requestFocus());
+		} else {
+			Platform.runLater(() -> lozinkaTextField.requestFocus());
+			System.out.println("LOZINKA FOCUS");
+		}
 		
 		//DragAndDrop
 		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -158,10 +201,14 @@ public class PrijavaController implements Initializable {
 		);
 		pause.play();
 		*/
+
 		if ((nalog=Nalog.prijava(korisnickoImeTextField.getText(), lozinkaTextField.getText())) != null) {
 			//((Stage)anchorPane.getScene().getWindow()).close();
 			//((Stage)anchorPane.getScene().getWindow()).hide();
 			//((Node)event.getSource()).getScene().getWindow().hide();
+			
+			//korisnickoImeTextField.setText("");
+			//lozinkaTextField.setText("");
 			((Stage)((Node)event.getSource()).getScene().getWindow()).close();
 			
 			//nalog.setKorisnickoIme(korisnickoImeTextField.getText());
@@ -182,6 +229,32 @@ public class PrijavaController implements Initializable {
 			
 			
 			
+			//Serijalizacija ako je cekirano Remember me
+			if(zapamtiMeCheckBox.isSelected()) {
+				System.out.println("REMEMBER ME");
+				try (ObjectOutputStream oos = 
+						new ObjectOutputStream(
+								new FileOutputStream(SER_FILE)
+						)
+				)
+				{
+					/*********
+					 * TREBA NESTO DRUGO ODRADITI
+					 * 
+					 * 
+					 */
+					nalog.setLozinka(lozinkaTextField.getText());
+					oos.writeObject(nalog);
+				} catch(IOException e) {
+					Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+				}
+			} else {
+				File f=new File(SER_FILE);
+		    	if(f.exists()) {
+		    		f.delete();
+		    	}
+			}
+			
 			
 			if(nalog.getZaposleni() instanceof Administrator) {
 				//administrator
@@ -194,10 +267,6 @@ public class PrijavaController implements Initializable {
     				stage.setResizable(false);
     				stage.initStyle(StageStyle.UNDECORATED);
     				stage.show();
-
-    				//Modality.NONE, Modality.WINDOW_MODAL, Modality.APPLICATION_MODAL
-    				//stage.initModality(Modality.APPLICATION_MODAL);
-    				//stage.showAndWait();
     			} catch(Exception e) {
     				//e.printStackTrace();
     				Util.LOGGER.log(Level.SEVERE, e.toString(), e);
@@ -212,16 +281,7 @@ public class PrijavaController implements Initializable {
     				//stage.setTitle("Administrativni radnik");
     				stage.setResizable(false);
     				stage.initStyle(StageStyle.UNDECORATED);
-    				//primaryStage.initStyle(StageStyle.DECORATED);
-    				//primaryStage.initStyle(StageStyle.UNDECORATED);    //brisanje _ [] X
-    				//primaryStage.initStyle(StageStyle.UNIFIED);
-    				//primaryStage.initStyle(StageStyle.UTILITY);
-
     				stage.show();
-
-    				//Modality.NONE, Modality.WINDOW_MODAL, Modality.APPLICATION_MODAL
-    				//stage.initModality(Modality.APPLICATION_MODAL);
-    				//stage.showAndWait();
     			} catch(Exception e) {
     				//e.printStackTrace();
     				Util.LOGGER.log(Level.SEVERE, e.toString(), e);
@@ -237,16 +297,7 @@ public class PrijavaController implements Initializable {
            			//stage.setTitle("Šalterski radnik");
            			stage.setResizable(false);
            			stage.initStyle(StageStyle.UNDECORATED);
-           			//primaryStage.initStyle(StageStyle.DECORATED);
-           			//primaryStage.initStyle(StageStyle.UNDECORATED);    //brisanje _ [] X
-           			//primaryStage.initStyle(StageStyle.UNIFIED);
-           			//primaryStage.initStyle(StageStyle.UTILITY);
-           			
            			stage.show();
-           			
-            		//Modality.NONE, Modality.WINDOW_MODAL, Modality.APPLICATION_MODAL
-            		//stage.initModality(Modality.APPLICATION_MODAL);
-            		//stage.showAndWait();
            		} catch(Exception e) {
            			//e.printStackTrace();
            			Util.LOGGER.log(Level.SEVERE, e.toString(), e);

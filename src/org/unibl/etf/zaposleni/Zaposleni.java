@@ -1,8 +1,10 @@
 package org.unibl.etf.zaposleni;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public abstract class Zaposleni {
+public abstract class Zaposleni implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String ime;
 	private String prezime;
 	private String adresa;

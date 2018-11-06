@@ -1,13 +1,13 @@
 package org.unibl.etf.prijava;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 //import java.util.Base64;
 
@@ -18,7 +18,8 @@ import org.unibl.etf.zaposleni.SalterskiRadnik;
 import org.unibl.etf.util.Util;
 import java.util.logging.Level;
 
-public class Nalog {
+public class Nalog implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String korisnickoIme;
 	private String lozinka;
 	private int idStanice;

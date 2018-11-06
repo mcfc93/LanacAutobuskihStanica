@@ -3,22 +3,18 @@ package org.unibl.etf.administrator;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
-import javafx.util.Callback;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 
 import org.unibl.etf.autobuska_stanica.*;
 
@@ -137,23 +133,36 @@ public class ListaStanicaController implements Initializable {
         obrisiColumn.setResizable(false);
         obrisiColumn.setSortable(false);
         
+        
         new Thread() {
         	@Override
         	public void run() {
-		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-		        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-		        
+        		Platform.runLater(() -> {
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+        		});
         	}
         }.run();
 	}
-
 	/*
 	public <S, T> void setButtonInColumn(TableColumn<AutobuskaStanica, AutobuskaStanica> tableColumn, ImageView url) {
 		tableColumn.setCellValueFactory(
