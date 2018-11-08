@@ -3,26 +3,20 @@ package org.unibl.etf.karta;
 import java.util.ArrayList;
 
 public class Linija {
-	
-	private ArrayList<Relacija> relacije = new ArrayList<>();
 	private int idLinije;
 	private String nazivLinije;
 	private int idStanice;
-	
-	public Linija(ArrayList<Relacija> relacije, int idLinije, String nazivLinije, int idStanice) {
+	private String daniUSedmici;
+	private int peron;
+	public Linija(int idLinije,String nazivLinije,String daniUSedmici,int peron) {
 		super();
-		this.relacije = relacije;
 		this.idLinije = idLinije;
 		this.nazivLinije = nazivLinije;
-		this.idStanice = idStanice;
+		this.daniUSedmici = daniUSedmici;
+		this.peron = peron;
 	}
 	
-	public ArrayList<Relacija> getRelacije() {
-		return relacije;
-	}
-	public void setRelacije(ArrayList<Relacija> relacije) {
-		this.relacije = relacije;
-	}
+	
 	public int getIdLinije() {
 		return idLinije;
 	}
@@ -63,20 +57,38 @@ public class Linija {
 			return false;
 		return true;
 	}
-	
-	public boolean dodajRelaciju(Relacija relacija) {
-		return relacije.add(relacija);
+
+
+	public int getPeron() {
+		return peron;
 	}
-	
-	public boolean ukloniRelaciju(Relacija relacija) {
-		return relacije.remove(relacija);
+
+
+	public void setPeron(int peron) {
+		this.peron = peron;
 	}
+
+
+	public String getDaniUSedmici() {
+		return daniUSedmici;
+	}
+
+
+	public void setDaniUSedmici(String daniUSedmici) {
+		this.daniUSedmici = daniUSedmici;
+	}
+
 
 	@Override
 	public String toString() {
-		return "Linija [relacije=" + relacije + ", idLinije=" + idLinije + ", nazivLinije=" + nazivLinije
-				+ ", idStanice=" + idStanice + "]";
+		return "Linija [idLinije=" + idLinije + ", nazivLinije=" + nazivLinije + ", idStanice=" + idStanice
+				+ ", daniUSedmici=" + daniUSedmici + ", peron=" + peron + "]";
 	}
+
+
+	
+	
+	
 	
 	
 }

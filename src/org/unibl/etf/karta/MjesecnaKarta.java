@@ -1,28 +1,26 @@
 package org.unibl.etf.karta;
 
 import java.io.File;
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+
+import org.unibl.etf.zaposleni.Zaposleni;
 
 public class MjesecnaKarta extends Karta {
 	private String ime;
 	private String prezime;
 	private File slika;
-	private double cijena;
-	private MjesecVazenja mjesecVazenja;
 	private TipKarte tip;
 	
-	public MjesecnaKarta() {
-		super();
+	public MjesecnaKarta(int idKarte, Linija linija, Relacija relacija, Time vrijemePolaska, Time vrijemeDolaska,
+			double cijena, LocalDate datumIzdavanja, Prevoznik prevoznik, String imeZaposlenog,String ime,String prezime,TipKarte tip,File slika) {
+		super(linija, relacija, vrijemePolaska, vrijemeDolaska, cijena, datumIzdavanja, prevoznik, imeZaposlenog);
 		// TODO Auto-generated constructor stub
-	}
-	public MjesecnaKarta(int idKarte, Prevoznik prevozink, Relacija relacija, String ime, String prezime, File slika, double cijena,
-			MjesecVazenja mjesecVazenja, TipKarte tip) {
-		super(idKarte, prevozink, relacija);
 		this.ime = ime;
 		this.prezime = prezime;
-		this.slika = slika;
-		this.cijena = cijena;
-		this.mjesecVazenja = mjesecVazenja;
 		this.tip = tip;
+		this.slika = slika;
 	}
 	
 	public String getIme() {
@@ -43,40 +41,23 @@ public class MjesecnaKarta extends Karta {
 	public void setSlika(File slika) {
 		this.slika = slika;
 	}
-	public double getCijena() {
-		return cijena;
-	}
-	public void setCijena(double cijena) {
-		this.cijena = cijena;
-	}
-	public MjesecVazenja getMjesecVazenja() {
-		return mjesecVazenja;
-	}
-	public void setMjesecVazenja(MjesecVazenja mjesecVazenja) {
-		this.mjesecVazenja = mjesecVazenja;
-	}
 	public TipKarte getTip() {
 		return tip;
 	}
 	public void setTip(TipKarte tip) {
 		this.tip = tip;
 	}
-	
 
 	@Override
-	public int hashCode() {
-		return super.hashCode();
-	}
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj);
-	}
-	@Override
 	public String toString() {
-		return "MjesecnaKarta [ime=" + ime + ", prezime=" + prezime + ", slika=" + slika + ", cijena=" + cijena
-				+ ", mjesecVazenja=" + mjesecVazenja + ", tip=" + tip + "]";
+		return "MjesecnaKarta [ime=" + ime + ", prezime=" + prezime + ", slika=" + slika + ", tip=" + tip + ", idKarte="
+				+ idKarte + ", linija=" + linija + ", relacija=" + relacija + ", vrijemePolaska=" + vrijemePolaska
+				+ ", vrijemeDolaska=" + vrijemeDolaska + ", cijena=" + cijena + ", datumIzdavanja=" + datumIzdavanja
+				+ ", prevoznik=" + prevoznik + ", imeZaposlenog=" + imeZaposlenog + ", peron=" + peron
+				+ ", nazivPrevoznika=" + nazivPrevoznika + ", nazivLinije=" + nazivLinije + "]";
 	}
 	
 	
+		
 	
 }

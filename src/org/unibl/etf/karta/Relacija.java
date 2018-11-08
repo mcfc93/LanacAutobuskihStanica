@@ -4,18 +4,18 @@ public class Relacija {
 	
 	private int idLinije;
 	private int idRelacije;
-	private String ishodiste;
-	private String odrediste;
+	private int polaziste;
+	private int odrediste;
 	
 	public Relacija() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Relacija(int idRelacije, int idLinije, String ishodiste, String odrediste) {
+	public Relacija(int idRelacije,int idLinije,int polaziste, int odrediste) {
 		super();
-		this.idLinije = idLinije;
 		this.idRelacije = idRelacije;
-		this.ishodiste = ishodiste;
+		this.idLinije = idLinije;
+		this.polaziste = polaziste;
 		this.odrediste = odrediste;
 	}
 	
@@ -31,22 +31,22 @@ public class Relacija {
 	public void setIdRelacije(int idRelacije) {
 		this.idRelacije = idRelacije;
 	}
-	public String getIshodiste() {
-		return ishodiste;
+	public int getIshodiste() {
+		return polaziste;
 	}
-	public void setIshodiste(String ishodiste) {
-		this.ishodiste = ishodiste;
+	public void setIshodiste(int ishodiste) {
+		this.polaziste = ishodiste;
 	}
-	public String getOdrediste() {
+	public int getOdrediste() {
 		return odrediste;
 	}
-	public void setOdrediste(String odrediste) {
+	public void setOdrediste(int odrediste) {
 		this.odrediste = odrediste;
 	}
 	
 	@Override
 	public String toString() {
-		return "Relacija [idLinije=" + idLinije + ", idRelacije=" + idRelacije + ", ishodiste=" + ishodiste
+		return "Relacija [idLinije=" + idLinije + ", idRelacije=" + idRelacije + ", polaziste=" + polaziste
 				+ ", odrediste=" + odrediste + "]";
 	}
 	@Override

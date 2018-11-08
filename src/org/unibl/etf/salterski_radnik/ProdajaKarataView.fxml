@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXRadioButton?>
-<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.TableColumn?>
@@ -11,27 +11,30 @@
 
 <AnchorPane prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.salterski_radnik.ProdajaKarataController">
    <children>
-      <JFXTextField fx:id="odredisteTextField" labelFloat="true" layoutX="14.0" layoutY="223.0" promptText="Odaberite odrediste" />
-      <TableView fx:id="linijeTable" layoutY="7.0" prefHeight="200.0" prefWidth="310.0" stylesheets="@salterski_radnik.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <JFXTextField fx:id="odredisteTextField" labelFloat="true" layoutX="14.0" layoutY="211.0" promptText="Odaberite odrediste" />
+      <TableView fx:id="linijeTable" layoutY="7.0" prefHeight="200.0" prefWidth="310.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columns>
-          <TableColumn fx:id="nazivLinijeColumn" prefWidth="64.0" text="Naziv linije" />
-          <TableColumn fx:id="cijenaColumn" prefWidth="41.0" text="Cijena" />
-            <TableColumn fx:id="vrijemePolaskaColumn" prefWidth="62.0" text="Vrijeme polaska" />
-            <TableColumn fx:id="peronColumn" prefWidth="137.0" text="Peron" />
-            <TableColumn fx:id="brojSjedistaColumn" prefWidth="75.0" text="Sjediste" />
-            <TableColumn fx:id="prevoznikColumn" prefWidth="101.0" text="Prevoznik" />
-            <TableColumn fx:id="idLinijeColumn" prefWidth="75.0" text="ID linije" />
-            <TableColumn fx:id="idStaniceColumn" prefWidth="75.0" text="ID stanice" />
+          <TableColumn fx:id="nazivLinijeColumn" minWidth="-1.0" prefWidth="162.0" resizable="false" text="Naziv linije" />
+            <TableColumn fx:id="vrijemePolaskaColumn" prefWidth="99.0" resizable="false" text="Vrijeme polaska" />
+            <TableColumn fx:id="vrijemeDolaskaColumn" prefWidth="101.0" resizable="false" text="Vrijeme dolaska" />
+          <TableColumn fx:id="cijenaColumn" minWidth="0.0" prefWidth="58.0" resizable="false" text="Cijena" />
+            <TableColumn fx:id="prevoznikColumn" prefWidth="97.0" resizable="false" text="Prevoznik" />
+            <TableColumn fx:id="peronColumn" prefWidth="82.0" text="Peron" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <JFXButton fx:id="pretragaButton" layoutX="62.0" layoutY="380.0" onAction="#pretragaRelacija" style="-fx-background-color: PURPLE;" text="Pretraga" textFill="RED" />
-      <JFXTextArea layoutX="325.0" layoutY="210.0" prefHeight="185.0" prefWidth="221.0" />
-      <JFXButton layoutX="410.0" layoutY="419.0" text="Prodaja" />
-      <DatePicker fx:id="datum" layoutX="167.0" layoutY="223.0" style="-fx-background-color: pink;" />
-      <JFXTextField fx:id="brojKarata" labelFloat="true" layoutX="14.0" layoutY="290.0" promptText="Broj karata" />
-      <JFXRadioButton fx:id="djecijaKarta" layoutX="208.0" layoutY="294.0" text="Djecija karta" />
+      <JFXButton fx:id="pretragaButton" layoutX="29.0" layoutY="349.0" onAction="#pretragaRelacija" style="-fx-background-color: #03A9F4;" text="Pretraga" />
+      <JFXTextField fx:id="brojKarata" labelFloat="true" layoutX="14.0" layoutY="251.0" promptText="Broj karata" />
+      <JFXButton fx:id="kupovinaButton" layoutX="116.0" layoutY="349.0" onAction="#kupovina" style="-fx-background-color: #03A9F4;" text="Kupovina" />
+      <DatePicker fx:id="datum" layoutX="14.0" layoutY="295.0" />
+      <JFXTextField fx:id="imeField" labelFloat="true" layoutX="364.0" layoutY="224.0" promptText="Ime" />
+      <JFXTextField fx:id="prezimeField" layoutX="364.0" layoutY="264.0" text="Prezime" />
+      <JFXTextField fx:id="nazivSlikeTextField" layoutX="364.0" layoutY="308.0" promptText="Odaberite sliku" />
+      <JFXButton fx:id="odaberiSlikuButton" layoutX="257.0" layoutY="308.0" onAction="#odaberiSliku" style="-fx-background-color: #03A9F4;" text="Odaberi sliku" />
+      <JFXRadioButton fx:id="radioButtonObicna" layoutX="201.0" layoutY="215.0" text="Obicna karta" />
+      <JFXRadioButton fx:id="radioButtonMjesecna" layoutX="201.0" layoutY="255.0" text="Mjesecna karta" />
+      <JFXComboBox fx:id="tipKarteComboBox" layoutX="394.0" layoutY="374.0" />
    </children>
 </AnchorPane>

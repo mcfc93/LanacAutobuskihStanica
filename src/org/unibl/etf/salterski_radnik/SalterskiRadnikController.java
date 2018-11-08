@@ -4,13 +4,13 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
 
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -19,65 +19,69 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class SalterskiRadnikController implements Initializable {
 	
-	@FXML
-	private AnchorPane anchorPane;
-	
-	@FXML
-	private AnchorPane dataAnchorPane;
-	
-	@FXML
-	private AnchorPane menuAnchorPane;
-	
-	@FXML
-	private AnchorPane infoAnchorPane;
-	
-	@FXML
-	private Label informacijeLabel;
-	
-	@FXML
-	private Button odjavaButton;
-	@FXML
-	private Button kreirajMjesecnuKartuButton;
-	@FXML
-	private Button prodajaKarataButton;
-	@FXML
-	private Button otkazivanjeRezervacijaButton;
-	
-	
+	public static int brojStanice;
+	public static int brojMjesta;
 	private double xOffset=0;
     private double yOffset=0;
+    
+	@FXML
+	private AnchorPane anchorPane;
+	@FXML
+	private AnchorPane dataAnchorPane;
+	@FXML
+	private AnchorPane menuAnchorPane;
+	@FXML
+	private AnchorPane infoAnchorPane;
+	@FXML
+	private Label informacijeLabel;
+	@FXML
+	private ToggleGroup toggleGroup;
+	@FXML
+	private ToggleButton informacijeButton;
+	@FXML
+	private ToggleButton odjavaButton;
+	@FXML
+	private ToggleButton kreirajMjesecnuKartuButton;
+	@FXML
+	private ToggleButton prodajaKarataButton;
+	@FXML
+	private ToggleButton korisnickiNalogButton;
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		toggleGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
+		    if (newValue == null) {
+		        oldValue.setSelected(true);
+		    }
+		});	
 		informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " + PrijavaController.nalog.getZaposleni().getPrezime());
-		
 		Connection c = null;
-		String query = "SELECT * FROM autobuska_stanica";
-		Statement s = null;
+		String query = "SELECT BrojPoste FROM autobuska_stanica WHERE IdStanice=?";
+		PreparedStatement s = null;
 		ResultSet r = null;
 		try {
 			c = Util.getConnection();
-			System.out.println("Broj stanice: " + PrijavaController.nalog.getIdStanice());
-			r = s.executeQuery(query);
+			s = c.prepareStatement(query);
+			s.setInt(1, PrijavaController.nalog.getIdStanice());
+			r = s.executeQuery();
 			while(r.next()) {
-				System.out.println("fas");
-				System.out.println(r.toString());
+				brojMjesta = r.getInt(1);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
+		Util.close(r, s, c);
 		//DragAndDrop
 		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
@@ -129,7 +133,6 @@ public class SalterskiRadnikController implements Initializable {
 System.out.println("GRESKA! - Odjava nije uspjesnja.");
 		}
 	}
-	
 	@FXML
 	void close(MouseEvent event) {
 		//System.exit(0);
@@ -155,26 +158,28 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	
 	@FXML
 	void doubleClick(MouseEvent event) {
-		//System.out.println("Broj klikova: " + event.getClickCount());
 		if(event.getClickCount() > 1) {
 			maximize(event);
 		}
 	}
 	
-	private void resetButtons() {
-		prodajaKarataButton.getStyleClass().clear();
-		odjavaButton.getStyleClass().clear();
-		kreirajMjesecnuKartuButton.getStyleClass().clear();
-		otkazivanjeRezervacijaButton.getStyleClass().clear();
-		odjavaButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
-		prodajaKarataButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
-		kreirajMjesecnuKartuButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
-		otkazivanjeRezervacijaButton.getStyleClass().addAll("button", "buttonMenu", "buttonRightBorder");
+	@FXML
+	void korisnickiNalog(ActionEvent event) {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/KorisnickiNalog.fxml"));
+			AnchorPane.setTopAnchor(root,0.0);
+			AnchorPane.setBottomAnchor(root,0.0);
+			AnchorPane.setLeftAnchor(root,0.0);
+			AnchorPane.setRightAnchor(root,0.0);
+			dataAnchorPane.getChildren().removeAll();
+			dataAnchorPane.getChildren().setAll(root);
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
 	}
 	
 	@FXML
 	void prodajaKarata(ActionEvent event) {
-		resetButtons();
 		prodajaKarataButton.getStyleClass().removeAll("buttonMenu");
 		prodajaKarataButton.getStyleClass().add("buttonPressed");
 		try {
@@ -193,28 +198,10 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	
 	@FXML
 	public void mjesecnaKarta(ActionEvent event) {
-		resetButtons();
 		kreirajMjesecnuKartuButton.getStyleClass().removeAll("buttonMenu");
 		kreirajMjesecnuKartuButton.getStyleClass().add("buttonPressed");
 		try {
 			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/KreiranjeMjesecneKarte.fxml"));
-			AnchorPane.setTopAnchor(root,0.0);
-			AnchorPane.setBottomAnchor(root,0.0);
-			AnchorPane.setLeftAnchor(root,0.0);
-			AnchorPane.setRightAnchor(root,0.0);
-			dataAnchorPane.getChildren().removeAll();
-			dataAnchorPane.getChildren().setAll(root);
-		} catch(Exception e) {
-			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-		}
-	}
-	@FXML
-	public void otkazivanjeKarata(ActionEvent event) {
-		resetButtons();
-		otkazivanjeRezervacijaButton.getStyleClass().removeAll("buttonMenu");
-		otkazivanjeRezervacijaButton.getStyleClass().add("buttonPressed");
-		try {
-			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/OtkazivanjeRezervacijaView.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
 			AnchorPane.setBottomAnchor(root,0.0);
 			AnchorPane.setLeftAnchor(root,0.0);

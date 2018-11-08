@@ -1,32 +1,30 @@
 package org.unibl.etf.karta;
 
 public class Prevoznik {
-	private int idPrevoznika;
 	private String naziv;
 	private String email;
 	private String adresa;
 	private String telefon;
-	
-	public Prevoznik(int idPrevoznika, String naziv, String email, String adresa, String telefon) {
+	private String mjesto;
+	private String webAdresa;
+	public Prevoznik(String naziv, String email, String adresa, String webAdresa,String telefon, String mjesto) {
 		super();
-		this.idPrevoznika = idPrevoznika;
 		this.naziv = naziv;
 		this.email = email;
+		this.webAdresa = webAdresa;
 		this.adresa = adresa;
 		this.telefon = telefon;
+		this.mjesto = mjesto;
 	}
 	
-	public Prevoznik() {
-		super();
-		// TODO Auto-generated constructor stub
+	public String getWebAdresa() {
+		return webAdresa;
 	}
-	
-	public int getIdPrevoznika() {
-		return idPrevoznika;
+
+	public void setWebAdresa(String webAdresa) {
+		this.webAdresa = webAdresa;
 	}
-	public void setIdPrevoznika(int idPrevoznika) {
-		this.idPrevoznika = idPrevoznika;
-	}
+
 	public String getNaziv() {
 		return naziv;
 	}
@@ -51,34 +49,18 @@ public class Prevoznik {
 	public void setTelefon(String telefon) {
 		this.telefon = telefon;
 	}
-	
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + idPrevoznika;
-		return result;
+	public String getMjesto() {
+		return mjesto;
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Prevoznik other = (Prevoznik) obj;
-		if (idPrevoznika != other.idPrevoznika)
-			return false;
-		return true;
+	public void setMjesto(String mjesto) {
+		this.mjesto = mjesto;
 	}
-	
 	@Override
 	public String toString() {
-		return "Prevoznik [idPrevoznika=" + idPrevoznika + ", naziv=" + naziv + ", email=" + email + ", adresa="
-				+ adresa + ", telefon=" + telefon + "]";
+		return "Prevoznik [naziv=" + naziv + ", email=" + email + ", adresa=" + adresa + ", telefon=" + telefon
+				+ ", mjesto=" + mjesto + "]";
 	}
+	
+	
 	
 }
