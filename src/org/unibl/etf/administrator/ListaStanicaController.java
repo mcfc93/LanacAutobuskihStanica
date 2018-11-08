@@ -172,33 +172,6 @@ public class ListaStanicaController implements Initializable {
         		Platform.runLater(() -> {
         			System.out.println(Thread.currentThread());
 			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-			        
-			        try {
-			        	Thread.sleep(5000);
-			        } catch(Exception e) {
-			        	
-			        }
-			        
 			        progressPane.setVisible(false);
         		});
         	}
@@ -221,8 +194,9 @@ public class ListaStanicaController implements Initializable {
                 progressPane.setVisible(false);
             }
         };
-new Thread(task).start();
+        new Thread(task).start();
 	}
+	
 	/*
 	public <S, T> void setButtonInColumn(TableColumn<AutobuskaStanica, AutobuskaStanica> tableColumn, ImageView url) {
 		tableColumn.setCellValueFactory(

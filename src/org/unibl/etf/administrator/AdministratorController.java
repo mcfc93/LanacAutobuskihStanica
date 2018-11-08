@@ -55,10 +55,10 @@ public class AdministratorController implements Initializable {
 	private ToggleButton odjavaButton;
 	
 	@FXML
-	private ToggleButton listaKorisnickihNalogaButton;
+	private ToggleButton dodavanjeKorisnickogNalogaButton;
 	
 	@FXML
-	private ToggleButton dodavanjeKorisnickogNalogaButton;
+	private ToggleButton brisanjeKorisnickogNalogaButton;
 	
 	@FXML
 	private ToggleButton listaAutobuskihStanicaButton;
@@ -68,6 +68,9 @@ public class AdministratorController implements Initializable {
 	
 	@FXML
 	private ToggleButton privremenoBlokiranjeAutobuskeStaniceButton;
+	
+	@FXML
+	private ToggleButton korisnickiNalogButton;
 	
 	private double xOffset=0;
     private double yOffset=0;
@@ -241,7 +244,28 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	}
 	
 	@FXML
-	void listaKorisnickihNaloga(ActionEvent event) {
+	void dodavanjeKorisnickogNaloga(ActionEvent event) {
+		//resetButtons();
+		//setCss((Button)event.getSource());
+		//dodajNalogButton.getStyleClass().removeAll("buttonMenu");
+		//dodajNalogButton.getStyleClass().add("buttonPressed");
+		
+		
+		try {
+			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/DodajNalog.fxml"));
+			AnchorPane.setTopAnchor(root,0.0);
+			AnchorPane.setBottomAnchor(root,0.0);
+			AnchorPane.setLeftAnchor(root,0.0);
+			AnchorPane.setRightAnchor(root,0.0);
+			dataAnchorPane.getChildren().removeAll();
+			dataAnchorPane.getChildren().setAll(root);
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+	}
+	
+	@FXML
+	void brisanjeKorisnickogNaloga(ActionEvent event) {
 		//resetButtons();
 		//setCss((Button)event.getSource());
 		//listaNalogaButton.getStyleClass().removeAll("buttonMenu");
@@ -261,15 +285,9 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	}
 	
 	@FXML
-	void dodavanjeKorisnickogNaloga(ActionEvent event) {
-		//resetButtons();
-		//setCss((Button)event.getSource());
-		//dodajNalogButton.getStyleClass().removeAll("buttonMenu");
-		//dodajNalogButton.getStyleClass().add("buttonPressed");
-		
-		
+	void korisnickiNalog(ActionEvent event) {
 		try {
-			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/DodajNalog.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/KorisnickiNalog.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
 			AnchorPane.setBottomAnchor(root,0.0);
 			AnchorPane.setLeftAnchor(root,0.0);

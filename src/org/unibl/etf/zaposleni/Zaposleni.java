@@ -1,18 +1,24 @@
 package org.unibl.etf.zaposleni;
 
 import java.io.Serializable;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.logging.Level;
+import org.unibl.etf.util.Util;
 
 public abstract class Zaposleni implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String ime;
 	private String prezime;
-	private String adresa;
-	private String brojTelefona;
-	private Date datumRodjenja;
 	private String jmbg;
-	private String mjestoPrebivalista;
+	private String adresa;
 	private String strucnaSprema;
+	private String brojTelefona;
+	//private Date datumRodjenja;
+	//private String mjestoPrebivalista;
 	private String email;
 	
 	public Zaposleni() {
@@ -40,5 +46,75 @@ public abstract class Zaposleni implements Serializable {
 		this.prezime = prezime;
 	}
 	
-	
+	public String getJmbg() {
+		return jmbg;
+	}
+
+	public void setJmbg(String jmbg) {
+		this.jmbg = jmbg;
+	}
+
+	public String getAdresa() {
+		return adresa;
+	}
+
+	public void setAdresa(String adresa) {
+		this.adresa = adresa;
+	}
+
+	public String getBrojTelefona() {
+		return brojTelefona;
+	}
+
+	public void setBrojTelefona(String brojTelefona) {
+		this.brojTelefona = brojTelefona;
+	}
+
+	public String getStrucnaSprema() {
+		return strucnaSprema;
+	}
+
+	public void setStrucnaSprema(String strucnaSprema) {
+		this.strucnaSprema = strucnaSprema;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return "Zaposleni [ime=" + ime + ", prezime=" + prezime + ", jmbg=" + jmbg + ", adresa=" + adresa
+				+ ", strucnaSprema=" + strucnaSprema + ", brojTelefona=" + brojTelefona + ", email=" + email + "]";
+	}
+
+	public void selectZaposleni(String korisnickoIme) {
+		Connection c = null;
+		CallableStatement s = null;
+		ResultSet r = null;
+	    try {
+	       	c=Util.getConnection();
+	    	s = c.prepareCall("{call selectZaposleni(?)}");
+	       	s.setString(1, korisnickoIme);
+	       	r = s.executeQuery();
+	        if(r.next()) {
+	       		this.setIme(r.getString("Ime"));
+	       		this.setPrezime(r.getString("Prezime"));
+	       		this.setJmbg(r.getString("JMBG"));
+	       		//zaposleni.setPol("TBD");
+	       		this.setAdresa(r.getString("Adresa") + " " + r.getString("BrojPoste") + " TBD");
+	       		this.setBrojTelefona(r.getString("BrojTelefona"));
+	       		this.setEmail(r.getString("Email"));
+	       		this.setStrucnaSprema(r.getString("StrucnaSprema"));
+	       	}
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(r,s,c);
+	    }
+	}
 }

@@ -119,7 +119,7 @@ public class Nalog implements Serializable {
 	        // 4.Process the result set
 	       	if(r.next()) {
 	       		
-	       		
+/*
 //ucitavanje podataka o zaposlenom iz baze
 //potrebno za sad samo Ime i Prezime
 //u konstruktore proslijediti Ime, Prezime a za sve ostale parametre staviti null
@@ -137,7 +137,7 @@ public class Nalog implements Serializable {
 	    		rr=ss.executeQuery("select Ime, Prezime from Zaposleni where JMBG=" + jmbg);
 	    		rr.next();
 	    		//System.out.println(rr.getString("Ime") + " " + rr.getString("Prezime"));
-	    		
+*/
 	    		
 	    		
 	    		
@@ -149,13 +149,17 @@ public class Nalog implements Serializable {
 	    		System.out.println(nalog);
 	    		
 	    		if("Administrator".equals(r.getString("Tip"))) {
-	       			nalog.zaposleni=new Administrator(rr.getString("Ime"), rr.getString("Prezime"));
-	       			//System.out.println(nalog.zaposleni.getIme());
+	       			nalog.zaposleni=new Administrator();
+	       			nalog.zaposleni.selectZaposleni(nalog.korisnickoIme);
 	       		} else if("AdministrativniRadnik".equals(r.getString("Tip"))) {
 	       			nalog.zaposleni=new AdministrativniRadnik();
+	       			nalog.zaposleni.selectZaposleni(nalog.korisnickoIme);
 	        	} else {
 	        		nalog.zaposleni=new SalterskiRadnik();
+	        		nalog.zaposleni.selectZaposleni(nalog.korisnickoIme);
 	        	}
+	    		
+	    		System.out.println(nalog.zaposleni);
 	        }/* else {
 	        	return null;
             }*/

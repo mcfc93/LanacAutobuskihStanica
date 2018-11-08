@@ -25,7 +25,7 @@
  	/*-fx-background-color: linear-gradient(to left bottom, gray, darkgray 50%, dimgray 99%, white);*/
  	-fx-background-color: linear-gradient(to right bottom, #4b0082, #8b008b 50%, #9c27b0 80%, #9932cc);
 }
-/*
+
 .button {
 	-fx-background-color: yellow;
 	-fx-border: none;
@@ -36,7 +36,7 @@
 .button:hover {
 	-fx-background-color: #9c27b0;
 }
-*/
+
 /*
 .buttonMenu {
 	-fx-background-color: transparent;
@@ -100,17 +100,18 @@
 	-fx-background-color: #2800ae;
 }
 
-.jfx-text-field {
+.text-field, .password-field {
+	-fx-text-fill: black;
+	-fx-prompt-text-fill: white;
+	-fx-highlight-fill: blue;
+}
+
+.jfx-text-field, .jfx-password-field {
+	-fx-text-fill: white;
 	-jfx-focus-color: BLUE;
 	-jfx-unfocus-color: WHITE;
 	-jfx-label-float: true;
 	-jfx-disable-animation: false;
-}
-
-.text-field {
-	-fx-text-fill: white;
-	-fx-prompt-text-fill: white;
-	-fx-highlight-fill: blue;
 }
 
 .jfx-text-field:error {
@@ -324,4 +325,24 @@
 	/*-fx-background-color: #9c27b0;*/
 	-fx-background-color: black;
 	-fx-cursor: hand;
+}
+
+.masker-pane {}
+
+.masker-pane .masker-glass {
+    -fx-background-color: rgba(0, 0, 0, .5);
+    /*-fx-background-color: rgba(92, 191, 235, .3);*/
+}
+
+.masker-pane .masker-text {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.masker-pane .masker-center {
+    -fx-background-color: rgba(0, 0, 0, .7);
+    /*-fx-background-color: rgba(92, 191, 235, .6);*/
+    -fx-max-height: 1.50in;
+    -fx-padding: .25in;
+    -fx-background-radius: .1in;
 }

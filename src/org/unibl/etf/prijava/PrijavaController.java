@@ -218,12 +218,12 @@ System.out.println("nalog.ser");
 			
 			
 			
-			//
-			
-			//MOZDA BOLJE DA SE UCITA PREKO LOGIN FORME
-			//A NE OTVARANJE NOVOG PROZORA ZA ADMINISTRATORA,...
-			
-			//
+			/**************************************************
+			* MOZDA BOLJE DA SE UCITA PREKO LOGIN FORME
+			* A NE OTVARANJE NOVOG PROZORA ZA ADMINISTRATORA,...
+			*
+			*
+			**************************************************/
 			
 			
 			

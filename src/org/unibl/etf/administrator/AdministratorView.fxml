@@ -62,7 +62,7 @@
                   </ImageView>
                </graphic>
             </ToggleButton>
-            <ToggleButton fx:id="listaKorisnickihNalogaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="305.0" mnemonicParsing="false" onAction="#listaKorisnickihNaloga" prefHeight="40.0" prefWidth="200.0" text="Lista korisničkih naloga" toggleGroup="$toggleGroup">
+            <ToggleButton fx:id="brisanjeKorisnickogNalogaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutX="-1.0" layoutY="345.0" mnemonicParsing="false" onAction="#brisanjeKorisnickogNaloga" prefHeight="40.0" prefWidth="200.0" text="Brisanje korisničkog naloga" toggleGroup="$toggleGroup">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -74,7 +74,7 @@
                   <Insets left="20.0" />
                </padding>
             </ToggleButton>
-            <ToggleButton fx:id="dodavanjeKorisnickogNalogaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="345.0" mnemonicParsing="false" onAction="#dodavanjeKorisnickogNaloga" prefHeight="40.0" prefWidth="200.0" text="Dodavanje korisničkog naloga" toggleGroup="$toggleGroup" wrapText="true">
+            <ToggleButton fx:id="dodavanjeKorisnickogNalogaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="305.0" mnemonicParsing="false" onAction="#dodavanjeKorisnickogNaloga" prefHeight="40.0" prefWidth="200.0" text="Dodavanje korisničkog naloga" toggleGroup="$toggleGroup" wrapText="true">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -91,6 +91,18 @@
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@img/logout.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </ToggleButton>
+            <ToggleButton fx:id="korisnickiNalogButton" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutX="-1.0" layoutY="385.0" mnemonicParsing="false" onAction="#korisnickiNalog" prefHeight="40.0" prefWidth="200.0" text="Korisnički nalog" toggleGroup="$toggleGroup">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/settings.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -131,6 +143,6 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="dataAnchorPane" layoutX="200.0" layoutY="30.0" prefHeight="470.0" prefWidth="600.0" stylesheets="@administrator.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
+      <AnchorPane fx:id="dataAnchorPane" layoutX="200.0" layoutY="30.0" prefHeight="470.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
    </children>
 </AnchorPane>
