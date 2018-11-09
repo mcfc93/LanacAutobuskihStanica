@@ -101,9 +101,21 @@
 }
 
 .text-field, .password-field {
-	-fx-text-fill: black;
+	-fx-text-fill: white;
 	-fx-prompt-text-fill: white;
 	-fx-highlight-fill: blue;
+}
+
+.zaposleniTextField {
+	-fx-text-fill: white;
+	-fx-prompt-text-fill: white;
+	-fx-highlight-fill: transparent;
+	-fx-border-radius: 20px;
+	-fx-border-color: white;
+	-fx-background-radius: 20px;
+	-fx-background-color: transparent;
+	-fx-border-width: 1.5px;
+	-fx-cursor: normal;
 }
 
 .jfx-text-field, .jfx-password-field {
@@ -114,13 +126,13 @@
 	-jfx-disable-animation: false;
 }
 
-.jfx-text-field:error {
+.jfx-text-field:error, .jfx-password-field:error {
     -jfx-focus-color: red;
     -jfx-unfocus-color: red;
     -fx-highlight-fill: red;
 }
 
-.jfx-text-field .error-label {
+.jfx-text-field .error-label, .jfx-password-field .error-label {
     -fx-text-fill: red;
     -fx-font-size: 7pt;
     -fx-pref-height: 20;
@@ -128,9 +140,9 @@
     -fx-alignment: top-left;
 }
 
-.jfx-text-field .error-icon {
+.jfx-text-field .error-icon, .jfx-password-field .error-icon {
     /*-fx-fill: red;*/
-   	-fx-image: url("/menu/images/warning-24.png");
+   	-fx-image: url("/org/unibl/etf/administrator/img/warning-24.png");
 }
 
 .jfx-autocomplete-popup {

@@ -39,7 +39,7 @@
             <Insets left="100.0" />
          </opaqueInsets>
       </JFXPasswordField>
-      <JFXPasswordField fx:id="novaLoxinka1TextField" promptText="Nova lozinka" GridPane.columnIndex="4" GridPane.rowIndex="5">
+      <JFXPasswordField fx:id="novaLozinka1TextField" promptText="Nova lozinka" GridPane.columnIndex="4" GridPane.rowIndex="5">
          <GridPane.margin>
             <Insets left="20.0" right="40.0" />
          </GridPane.margin>
@@ -88,13 +88,13 @@
             <Insets left="40.0" right="20.0" />
          </GridPane.margin>
       </Label>
-      <TextField fx:id="imePrezimeTextField" editable="false" focusTraversable="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-      <TextField fx:id="jmbgTextField" editable="false" focusTraversable="false" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-      <TextField fx:id="polTextField" editable="false" focusTraversable="false" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-      <TextField fx:id="adresaTextField" editable="false" focusTraversable="false" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-      <TextField fx:id="brojTelefonaTextField" editable="false" focusTraversable="false" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-      <TextField fx:id="emailTextField" editable="false" focusTraversable="false" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-      <TextField fx:id="strucnaSpremaTextField" editable="false" focusTraversable="false" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+      <TextField fx:id="imePrezimeTextField" editable="false" focusTraversable="false" styleClass="zaposleniTextField" stylesheets="@administrator.css" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      <TextField fx:id="jmbgTextField" editable="false" focusTraversable="false" styleClass="zaposleniTextField" stylesheets="@administrator.css" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <TextField fx:id="polTextField" editable="false" focusTraversable="false" styleClass="zaposleniTextField" stylesheets="@administrator.css" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+      <TextField fx:id="adresaTextField" editable="false" focusTraversable="false" styleClass="zaposleniTextField" stylesheets="@administrator.css" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+      <TextField fx:id="brojTelefonaTextField" editable="false" focusTraversable="false" styleClass="zaposleniTextField" stylesheets="@administrator.css" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+      <TextField fx:id="emailTextField" editable="false" focusTraversable="false" styleClass="zaposleniTextField" stylesheets="@administrator.css" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+      <TextField fx:id="strucnaSpremaTextField" editable="false" focusTraversable="false" styleClass="zaposleniTextField" stylesheets="@administrator.css" GridPane.columnIndex="2" GridPane.rowIndex="4" />
       <Label prefHeight="9.0" prefWidth="143.0" text="PROMJENA LOZINKE:" textFill="WHITE" GridPane.columnIndex="4" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
          <font>
             <Font name="System Bold" size="14.0" />
