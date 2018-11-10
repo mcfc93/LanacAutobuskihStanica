@@ -14,6 +14,7 @@
 
 .anchorMenu {
 	-fx-background-color: linear-gradient(black 20%, red 80%);
+	/*-fx-background-color: linear-gradient(darkblue 20%, #ff0095 80%);*/
 }
 
 #dataAnchorPane {
@@ -82,7 +83,8 @@
 }
 
 .toggle-button:selected {
-	-fx-background-color: #000000;
+	/*-fx-background-color: #ff0095;*/
+	-fx-background-color: BLACK;
 	-fx-border-color: RED;
 	-fx-border-width: 0px 4px 0px 0px;
 	-fx-cursor: normal;
@@ -104,18 +106,6 @@
 	-fx-text-fill: white;
 	-fx-prompt-text-fill: white;
 	-fx-highlight-fill: blue;
-}
-
-.zaposleniTextField {
-	-fx-text-fill: white;
-	-fx-prompt-text-fill: white;
-	-fx-highlight-fill: transparent;
-	-fx-border-radius: 20px;
-	-fx-border-color: white;
-	-fx-background-radius: 20px;
-	-fx-background-color: transparent;
-	-fx-border-width: 1.5px;
-	-fx-cursor: normal;
 }
 
 .jfx-text-field, .jfx-password-field {

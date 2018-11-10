@@ -128,3 +128,15 @@
 #passwordLabel {
 	-fx-background-color: #ff0095;
 }
+
+.zaposleniTextField {
+	-fx-text-fill: white;
+	-fx-prompt-text-fill: white;
+	-fx-highlight-fill: transparent;
+	-fx-border-radius: 20px;
+	-fx-border-color: white;
+	-fx-background-radius: 20px;
+	-fx-background-color: transparent;
+	-fx-border-width: 1.5px;
+	-fx-cursor: normal;
+}

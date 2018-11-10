@@ -27,7 +27,7 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/logout.png" />
+                        <Image url="@img/listStations.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -42,7 +42,7 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/logout.png" />
+                        <Image url="@img/addStation.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -57,7 +57,7 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/logout.png" />
+                        <Image url="@img/pauseStation.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -66,7 +66,7 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/logout.png" />
+                        <Image url="@img/removeAccount_v2.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -78,7 +78,7 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/logout.png" />
+                        <Image url="@img/addUser_v2.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -98,7 +98,7 @@
                   <Insets left="20.0" />
                </padding>
             </ToggleButton>
-            <ToggleButton fx:id="korisnickiNalogButton" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="402.0" mnemonicParsing="false" onAction="#korisnickiNalog" prefHeight="40.0" prefWidth="200.0" text="Korisnički nalog" toggleGroup="$toggleGroup" wrapText="true" AnchorPane.bottomAnchor="54.0">
+            <ToggleButton fx:id="upravljanjeKorisnickimNalogomButton" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="402.0" mnemonicParsing="false" onAction="#upravljanjeKorisnickimNalogom" prefHeight="40.0" prefWidth="200.0" text="Upravljanje korisničkim nalogom" toggleGroup="$toggleGroup" wrapText="true" AnchorPane.bottomAnchor="54.0">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>

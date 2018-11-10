@@ -85,9 +85,7 @@ public class Nalog implements Serializable {
 				+ ", prijavljen=" + prijavljen + "]";
 	}
 	
-	public static Nalog prijava(String korisnickoIme, String lozinka) {
-		Nalog nalog=null;
-		//trazenje hash vrijednosti lozinke
+	public static String hash(String lozinka) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			byte[] hash = digest.digest(lozinka.getBytes(StandardCharsets.UTF_8));
@@ -101,6 +99,14 @@ public class Nalog implements Serializable {
 		} catch(NoSuchAlgorithmException e) {
 			
 		}
+		return lozinka;
+	}
+	
+	public static Nalog prijava(String korisnickoIme, String lozinka) {
+		Nalog nalog=null;
+		//trazenje hash vrijednosti lozinke
+		lozinka=hash(lozinka);
+		//System.out.println(lozinka);
 		//uspostavljanje veze sa bazom i autentifikacija korisnika
 		Connection c = null;
 		CallableStatement s = null;
@@ -217,5 +223,30 @@ public class Nalog implements Serializable {
 	}
 	
 	//boolean provjeriKorisnickoIme(String korisnickoIme)
-	//boolean provjeriLozinku(String lozinka)
+	
+	
+	public static boolean provjeriLozinku(String lozinka) {
+		return PrijavaController.nalog.getLozinka().equals(hash(lozinka));
+	}
+	
+	public static boolean promijeniLozinku(String novaLozinka) {
+		Connection c = null;
+		CallableStatement s = null;
+		ResultSet r = null;
+	    try {
+	       	c=Util.getConnection();
+	    	s = c.prepareCall("{call updatePassword(?,?)}");
+	       	s.setString(1, PrijavaController.nalog.getKorisnickoIme());
+	       	s.setString(1, novaLozinka);
+	       	r = s.executeQuery();
+	        if(r.next()) {
+	        	return true;
+	       	}
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(r,s,c);
+	    }
+		return false;
+	}
 }

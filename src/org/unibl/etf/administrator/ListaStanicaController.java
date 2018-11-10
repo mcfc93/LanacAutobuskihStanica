@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,6 +21,7 @@ import javafx.scene.layout.AnchorPane;
 
 import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.autobuska_stanica.*;
+
 
 public class ListaStanicaController implements Initializable {
 	
@@ -177,6 +179,7 @@ public class ListaStanicaController implements Initializable {
         	}
         }.run();
         */
+		
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() /*throws Exception*/ {
@@ -195,6 +198,31 @@ public class ListaStanicaController implements Initializable {
             }
         };
         new Thread(task).start();
+        
+        /*
+        Service<Void> service = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {           
+                    @Override
+                    protected Void call() {
+                    	System.out.println(Thread.currentThread());
+                        progressPane.setVisible(true);
+                        for(int i=0; i<30; i++) {
+                        listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
+                    	}
+                        return null;
+                    }
+                    @Override
+                    protected void succeeded(){
+                        super.succeeded();
+                        progressPane.setVisible(false);
+                    }
+                };
+            }
+        };
+        service.start();
+        */
 	}
 	
 	/*

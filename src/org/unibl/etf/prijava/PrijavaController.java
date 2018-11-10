@@ -206,8 +206,6 @@ System.out.println("nalog.ser");
 			//((Stage)anchorPane.getScene().getWindow()).hide();
 			//((Node)event.getSource()).getScene().getWindow().hide();
 			
-			//korisnickoImeTextField.setText("");
-			//lozinkaTextField.setText("");
 			((Stage)((Node)event.getSource()).getScene().getWindow()).close();
 			
 			//nalog.setKorisnickoIme(korisnickoImeTextField.getText());
@@ -255,6 +253,9 @@ System.out.println("nalog.ser");
 		    	}
 			}
 			
+			nalog.setLozinka(Nalog.hash(lozinkaTextField.getText()));
+			korisnickoImeTextField.clear();
+			lozinkaTextField.clear();
 			
 			if(nalog.getZaposleni() instanceof Administrator) {
 				//administrator
@@ -337,12 +338,4 @@ System.out.println("nalog.ser");
 		Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 		stage.setIconified(true);
 	}
-	
-	/*
-	 		Alert alert=new Alert(AlertType.ERROR);
-    		alert.setTitle("Greška");
-    		alert.setHeaderText(null);
-    		alert.setContentText("Poruka.");
-    		alert.showAndWait();
-	 */
 }

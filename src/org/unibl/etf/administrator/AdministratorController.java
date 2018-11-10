@@ -70,7 +70,7 @@ public class AdministratorController implements Initializable {
 	private ToggleButton privremenoBlokiranjeAutobuskeStaniceButton;
 	
 	@FXML
-	private ToggleButton korisnickiNalogButton;
+	private ToggleButton upravljanjeKorisnickimNalogomButton;
 	
 	private double xOffset=0;
     private double yOffset=0;
@@ -252,7 +252,7 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 		
 		
 		try {
-			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/DodajNalog.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/DodajNalog.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
 			AnchorPane.setBottomAnchor(root,0.0);
 			AnchorPane.setLeftAnchor(root,0.0);
@@ -285,9 +285,9 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	}
 	
 	@FXML
-	void korisnickiNalog(ActionEvent event) {
+	void upravljanjeKorisnickimNalogom(ActionEvent event) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/KorisnickiNalog.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/prijava/UpravljanjeKorisnickimNalogom.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
 			AnchorPane.setBottomAnchor(root,0.0);
 			AnchorPane.setLeftAnchor(root,0.0);
