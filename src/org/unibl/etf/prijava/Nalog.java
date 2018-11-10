@@ -1,7 +1,6 @@
 package org.unibl.etf.prijava;
 
 import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +8,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
-//import java.util.Base64;
 
 import org.unibl.etf.zaposleni.Zaposleni;
 import org.unibl.etf.zaposleni.Administrator;
@@ -113,8 +111,6 @@ public class Nalog implements Serializable {
 		ResultSet r = null;
 	    try {
 	       	// 1.Get a connection to database
-	       	//c = DriverManager.getConnection("jdbc:mysql://localhost:3306/bus?autoReconnect=true&useSSL=false","root","student");
-	    	//c = DriverManager.getConnection(Util.PROPERTY.getProperty("jdbc.url"), Util.PROPERTY.getProperty("db.username"), Util.PROPERTY.getProperty("db.password"));
 	       	c=Util.getConnection();
 	    	// 2.Create a statement
 	       	s = c.prepareCall("{call checkAuthentication(?,?)}");
@@ -124,32 +120,7 @@ public class Nalog implements Serializable {
 	       	r = s.executeQuery();
 	        // 4.Process the result set
 	       	if(r.next()) {
-	       		
-/*
-//ucitavanje podataka o zaposlenom iz baze
-//potrebno za sad samo Ime i Prezime
-//u konstruktore proslijediti Ime, Prezime a za sve ostale parametre staviti null
-//prvo potrebno definisati polja klase Zaposleni koja ce se sigurno nalaziti u njoj
-	       		
-	       		//privremeno rjesenje
-	       		String jmbg=null;
-	       		Statement ss = null;
-	    		ResultSet rr = null;
-	       		
-	    		ss=c.createStatement();
-	    		rr=ss.executeQuery("select JMBG from Nalog where KorisnickoIme='" + korisnickoIme + "'");
-	    		rr.next();
-	    		jmbg=rr.getString("JMBG");
-	    		rr=ss.executeQuery("select Ime, Prezime from Zaposleni where JMBG=" + jmbg);
-	    		rr.next();
-	    		//System.out.println(rr.getString("Ime") + " " + rr.getString("Prezime"));
-*/
-	    		
-	    		
-	    		
-	    		
-	    		
-	    		
+	        	//ucitavanje podataka o zaposlenom iz baze
 	    		nalog=new Nalog(korisnickoIme, lozinka, r.getInt("IdStanice"), true, null);
 	       		
 	    		System.out.println(nalog);
@@ -170,32 +141,8 @@ public class Nalog implements Serializable {
 	        	return null;
             }*/
 	    } catch(SQLException e) {
-	       	//e.printStackTrace();
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 	    } finally {
-	    	/*
-	    	if(r != null) {
-	    		try {
-	    			r.close();
-	    		} catch (SQLException e) {
-	    			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-	    		}
-	    	}
-	        if( s != null) {
-	            try {
-	            	s.close();
-	            } catch (SQLException e) {
-	            	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-	            }
-	        }
-	        if(c != null) {
-	            try {
-	            	c.close();
-	            } catch (SQLException e) {
-	            	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-	            }
-	        }
-	        */
 	    	Util.close(r,s,c);
 	    }
 	    return nalog;
@@ -226,26 +173,26 @@ public class Nalog implements Serializable {
 	
 	
 	public static boolean provjeriLozinku(String lozinka) {
-		return PrijavaController.nalog.getLozinka().equals(hash(lozinka));
+		return PrijavaController.nalog.getLozinka().equals(lozinka);
 	}
 	
 	public static boolean promijeniLozinku(String novaLozinka) {
 		Connection c = null;
 		CallableStatement s = null;
-		ResultSet r = null;
 	    try {
 	       	c=Util.getConnection();
-	    	s = c.prepareCall("{call updatePassword(?,?)}");
+	    	s = c.prepareCall("{call updatePassword(?,?,?)}");
 	       	s.setString(1, PrijavaController.nalog.getKorisnickoIme());
-	       	s.setString(1, novaLozinka);
-	       	r = s.executeQuery();
-	        if(r.next()) {
+	       	s.setString(2, novaLozinka);
+	       	s.registerOutParameter(3, java.sql.Types.INTEGER);
+	       	s.execute();
+	        if(s.getInt(3) == 1) {
 	        	return true;
 	       	}
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 	    } finally {
-	    	Util.close(r,s,c);
+	    	Util.close(s,c);
 	    }
 		return false;
 	}

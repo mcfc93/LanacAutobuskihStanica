@@ -129,7 +129,13 @@ public class UpravljanjeKorisnickimNalogomController implements Initializable {
     	// & umjesto && da se ne radi short-circuit evaluation
     	if(staraLozinkaTextField.validate() & novaLozinka1TextField.validate() & novaLozinka2TextField.validate()) {
     		System.out.println("Validacija uspjesna.");
-    		if(Nalog.provjeriLozinku(staraLozinkaTextField.getText())) {
+    		if(Nalog.provjeriLozinku(Nalog.hash(staraLozinkaTextField.getText()))) {
+    			if(Nalog.promijeniLozinku(Nalog.hash(novaLozinka1TextField.getText().trim()))) {
+    				System.out.println("Nova lozinka: " + novaLozinka1TextField.getText());
+    				System.out.println("Hash: " + Nalog.hash(novaLozinka1TextField.getText().trim()));
+    				PrijavaController.nalog.setLozinka(Nalog.hash(novaLozinka1TextField.getText()));
+    			}
+    			
     			staraLozinkaTextField.clear();
     			novaLozinka1TextField.clear();
     			novaLozinka2TextField.clear();
