@@ -108,6 +108,7 @@ public class ListaStanicaController implements Initializable {
             	//postaviti dimenzije
                 @Override
                 protected void updateItem(AutobuskaStanica item, boolean empty) {
+                	//System.out.println(item);
                     super.updateItem(item, empty);
                     if (!empty) {
                     	//imageView.setStyle("-fx-background-image: url('org/unibl/etf/administrator/img/delete.png')");
@@ -124,19 +125,20 @@ public class ListaStanicaController implements Initializable {
             return cell;
         });
         
+        for(TableColumn<?,?> column:autobuskeStaniceTable.getColumns()) {
+        	column.setReorderable(false);
+        }
+        
         nazivColumn.setMinWidth(100);
         nazivColumn.setReorderable(false);
         
         adresaColumn.setMinWidth(100);
-        adresaColumn.setReorderable(false);
         
-        brojPosteColumn.setReorderable(false);
+       // brojPosteColumn.set ;
         
-        brojTelefonaColumn.setReorderable(false);
         brojTelefonaColumn.setMinWidth(100);
         brojTelefonaColumn.setMaxWidth(100);
         
-        brojPeronaColumn.setReorderable(false);
         brojPeronaColumn.setMinWidth(50);
         brojPeronaColumn.setMaxWidth(50);
         
@@ -147,13 +149,11 @@ public class ListaStanicaController implements Initializable {
         izmijeniColumn.setMaxWidth(50);
         izmijeniColumn.setResizable(false);
         izmijeniColumn.setSortable(false);
-        izmijeniColumn.setReorderable(false);
         obrisiColumn.setText("");
         obrisiColumn.setMinWidth(50);
         obrisiColumn.setMaxWidth(50);
         obrisiColumn.setResizable(false);
         obrisiColumn.setSortable(false);
-        obrisiColumn.setReorderable(false);
         
         
         

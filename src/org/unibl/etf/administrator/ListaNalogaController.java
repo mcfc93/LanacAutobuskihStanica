@@ -50,6 +50,12 @@ public class ListaNalogaController implements Initializable {
 		naloziTable.setPlaceholder(new Label("Nema naloga u tabeli."));
 		naloziTable.setFocusTraversable(false);
 		
+		for(TableColumn<?,?> column: naloziTable.getColumns()) {
+        	column.setReorderable(false);
+        }
+		
+		
+		
 		MaskerPane progressPane = new MaskerPane();
 		progressPane.setText("Molimo sačekajte...");
 		progressPane.setVisible(false);
@@ -79,5 +85,4 @@ public class ListaNalogaController implements Initializable {
         };
         new Thread(task).start();
 	}
-
 }

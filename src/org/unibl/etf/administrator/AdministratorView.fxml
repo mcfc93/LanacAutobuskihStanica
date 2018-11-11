@@ -112,7 +112,7 @@
             </ToggleButton>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="menuLine" layoutX="200.0" layoutY="14.0" onMouseClicked="#doubleClickMaximize" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: BLACK;" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="menuLine" layoutX="200.0" layoutY="14.0" onMouseClicked="#doubleClickMaximize" prefHeight="30.0" prefWidth="200.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label fx:id="close" layoutX="576.0" layoutY="4.0" onMouseClicked="#close" prefHeight="20.0" prefWidth="20.0" styleClass="close" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                <graphic>

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
@@ -34,11 +35,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -200,119 +203,126 @@ System.out.println("nalog.ser");
 		);
 		pause.play();
 		*/
-
-		if ((nalog=Nalog.prijava(korisnickoImeTextField.getText(), lozinkaTextField.getText())) != null) {
-			//((Stage)anchorPane.getScene().getWindow()).close();
-			//((Stage)anchorPane.getScene().getWindow()).hide();
-			//((Node)event.getSource()).getScene().getWindow().hide();
-			
-			((Stage)((Node)event.getSource()).getScene().getWindow()).close();
-			
-			//nalog.setKorisnickoIme(korisnickoImeTextField.getText());
-			//nalog.setLozinka(lozinkaTextField.getText());
-			
-			
-			
-			
-			
-			
-			/**************************************************
-			* MOZDA BOLJE DA SE UCITA PREKO LOGIN FORME
-			* A NE OTVARANJE NOVOG PROZORA ZA ADMINISTRATORA,...
-			*
-			*
-			**************************************************/
-			
-			
-			
-			
-			//Serijalizacija ako je cekirano Remember me
-			if(zapamtiMeCheckBox.isSelected()) {
-				System.out.println("REMEMBER ME");
-				try (ObjectOutputStream oos = 
-						new ObjectOutputStream(
-								new FileOutputStream(SER_FILE)
-						)
-				)
-				{
-					/****************************
-					 * TREBA NESTO DRUGO ODRADITI
-					 * TRENUTNO DOSTUPNA LOZINKA
-					 * 
-					 ***************************/
-					nalog.setLozinka(lozinkaTextField.getText());
-					
-					oos.writeObject(nalog);
-				} catch(IOException e) {
-					Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		try {
+			if ((nalog=Nalog.prijava(korisnickoImeTextField.getText(), lozinkaTextField.getText())) != null) {
+				//((Stage)anchorPane.getScene().getWindow()).close();
+				//((Stage)anchorPane.getScene().getWindow()).hide();
+				//((Node)event.getSource()).getScene().getWindow().hide();
+				
+				((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+				
+				//nalog.setKorisnickoIme(korisnickoImeTextField.getText());
+				//nalog.setLozinka(lozinkaTextField.getText());
+				
+				
+				
+				
+				
+				
+				/**************************************************
+				* MOZDA BOLJE DA SE UCITA PREKO LOGIN FORME
+				* A NE OTVARANJE NOVOG PROZORA ZA ADMINISTRATORA,...
+				*
+				*
+				**************************************************/
+				
+				
+				
+				
+				//Serijalizacija ako je cekirano Remember me
+				if(zapamtiMeCheckBox.isSelected()) {
+					System.out.println("REMEMBER ME");
+					try (ObjectOutputStream oos = 
+							new ObjectOutputStream(
+									new FileOutputStream(SER_FILE)
+							)
+					)
+					{
+						/****************************
+						 * TREBA NESTO DRUGO ODRADITI
+						 * TRENUTNO DOSTUPNA LOZINKA
+						 * 
+						 ***************************/
+						nalog.setLozinka(lozinkaTextField.getText());
+						
+						oos.writeObject(nalog);
+					} catch(IOException e) {
+						Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+					}
+				} else {
+					File f=new File(SER_FILE);
+			    	if(f.exists()) {
+			    		f.delete();
+			    	}
 				}
+				
+				nalog.setLozinka(Nalog.hash(lozinkaTextField.getText()));
+				korisnickoImeTextField.clear();
+				lozinkaTextField.clear();
+				
+				if(nalog.getZaposleni() instanceof Administrator) {
+					//administrator
+	    			try {
+	    				Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/AdministratorView.fxml"));
+	    				Scene scene = new Scene(root);
+	    				Stage stage=new Stage();
+	    				stage.setScene(scene);
+	    				//stage.setTitle("Administrator");
+	    				stage.setResizable(false);
+	    				stage.initStyle(StageStyle.UNDECORATED);
+	    				stage.show();
+	    			} catch(IOException e) {
+	    				//e.printStackTrace();
+	    				Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    			}
+				} else if(nalog.getZaposleni() instanceof AdministrativniRadnik) {
+					//administrativni radnik
+	    			try {
+	    				Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/AdministrativniRadnikView.fxml"));
+	    				Scene scene = new Scene(root);
+	    				Stage stage=new Stage();
+	    				stage.setScene(scene);
+	    				//stage.setTitle("Administrativni radnik");
+	    				stage.setResizable(false);
+	    				stage.initStyle(StageStyle.UNDECORATED);
+	    				stage.show();
+	    			} catch(IOException e) {
+	    				//e.printStackTrace();
+	    				Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    			}
+				} else {
+					//if("SalterskiRadnik".equals(r.getString("Tip"))) {
+	        		//salterski radnik
+	               	try {
+	            		Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/SalterskiRadnikView.fxml"));
+	           			Scene scene = new Scene(root);
+	           			Stage stage=new Stage();
+	           			stage.setScene(scene);
+	           			//stage.setTitle("Šalterski radnik");
+	           			stage.setResizable(false);
+	           			stage.initStyle(StageStyle.UNDECORATED);
+	           			stage.show();
+	           		} catch(IOException e) {
+	           			//e.printStackTrace();
+	           			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	            	}
+				}
+	
 			} else {
-				File f=new File(SER_FILE);
-		    	if(f.exists()) {
-		    		f.delete();
-		    	}
+				greskaTextLabel.setText("Korisničko ime ili lozinka pogrešni!");
+				greskaTextLabel.setVisible(true);
+				greskaBackgroundLabel.setVisible(true);
+				korisnickoImeTextField.clear();
+				lozinkaTextField.clear();
+				//korisnickoImeTextField.requestFocus();
+				//progressBar.setVisible(false);
 			}
-			
-			nalog.setLozinka(Nalog.hash(lozinkaTextField.getText()));
-			korisnickoImeTextField.clear();
-			lozinkaTextField.clear();
-			
-			if(nalog.getZaposleni() instanceof Administrator) {
-				//administrator
-    			try {
-    				Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/AdministratorView.fxml"));
-    				Scene scene = new Scene(root);
-    				Stage stage=new Stage();
-    				stage.setScene(scene);
-    				//stage.setTitle("Administrator");
-    				stage.setResizable(false);
-    				stage.initStyle(StageStyle.UNDECORATED);
-    				stage.show();
-    			} catch(Exception e) {
-    				//e.printStackTrace();
-    				Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-    			}
-			} else if(nalog.getZaposleni() instanceof AdministrativniRadnik) {
-				//administrativni radnik
-    			try {
-    				Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/AdministrativniRadnikView.fxml"));
-    				Scene scene = new Scene(root);
-    				Stage stage=new Stage();
-    				stage.setScene(scene);
-    				//stage.setTitle("Administrativni radnik");
-    				stage.setResizable(false);
-    				stage.initStyle(StageStyle.UNDECORATED);
-    				stage.show();
-    			} catch(Exception e) {
-    				//e.printStackTrace();
-    				Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-    			}
-			} else {
-				//if("SalterskiRadnik".equals(r.getString("Tip"))) {
-        		//salterski radnik
-               	try {
-            		Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/SalterskiRadnikView.fxml"));
-           			Scene scene = new Scene(root);
-           			Stage stage=new Stage();
-           			stage.setScene(scene);
-           			//stage.setTitle("Šalterski radnik");
-           			stage.setResizable(false);
-           			stage.initStyle(StageStyle.UNDECORATED);
-           			stage.show();
-           		} catch(Exception e) {
-           			//e.printStackTrace();
-           			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-            	}
-			}
-
-		} else {
-			greskaTextLabel.setText("Korisničko ime ili lozinka pogrešni!");
-			greskaTextLabel.setVisible(true);
-			greskaBackgroundLabel.setVisible(true);
-			korisnickoImeTextField.clear();
-			lozinkaTextField.clear();
-			//korisnickoImeTextField.requestFocus();
-			//progressBar.setVisible(false);
+		} catch(Exception e) {
+			Alert alert=new Alert(AlertType.ERROR);
+    		alert.setTitle("Greška");
+    		alert.setHeaderText(null);
+    		alert.setContentText("Neuspješno povezivanje sa bazom.");
+    		alert.showAndWait();
 		}
     }
 	

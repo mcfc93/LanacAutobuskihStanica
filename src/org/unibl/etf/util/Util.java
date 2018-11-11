@@ -14,11 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-/**
- * 
- * @author mcfc93
- *
- */
 //klasa koja sadrzi sve pomocne alate
 public class Util {
 	public static Properties PROPERTY = new Properties();
@@ -59,7 +54,7 @@ System.out.println(PROPERTY);
 		try {
 			c = DriverManager.getConnection(Util.PROPERTY.getProperty("jdbc.url"), Util.PROPERTY.getProperty("db.username"), Util.PROPERTY.getProperty("db.password"));
 		} catch (SQLException e) {
-			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.LOGGER.log(Level.SEVERE, e.toString()/*, e*/);
 		}
 		return c;
 	}

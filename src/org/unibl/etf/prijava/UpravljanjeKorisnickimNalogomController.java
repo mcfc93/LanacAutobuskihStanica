@@ -134,6 +134,9 @@ public class UpravljanjeKorisnickimNalogomController implements Initializable {
     				System.out.println("Nova lozinka: " + novaLozinka1TextField.getText());
     				System.out.println("Hash: " + Nalog.hash(novaLozinka1TextField.getText().trim()));
     				PrijavaController.nalog.setLozinka(Nalog.hash(novaLozinka1TextField.getText()));
+    			} else {
+    				//
+    				
     			}
     			
     			staraLozinkaTextField.clear();

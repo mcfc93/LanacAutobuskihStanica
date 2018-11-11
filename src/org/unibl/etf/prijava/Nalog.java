@@ -100,7 +100,7 @@ public class Nalog implements Serializable {
 		return lozinka;
 	}
 	
-	public static Nalog prijava(String korisnickoIme, String lozinka) {
+	public static Nalog prijava(String korisnickoIme, String lozinka) throws SQLException {
 		Nalog nalog=null;
 		//trazenje hash vrijednosti lozinke
 		lozinka=hash(lozinka);
@@ -140,8 +140,10 @@ public class Nalog implements Serializable {
 	        }/* else {
 	        	return null;
             }*/
+	    /*
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    */
 	    } finally {
 	    	Util.close(r,s,c);
 	    }
@@ -153,22 +155,7 @@ public class Nalog implements Serializable {
 		zaposleni=null;
 		return true;
 	}
-	
-	
-	
-	
-	public boolean dodavanjeNaloga() {
-		return true;
-	}
-	
-	public boolean izmjenaNaloga() {
-		return true;
-	}
-	
-	public boolean brisanjeNaloga() {
-		return true;
-	}
-	
+
 	//boolean provjeriKorisnickoIme(String korisnickoIme)
 	
 	
@@ -195,5 +182,17 @@ public class Nalog implements Serializable {
 	    	Util.close(s,c);
 	    }
 		return false;
+	}
+	
+	public boolean dodavanjeNaloga() {
+		return true;
+	}
+	
+	public boolean izmjenaNaloga() {
+		return false;
+	}
+	
+	public boolean brisanjeNaloga() {
+		return true;
 	}
 }

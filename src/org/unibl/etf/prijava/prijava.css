@@ -130,13 +130,27 @@
 }
 
 .zaposleniTextField {
-	-fx-text-fill: white;
-	-fx-prompt-text-fill: white;
+	/*-fx-text-fill: white;*/
+	-fx-text-fill: BLACK;
+	/*-fx-font-weight: bold;*/
+	/*-fx-prompt-text-fill: white;*/
+	-fx-prompt-text-fill: #ff0095;
 	-fx-highlight-fill: transparent;
 	-fx-border-radius: 20px;
-	-fx-border-color: white;
+	/*-fx-border-color: white;*/
+	-fx-border-color: #ff0095;
 	-fx-background-radius: 20px;
 	-fx-background-color: transparent;
 	-fx-border-width: 1.5px;
 	-fx-cursor: normal;
+}
+
+.naslovLabel {
+	-fx-text-fill: #ff0095;
+	-fx-font-weight: bold;
+}
+
+.zaposleniLabel {
+	-fx-text-fill: BLACK;
+	-fx-font-weight: bold;
 }
