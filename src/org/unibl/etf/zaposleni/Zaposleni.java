@@ -106,7 +106,7 @@ public abstract class Zaposleni implements Serializable {
 	       		this.setPrezime(r.getString("Prezime"));
 	       		this.setJmbg(r.getString("JMBG"));
 	       		//zaposleni.setPol("TBD");
-	       		this.setAdresa(r.getString("Adresa") + " " + r.getString("BrojPoste") + " TBD");
+	       		this.setAdresa(r.getString("Adresa") + " " + r.getString("PostanskiBroj") + " TBD");
 	       		this.setBrojTelefona(r.getString("BrojTelefona"));
 	       		this.setEmail(r.getString("Email"));
 	       		this.setStrucnaSprema(r.getString("StrucnaSprema"));

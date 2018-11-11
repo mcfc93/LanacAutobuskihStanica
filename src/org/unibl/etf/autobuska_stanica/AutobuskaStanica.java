@@ -90,7 +90,7 @@ public class AutobuskaStanica {
 	    	//c = DriverManager.getConnection(Util.PROPERTY.getProperty("jdbc.url"), Util.PROPERTY.getProperty("db.username"), Util.PROPERTY.getProperty("db.password"));
 	       	c=Util.getConnection();
 	    	// 2.Create a statement
-	       	s = c.prepareCall("{call showBusStation()}");
+	       	s = c.prepareCall("{call showBusStations()}");
 	       	// 3.Execute a SQL query
 	       	r = s.executeQuery();
 	        // 4.Process the result set
@@ -103,7 +103,7 @@ public class AutobuskaStanica {
 		       	
 	    		//System.out.println(as);
 	    		
-	    		listaAutobuskihStanica.add(new AutobuskaStanica(r.getString("Naziv"), r.getString("Adresa"), r.getInt("BrojPoste"), r.getString("BrojTelefona"), r.getInt("BrojPerona")));
+	    		listaAutobuskihStanica.add(new AutobuskaStanica(r.getString("Naziv"), r.getString("Adresa"), r.getInt("PostanskiBroj"), r.getString("BrojTelefona"), r.getInt("BrojPerona")));
 	        }
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);

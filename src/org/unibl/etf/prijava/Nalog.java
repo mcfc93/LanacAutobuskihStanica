@@ -121,7 +121,7 @@ public class Nalog implements Serializable {
 	        // 4.Process the result set
 	       	if(r.next()) {
 	        	//ucitavanje podataka o zaposlenom iz baze
-	    		nalog=new Nalog(korisnickoIme, lozinka, r.getInt("IdStanice"), true, null);
+	    		nalog=new Nalog(korisnickoIme, lozinka, r.getInt("JIBStanice"), true, null);
 	       		
 	    		System.out.println(nalog);
 	    		
