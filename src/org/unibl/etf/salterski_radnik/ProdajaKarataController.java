@@ -1,11 +1,6 @@
 package org.unibl.etf.salterski_radnik;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
@@ -22,25 +17,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
-
 import org.unibl.etf.karta.Karta;
 import org.unibl.etf.karta.Linija;
-import org.unibl.etf.karta.MjesecnaKarta;
 import org.unibl.etf.karta.Prevoznik;
-import org.unibl.etf.karta.RedVoznje;
 import org.unibl.etf.karta.Relacija;
 import org.unibl.etf.karta.TipKarte;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXAutoCompletePopup;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLDataException;
-
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -56,13 +47,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.TableView.ResizeFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.util.Callback;
+
 
 public class ProdajaKarataController implements Initializable {
 	
@@ -72,20 +60,23 @@ public class ProdajaKarataController implements Initializable {
 	public static String daniUSedmici;
 	public static File odabranaSlika = null;
 	public static boolean kupovinaMjesecne=false;
-	
+	private int brojKarataZaKupovinu;
+	@FXML
+	private JFXTextField brojTelefonaTextField = new JFXTextField();
+	@FXML
+	private JFXTextField polazisteTextField = new JFXTextField();
+	@FXML
+	public JFXCheckBox rezervacijaCheckBox = new JFXCheckBox();
 	@FXML
 	private JFXButton odaberiSlikuButton = new JFXButton();
 	@FXML
 	private Label slikaKorisnikaLabel;
 	@FXML
-	private JFXTextField imeField = new JFXTextField();
+	private JFXTextField imeTextField = new JFXTextField();
 	@FXML
-	private JFXTextField prezimeField = new JFXTextField();
+	private JFXTextField prezimeTextField = new JFXTextField();
 	@FXML
 	private JFXTextField nazivSlikeTextField;
-	
-	
-	
 	@FXML
 	private ToggleGroup toggleGroup = new ToggleGroup();
 	@FXML
@@ -95,7 +86,7 @@ public class ProdajaKarataController implements Initializable {
 	@FXML
 	private JFXComboBox<TipKarte> tipKarteComboBox;
 	@FXML
-	private JFXTextField brojKarata = new JFXTextField();
+	private JFXTextField brojKarataTextField = new JFXTextField();
 	@FXML
 	private DatePicker datum =  new DatePicker();
 	@FXML
@@ -121,11 +112,34 @@ public class ProdajaKarataController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+    	//
+		disableMjesecna(true);
+		//
+		polazisteTextField.setVisible(false);
+    	brojTelefonaTextField.setDisable(true);
+    	rezervacijaCheckBox.setSelected(false);
+		rezervacijaCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+		        if(newValue) {
+			       imeTextField.setDisable(false);
+			        prezimeTextField.setDisable(false);
+			    	brojTelefonaTextField.setDisable(false);
+
+		        }
+		        else {
+		        	imeTextField.setDisable(true);
+		        	prezimeTextField.setDisable(true);
+		        	brojTelefonaTextField.setDisable(true);
+
+		        }
+		    }
+		});
+
 		nazivSlikeTextField.setEditable(false);
 		kupovinaButton.disableProperty().bind(Bindings.isEmpty(linijeTable.getSelectionModel().getSelectedItems()));
 		tipKarteComboBox.setItems(FXCollections.observableArrayList(TipKarte.values()));
 		radioButtonObicna.setSelected(true);
-		disableMjesecna(true);
 		radioButtonMjesecna.setToggleGroup(toggleGroup);
 		radioButtonObicna.setToggleGroup(toggleGroup);
 		toggleGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
@@ -134,27 +148,58 @@ public class ProdajaKarataController implements Initializable {
 		    }
 		    else
 		    	if(newValue.equals(radioButtonObicna)) {
+		    		datum.setDisable(false);
+		    		odredisteTextField.setText("");
+		    		imeTextField.setText("");
+		    		prezimeTextField.setText("");
+		    		brojTelefonaTextField.setText("");
+		    		tipKarteComboBox.setValue(null);
+		    		tipKarteComboBox.setDisable(true);
+		    		rezervacijaCheckBox.setDisable(false);
+		    		polazisteTextField.setVisible(false);
+		        	brojKarataTextField.setVisible(true);
+		    		imeTextField.setText("");
+		    		prezimeTextField.setText("");
+		    		nazivSlikeTextField.setText("");
+		    		odabranaSlika = null;
+		    		brojKarataTextField.setText("1");
 		    		kupovinaMjesecne=false;
 		    		kupovinaButton.disableProperty().bind(Bindings.isEmpty(linijeTable.getSelectionModel().getSelectedItems()));
 		    		karteObs.clear();
 		    		disableMjesecna(true);
 		    	}
 		    	else {
+		    		brojKarataZaKupovinu=1;
+		    		brojKarataTextField.setText("1");
+		    		tipKarteComboBox.setDisable(false);
+		    		polazisteTextField.setText("");
+		    		odredisteTextField.setText("");
+		    		imeTextField.setText("");
+		    		prezimeTextField.setText("");
+		    		brojTelefonaTextField.setText("");
+		    		datum.setValue(LocalDate.now());
+		    		datum.setDisable(true);
+		    		rezervacijaCheckBox.setSelected(false);
+		    		brojKarataZaKupovinu=1;
+		    		rezervacijaCheckBox.setDisable(true);
+		        	polazisteTextField.setVisible(true);
 		    		kupovinaMjesecne=true;
+		    		brojKarataTextField.setVisible(false);
+		    		System.out.println("Mjesecna");
 		    		disableMjesecna(false);
 		    		karteObs.clear();
 		    		kupovinaButton.disableProperty().bind(Bindings.isEmpty(linijeTable.getSelectionModel().getSelectedItems()).or(Bindings.createBooleanBinding(
-		    			    () -> imeField.getText().isEmpty() || prezimeField.getText().isEmpty() || 
+		    			    () -> imeTextField.getText().isEmpty() || prezimeTextField.getText().isEmpty() || 
 		    			    	  nazivSlikeTextField.getText().isEmpty() || 
 		    			    	  tipKarteComboBox.getSelectionModel().getSelectedItem() == null, 
-		    			    imeField.textProperty(), prezimeField.textProperty(), nazivSlikeTextField.textProperty(),
+		    			    imeTextField.textProperty(), prezimeTextField.textProperty(), nazivSlikeTextField.textProperty(),
 		    			    tipKarteComboBox.getSelectionModel().selectedItemProperty()
 		    			    )));
 		    	}
 		});	
 		
 		linijeTable.setItems(karteObs);
-		brojKarata.setText("1");
+		brojKarataTextField.setText("1");
 		ucitajRelacije();
 		linijeTable.setPlaceholder(new Label("Odaberite relaciju i datum"));
 		datum.setValue(LocalDate.now());		
@@ -173,6 +218,17 @@ public class ProdajaKarataController implements Initializable {
 	        }
 	    });
 		
+		autoComplete();
+	    
+	    pretragaButton.disableProperty().bind(Bindings.createBooleanBinding(
+			    () -> !relacijeSet.contains(odredisteTextField.getText()),
+			    	odredisteTextField.textProperty()
+			    ));
+	}
+
+	
+	private void autoComplete() {
+		// TODO Auto-generated method stub
 		JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
 	    autoCompletePopup.getSuggestions().addAll(relacijeSet);
 	    autoCompletePopup.setSelectionHandler(event -> {
@@ -186,31 +242,43 @@ public class ProdajaKarataController implements Initializable {
 	            autoCompletePopup.show(odredisteTextField);
 	        }
 	    });
-	    pretragaButton.disableProperty().bind(Bindings.createBooleanBinding(
-			    () -> !relacijeSet.contains(odredisteTextField.getText()),
-			    	odredisteTextField.textProperty()
-			    ));
+	    JFXAutoCompletePopup<String> autoCompletePopup2 = new JFXAutoCompletePopup<>();
+	    autoCompletePopup2.getSuggestions().addAll(relacijeSet);
+	    autoCompletePopup2.setSelectionHandler(event -> {
+	        polazisteTextField.setText(event.getObject());
+	    });
+	    polazisteTextField.textProperty().addListener(observable -> {
+	        autoCompletePopup2.filter(string -> string.toLowerCase().contains(polazisteTextField.getText().toLowerCase()));
+	        if (autoCompletePopup2.getFilteredSuggestions().isEmpty() || polazisteTextField.getText().isEmpty()) {
+	            autoCompletePopup2.hide();
+	        } else {
+	            autoCompletePopup2.show(polazisteTextField);
+	        }
+	    });
+	    
 	}
 
-	
+
 	public void disableMjesecna(boolean b) {
 		// TODO Auto-generated method stub
-		imeField.setDisable(b);
-		prezimeField.setDisable(b);
+		imeTextField.setDisable(b);
+		prezimeTextField.setDisable(b);
 		odaberiSlikuButton.setDisable(b);
 		nazivSlikeTextField.setDisable(b);
 	}
 
 
-	public static void ucitajRelacije() {
+	public void ucitajRelacije() {
 		// TODO Auto-generated method stub
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
+		String sql1 = "select distinct Naziv from mjesto where PostanskiBroj!=?";
+		String sql2 = "select distinct Naziv from mjesto";
 		try {
 			c = Util.getConnection();
-			s = c.prepareStatement("select Naziv from mjesto where BrojPoste!=?");
-			s.setInt(1, SalterskiRadnikController.brojMjesta);
+			s = c.prepareStatement( (rezervacijaCheckBox.isSelected())? sql2:sql1);
+			s.setInt(1,SalterskiRadnikController.brojMjesta);
 			r = s.executeQuery();
 			while(r.next()) {
 				relacijeSet.add(r.getString(1));
@@ -220,50 +288,81 @@ public class ProdajaKarataController implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Util.close(r, s, c);
+		finally {
+			Util.close(r, s, c);
+		}
 	}
 
 	
 	@FXML
 	public void pretragaRelacija() {
-		int brojMjestaOdredista = pronadjiTrazenoOdrediste(odredisteTextField.getText());
 		karteObs.clear();
 		Connection c = null;
 		PreparedStatement s = null;
-		String sqlQuery = "select dani_u_sedmici,vrijeme_polaska,NazivPrevoznika,Email,prevoznik.Adresa,WEBAdresa,Telefon,prevoznik.BrojPoste,NazivLinije,Peron,Polaziste,Odrediste,vrijeme_dolaska,cijena,relacija.IdRelacije,relacija.IdLinije from linija join (relacija,prevoznik) "
-				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.prevoznik_fk=IdPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (polaziste=? && odrediste=?)";
 		ResultSet r = null;
+		String sqlQuery = "select DaniUSedmici,VrijemePolaska,NazivPrevoznika,Email,prevoznik.Adresa,WEBAdresa,Telefon,prevoznik.PostanskiBroj,NazivLinije,Peron,Polaziste,Odrediste,VrijemeDolaska,CijenaJednokratna,relacija.IdRelacije,relacija.IdLinije from linija join (relacija,prevoznik) "
+				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.IdPrevoznika=prevoznik.IdPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?)";
+		String sqlQueryMjesecna = "select DaniUSedmici,VrijemePolaska,NazivPrevoznika,Email,prevoznik.Adresa,WEBAdresa,Telefon,prevoznik.PostanskiBroj,NazivLinije,Peron,Polaziste,Odrediste,VrijemeDolaska,CijenaMjesecna,relacija.IdRelacije,relacija.IdLinije from linija join (relacija,prevoznik) "
+				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.IdPrevoznika=prevoznik.IdPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (polaziste=? && odrediste=?)";
 		try {
 			c = Util.getConnection();
-			s = c.prepareStatement(sqlQuery);
-			s.setInt(2, brojMjestaOdredista);
-			s.setInt(1, SalterskiRadnikController.brojMjesta);
-			r = s.executeQuery();
-			while(r.next()) {
+			
+			if(kupovinaMjesecne) {
+				s = c.prepareStatement(sqlQueryMjesecna);
+				s.setString(1, polazisteTextField.getText());
+				s.setString(2, odredisteTextField.getText());
+				r = s.executeQuery();
+				while(r.next()) {
+					
+					Time vrijemePolaska = r.getTime(2);
+					daniUSedmici = r.getString(1);
+					Prevoznik prevoznik = new Prevoznik(r.getString(3), r.getString(4), r.getString(5), r.getString(6), r.getString(7), "BL");
+					Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10));
+					Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
+					Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice());
+					karteObs.add(karta);
+					System.out.println("JIB stanice: " + karta.getJIBStanice());
+				}
+			}
+			else {
+				s = c.prepareStatement(sqlQuery);
+				s.setString(1, InformacijeController.nazivMjesta);
+				s.setString(2, odredisteTextField.getText());
+				r = s.executeQuery();
+			while(r.next()) {	
 				daniUSedmici = r.getString(1);
 				Time vrijemePolaska = r.getTime(2);
 				if(zadovoljavaDatumVrijeme(daniUSedmici,vrijemePolaska)) {
 					Prevoznik prevoznik = new Prevoznik(r.getString(3), r.getString(4), r.getString(5), r.getString(6), r.getString(7), "BL");
 					Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10));
-					Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getInt(11), r.getInt(12));
-					Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme());
+					Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
+					Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice());
 					karteObs.add(karta);
-					}
+					System.out.println(karta);
+					System.out.println("JIB stanice: " + karta.getJIBStanice());
+
 				}
+			
+			}
+			}
+
+			if(karteObs.isEmpty())
+				showPrazanSetAlert();
 			} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			}
-		if(karteObs.isEmpty())
-			showPrazanSetAlert();
-		Util.close(r, s, c);
+		finally {
+			Util.close(r, s, c);
+		}
+		
 	}
 	
 	public void showPrazanSetAlert() {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Obavjestenje");
 		alert.setHeaderText("Nema linija");
-		alert.setContentText("Za odabranu relaciju i datum nema linija ili su vec otisle.");
+		alert.setContentText("Za odabrani datum i destinaciju (ili relacije) nema linija.");
 		alert.showAndWait();
 
 	}
@@ -272,9 +371,6 @@ public class ProdajaKarataController implements Initializable {
 	public boolean zadovoljavaDatumVrijeme(String daniUSedmici,Time vrijemePolaska) {
 		LocalTime localTime = LocalTime.now();
 		if(datum.getValue().equals(LocalDate.now())) {
-			System.out.println("danasnji");
-			System.out.println(daniUSedmici);
-			System.out.println();
 			return (localTime.compareTo(vrijemePolaska.toLocalTime())<0);
 			}
 		else
@@ -287,7 +383,7 @@ public class ProdajaKarataController implements Initializable {
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
-		String sql = "select BrojPoste from mjesto where Naziv=?";
+		String sql = "select PostanskiBroj from mjesto where Naziv=?";
 		try {
 			c = Util.getConnection();
 			s = c.prepareStatement(sql);
@@ -303,64 +399,159 @@ public class ProdajaKarataController implements Initializable {
 			e.printStackTrace();
 			return 0;
 		}
-		Util.close(r, s, c);
+		finally {
+			Util.close(r, s, c);
+		}
 		return 0;
 	}
 
 	@FXML
 	public void kupovina() {
-		if(50-provjeriBrojKarata()<Integer.parseInt(brojKarata.getText())) {
+		brojKarataZaKupovinu = Integer.parseInt(brojKarataTextField.getText());
+		if(50-provjeriBrojKarata()<brojKarataZaKupovinu) {
 			showNedovoljnoMjesta();
 			return;
 		}
 		if(showPotvrda()) {
-			if(!kupovinaMjesecne) {
-				System.out.println("prodaja");
 				Connection c = null;
 				PreparedStatement s = null;
-				ResultSet r = null;
-				for(int i=0;i<Integer.parseInt(brojKarata.getText());++i) {
+				for(int i=0;i<brojKarataZaKupovinu;++i) {
 					int brojKarata = provjeriBrojKarata();
 					System.out.println("Broj karata: " + brojKarata);
-					System.out.println(linijeTable.getSelectionModel().getSelectedItem());
-					String sqlQuery = "insert into karta value (DEFAULT,?,?,?,?)";
+					String sqlQuery = "insert into karta value (DEFAULT,?,?,?,?,?)";
+					String sqlMjesecna = "insert into karta value (DEFAULT,?,?,DEFAULT,?,?)";
 					try {
 						c = Util.getConnection();
-						s = c.prepareStatement(sqlQuery);
-						s.setInt(1, linijeTable.getSelectionModel().getSelectedItem().getRelacija().getIdRelacije());
-						s.setDate(2, Date.valueOf(datum.getValue()));
-						s.setInt(3, brojKarata+1);
-						s.setInt(4, linijeTable.getSelectionModel().getSelectedItem().getLinija().getIdLinije());
-						System.out.println(s.executeUpdate());
+						if(kupovinaMjesecne) {
+							Karta karta = linijeTable.getSelectionModel().getSelectedItem();
+							  s = c.prepareStatement(sqlMjesecna,
+                                     Statement.RETURN_GENERATED_KEYS);
+							s.setInt(1, karta.getRelacija().getIdRelacije());
+							s.setDate(2, Date.valueOf(datum.getValue()));
+							s.setInt(3, karta.getJIBStanice());
+							s.setDouble(4, karta.getCijena());
+							s.executeUpdate();
+							
+							 try (ResultSet generatedKeys = s.getGeneratedKeys()) {
+						            if (generatedKeys.next()) {
+										dodajMjesecnuKartu(generatedKeys.getInt(1));
+
+						            }
+						            else {
+						                throw new SQLException("Creating user failed, no ID obtained.");
+						            }
+						        }
+						}
+						else {
+							Karta k = linijeTable.getSelectionModel().getSelectedItem();
+							System.out.println(k);
+							s = c.prepareStatement(sqlQuery,Statement.RETURN_GENERATED_KEYS);
+							s.setInt(1, k.getRelacija().getIdRelacije());
+							s.setDate(2, Date.valueOf(datum.getValue()));
+							s.setInt(3, brojKarata+1);
+							s.setInt(4, k.getJIBStanice());
+							s.setDouble(5, k.getCijena());
+							s.executeUpdate();
+							if(rezervacijaCheckBox.isSelected()) {
+								try (ResultSet generatedKeys = s.getGeneratedKeys()) {
+						            if (generatedKeys.next()) {
+										dodajRezervaciju(generatedKeys.getInt(1));
+										System.out.println("SERial zadnje: " + generatedKeys.getInt(1));
+						            }
+						            else {
+						                throw new SQLException("Creating user failed, no ID obtained.");
+						            }
+						        }
+							}
+						}
 						} catch (Exception e) {
 							// TODO: handle exception
 							e.printStackTrace();
 						}
-						try(BufferedWriter bw = 
-							new BufferedWriter(new FileWriter(new File("karta"+linijeTable.getSelectionModel().getSelectedItem().getIdKarte()))))
-						{
-							bw.write(linijeTable.getSelectionModel().getSelectedItem().toString());
-				
-						}	catch (IOException	 e) {
-						// TODO: handle exception
-							e.printStackTrace();
+						finally {
+							Util.close(s, c);
 						}
-						Util.close(r, s, c);
-				}
-			}
-			else { // KUPOVINA MJESECNE
-				Karta k = linijeTable.getSelectionModel().getSelectedItem();
-				System.out.println("Ispis");
-				System.out.println(k);
-				MjesecnaKarta mk = new MjesecnaKarta(k.getIdKarte(), k.getLinija(), k.getRelacija(), k.getVrijemePolaska(), k.getVrijemeDolaska(), k.getCijena(), LocalDate.now(), k.getPrevoznik(), "vc", imeField.getText(), prezimeField.getText(), tipKarteComboBox.getValue(), odabranaSlika);
-				System.out.println("Mjesecna karta:");
-				System.out.println(mk);
-				Connection c = null;
-				PreparedStatement s = null;
+					// ISPIS KARTE
+			
+					
+					// ispis
+						
 				
 			}
 			
+			
 		}			
+	}
+
+	private void dodajRezervaciju(int serijskiBrojKarte) {
+		// TODO Auto-generated method stub
+		Connection c= null;
+		PreparedStatement s = null;
+		String sqlQuery = "insert into rezervacija value (default,?,?,?,?)";
+		try {
+			c = Util.getConnection();
+			s = c.prepareStatement(sqlQuery);
+			s.setDate(1, Date.valueOf(LocalDate.now()));
+			s.setString(2, imeTextField.getText() + " " + prezimeTextField.getText());
+			s.setString(3, brojTelefonaTextField.getText());
+			s.setInt(4, serijskiBrojKarte);
+			System.out.println("Ser. broj: " + serijskiBrojKarte);
+			s.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	public String getNazivMjesta() {
+		// TODO Auto-generated method stub
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		String sql = "select mjesto.Naziv from mjesto join autobuska_stanica\n" + 
+				"on (mjesto.PostanskiBroj=autobuska_stanica.PostanskiBroj) \n" + 
+				"where (autobuska_stanica.IdStanice=?)";
+		try {
+			c = Util.getConnection();
+			s = c.prepareStatement(sql);
+			s.setInt(1, PrijavaController.nalog.getIdStanice());
+			r = s.executeQuery();
+			while(r.next()) {
+				return r.getString(1);
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			Util.close(r, s, c);
+		}
+		return null;
+	}
+	
+	public void dodajMjesecnuKartu(int i) {
+		// TODO Auto-generated method stub
+		Connection c= null;
+		PreparedStatement s = null;
+		Karta k = linijeTable.getSelectionModel().getSelectedItem();
+		String sqlQuery = "insert into mjesecna_karta value (default,?,?,?,?,?,?)";
+		try {
+			c = Util.getConnection();
+			s = c.prepareStatement(sqlQuery);
+			s.setDouble(1, k.getCijena());
+			s.setString(2, imeTextField.getText());
+			s.setString(3, prezimeTextField.getText());
+			s.setString(4, odabranaSlika.getAbsolutePath());
+			s.setString(5, tipKarteComboBox.getValue().toString());
+			s.setInt(6, i);
+			s.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			Util.close(s, c);
+		}
 	}
 
 	public boolean showPotvrda() {
@@ -380,10 +571,10 @@ public class ProdajaKarataController implements Initializable {
 	
 	@FXML
 	public void odaberiSliku() {
-		System.out.println("fasf");
 		FileChooser fc  = new FileChooser();
 		fc.getExtensionFilters().add(new ExtensionFilter("PNG Files", "*.png"));
 	    odabranaSlika = fc.showOpenDialog(null);
+	    System.out.println(odabranaSlika.getAbsolutePath());
 		if(odabranaSlika!=null) {
 			try {
 				nazivSlikeTextField.setText(odabranaSlika.getName());
@@ -398,22 +589,24 @@ public class ProdajaKarataController implements Initializable {
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
-		String sqlQuery = "select count(*) from karta where IdRelacije=? and Datum=? and IdLinije=?";
+		String sqlQuery = "select count(*) from karta join (relacija,linija) on (karta.IdRelacije=relacija.IdRelacije) and (relacija.IdLinije=linija.IdLinije) "
+				+ "where (linija.IdLinije=?) and (karta.Datum=?)";
 		try {
 			c = Util.getConnection();
 			s = c.prepareStatement(sqlQuery);
-			s.setInt(1, linijeTable.getSelectionModel().getSelectedItem().getRelacija().getIdRelacije());
+			s.setInt(1, linijeTable.getSelectionModel().getSelectedItem().getLinija().getIdLinije());
 			s.setDate(2, Date.valueOf(datum.getValue()));
-			s.setInt(3, linijeTable.getSelectionModel().getSelectedItem().getLinija().getIdLinije());
 			r = s.executeQuery();
-			while(r.next())
+			if(r.next())
 				return r.getInt(1);
 		} catch (SQLException e) {
 			// TODO: handle exception
 			e.printStackTrace();
 			return 0;
 		}
-		Util.close(r, s, c);
+		finally {
+			Util.close(r, s, c);
+		}
 		return 0;
 	}
 }

@@ -1,9 +1,11 @@
 package org.unibl.etf.salterski_radnik;
 
 import java.net.URL;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
@@ -50,9 +52,9 @@ public class SalterskiRadnikController implements Initializable {
 	@FXML
 	private ToggleButton informacijeButton;
 	@FXML
-	private ToggleButton odjavaButton;
+	private ToggleButton otkazivanjeRezervacijeButton;
 	@FXML
-	private ToggleButton kreirajMjesecnuKartuButton;
+	private ToggleButton odjavaButton;
 	@FXML
 	private ToggleButton prodajaKarataButton;
 	@FXML
@@ -60,28 +62,13 @@ public class SalterskiRadnikController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+	
 		toggleGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
 		    if (newValue == null) {
 		        oldValue.setSelected(true);
 		    }
 		});	
 		informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " + PrijavaController.nalog.getZaposleni().getPrezime());
-		Connection c = null;
-		String query = "SELECT BrojPoste FROM autobuska_stanica WHERE IdStanice=?";
-		PreparedStatement s = null;
-		ResultSet r = null;
-		try {
-			c = Util.getConnection();
-			s = c.prepareStatement(query);
-			s.setInt(1, PrijavaController.nalog.getIdStanice());
-			r = s.executeQuery();
-			while(r.next()) {
-				brojMjesta = r.getInt(1);
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		Util.close(r, s, c);
 		//DragAndDrop
 		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
@@ -108,8 +95,40 @@ public class SalterskiRadnikController implements Initializable {
 			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 			stage.setOpacity(1.0);
 		});
+		System.out.println(PrijavaController.nalog.getIdStanice());
+		
+		info();
 	}
 	
+	@FXML
+	void info( ) {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/InformacijeView.fxml"));
+			AnchorPane.setTopAnchor(root,0.0);
+			AnchorPane.setBottomAnchor(root,0.0);
+			AnchorPane.setLeftAnchor(root,0.0);
+			AnchorPane.setRightAnchor(root,0.0);
+			dataAnchorPane.getChildren().removeAll();
+			dataAnchorPane.getChildren().setAll(root);
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+	}
+	
+	@FXML
+	public void otkazivanjeRezervacije(ActionEvent event) {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/OtkazivanjeRezervacijeView.fxml"));
+			AnchorPane.setTopAnchor(root,0.0);
+			AnchorPane.setBottomAnchor(root,0.0);
+			AnchorPane.setLeftAnchor(root,0.0);
+			AnchorPane.setRightAnchor(root,0.0);
+			dataAnchorPane.getChildren().removeAll();
+			dataAnchorPane.getChildren().setAll(root);
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+	}
 	@FXML
 	public void odjava(ActionEvent event) {
 		if(PrijavaController.nalog.odjava()) {
@@ -166,7 +185,7 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	@FXML
 	void korisnickiNalog(ActionEvent event) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/KorisnickiNalog.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/prijava/UpravljanjeKorisnickimNalogom.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
 			AnchorPane.setBottomAnchor(root,0.0);
 			AnchorPane.setLeftAnchor(root,0.0);
@@ -196,22 +215,7 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 		
 	}
 	
-	@FXML
-	public void mjesecnaKarta(ActionEvent event) {
-		kreirajMjesecnuKartuButton.getStyleClass().removeAll("buttonMenu");
-		kreirajMjesecnuKartuButton.getStyleClass().add("buttonPressed");
-		try {
-			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/KreiranjeMjesecneKarte.fxml"));
-			AnchorPane.setTopAnchor(root,0.0);
-			AnchorPane.setBottomAnchor(root,0.0);
-			AnchorPane.setLeftAnchor(root,0.0);
-			AnchorPane.setRightAnchor(root,0.0);
-			dataAnchorPane.getChildren().removeAll();
-			dataAnchorPane.getChildren().setAll(root);
-		} catch(Exception e) {
-			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-		}
-	}
+	
 
 
 }

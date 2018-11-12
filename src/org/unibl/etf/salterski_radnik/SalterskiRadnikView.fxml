@@ -18,7 +18,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <ToggleButton fx:id="informacijeButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="166.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" selected="true" text="Informacije">
+            <ToggleButton fx:id="informacijeButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="166.0" mnemonicParsing="false" onAction="#info" prefHeight="25.0" prefWidth="200.0" selected="true" text="Informacije">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -48,17 +48,6 @@
                <padding>
                   <Insets left="20.0" />
                </padding></ToggleButton>
-            <ToggleButton fx:id="kreirajMjesecnuKartuButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="236.0" mnemonicParsing="false" onAction="#mjesecnaKarta" prefHeight="25.0" prefWidth="200.0" text="Nova mjesecna karta" toggleGroup="$toggleGroup">
-               <graphic>
-                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@img/logout.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets left="20.0" />
-               </padding></ToggleButton>
             <ToggleButton fx:id="odjavaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="357.0" mnemonicParsing="false" onAction="#odjava" prefHeight="25.0" prefWidth="200.0" text="Odjava" toggleGroup="$toggleGroup">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
@@ -75,6 +64,15 @@
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../administrator/img/settings.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </ToggleButton>
+            <ToggleButton fx:id="otkazivanjeRezervacijeButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="234.0" mnemonicParsing="false" onAction="#otkazivanjeRezervacije" prefHeight="28.0" prefWidth="200.0" text="Otkazivanje rezervacije" toggleGroup="$toggleGroup">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/logout.png" />
                      </image>
                   </ImageView>
                </graphic>

@@ -16,7 +16,7 @@ public class Karta {
 	protected LocalDate datumIzdavanja;
 	protected Prevoznik prevoznik;
 	protected String imeZaposlenog;
-	
+	protected int JIBStanice;
 	protected int peron;
 	protected String nazivPrevoznika;
 	protected String nazivLinije;
@@ -59,7 +59,7 @@ public class Karta {
 		this.nazivPrevoznika = nazivPrevoznika;
 	}
 	public Karta(Linija linija, Relacija relacija, Time vrijemePolaska, Time vrijemeDolaska, double cijena,
-			LocalDate datumIzdavanja, Prevoznik prevoznik, String imeZaposlenog) {
+			LocalDate datumIzdavanja, Prevoznik prevoznik, String imeZaposlenog, int JIBStanice) {
 		super();
 		this.linija = linija;
 		this.relacija = relacija;
@@ -72,6 +72,14 @@ public class Karta {
 		this.nazivPrevoznika = prevoznik.getNaziv();
 		this.peron = linija.getPeron();
 		this.nazivLinije = linija.getNazivLinije();
+		this.JIBStanice = JIBStanice;
+	}
+	
+	public int getJIBStanice() {
+		return JIBStanice;
+	}
+	public void setJIBStanice(int jIBStanice) {
+		JIBStanice = jIBStanice;
 	}
 	public int getIdKarte() {
 		return idKarte;
@@ -116,11 +124,14 @@ public class Karta {
 		this.imeZaposlenog = izdaoZaposleni;
 	}
 	
+	
 	@Override
 	public String toString() {
 		return "Karta [idKarte=" + idKarte + ", linija=" + linija + ", relacija=" + relacija + ", vrijemePolaska="
 				+ vrijemePolaska + ", vrijemeDolaska=" + vrijemeDolaska + ", cijena=" + cijena + ", datumIzdavanja="
-				+ datumIzdavanja + ", prevoznik=" + prevoznik + ", imeZaposlenog=" + imeZaposlenog + "]";
+				+ datumIzdavanja + ", prevoznik=" + prevoznik + ", imeZaposlenog=" + imeZaposlenog + ", JIBStanice="
+				+ JIBStanice + ", peron=" + peron + ", nazivPrevoznika=" + nazivPrevoznika + ", nazivLinije="
+				+ nazivLinije + "]";
 	}
 	@Override
 	public int hashCode() {
