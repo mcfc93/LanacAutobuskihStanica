@@ -20,7 +20,7 @@ public class Nalog implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String korisnickoIme;
 	private String lozinka;
-	private int idStanice;
+	private String idStanice;
 	private boolean prijavljen;		//da li je trenutni korisnik prijavljen
 	private Zaposleni zaposleni;	//podaci o vlasniku naloga
 	
@@ -28,7 +28,7 @@ public class Nalog implements Serializable {
 		super();
 	}
 	
-	public Nalog(String korisnickoIme, String lozinka, int idStanice, boolean prijavljen, Zaposleni zaposleni) {
+	public Nalog(String korisnickoIme, String lozinka, String idStanice, boolean prijavljen, Zaposleni zaposleni) {
 		super();
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
@@ -53,11 +53,11 @@ public class Nalog implements Serializable {
 		this.lozinka = lozinka;
 	}
 	
-	public int getIdStanice() {
+	public String getIdStanice() {
 		return idStanice;
 	}
 	
-	public void setIdStanice(int idStanice) {
+	public void setIdStanice(String idStanice) {
 		this.idStanice = idStanice;
 	}
 	
@@ -121,7 +121,7 @@ public class Nalog implements Serializable {
 	        // 4.Process the result set
 	       	if(r.next()) {
 	        	//ucitavanje podataka o zaposlenom iz baze
-	    		nalog=new Nalog(korisnickoIme, lozinka, r.getInt("JIBStanice"), true, null);
+	    		nalog=new Nalog(korisnickoIme, lozinka, r.getString("JIBStanice"), true, null);
 	       		
 	    		System.out.println(nalog);
 	    		

@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import org.unibl.etf.util.Util;
 
 public class AutobuskaStanica {
+	private String jib;
 	private String naziv;
 	private String adresa;
 	private int brojPoste;
@@ -21,13 +22,22 @@ public class AutobuskaStanica {
 		super();
 	}
 	
-	public AutobuskaStanica(String naziv, String adresa, int brojPoste, String brojTelefona, int brojPerona) {
+	public AutobuskaStanica(String jib, String naziv, String adresa, int brojPoste, String brojTelefona, int brojPerona) {
 		super();
+		this.jib= jib;
 		this.naziv = naziv;
 		this.adresa = adresa;
 		this.brojPoste = brojPoste;
 		this.brojTelefona = brojTelefona;
 		this.brojPerona = brojPerona;
+	}
+	
+	public String getJib() {
+		return naziv;
+	}
+
+	public void setJib(String jib) {
+		this.jib = jib;
 	}
 
 	public String getNaziv() {
@@ -72,7 +82,7 @@ public class AutobuskaStanica {
 
 	@Override
 	public String toString() {
-		return "AutobuskaStanica [naziv=" + naziv + ", adresa=" + adresa + ", brojPoste=" + brojPoste
+		return "AutobuskaStanica [jib=" + jib + ", naziv=" + naziv + ", adresa=" + adresa + ", brojPoste=" + brojPoste
 				+ ", brojTelefona=" + brojTelefona + ", brojPerona=" + brojPerona + "]";
 	}
 	
@@ -103,7 +113,7 @@ public class AutobuskaStanica {
 		       	
 	    		//System.out.println(as);
 	    		
-	    		listaAutobuskihStanica.add(new AutobuskaStanica(r.getString("Naziv"), r.getString("Adresa"), r.getInt("PostanskiBroj"), r.getString("BrojTelefona"), r.getInt("BrojPerona")));
+	    		listaAutobuskihStanica.add(new AutobuskaStanica("TBD", r.getString("Naziv"), r.getString("Adresa"), r.getInt("PostanskiBroj"), r.getString("BrojTelefona"), r.getInt("BrojPerona")));
 	        }
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);

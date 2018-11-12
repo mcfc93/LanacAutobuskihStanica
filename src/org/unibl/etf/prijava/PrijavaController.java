@@ -318,6 +318,7 @@ System.out.println("nalog.ser");
 				//progressBar.setVisible(false);
 			}
 		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString());
 			Alert alert=new Alert(AlertType.ERROR);
     		alert.setTitle("Greška");
     		alert.setHeaderText(null);
