@@ -23,7 +23,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <ToggleButton fx:id="a" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="187.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" selected="true" text="A">
+            <ToggleButton fx:id="a" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="187.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" selected="true" text="Dodaj ili ukloni linije">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -38,7 +38,7 @@
                   <ToggleGroup fx:id="toggleGroup" />
                </toggleGroup>
             </ToggleButton>
-            <ToggleButton fx:id="b" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="217.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="B" toggleGroup="$toggleGroup">
+            <ToggleButton fx:id="b" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="217.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Izmjena linije" toggleGroup="$toggleGroup">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -50,7 +50,7 @@
                   <Insets left="20.0" />
                </padding>
             </ToggleButton>
-            <ToggleButton fx:id="c" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="247.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="C" toggleGroup="$toggleGroup">
+            <ToggleButton fx:id="c" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="247.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Dodaj ili ukloni prevoznika" toggleGroup="$toggleGroup">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -62,7 +62,7 @@
                   <Insets left="20.0" />
                </padding>
             </ToggleButton>
-            <ToggleButton fx:id="d" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="277.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="D" toggleGroup="$toggleGroup">
+            <ToggleButton fx:id="d" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="277.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Izmjena prevoznika" toggleGroup="$toggleGroup">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -85,6 +85,15 @@
                <padding>
                   <Insets left="20.0" />
                </padding>
+            </ToggleButton>
+            <ToggleButton alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutX="-2.0" layoutY="413.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="200.0" text="Rad sa nalogom" toggleGroup="$toggleGroup">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/logout.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </ToggleButton>
          </children>
       </AnchorPane>

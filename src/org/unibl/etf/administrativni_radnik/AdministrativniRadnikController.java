@@ -41,13 +41,16 @@ public class AdministrativniRadnikController implements Initializable {
     private ToggleGroup toggleGroup;
 	
 	@FXML
-	private ToggleButton odjavaButton;
+	private ToggleButton dodajIliUkloniLinijuButton = new ToggleButton();
 	
 	@FXML
-	private ToggleButton a;
+	private ToggleButton odjavaButton = new ToggleButton();
 	
 	@FXML
-	private ToggleButton b;
+	private ToggleButton dodajIliUkloniPrevoznikaButton = new ToggleButton();
+	
+	@FXML
+	private ToggleButton izmjeniPrevoznikaButton = new ToggleButton();;
 	
 	@FXML
 	private ToggleButton c;
@@ -104,8 +107,24 @@ informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " +
 		 * startMethod(null);
 		 * 
 		 **********************************************/
+		dodajIliUkloniLinije();
 	}
 	
+	public void dodajIliUkloniLinije() {
+		// TODO Auto-generated method stub
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/DodajIliUkloniLinije.fxml"));
+			AnchorPane.setTopAnchor(root,0.0);
+			AnchorPane.setBottomAnchor(root,0.0);
+			AnchorPane.setLeftAnchor(root,0.0);
+			AnchorPane.setRightAnchor(root,0.0);
+			dataAnchorPane.getChildren().removeAll();
+			dataAnchorPane.getChildren().setAll(root);
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+	}
+
 	@FXML
 	public void odjava(ActionEvent event) {
 		if(PrijavaController.nalog.odjava()) {

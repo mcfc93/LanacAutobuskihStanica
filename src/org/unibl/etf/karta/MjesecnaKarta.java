@@ -14,7 +14,7 @@ public class MjesecnaKarta extends Karta {
 	private TipKarte tip;
 	
 	public MjesecnaKarta(int idKarte, Linija linija, Relacija relacija, Time vrijemePolaska, Time vrijemeDolaska,
-			double cijena, LocalDate datumIzdavanja, Prevoznik prevoznik, String imeZaposlenog,String ime,String prezime,TipKarte tip,File slika,int JIBStanice) {
+			double cijena, LocalDate datumIzdavanja, Prevoznik prevoznik, String imeZaposlenog,String ime,String prezime,TipKarte tip,File slika,String JIBStanice) {
 		super(linija, relacija, vrijemePolaska, vrijemeDolaska, cijena, datumIzdavanja, prevoznik, imeZaposlenog,JIBStanice);
 		// TODO Auto-generated constructor stub
 		this.ime = ime;

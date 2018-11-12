@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -80,6 +81,22 @@ public class InformacijeController implements Initializable{
 	private static String daniUSedmici;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		Connection c = null;
+		Statement s = null;
+		ResultSet r= null;
+		String sql = "select SerijskiBroj from karta where BrojSjedista=5 and IdRelacije=407";
+		try {
+			c = Util.getConnection();
+			s = c.prepareStatement(sql);
+			r = s.executeQuery(sql);
+			if(r.next()) {
+				System.out.println(r.getLong(1));
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+		}
+		
 		karteTable.setItems(karteObs);
 		datum.setValue(LocalDate.now());
 		nazivMjesta = getNazivMjesta();
@@ -148,9 +165,9 @@ public class InformacijeController implements Initializable{
 		PreparedStatement s = null;
 		ResultSet r = null;
 		String sqlQueryPolasci = "select DaniUSedmici,VrijemePolaska,NazivPrevoznika,Email,prevoznik.Adresa,WEBAdresa,Telefon,prevoznik.PostanskiBroj,NazivLinije,Peron,Polaziste,Odrediste,VrijemeDolaska,CijenaJednokratna,relacija.IdRelacije,relacija.IdLinije from linija join (relacija,prevoznik) "
-				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.IdPrevoznika=prevoznik.IdPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?)";
+				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?)";
 		String sqlQueryDolasci = "select DaniUSedmici,VrijemePolaska,NazivPrevoznika,Email,prevoznik.Adresa,WEBAdresa,Telefon,prevoznik.PostanskiBroj,NazivLinije,Peron,Polaziste,Odrediste,VrijemeDolaska,CijenaJednokratna,relacija.IdRelacije,relacija.IdLinije from linija join (relacija,prevoznik) "
-				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.IdPrevoznika=prevoznik.IdPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Odrediste=? && Polaziste=?)";
+				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Odrediste=? && Polaziste=?)";
 		
 		try {
 			c = Util.getConnection();
@@ -258,7 +275,7 @@ public class InformacijeController implements Initializable{
 		try {
 			c = Util.getConnection();
 			s = c.prepareStatement(sql);
-			s.setInt(1, PrijavaController.nalog.getIdStanice());
+			s.setString(1, PrijavaController.nalog.getIdStanice());
 			r = s.executeQuery();
 			while(r.next()) {
 				return r.getString(1);

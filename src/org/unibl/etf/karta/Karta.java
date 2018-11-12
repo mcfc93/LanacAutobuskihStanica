@@ -16,7 +16,7 @@ public class Karta {
 	protected LocalDate datumIzdavanja;
 	protected Prevoznik prevoznik;
 	protected String imeZaposlenog;
-	protected int JIBStanice;
+	protected String JIBStanice;
 	protected int peron;
 	protected String nazivPrevoznika;
 	protected String nazivLinije;
@@ -59,7 +59,7 @@ public class Karta {
 		this.nazivPrevoznika = nazivPrevoznika;
 	}
 	public Karta(Linija linija, Relacija relacija, Time vrijemePolaska, Time vrijemeDolaska, double cijena,
-			LocalDate datumIzdavanja, Prevoznik prevoznik, String imeZaposlenog, int JIBStanice) {
+			LocalDate datumIzdavanja, Prevoznik prevoznik, String imeZaposlenog, String JIBStanice) {
 		super();
 		this.linija = linija;
 		this.relacija = relacija;
@@ -75,10 +75,11 @@ public class Karta {
 		this.JIBStanice = JIBStanice;
 	}
 	
-	public int getJIBStanice() {
+	
+	public String getJIBStanice() {
 		return JIBStanice;
 	}
-	public void setJIBStanice(int jIBStanice) {
+	public void setJIBStanice(String jIBStanice) {
 		JIBStanice = jIBStanice;
 	}
 	public int getIdKarte() {

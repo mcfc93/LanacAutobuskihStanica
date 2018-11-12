@@ -301,9 +301,9 @@ public class ProdajaKarataController implements Initializable {
 		PreparedStatement s = null;
 		ResultSet r = null;
 		String sqlQuery = "select DaniUSedmici,VrijemePolaska,NazivPrevoznika,Email,prevoznik.Adresa,WEBAdresa,Telefon,prevoznik.PostanskiBroj,NazivLinije,Peron,Polaziste,Odrediste,VrijemeDolaska,CijenaJednokratna,relacija.IdRelacije,relacija.IdLinije from linija join (relacija,prevoznik) "
-				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.IdPrevoznika=prevoznik.IdPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?)";
+				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?)";
 		String sqlQueryMjesecna = "select DaniUSedmici,VrijemePolaska,NazivPrevoznika,Email,prevoznik.Adresa,WEBAdresa,Telefon,prevoznik.PostanskiBroj,NazivLinije,Peron,Polaziste,Odrediste,VrijemeDolaska,CijenaMjesecna,relacija.IdRelacije,relacija.IdLinije from linija join (relacija,prevoznik) "
-				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.IdPrevoznika=prevoznik.IdPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (polaziste=? && odrediste=?)";
+				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (polaziste=? && odrediste=?)";
 		try {
 			c = Util.getConnection();
 			
@@ -319,7 +319,7 @@ public class ProdajaKarataController implements Initializable {
 					Prevoznik prevoznik = new Prevoznik(r.getString(3), r.getString(4), r.getString(5), r.getString(6), r.getString(7), "BL");
 					Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10));
 					Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
-					Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice());
+					Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),"1111111111");
 					karteObs.add(karta);
 					System.out.println("JIB stanice: " + karta.getJIBStanice());
 				}
@@ -336,7 +336,7 @@ public class ProdajaKarataController implements Initializable {
 					Prevoznik prevoznik = new Prevoznik(r.getString(3), r.getString(4), r.getString(5), r.getString(6), r.getString(7), "BL");
 					Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10));
 					Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
-					Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice());
+					Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),"1111111111");
 					karteObs.add(karta);
 					System.out.println(karta);
 					System.out.println("JIB stanice: " + karta.getJIBStanice());
@@ -428,7 +428,7 @@ public class ProdajaKarataController implements Initializable {
                                      Statement.RETURN_GENERATED_KEYS);
 							s.setInt(1, karta.getRelacija().getIdRelacije());
 							s.setDate(2, Date.valueOf(datum.getValue()));
-							s.setInt(3, karta.getJIBStanice());
+							s.setString(3, karta.getJIBStanice());
 							s.setDouble(4, karta.getCijena());
 							s.executeUpdate();
 							
@@ -449,9 +449,10 @@ public class ProdajaKarataController implements Initializable {
 							s.setInt(1, k.getRelacija().getIdRelacije());
 							s.setDate(2, Date.valueOf(datum.getValue()));
 							s.setInt(3, brojKarata+1);
-							s.setInt(4, k.getJIBStanice());
+							s.setString(4, k.getJIBStanice());
 							s.setDouble(5, k.getCijena());
 							s.executeUpdate();
+						
 							if(rezervacijaCheckBox.isSelected()) {
 								try (ResultSet generatedKeys = s.getGeneratedKeys()) {
 						            if (generatedKeys.next()) {
@@ -511,11 +512,11 @@ public class ProdajaKarataController implements Initializable {
 		ResultSet r = null;
 		String sql = "select mjesto.Naziv from mjesto join autobuska_stanica\n" + 
 				"on (mjesto.PostanskiBroj=autobuska_stanica.PostanskiBroj) \n" + 
-				"where (autobuska_stanica.IdStanice=?)";
+				"where (autobuska_stanica.JIBStanice=?)";
 		try {
 			c = Util.getConnection();
 			s = c.prepareStatement(sql);
-			s.setInt(1, PrijavaController.nalog.getIdStanice());
+			s.setString(1, PrijavaController.nalog.getIdStanice());
 			r = s.executeQuery();
 			while(r.next()) {
 				return r.getString(1);
