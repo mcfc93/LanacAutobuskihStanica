@@ -11,6 +11,78 @@
     * //stage.initStyle(StageStyle.TRANSPARENT);
  	*/
 }
+.combo-box .list-cell 
+{
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-text-fill: WHITE;
+    -fx-padding: 3 0 2 7;
+}
+
+.combo-box-popup .list-view 
+{
+    -fx-background-color: TRANSPARENT;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
+}    
+
+.combo-box-popup .list-view .list-cell 
+{
+    -fx-padding: 4 0 4 5;
+
+    /* No alternate highlighting */
+    -fx-background-color: transparent;
+}
+
+.combo-box-popup .list-view .list-cell:filled:selected, .combo-box-popup .list-view .list-cell:filled:selected:hover 
+{
+    -fx-background: -fx-accent;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+.combo-box-popup .list-view .list-cell:filled:hover 
+{
+    -fx-background-color: #03A9F4;
+    -fx-text-fill: white;
+}
+
+.combo-box-base  
+{
+    -fx-background-color: transparent;
+    -fx-background-radius: 5, 5, 4, 3;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-padding: 0;
+}
+
+.combo-box-base:hover
+{
+    -fx-color: -fx-hover-base;
+}
+
+.combo-box-base:showing 
+{
+    -fx-color: -fx-pressed-base;
+}
+
+.combo-box-base:focused {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6.4, 4, 5, 3;
+    -fx-background-insets: -1.4, 0, 1, 2;
+}
+
+.combo-box-base:disabled {
+    -fx-opacity: .4;
+}
+
+
+
+
+
+
+
+
+
 
 .anchorMenu {
 	-fx-background-color: linear-gradient(black 20%, red 80%);
@@ -108,7 +180,7 @@
 
 .jfx-text-field, .jfx-password-field {
 	-fx-text-fill: white;
-	-jfx-focus-color: BLUE;
+	-jfx-focus-color: #00BCD4;
 	-jfx-unfocus-color: WHITE;
 	-jfx-label-float: true;
 	-jfx-disable-animation: false;

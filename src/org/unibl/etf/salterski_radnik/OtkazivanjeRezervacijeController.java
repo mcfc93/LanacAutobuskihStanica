@@ -96,6 +96,13 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		finally {
+			Util.close(s, c);
+		}
+		cijenaTextField.setText("");
+		relacijaTextField.setText("");
+		datumTextField.setText("");
+		linijaTextField.setText("");
+		serijskiBrojTextField.setText("");
 	}
 }

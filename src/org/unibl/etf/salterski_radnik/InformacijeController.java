@@ -158,17 +158,36 @@ public class InformacijeController implements Initializable{
 			s.setString(1, getNazivMjesta());
 			s.setString(2, mjesto.getText());
 			r = s.executeQuery();
-			while(r.next()) {
-				daniUSedmici = r.getString(1);
-				Time vrijemePolaska = r.getTime(2);
-				if(zadovoljavaDatumVrijeme(daniUSedmici,vrijemePolaska)) {
-					Prevoznik prevoznik = new Prevoznik(r.getString(3), r.getString(4), r.getString(5), r.getString(6), r.getString(7), "BL");
-					Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10));
-					Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
-					Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),r.getInt(17));
-					karteObs.add(karta);
+			
+			if(polasci) {
+					while(r.next()) {
+						daniUSedmici = r.getString(1);
+						Time vrijemePolaska = r.getTime(2);
+						if(daniUSedmici.contains(datum.getValue().getDayOfWeek().toString())) {
+							Prevoznik prevoznik = new Prevoznik(r.getString(3), r.getString(4), r.getString(5), r.getString(6), r.getString(7), "BL");
+							Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10));
+							Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
+							Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice());
+							System.out.println("nasao");
+							karteObs.add(karta);
+						}
+				}		
+			}
+			else {
+				while(r.next()) {
+					daniUSedmici = r.getString(1);
+					Time vrijemePolaska = r.getTime(2);
+					if(zadovoljavaDatumVrijeme(daniUSedmici,vrijemePolaska)) {
+						Prevoznik prevoznik = new Prevoznik(r.getString(3), r.getString(4), r.getString(5), r.getString(6), r.getString(7), "BL");
+						Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10));
+						Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
+						Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice());
+						System.out.println("nasao");
+						karteObs.add(karta);
 					}
 				}
+			}
+			
 			} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
