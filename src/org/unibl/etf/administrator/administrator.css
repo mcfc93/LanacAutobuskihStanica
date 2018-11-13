@@ -13,20 +13,14 @@
 }
 
 .anchorMenu {
-	/*-fx-background-color: linear-gradient(black 20%, red 80%);*/
-	/*-fx-background-color: linear-gradient(darkblue 20%, darkmagenta 80%);*/
 	-fx-background-color: linear-gradient(black 20%, #ff0095 80%);
 }
 
 #dataAnchorPane {
 	/*linear-gradient( [ [from <point> to <point>] | [ to <side-or-corner>], ]? [ [ repeat | reflect ], ]? <color-stop>[, <color-stop>]+)
 	 *where <side-or-corner> = [left | right] || [top | bottom]
-	 */
- 	
- 	/*-fx-background-color: linear-gradient(#9c27b0, BLUE);*/
- 	/*-fx-background-color: linear-gradient(to left bottom, gray, darkgray 50%, dimgray 99%, white);*/
- 	/*-fx-background-color: linear-gradient(to right bottom, #4b0082, #8b008b 50%, #9c27b0 80%, #9932cc);*/
- 	/*-fx-background-color: #5CBFEB;*/
+	 * -fx-background-color: linear-gradient(to right bottom, #4b0082, #8b008b 50%, #9c27b0 80%, #9932cc);
+ 	 */
  	-fx-background-color: white;
 }
 
@@ -167,7 +161,8 @@
 
 .scroll-bar:horizontal .thumb:hover,
 .scroll-bar:vertical .thumb:hover {
-    -fx-background-color: derive(#4D4C4F,10.0%);
+    /*-fx-background-color: derive(#4D4C4F,10.0%);*/
+    -fx-background-color: #ff0095;
     
     /*-fx-background-color: BLACK;*/
     -fx-background-insets: 0;
@@ -212,7 +207,7 @@
     /*-fx-table-header-border-color: transparent;*/
     /*-fx-table-cell-border-color: derive(-fx-color,5%);*/
     
-    
+    -fx-focus-traversable: false;
     
     -fx-border-color: transparent;
     /*-fx-background-color: pink;*/
@@ -235,7 +230,7 @@
 .table-view .column-header-background {
     -fx-background-color: transparent;
     -fx-border-color: transparent transparent rgba(0,0,0,0.9) transparent;
-    -fx-border-width: 1;
+    -fx-border-width: 2;
     -fx-background-insets: 0;
     
     
@@ -247,6 +242,7 @@
 .table-view .column-header-background .label{
     -fx-background-color: transparent;
     -fx-text-fill: #ff0095;
+    -fx-alignment: center-left;
 }
 
 
@@ -258,30 +254,30 @@
     -fx-alignment: center-left;
 }
 
-/*
+
 .table-row-cell {
-    -fx-background-color: -fx-table-cell-border-color, #616161;
+    -fx-background-color: -fx-table-cell-border-color, transparent;
     -fx-background-insets: 0, 0 0 0 0;
     -fx-padding: 0;
     
     -fx-border-color: transparent;
-	-fx-table-cell-border-color: RED;
+	-fx-table-cell-border-color: transparent;
 }
 
 
 .table-row-cell:odd {
-    -fx-background-color: -fx-table-cell-border-color, #424242;
-    -fx-background-insets: 0, 0 0 1 0;
+    -fx-background-color: -fx-table-cell-border-color, transparent;
+    -fx-background-insets: 0, 0 0 0 0;
     -fx-padding: 0;  
 }
-*/
+
 .table-row-cell:selected {
-    -fx-background-color: #ff0095;
+    -fx-background-color: pink;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }
 .table-row-cell:selected .text {
-       -fx-fill: white;
+       /*-fx-fill: black;*/
 }
 /*
 .table-cell {
@@ -347,11 +343,12 @@
 	-fx-border-radius: 0px;
 	-fx-background-radius: 0px;
 	-fx-focus-traversable: false;
+	-fx-border-radius: 5;
+ 	-fx-background-radius: 5;
 }
 
 .buttonTableEdit:hover {
 	/*DRUGA SLIKA */
-	/*-fx-background-color: #9c27b0;*/
 	-fx-background-color: black;
 	-fx-cursor: hand;
 }
@@ -368,6 +365,8 @@
 	-fx-border-radius: 0px;
 	-fx-background-radius: 0px;
 	-fx-focus-traversable: false;
+	-fx-border-radius: 5;
+ 	-fx-background-radius: 5;
 }
 
 .buttonTableDelete:hover {
@@ -402,4 +401,13 @@
     -fx-max-height: 1.50in;
     -fx-padding: .25in;
     -fx-background-radius: .1in;
+}
+
+.jfx-radio-button{
+    -jfx-selected-color: #ff0095;
+    -jfx-unselected-color: BLACK;
+}
+
+.jfx-radio-button .radio-container:hover{
+    -fx-cursor: hand;
 }

@@ -20,8 +20,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 
 public class UpravljanjeKorisnickimNalogomController implements Initializable {
+	
+    @FXML
+    private GridPane gridPane;
 	
     @FXML
     private JFXPasswordField staraLozinkaTextField;

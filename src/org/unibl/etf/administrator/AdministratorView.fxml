@@ -11,7 +11,7 @@
 
 <AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="800.0" stylesheets="@administrator.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.AdministratorController">
    <children>
-      <AnchorPane fx:id="anchorMenu" layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="anchorMenu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="anchorMenu" layoutY="5.0" maxWidth="350.0" minHeight="200.0" prefHeight="200.0" prefWidth="200.0" styleClass="anchorMenu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="50.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>

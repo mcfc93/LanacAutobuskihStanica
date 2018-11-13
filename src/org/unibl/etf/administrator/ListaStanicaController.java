@@ -5,19 +5,24 @@ import java.util.ResourceBundle;
 
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 
 import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.autobuska_stanica.*;
@@ -76,17 +81,19 @@ public class ListaStanicaController implements Initializable {
         
         izmijeniColumn.setCellFactory(tableCell -> {
             TableCell<AutobuskaStanica, AutobuskaStanica> cell = new TableCell<AutobuskaStanica, AutobuskaStanica>() {
-                //private ImageView imageView = new ImageView("org/unibl/etf/administrator/img/edit.png");
-            	private Button imageView = new Button("");
+                private Button button = new Button("");
             	//postaviti dimenzije
                 @Override
                 protected void updateItem(AutobuskaStanica item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                    	//imageView.setStyle("-fx-background-image: url('org/unibl/etf/administrator/img/edit.png')");
-                    	imageView.getStyleClass().addAll("buttonTable", "buttonTableEdit");
-                    	setGraphic(imageView);
-                    	imageView.setOnMouseClicked(
+                    	//System.out.println(item);
+                    	button.getStyleClass().addAll("buttonTable", "buttonTableEdit");
+                    	button.setTooltip(new Tooltip("Izmijeni?"));
+                    	button.getTooltip().setAutoHide(false);
+                    	button.getTooltip().setShowDelay(Duration.seconds(0.5));
+                    	setGraphic(button);
+                    	button.setOnMouseClicked(
                     			event -> getTableView().getItems().remove(item)
                     		);
                     } else {
@@ -103,18 +110,22 @@ public class ListaStanicaController implements Initializable {
         
         obrisiColumn.setCellFactory(tableCell -> {
             TableCell<AutobuskaStanica, AutobuskaStanica> cell = new TableCell<AutobuskaStanica, AutobuskaStanica>() {
-                //private ImageView imageView = new ImageView("org/unibl/etf/administrator/img/delete.png");
-            	private Button imageView = new Button("");
+                private Button button = new Button("");
             	//postaviti dimenzije
                 @Override
                 protected void updateItem(AutobuskaStanica item, boolean empty) {
-                	//System.out.println(item);
                     super.updateItem(item, empty);
                     if (!empty) {
-                    	//imageView.setStyle("-fx-background-image: url('org/unibl/etf/administrator/img/delete.png')");
-                    	imageView.getStyleClass().addAll("buttonTable", "buttonTableDelete");
-                    	setGraphic(imageView);
-                    	imageView.setOnMouseClicked(
+                       	//System.out.println(item);
+                    	//postavljanje CSS
+                    	button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
+                    	//postavljanje opisa
+                    	button.setTooltip(new Tooltip("Obriši?"));
+                    	button.getTooltip().setAutoHide(false);
+                    	button.getTooltip().setShowDelay(Duration.seconds(0.5));
+                    	//dodavanje u kolonu
+                    	setGraphic(button);
+                    	button.setOnMouseClicked(
                     			event -> getTableView().getItems().remove(item)
                         );
                     } else {
@@ -185,9 +196,9 @@ public class ListaStanicaController implements Initializable {
             protected Void call() /*throws Exception*/ {
             	System.out.println(Thread.currentThread());
                 progressPane.setVisible(true);
-                for(int i=0; i<30; i++) {
+                //for(int i=0; i<30; i++) {
                 listaAutobuskihStanica.addAll(AutobuskaStanica.listaStanica());
-            	}
+            	//}
                 //Thread.sleep(2000);
                 return null;
             }
@@ -240,8 +251,8 @@ public class ListaStanicaController implements Initializable {
                 protected void updateItem(AutobuskaStanica item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                    	//imageView.setStyle("-fx-background-image: url('org/unibl/etf/administrator/img/edit.png')");
                     	imageView.getStyleClass().addAll("buttonTable", "buttonTableEdit");
+                    	//imageView.setStyle("-fx-background-image: url('org/unibl/etf/administrator/img/edit.png')");
                     	setGraphic(imageView);
                     	imageView.setOnMouseClicked(
                     			event -> getTableView().getItems().remove(item)
