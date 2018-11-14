@@ -11,6 +11,26 @@
     * //stage.initStyle(StageStyle.TRANSPARENT);
  	*/
 }
+.jfx-check-box {
+	    -fx-text-fill: WHITE;
+	
+}
+.jfx-check-box .box {
+	-fx-border-color:white;
+	
+}
+.jfx-radio-button {
+	-fx-text-fill: WHITE;
+	-jfx-selected-color: #1fdbf8;
+    -jfx-unselected-color: white;
+}
+/*
+.jfx-radio-button .radio:selected {
+	-jfx-selected-color: #0F9D58;
+	
+} */
+
+
 .combo-box .list-cell 
 {
     -fx-background: transparent;
@@ -53,6 +73,8 @@
     -fx-background-radius: 5, 5, 4, 3;
     -fx-background-insets: 0 0 -1 0, 0, 1, 2;
     -fx-padding: 0;
+        -fx-text-fill: white;
+    
 }
 
 .combo-box-base:hover
@@ -64,7 +86,9 @@
 {
     -fx-color: -fx-pressed-base;
 }
-
+.jfx-combo-box {
+     -fx-prompt-text-fill: white;
+ }
 .combo-box-base:focused {
     -fx-background-color: transparent;
     -fx-background-radius: 6.4, 4, 5, 3;
@@ -76,7 +100,9 @@
 }
 
 
-
+.combo-box .text-field {
+    -fx-prompt-text-fill: white ;
+}
 
 
 

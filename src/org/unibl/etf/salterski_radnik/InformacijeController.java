@@ -82,26 +82,11 @@ public class InformacijeController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		Connection c = null;
-		Statement s = null;
-		ResultSet r= null;
-		String sql = "select SerijskiBroj from karta where BrojSjedista=5 and IdRelacije=407";
-		try {
-			c = Util.getConnection();
-			s = c.prepareStatement(sql);
-			r = s.executeQuery(sql);
-			if(r.next()) {
-				System.out.println(r.getLong(1));
-			}
-		} catch (SQLException e) {
-			// TODO: handle exception
-		}
-		
 		karteTable.setItems(karteObs);
 		datum.setValue(LocalDate.now());
 		nazivMjesta = getNazivMjesta();
 		System.out.println("Naziv mjesta: " + nazivMjesta);
-		ucitajStajalista();
+		ucitajMjesta();
 		karteTable.setPlaceholder(new Label("Odaberite relaciju i datum"));
 		autoComplete(mjestaSet);
 		polasciRadioButton.setToggleGroup(toggleGroup);
@@ -125,7 +110,7 @@ public class InformacijeController implements Initializable{
 		    		mjesto.setText("");
 		    		polasci = true;
 		    		mjesto.setPromptText("Destinacija");
-
+		    		
 		    	}
 		    	else {
 		    		mjesto.setText("");
@@ -177,6 +162,10 @@ public class InformacijeController implements Initializable{
 			r = s.executeQuery();
 			
 			if(polasci) {
+					s = c.prepareStatement(sqlQueryPolasci);
+					s.setString(1, getNazivMjesta());
+					s.setString(2, mjesto.getText());
+					r = s.executeQuery();
 					while(r.next()) {
 						daniUSedmici = r.getString(1);
 						Time vrijemePolaska = r.getTime(2);
@@ -222,15 +211,15 @@ public class InformacijeController implements Initializable{
 		alert.showAndWait();
 
 	}
-	public void ucitajStajalista() {
+	public void ucitajMjesta() {
 		// TODO Auto-generated method stub
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
 		try {
 			c = Util.getConnection();
-			s = c.prepareStatement("select distinct Naziv from mjesto where PostanskiBroj!=?");
-			s.setInt(1,SalterskiRadnikController.brojMjesta);
+			s = c.prepareStatement("select distinct Naziv from mjesto where Naziv!=?");
+			s.setString(1,nazivMjesta);
 			r = s.executeQuery();
 			while(r.next()) {
 				mjestaSet.add(r.getString(1));
