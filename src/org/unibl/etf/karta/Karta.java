@@ -1,9 +1,16 @@
 package org.unibl.etf.karta;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.unibl.etf.util.Util;
 import org.unibl.etf.zaposleni.Zaposleni;
 
 public class Karta {
@@ -156,6 +163,28 @@ public class Karta {
 	}
 
 	
+	/*public static List<Karta> getKarteList(String polaziste,String odrediste, boolean jednokratna) {
+		List<Karta> listaKarata = new ArrayList<>();
+		Connection c = null;
+		CallableStatement s = null;
+		ResultSet r = null;
+		try {
+	       	c = Util.getConnection();
+	       	if(jednokratna)
+	       		s = c.prepareCall("{call jednokratneKarte(?,?)}");
+	       	else
+	       		s = c.prepareCall("{call mjesecneKarte(?,?)}");
+	       	s.setString(1, polaziste);
+	       	s.setString(2, odrediste);
+	       	r = s.executeQuery();
+	       	while(r.next()) {
+	       		
+	       	}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}*/
 	
 	
 	

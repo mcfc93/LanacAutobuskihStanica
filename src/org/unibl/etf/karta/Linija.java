@@ -8,15 +8,27 @@ public class Linija {
 	private int idStanice;
 	private String daniUSedmici;
 	private int peron;
-	public Linija(int idLinije,String nazivLinije,String daniUSedmici,int peron) {
+	private String nazivPrevoznika;
+	public Linija(int idLinije,String nazivLinije,String daniUSedmici,int peron,String nazivPrevoznika) {
 		super();
 		this.idLinije = idLinije;
 		this.nazivLinije = nazivLinije;
 		this.daniUSedmici = daniUSedmici;
 		this.peron = peron;
+		this.nazivPrevoznika = nazivPrevoznika;
 	}
 	
 	
+	public String getNazivPrevoznika() {
+		return nazivPrevoznika;
+	}
+
+
+	public void setNazivPrevoznika(String nazivPrevoznika) {
+		this.nazivPrevoznika = nazivPrevoznika;
+	}
+
+
 	public int getIdLinije() {
 		return idLinije;
 	}

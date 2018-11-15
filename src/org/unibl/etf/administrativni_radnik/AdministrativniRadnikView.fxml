@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="800.0" stylesheets="@administrativni_radnik.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrativni_radnik.AdministrativniRadnikController">
+<AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="800.0" stylesheets="@../salterski_radnik/salterski_radnik.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrativni_radnik.AdministrativniRadnikController">
    <children>
-      <AnchorPane fx:id="anchorMenu" layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="anchorMenu" stylesheets="@administrativni_radnik.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="anchorMenu" layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="anchorMenu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="50.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -128,6 +128,6 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="dataAnchorPane" layoutX="200.0" layoutY="30.0" prefHeight="470.0" prefWidth="600.0" stylesheets="@administrativni_radnik.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
+      <AnchorPane fx:id="dataAnchorPane" layoutX="200.0" layoutY="30.0" prefHeight="470.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
    </children>
 </AnchorPane>

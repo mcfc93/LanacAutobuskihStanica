@@ -7,12 +7,11 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="470.0" prefWidth="600.0" stylesheets="@../prijava/prijava.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrativni_radnik.DodajIliUkloniLinijeController">
+<AnchorPane prefHeight="470.0" prefWidth="600.0" stylesheets="@../administrator/administrator.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrativni_radnik.DodajIliUkloniLinijeController">
    <children>
-      <JFXButton fx:id="ukloniLinijuButton" layoutX="479.0" layoutY="234.0" onAction="#ukloniLiniju" prefHeight="45.0" prefWidth="89.0" text="Ukloni" />
-      <JFXTextField layoutX="14.0" layoutY="223.0" promptText="Naziv nove linije" />
-      <JFXTextField layoutX="14.0" layoutY="268.0" promptText="ID prevoznika" />
-      <JFXTextField layoutX="14.0" layoutY="319.0" promptText="Peron" />
+      <JFXTextField fx:id="nazivLinijeTextField" layoutX="14.0" layoutY="223.0" promptText="Naziv nove linije" />
+      <JFXTextField fx:id="nazivPrevoznikaTextField" layoutX="14.0" layoutY="268.0" promptText="Naziv prevoznika" />
+      <JFXTextField fx:id="peronTextField" layoutX="14.0" layoutY="319.0" promptText="Peron" />
       <JFXCheckBox fx:id="ponedjeljakCB" layoutX="177.0" layoutY="220.0" text="Ponedjeljak" />
       <JFXCheckBox fx:id="utorakCB" layoutX="177.0" layoutY="249.0" text="Utorak" />
       <JFXCheckBox fx:id="srijedaCB" layoutX="177.0" layoutY="284.0" text="Srijeda" />
@@ -20,16 +19,17 @@
       <JFXCheckBox fx:id="petakCB" layoutX="177.0" layoutY="344.0" text="Petak" />
       <JFXCheckBox fx:id="subotaCB" layoutX="173.0" layoutY="372.0" text="Subota" />
       <JFXCheckBox fx:id="nedjeljaCB" layoutX="173.0" layoutY="401.0" text="Nedjelja" />
-      <JFXButton fx:id="dodajLinijuButton" layoutX="25.0" layoutY="372.0" prefHeight="58.0" prefWidth="114.0" text="Dodaj liniju" />
+      <JFXButton fx:id="dodajLinijuButton" layoutX="25.0" layoutY="372.0" onAction="#dodajLiniju" prefHeight="58.0" prefWidth="114.0" text="Dodaj liniju" />
       <TableView fx:id="linijeTableView" layoutX="-7.0" prefHeight="200.0" prefWidth="616.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <columns>
           <TableColumn fx:id="nazivLinijeColumn" prefWidth="143.0" text="Naziv linije" />
-          <TableColumn fx:id="idLinijeLinijeColumn" prefWidth="59.0" text="ID linije" />
-            <TableColumn fx:id="nazivPrevoznikaColumn" prefWidth="115.0" text="Naziv prevoznika" />
-            <TableColumn fx:id="peronLinijeColumn" minWidth="6.0" prefWidth="55.0" text="Peron" />
-            <TableColumn fx:id="daniUSedmiciColumn" prefWidth="243.0" text="Dani" />
+          <TableColumn fx:id="idLinijeLinijeColumn" prefWidth="49.0" text="ID linije" />
+            <TableColumn fx:id="nazivPrevoznikaColumn" prefWidth="125.0" text="Naziv prevoznika" />
+            <TableColumn fx:id="peronLinijeColumn" minWidth="6.0" prefWidth="41.0" text="Peron" />
+            <TableColumn fx:id="daniUSedmiciColumn" prefWidth="131.0" text="Dani" />
+            <TableColumn fx:id="izmijeniColumn" prefWidth="46.0" text="Izmijeni" />
+            <TableColumn fx:id="izbrisiColumn" prefWidth="64.0" text="Izbrisi" />
         </columns>
       </TableView>
-      <JFXButton layoutX="361.0" layoutY="234.0" prefHeight="45.0" prefWidth="89.0" text="Izmjeni" />
    </children>
 </AnchorPane>

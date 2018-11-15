@@ -28,7 +28,6 @@ import com.jfoenix.controls.JFXAutoCompletePopup;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
@@ -39,7 +38,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -50,6 +48,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -71,7 +70,6 @@ public class ProdajaKarataController implements Initializable {
 	public static boolean povratna=false;
 	private static final double POPUST_PENZIONERSKA = 0.75;
 	private static final double POPUST_DJACKA = 0.80;
-	private static final double POPUST_RADNICKA = 0.90;
 	private static final double POPUST_POVRATNA = 0.85;
 	@FXML
 	private JFXCheckBox povratnaKartaCheckBox = new JFXCheckBox();
@@ -90,7 +88,7 @@ public class ProdajaKarataController implements Initializable {
 	@FXML
 	private JFXTextField prezimeTextField = new JFXTextField();
 	@FXML
-	private JFXTextField nazivSlikeTextField;
+	private Label nazivSlikeLabel;
 	@FXML
 	private ToggleGroup toggleGroup = new ToggleGroup();
 	@FXML
@@ -126,58 +124,44 @@ public class ProdajaKarataController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		kupovinaButton.setDisable(true);
-		disableMjesecna(true);
 		tipKarteSetUp();
-		
-		ValidatorBase samePasswordValidator = new ValidatorBase("Ne poklapa se") {
-			@Override
-			protected void eval() {
-				if(!imeTextField.getText().trim().isEmpty()
-		        		&& !prezimeTextField.getText().trim().isEmpty()) {
-		        	 hasErrors.set(true);
-		        } else {
-		        	 hasErrors.set(false);
-		        }
-			}
-		};
-		samePasswordValidator.setIcon(new ImageView());
-		
-		
-		
+		brojTelefonaTextField.setTextFormatter(new TextFormatter<>(change -> (change.getControlNewText().matches("([0-9][0-9]*)?")) ? change : null));
+		nazivSlikeLabel.setVisible(false);
+		odaberiSlikuButton.setVisible(false);
+		imeTextField.setVisible(false);
+		prezimeTextField.setVisible(false);
+		tipKarteComboBox.setVisible(false);
+		brojTelefonaTextField.setVisible(false);
 		for(int i=1;i<=MAX_BROJ_KARATA;++i)
 			brojKarataComboBox.getItems().add(i);
 		brojKarataComboBox.getSelectionModel().selectFirst();
 		brojKarataComboBox.setVisibleRowCount(3);
 		polazisteTextField.setVisible(false);
-    	brojTelefonaTextField.setDisable(true);
     	rezervacijaCheckBox.setSelected(false);
     	povratnaKartaCheckBox.setSelected(false);
 		rezervacijaCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		        if(newValue) {
-			       imeTextField.setDisable(false);
-			       prezimeTextField.setDisable(false);
-			       brojTelefonaTextField.setDisable(false);
-
+			       imeTextField.setVisible(true);
+			       prezimeTextField.setVisible(true);
+			       brojTelefonaTextField.setVisible(true);
 		        }
 		        else {
-		        	imeTextField.setDisable(true);
-		        	prezimeTextField.setDisable(true);
-		        	brojTelefonaTextField.setDisable(true);
-
+		        	imeTextField.setVisible(false);
+				    prezimeTextField.setVisible(false);
+				    brojTelefonaTextField.setVisible(false);  
 		        }
 		    }
 		});	
+		
 		povratnaKartaCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		    	if(newValue) {
-		    		System.out.println("select");
 		    		for (Karta karta : karteObs) {
 						karta.setCijena( 2* (karta.getCijena() * POPUST_POVRATNA));
-					}
+		    		}
 		    		karteTable.refresh();
 		    	}
 		    	else
@@ -187,11 +171,8 @@ public class ProdajaKarataController implements Initializable {
 		    	karteTable.refresh();
 		    }
 		});	
-		
-   		
 
-		nazivSlikeTextField.setEditable(false);
-		//kupovinaButton.disableProperty().bind(Bindings.isEmpty(linijeTable.getSelectionModel().getSelectedItems()));
+		kupovinaButton.disableProperty().bind(Bindings.isEmpty(karteTable.getSelectionModel().getSelectedItems()));
 		tipKarteComboBox.setItems(FXCollections.observableArrayList(TipKarte.values()));
 		tipKarteComboBox.setValue(TipKarte.OBICNA);
 		radioButtonObicna.setSelected(true);
@@ -203,8 +184,12 @@ public class ProdajaKarataController implements Initializable {
 		    }
 		    else
 		    	if(newValue.equals(radioButtonObicna)) {
-		    		
-	
+		    		nazivSlikeLabel.setVisible(false);
+		    		odaberiSlikuButton.setVisible(false);
+		    		imeTextField.setVisible(false);
+		    		prezimeTextField.setVisible(false);
+		    		tipKarteComboBox.setVisible(false);
+		    		brojTelefonaTextField.setVisible(false);
 		    		datum.setDisable(false);
 		    		odredisteTextField.clear();
 		    		povratnaKartaCheckBox.setDisable(false);
@@ -219,16 +204,20 @@ public class ProdajaKarataController implements Initializable {
 		    		odabranaSlika = null;
 		    		brojKarataComboBox.getSelectionModel().selectFirst();
 		    		kupovinaMjesecne=false;
-		    		//kupovinaButton.disableProperty().bind(Bindings.isEmpty(linijeTable.getSelectionModel().getSelectedItems()));
+		    		kupovinaButton.disableProperty().bind(Bindings.isEmpty(karteTable.getSelectionModel().getSelectedItems()));
 		    		karteObs.clear();
-		    		disableMjesecna(true);
 		    	}
 		    	else { // KUPOVINA MJESECNE KARTE
-		    
+		    		nazivSlikeLabel.setVisible(true);
+		    		odaberiSlikuButton.setVisible(true);
+		    		imeTextField.setVisible(true);
+		    		prezimeTextField.setVisible(true);
+		    		tipKarteComboBox.setVisible(true);		    		
+		    		
+		    		
 		    		brojKarataZaKupovinu=1;
 		    		povratnaKartaCheckBox.setSelected(false);
-		    		povratnaKartaCheckBox.setDisable(true);
-
+		    		povratnaKartaCheckBox.setDisable(true);	
 		    		brojKarataComboBox.getSelectionModel().selectFirst();
 		    		tipKarteComboBox.setDisable(false);
 		    		polazisteTextField.clear();
@@ -244,7 +233,6 @@ public class ProdajaKarataController implements Initializable {
 		        	polazisteTextField.setVisible(true);
 		    		kupovinaMjesecne=true;
 		    		brojKarataComboBox.setVisible(false);
-		    		disableMjesecna(false);
 		    		karteObs.clear();
 		    		kupovinaButton.disableProperty().bind(Bindings.isEmpty(karteTable.getSelectionModel().getSelectedItems()).or(Bindings.createBooleanBinding(
 		    			    () -> imeTextField.getText().isEmpty() || prezimeTextField.getText().isEmpty(),
@@ -376,16 +364,6 @@ public class ProdajaKarataController implements Initializable {
 	}
 
 
-	public void disableMjesecna(boolean b) {
-		// TODO Auto-generated method stub
-		imeTextField.setDisable(b);
-		prezimeTextField.setDisable(b);
-		odaberiSlikuButton.setDisable(b);
-		nazivSlikeTextField.setDisable(b);
-		tipKarteComboBox.setDisable(b);
-	}
-
-
 	public void ucitajRelacije() {
 		// TODO Auto-generated method stub
 		Connection c = null;
@@ -435,7 +413,7 @@ public class ProdajaKarataController implements Initializable {
 					Time vrijemePolaska = r.getTime(2);
 					daniUSedmici = r.getString(1);
 					Prevoznik prevoznik = new Prevoznik(r.getString(3), r.getString(4), r.getString(5), r.getString(6), r.getString(7), "BL");
-					Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10));
+					Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10),r.getString(3));
 					Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
 					Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),"1111111111");
 					if(karta.getCijena()==0)
@@ -467,7 +445,7 @@ public class ProdajaKarataController implements Initializable {
 				Time vrijemePolaska = r.getTime(2);
 				if(zadovoljavaDatumVrijeme(daniUSedmici,vrijemePolaska)) {
 					Prevoznik prevoznik = new Prevoznik(r.getString(3), r.getString(4), r.getString(5), r.getString(6), r.getString(7), "BL");
-					Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10));
+					Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10),r.getString(3));
 					Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
 					Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),"1111111111");
 					if(povratnaKartaCheckBox.isSelected())
@@ -559,8 +537,6 @@ public class ProdajaKarataController implements Initializable {
 
 	@FXML
 	public void kupovina() {
-		if(imeTextField.validate() & prezimeTextField.validate() & brojTelefonaTextField.validate())
-			System.out.println("uspjesna validacija");
 		
 		if(karteTable.getSelectionModel().getSelectedItem()==null) {
 			showOdaberiteLinijuAlert();
@@ -694,7 +670,8 @@ public class ProdajaKarataController implements Initializable {
     	ValidatorBase requiredFieldValidator = new RequiredFieldValidator();
 	    requiredFieldValidator.setMessage("Obavezan unos");
 	    requiredFieldValidator.setIcon(new ImageView());
-	 
+	    requiredFieldValidator.setVisible(false);
+	    
 	    textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
 	        if(!newValue) {
 	        	textField.validate();
@@ -707,6 +684,8 @@ public class ProdajaKarataController implements Initializable {
 	        //} else {
 	        //	textField.resetValidation();
 	        //}
+	        
+	        	
 	    });
 	    
 	    
@@ -783,9 +762,10 @@ public class ProdajaKarataController implements Initializable {
 		FileChooser fc  = new FileChooser();
 		fc.getExtensionFilters().add(new ExtensionFilter("PNG Files", "*.png"));
 	    odabranaSlika = fc.showOpenDialog(null);
+	    nazivSlikeLabel.setText("Naziv slike");
 		if(odabranaSlika!=null) {
 			try {
-				nazivSlikeTextField.setText(odabranaSlika.getName());
+				nazivSlikeLabel.setText("Naziv slike: " + odabranaSlika.getName());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
