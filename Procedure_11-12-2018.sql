@@ -23,9 +23,18 @@ begin
 select KorisnickoIme, nalog.JMBG, Ime, Prezime, zaposleni.JMBG, StrucnaSprema, Adresa, PostanskiBroj, BrojTelefona, Email
 from nalog join zaposleni on (nalog.JMBG=zaposleni.JMBG) where KorisnickoIme=pUserName;
 end $$
-delimiter ;delimiter $$
+delimiter ;
+
+delimiter $$
 create procedure showBusStations()
 begin 
 select Naziv,Adresa,PostanskiBroj,BrojTelefona,BrojPerona from autobuska_stanica;	
+end $$
+delimiter ;
+
+delimiter $$
+CREATE PROCEDURE addBusStation(in pJIBStanice char(10), in pNaziv varchar(35),in pAdresa varchar(35) ,in pPostanskiBroj int(11), in pBrojTelefona varchar(15),in pBrojPerona int(11),in pWebStranica varchar(45))
+begin 
+	INSERT INTO autobuska_stanica(JIBStanice,Naziv,Adresa,PostanskiBroj,BrojTelefona,BrojPerona,WebStranica,StanicaAktivna) VALUES (pJIBStanice,pNaziv,pAdresa,pPostanskiBroj,pBrojTelefona,pBrojPerona,pWebStranica,1);
 end $$
 delimiter ;
