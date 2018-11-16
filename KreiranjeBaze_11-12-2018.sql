@@ -229,3 +229,9 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 29
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
+
+alter table autobuska_stanica
+add Email varchar(50);
+
+alter table nalog
+add NalogAktivan tinyint(1);
