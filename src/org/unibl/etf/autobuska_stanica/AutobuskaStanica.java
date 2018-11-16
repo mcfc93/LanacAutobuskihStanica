@@ -14,30 +14,33 @@ import org.unibl.etf.util.Util;
 public class AutobuskaStanica {
 	private String jib;
 	private String naziv;
-	private String adresa;
+	private String ulicaIBroj;
 	private int postanskiBroj;
+	private String grad;
 	private String brojTelefona;
 	private int brojPerona;
 	private String webStranica;
-	//private String email;
+	private String email;
 	
 	public AutobuskaStanica() {
 		super();
 	}
 	
-	public AutobuskaStanica(String jib, String naziv, String adresa, int postanskiBroj, String brojTelefona, int brojPerona, String webStranica) {
+	public AutobuskaStanica(String jib, String naziv, String ulicaIBroj, int postanskiBroj, String grad, String brojTelefona, int brojPerona, String webStranica, String email) {
 		super();
 		this.jib= jib;
 		this.naziv = naziv;
-		this.adresa = adresa;
+		this.ulicaIBroj = ulicaIBroj;
 		this.postanskiBroj = postanskiBroj;
+		this.grad = grad;
 		this.brojTelefona = brojTelefona;
 		this.brojPerona = brojPerona;
 		this.webStranica = webStranica;
+		this.email=email;
 	}
 	
 	public String getJib() {
-		return naziv;
+		return jib;
 	}
 
 	public void setJib(String jib) {
@@ -52,12 +55,12 @@ public class AutobuskaStanica {
 		this.naziv = naziv;
 	}
 
-	public String getAdresa() {
-		return adresa;
+	public String getUlicaIBroj() {
+		return ulicaIBroj;
 	}
 
-	public void setAdresa(String adresa) {
-		this.adresa = adresa;
+	public void setUlicaIBroj(String ulicaIBroj) {
+		this.ulicaIBroj = ulicaIBroj;
 	}
 
 	public int getPostanskiBroj() {
@@ -66,6 +69,14 @@ public class AutobuskaStanica {
 
 	public void setPostanskiBroj(int postanskiBroj) {
 		this.postanskiBroj = postanskiBroj;
+	}
+
+	public String getGrad() {
+		return grad;
+	}
+
+	public void setGrad(String grad) {
+		this.grad = grad;
 	}
 
 	public String getBrojTelefona() {
@@ -91,11 +102,24 @@ public class AutobuskaStanica {
 	public void setWebStranica(String webStranica) {
 		this.webStranica = webStranica;
 	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getAdresa() {
+		return ulicaIBroj + " " + postanskiBroj + " " + grad;
+	}
 
 	@Override
 	public String toString() {
-		return "AutobuskaStanica [jib=" + jib + ", naziv=" + naziv + ", adresa=" + adresa + ", postanskiBroj=" + postanskiBroj
-				+ ", brojTelefona=" + brojTelefona + ", brojPerona=" + brojPerona + "]";
+		return "AutobuskaStanica [jib=" + jib + ", naziv=" + naziv + ", adresa=" + ulicaIBroj + " "
+				+ postanskiBroj + " " + grad + ", brojTelefona=" + brojTelefona + ", brojPerona=" + brojPerona
+				+ ", webStranica=" + webStranica + ", email=" + email + "]";
 	}
 	
 	public static List<AutobuskaStanica> listaStanica() {
@@ -108,7 +132,7 @@ public class AutobuskaStanica {
 	    	s = c.prepareCall("{call showBusStations()}");
 	       	r = s.executeQuery();
 	        while(r.next()) {
-		       	listaAutobuskihStanica.add(new AutobuskaStanica("TBD", r.getString("Naziv"), r.getString("Adresa"), r.getInt("PostanskiBroj"), r.getString("BrojTelefona"), r.getInt("BrojPerona"), "TBD"));
+		       	listaAutobuskihStanica.add(new AutobuskaStanica(r.getString("JIBStanice"), r.getString("Naziv"), r.getString("Adresa"), r.getInt("PostanskiBroj"), r.getString(5), r.getString("BrojTelefona"), r.getInt("BrojPerona"), r.getString("WebStranica"), r.getString("Email")));
 	        }
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
@@ -118,13 +142,13 @@ public class AutobuskaStanica {
 	    return listaAutobuskihStanica;
 	}
 	
-	public static boolean dodavanjeAutobuskeStanice(String jib, String naziv, String adresa, int postanskiBroj, String brojTelefona, int brojPerona, String webStranica) {
+	public static boolean dodavanjeAutobuskeStanice(String jib, String naziv, String adresa, int postanskiBroj, String brojTelefona, int brojPerona, String webStranica, String email) {
 		Connection c = null;
 		CallableStatement s = null;
 		ResultSet r = null;
 	    try {
 	       	c=Util.getConnection();
-	    	s = c.prepareCall("{call addBusStation(?,?,?,?,?,?,?)}");
+	    	s = c.prepareCall("{call addBusStation(?,?,?,?,?,?,?,?)}");
 	    	s.setString(1, jib);
 	       	s.setString(2, naziv);
 	       	s.setString(3, adresa);
@@ -132,12 +156,30 @@ public class AutobuskaStanica {
 	       	s.setString(5, brojTelefona);
 	       	s.setInt(6, brojPerona);
 	       	s.setString(7, webStranica);
+	       	s.setString(8, email);
 	       	r = s.executeQuery();
 	       	return true;
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 	    } finally {
 	    	Util.close(r,s,c);
+	    }
+	    return false;
+	}
+	
+	public static boolean brisanjeAutobuskeStanice(String jib) {
+		Connection c = null;
+		CallableStatement s = null;
+	    try {
+	       	c=Util.getConnection();
+	    	s = c.prepareCall("{call removeBusStation(?)}");
+	    	s.setString(1, jib);
+	       	s.execute();
+	       	return true;
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(s,c);
 	    }
 	    return false;
 	}

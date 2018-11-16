@@ -65,8 +65,7 @@ public class UpravljanjeKorisnickimNalogomController implements Initializable {
 		Zaposleni zaposleni=PrijavaController.nalog.getZaposleni();
 		imePrezimeTextField.setText(zaposleni.getIme() + " " + zaposleni.getPrezime());
    		jmbgTextField.setText(zaposleni.getJmbg());
-   		//polTextField.setText(zaposleni.getPol());
-   		polTextField.setText("TBD");
+   		polTextField.setText(zaposleni.getPol());
    		adresaTextField.setText(zaposleni.getAdresa());
    		brojTelefonaTextField.setText(zaposleni.getBrojTelefona());
    		emailTextField.setText(zaposleni.getEmail());

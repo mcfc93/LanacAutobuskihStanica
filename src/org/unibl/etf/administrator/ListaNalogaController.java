@@ -3,16 +3,26 @@ package org.unibl.etf.administrator;
 import java.net.URL;
 import java.util.ResourceBundle;
 import org.controlsfx.control.MaskerPane;
+import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.prijava.Nalog;
+import org.unibl.etf.zaposleni.Administrator;
+import org.unibl.etf.zaposleni.Zaposleni;
+
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 
 public class ListaNalogaController implements Initializable {
 	
@@ -30,9 +40,15 @@ public class ListaNalogaController implements Initializable {
 
     @FXML
     private TableColumn<?, ?> tipColumn;
-
+    
     @FXML
     private TableColumn<?, ?> idStaniceColumn;
+    
+    @FXML
+    private TableColumn<?, ?> imeColumn;
+
+    @FXML
+    private TableColumn<?, ?> prezimeColumn;
     
     @FXML
     private TableColumn<Nalog, Nalog> izmijeniColumn;
@@ -47,13 +63,61 @@ public class ListaNalogaController implements Initializable {
 		listaNaloga=FXCollections.observableArrayList();
 		naloziTable.setItems(listaNaloga);
 		
-		naloziTable.setPlaceholder(new Label("Nema naloga u tabeli."));
+		naloziTable.setPlaceholder(new Label("Nema korisničkih naloga u tabeli."));
 		naloziTable.setFocusTraversable(false);
+		
+		korisnickoImeColumn.setCellValueFactory(new PropertyValueFactory<>("korisnickoIme"));
+		lozinkaColumn.setCellValueFactory(new PropertyValueFactory<>("lozinka"));
+		tipColumn.setCellValueFactory(new PropertyValueFactory<>("tip"));
+		idStaniceColumn.setCellValueFactory(new PropertyValueFactory<>("idStanice"));
+		imeColumn.setCellValueFactory(new PropertyValueFactory<>("ime"));
+		prezimeColumn.setCellValueFactory(new PropertyValueFactory<>("prezime"));
+		
+		obrisiColumn.setCellValueFactory(
+        		param -> new ReadOnlyObjectWrapper<>(param.getValue())
+        	);
+		
+		obrisiColumn.setCellFactory(tableCell -> {
+            TableCell<Nalog, Nalog> cell = new TableCell<Nalog, Nalog>() {
+                private Button button = new Button("");
+            	//postaviti dimenzije
+                @Override
+                protected void updateItem(Nalog item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (!empty) {
+                       	//System.out.println(item);
+                    	//postavljanje CSS
+                    	button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
+                    	//postavljanje opisa
+                    	button.setTooltip(new Tooltip("Obriši?"));
+                    	button.getTooltip().setAutoHide(false);
+                    	button.getTooltip().setShowDelay(Duration.seconds(0.5));
+                    	//dodavanje u kolonu
+                    	setGraphic(button);
+                    	button.setOnMouseClicked(
+                    		event -> {
+                    			Nalog.brisanjeNaloga(item.getZaposleni().getJmbg());
+                    			getTableView().getItems().remove(item);
+                				System.out.println("Obrisano: " + item);
+                    		}
+                        );
+                    } else {
+                    	setGraphic(null);
+                    }
+                }
+            };
+            return cell;
+        });
 		
 		for(TableColumn<?,?> column: naloziTable.getColumns()) {
         	column.setReorderable(false);
-        }
+		}
 		
+		obrisiColumn.setText("");
+        obrisiColumn.setMinWidth(50);
+        obrisiColumn.setMaxWidth(50);
+        obrisiColumn.setResizable(false);
+        obrisiColumn.setSortable(false);
 		
 		
 		MaskerPane progressPane = new MaskerPane();
@@ -72,9 +136,9 @@ public class ListaNalogaController implements Initializable {
             protected Void call() {
             	System.out.println(Thread.currentThread());
                 progressPane.setVisible(true);
-                for(int i=0; i<30; i++) {
-                //listaNaloga.addAll(Nalog.listaNaloga());
-            	}
+                //for(int i=0; i<30; i++) {
+                listaNaloga.addAll(Nalog.listaNaloga());
+            	//}
                 return null;
             }
             @Override

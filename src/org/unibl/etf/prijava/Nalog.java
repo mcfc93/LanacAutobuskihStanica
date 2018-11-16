@@ -14,6 +14,9 @@ import org.unibl.etf.zaposleni.Administrator;
 import org.unibl.etf.zaposleni.AdministrativniRadnik;
 import org.unibl.etf.zaposleni.SalterskiRadnik;
 import org.unibl.etf.util.Util;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 public class Nalog implements Serializable {
@@ -21,6 +24,7 @@ public class Nalog implements Serializable {
 	private String korisnickoIme;
 	private String lozinka;
 	private String idStanice;
+	private String tip;
 	private boolean prijavljen;		//da li je trenutni korisnik prijavljen
 	private Zaposleni zaposleni;	//podaci o vlasniku naloga
 	
@@ -28,13 +32,26 @@ public class Nalog implements Serializable {
 		super();
 	}
 	
-	public Nalog(String korisnickoIme, String lozinka, String idStanice, boolean prijavljen, Zaposleni zaposleni) {
+	public Nalog(String korisnickoIme, String lozinka, String idStanice, String tip, boolean prijavljen, Zaposleni zaposleni) {
 		super();
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
 		this.idStanice = idStanice;
+		this.tip=tip;
 		this.prijavljen = prijavljen;
 		this.zaposleni=zaposleni;
+	}
+	
+	public Nalog(String korisnickoIme, String lozinka, String idStanice, String tip, String ime, String prezime, String jmbg) {
+		super();
+		this.korisnickoIme = korisnickoIme;
+		this.lozinka = lozinka;
+		this.idStanice = idStanice;
+		this.tip=tip;
+		this.zaposleni=new Administrator();
+		zaposleni.setIme(ime);
+		zaposleni.setPrezime(prezime);
+		zaposleni.setJmbg(jmbg);
 	}
 
 	public String getKorisnickoIme() {
@@ -61,6 +78,14 @@ public class Nalog implements Serializable {
 		this.idStanice = idStanice;
 	}
 	
+	public String getTip() {
+		return tip;
+	}
+
+	public void setTip(String tip) {
+		this.tip = tip;
+	}
+
 	public boolean isPrijavljen() {
 		return prijavljen;
 	}
@@ -76,11 +101,19 @@ public class Nalog implements Serializable {
 	public void setZaposleni(Zaposleni zaposleni) {
 		this.zaposleni = zaposleni;
 	}
+	
+	public String getIme() {
+		return zaposleni.getIme();
+	}
+	
+	public String getPrezime() {
+		return zaposleni.getPrezime();
+	}
 
 	@Override
 	public String toString() {
 		return "Nalog [korisnickoIme=" + korisnickoIme + ", lozinka=" + lozinka + ", idStanice=" + idStanice
-				+ ", prijavljen=" + prijavljen + "]";
+				+ ", tip=" + tip + ", prijavljen=" + prijavljen + "]";
 	}
 	
 	public static String hash(String lozinka) {
@@ -121,7 +154,7 @@ public class Nalog implements Serializable {
 	        // 4.Process the result set
 	       	if(r.next()) {
 	        	//ucitavanje podataka o zaposlenom iz baze
-	    		nalog=new Nalog(korisnickoIme, lozinka, r.getString("JIBStanice"), true, null);
+	    		nalog=new Nalog(korisnickoIme, lozinka, r.getString("JIBStanice"), r.getString("Tip") , true, null);
 	       		
 	    		System.out.println(nalog);
 	    		
@@ -217,7 +250,40 @@ public class Nalog implements Serializable {
 		return false;
 	}
 	
-	public static boolean brisanjeNaloga() {
-		return true;
+	public static boolean brisanjeNaloga(String jmbg) {
+		Connection c = null;
+		CallableStatement s = null;
+	    try {
+	       	c=Util.getConnection();
+	    	s = c.prepareCall("{call removeEmployee(?)}");
+	    	s.setString(1, jmbg);
+	       	s.execute();
+	       	return true;
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(s,c);
+	    }
+	    return false;
+	}
+	
+	public static List<Nalog> listaNaloga() {
+		List<Nalog> listaNaloga = new ArrayList<>();
+		Connection c = null;
+		CallableStatement s = null;
+		ResultSet r = null;
+	    try {
+	       	c=Util.getConnection();
+	    	s = c.prepareCall("{call showEmployees()}");
+	       	r = s.executeQuery();
+	        while(r.next()) {
+		       	listaNaloga.add(new Nalog(r.getString("KorisnickoIme"), r.getString("Lozinka"), r.getString("JIBStanice"), r.getString("Tip"), r.getString("Ime"), r.getString("Prezime"), r.getString("JMBG")));
+	        }
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(r,s,c);
+	    }
+	    return listaNaloga;
 	}
 }

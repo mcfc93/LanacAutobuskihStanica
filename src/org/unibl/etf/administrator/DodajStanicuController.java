@@ -53,7 +53,7 @@ public class DodajStanicuController implements Initializable {
 	
 	@FXML
     void potvrdi(ActionEvent event) {
-		if(AutobuskaStanica.dodavanjeAutobuskeStanice(jibTextField.getText().trim(), nazivTextField.getText().trim(), adresaTextField.getText().trim(), Integer.parseInt(postanskiBrojTextField.getText().trim()), brojTelefonaTextField.getText().trim(), Integer.parseInt(brojPeronaTextField.getText().trim()), webStranicaTextField.getText().trim())) {
+		if(AutobuskaStanica.dodavanjeAutobuskeStanice(jibTextField.getText().trim(), nazivTextField.getText().trim(), adresaTextField.getText().trim(), Integer.parseInt(postanskiBrojTextField.getText().trim()), brojTelefonaTextField.getText().trim(), Integer.parseInt(brojPeronaTextField.getText().trim()), webStranicaTextField.getText().trim(), emailTextField.getText().trim())) {
 			Alert alert=new Alert(AlertType.INFORMATION);
     		alert.setTitle("Greška");
     		alert.setHeaderText(null);

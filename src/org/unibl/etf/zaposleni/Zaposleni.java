@@ -17,6 +17,7 @@ public abstract class Zaposleni implements Serializable {
 	private String adresa;
 	private String strucnaSprema;
 	private String brojTelefona;
+	private String pol;
 	//private Date datumRodjenja;
 	//private String mjestoPrebivalista;
 	private String email;
@@ -52,6 +53,14 @@ public abstract class Zaposleni implements Serializable {
 
 	public void setJmbg(String jmbg) {
 		this.jmbg = jmbg;
+	}
+
+	public String getPol() {
+		return pol;
+	}
+
+	public void setPol(String pol) {
+		this.pol = pol;
 	}
 
 	public String getAdresa() {
@@ -105,8 +114,8 @@ public abstract class Zaposleni implements Serializable {
 	       		this.setIme(r.getString("Ime"));
 	       		this.setPrezime(r.getString("Prezime"));
 	       		this.setJmbg(r.getString("JMBG"));
-	       		//zaposleni.setPol("TBD");
-	       		this.setAdresa(r.getString("Adresa") + " " + r.getString("PostanskiBroj") + " TBD");
+	       		this.setPol(r.getString("Pol"));
+	       		this.setAdresa(r.getString("Adresa") + " " + r.getString("PostanskiBroj") + " " + r.getString("mjesto.Naziv"));
 	       		this.setBrojTelefona(r.getString("BrojTelefona"));
 	       		this.setEmail(r.getString("Email"));
 	       		this.setStrucnaSprema(r.getString("StrucnaSprema"));

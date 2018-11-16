@@ -94,8 +94,10 @@ public class ListaStanicaController implements Initializable {
                     	button.getTooltip().setShowDelay(Duration.seconds(0.5));
                     	setGraphic(button);
                     	button.setOnMouseClicked(
-                    			event -> getTableView().getItems().remove(item)
-                    		);
+                    			event -> {
+                    				
+                    			}
+                    	);
                     } else {
                     	setGraphic(null);
                     }
@@ -126,7 +128,11 @@ public class ListaStanicaController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(
-                    			event -> getTableView().getItems().remove(item)
+                    		event -> {
+                    			AutobuskaStanica.brisanjeAutobuskeStanice(item.getJib());
+                				getTableView().getItems().remove(item);
+                				System.out.println("Obrisano: " + item);
+                    		}
                         );
                     } else {
                     	setGraphic(null);
