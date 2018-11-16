@@ -5,7 +5,6 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.logging.Level;
 import org.unibl.etf.util.Util;
 
@@ -19,7 +18,6 @@ public abstract class Zaposleni implements Serializable {
 	private String brojTelefona;
 	private String pol;
 	//private Date datumRodjenja;
-	//private String mjestoPrebivalista;
 	private String email;
 	
 	public Zaposleni() {
@@ -115,7 +113,7 @@ public abstract class Zaposleni implements Serializable {
 	       		this.setPrezime(r.getString("Prezime"));
 	       		this.setJmbg(r.getString("JMBG"));
 	       		this.setPol(r.getString("Pol"));
-	       		this.setAdresa(r.getString("Adresa") + " " + r.getString("PostanskiBroj") + " " + r.getString("mjesto.Naziv"));
+	       		this.setAdresa(r.getString("Adresa") + ", " + r.getString("PostanskiBroj") + " " + r.getString("mjesto.Naziv"));
 	       		this.setBrojTelefona(r.getString("BrojTelefona"));
 	       		this.setEmail(r.getString("Email"));
 	       		this.setStrucnaSprema(r.getString("StrucnaSprema"));

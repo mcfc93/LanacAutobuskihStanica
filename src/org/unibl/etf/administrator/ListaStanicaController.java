@@ -3,16 +3,12 @@ package org.unibl.etf.administrator;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -20,7 +16,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
@@ -37,13 +32,13 @@ public class ListaStanicaController implements Initializable {
 	private TableView<AutobuskaStanica> autobuskeStaniceTable;
 	
 	@FXML
+	private TableColumn<?, ?> jibColumn;
+	
+	@FXML
     private TableColumn<?, ?> nazivColumn;
 
     @FXML
     private TableColumn<?, ?> adresaColumn;
-
-    @FXML
-    private TableColumn<?, ?> brojPosteColumn;
 
     @FXML
     private TableColumn<?, ?> brojTelefonaColumn;
@@ -68,9 +63,9 @@ public class ListaStanicaController implements Initializable {
     	autobuskeStaniceTable.setPlaceholder(new Label("Nema autobuskih stanica u tabeli."));
     	autobuskeStaniceTable.setFocusTraversable(false);
     	
+    	jibColumn.setCellValueFactory(new PropertyValueFactory<>("jib"));
     	nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
         adresaColumn.setCellValueFactory(new PropertyValueFactory<>("adresa"));
-        brojPosteColumn.setCellValueFactory(new PropertyValueFactory<>("postanskiBroj"));
         brojTelefonaColumn.setCellValueFactory(new PropertyValueFactory<>("brojTelefona"));
         brojPeronaColumn.setCellValueFactory(new PropertyValueFactory<>("brojPerona"));
 
@@ -146,29 +141,28 @@ public class ListaStanicaController implements Initializable {
         	column.setReorderable(false);
         }
         
+        jibColumn.setMinWidth(80);
+        jibColumn.setMaxWidth(125);
+        
         nazivColumn.setMinWidth(100);
-        nazivColumn.setReorderable(false);
         
-        adresaColumn.setMinWidth(100);
+        adresaColumn.setMinWidth(125);
         
-       // brojPosteColumn.set ;
+        brojTelefonaColumn.setMinWidth(85);
+        brojTelefonaColumn.setMaxWidth(125);
         
-        brojTelefonaColumn.setMinWidth(100);
-        brojTelefonaColumn.setMaxWidth(100);
-        
-        brojPeronaColumn.setMinWidth(50);
-        brojPeronaColumn.setMaxWidth(50);
+        brojPeronaColumn.setMinWidth(75);
+        brojPeronaColumn.setMaxWidth(75);
         
         
         izmijeniColumn.setText("");
-        //izmijeniColumn.setPrefWidth(50);
-        izmijeniColumn.setMinWidth(50);
-        izmijeniColumn.setMaxWidth(50);
+        izmijeniColumn.setMinWidth(35);
+        izmijeniColumn.setMaxWidth(35);
         izmijeniColumn.setResizable(false);
         izmijeniColumn.setSortable(false);
         obrisiColumn.setText("");
-        obrisiColumn.setMinWidth(50);
-        obrisiColumn.setMaxWidth(50);
+        obrisiColumn.setMinWidth(35);
+        obrisiColumn.setMaxWidth(35);
         obrisiColumn.setResizable(false);
         obrisiColumn.setSortable(false);
         

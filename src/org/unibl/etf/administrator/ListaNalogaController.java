@@ -3,10 +3,7 @@ package org.unibl.etf.administrator;
 import java.net.URL;
 import java.util.ResourceBundle;
 import org.controlsfx.control.MaskerPane;
-import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.prijava.Nalog;
-import org.unibl.etf.zaposleni.Administrator;
-import org.unibl.etf.zaposleni.Zaposleni;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -113,10 +110,26 @@ public class ListaNalogaController implements Initializable {
         	column.setReorderable(false);
 		}
 		
+		korisnickoImeColumn.setMinWidth(100);
+		korisnickoImeColumn.setMaxWidth(250);
+		
+		lozinkaColumn.setMinWidth(60);
+		
+		tipColumn.setMinWidth(125);
+		tipColumn.setMaxWidth(150);
+		
+		idStaniceColumn.setMinWidth(75);
+		idStaniceColumn.setMaxWidth(85);
+		
+		imeColumn.setMinWidth(70);
+		imeColumn.setMaxWidth(150);
+		
+		prezimeColumn.setMinWidth(70);
+		prezimeColumn.setMaxWidth(150);
+		
 		obrisiColumn.setText("");
-        obrisiColumn.setMinWidth(50);
-        obrisiColumn.setMaxWidth(50);
-        obrisiColumn.setResizable(false);
+        obrisiColumn.setMinWidth(35);
+        obrisiColumn.setMaxWidth(35);
         obrisiColumn.setSortable(false);
 		
 		

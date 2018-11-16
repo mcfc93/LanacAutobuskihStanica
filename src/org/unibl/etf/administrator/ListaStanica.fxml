@@ -9,9 +9,9 @@
    <children>
       <TableView fx:id="autobuskeStaniceTable" layoutX="15.0" layoutY="15.0" prefHeight="440.0" prefWidth="570.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
         <columns>
+            <TableColumn fx:id="jibColumn" prefWidth="75.0" text="JIB" />
           <TableColumn fx:id="nazivColumn" minWidth="20.0" text="Naziv" />
           <TableColumn fx:id="adresaColumn" minWidth="20.0" text="Adresa" />
-            <TableColumn fx:id="brojPosteColumn" minWidth="20.0" text="Broj poste" />
             <TableColumn fx:id="brojTelefonaColumn" minWidth="20.0" text="Broj telefona" />
             <TableColumn fx:id="brojPeronaColumn" minWidth="20.0" text="Broj perona" />
             <TableColumn fx:id="izmijeniColumn" minWidth="20.0" text="EDIT" />

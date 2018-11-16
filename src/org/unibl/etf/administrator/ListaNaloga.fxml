@@ -8,7 +8,7 @@
    <children>
       <TableView fx:id="naloziTable" layoutX="15.0" layoutY="15.0" prefHeight="440.0" prefWidth="570.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
         <columns>
-          <TableColumn fx:id="korisnickoImeColumn" prefWidth="75.0" text="Korisnicko ime" />
+          <TableColumn fx:id="korisnickoImeColumn" prefWidth="75.0" text="Korisničko ime" />
           <TableColumn fx:id="lozinkaColumn" prefWidth="75.0" text="Lozinka" />
             <TableColumn fx:id="tipColumn" prefWidth="75.0" text="Tip" />
             <TableColumn fx:id="idStaniceColumn" prefWidth="75.0" text="ID Stanice" />

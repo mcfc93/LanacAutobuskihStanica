@@ -12,8 +12,6 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import com.jfoenix.validation.base.ValidatorBase;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,7 +20,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.TextInputControl;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
@@ -70,10 +67,10 @@ public class DodajNalogController implements Initializable {
     private ToggleGroup polGroup;
     
     @FXML
-    private JFXRadioButton muskoRadioButton;
+    private JFXRadioButton muskiRadioButton;
 
     @FXML
-    private JFXRadioButton zenskoRadioButton;
+    private JFXRadioButton zenskiRadioButton;
 
     @FXML
     private JFXTextField brojTelefonaTextField;
@@ -132,9 +129,14 @@ public class DodajNalogController implements Initializable {
 		ValidatorBase jmbgValidator = new ValidatorBase("Nekorektan unos") {
 			@Override
 			protected void eval() {
+				/*
 				if(!jmbgTextField.getText().isEmpty()
 						&& jmbgTextField.getText().length() != 13) {
 		        	 hasErrors.set(true);
+		       	*/
+				if(!jmbgTextField.getText().isEmpty()
+	        			&& !jmbgTextField.getText().matches("^[0-9]{13}$")) {
+	        		hasErrors.set(true);
 		        } else {
 		        	 hasErrors.set(false);
 		        	 /*
@@ -144,11 +146,6 @@ public class DodajNalogController implements Initializable {
 		        		 hasErrors.set(true);
 		        	 }
 		        	 */
-		        	 
-		        	if(!jmbgTextField.getText().matches("^[0-9]+$")) {
-		        		hasErrors.set(true);
-		        	}
-		        	
 		        	 /*
 		        	if(!jmbgTextField.getText().matches("((+)[0-9]2)?[0-9]{3}(/)[0-9]{3}(-)[0-9]{3}[0-9]*")) {
 		        		hasErrors.set(true);
@@ -162,55 +159,64 @@ public class DodajNalogController implements Initializable {
    		korisnickoImeTextField.getValidators().add(requredFieldValidator(korisnickoImeTextField));
    		//lozinkaTextField.getValidators().add(requredFieldValidator(lozinkaTextField));
    		jibStaniceTextField.getValidators().add(requredFieldValidator(jibStaniceTextField));
-   		
+   		imeTextField.getValidators().add(requredFieldValidator(imeTextField));
+   		prezimeTextField.getValidators().add(requredFieldValidator(prezimeTextField));
    		jmbgTextField.getValidators().addAll(requredFieldValidator(jmbgTextField), jmbgValidator);
+   		adresaTextField.getValidators().add(requredFieldValidator(adresaTextField));
+   		postanskiBrojTextField.getValidators().add(requredFieldValidator(postanskiBrojTextField));
+   		strucnaSpremaTextField.getValidators().add(requredFieldValidator(strucnaSpremaTextField));
+   		brojTelefonaTextField.getValidators().add(requredFieldValidator(brojTelefonaTextField));
+   		emailTextField.getValidators().add(requredFieldValidator(emailTextField));
 	}
 	
 	public ValidatorBase requredFieldValidator(JFXTextField textField) {
     	ValidatorBase requiredFieldValidator = new RequiredFieldValidator();
 	    requiredFieldValidator.setMessage("Obavezan unos");
 	    requiredFieldValidator.setIcon(new ImageView());
-	    
-	    
 	    textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
 	        if(!newValue) {
 	        	textField.validate();
 	        }
 	    });
-	    
-	    
 	    textField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
-	        //if(textField.getText().trim().isEmpty()) {
 	        	textField.validate();
-	        //} else {
-	        //	textField.resetValidation();
-	        //}
 	    });
-	    
-	    
 	    return requiredFieldValidator;
     }
 	
 	@FXML
     void potvrdi(ActionEvent event) {
-		if(Nalog.dodavanjeNaloga(korisnickoImeTextField.getText(),
-								Nalog.hash(lozinkaTextField.getText()),
-								jibStaniceTextField.getText(),
-								administrativniRadnikRadioButton.isSelected() ? "AdministrativniRadnik" : "SalterRadnik",
-								imeTextField.getText(), prezimeTextField.getText(),
-								jmbgTextField.getText(),
-								muskoRadioButton.isSelected() ? "Muški" : "Ženski",
-								adresaTextField.getText(),
-								Integer.parseInt(postanskiBrojTextField.getText()),
-								strucnaSpremaTextField.getText(),
-								brojTelefonaTextField.getText(),
-								emailTextField.getText())) {
-			lozinkaTextField.clear();
-			Alert alert=new Alert(AlertType.INFORMATION);
-    		alert.setTitle("Informacija");
-    		alert.setHeaderText(null);
-    		alert.setContentText("Nalog uspjesno dodan.");
-    		alert.showAndWait();
+		if(korisnickoImeTextField.validate()
+				/*& lozinkaTextField.validate()*/
+					& jibStaniceTextField.validate()
+						& imeTextField.validate()
+							& prezimeTextField.validate()
+								& jmbgTextField.validate()
+									& adresaTextField.validate()
+										& postanskiBrojTextField.validate()
+											& strucnaSpremaTextField.validate()
+												& brojTelefonaTextField.validate()
+													& emailTextField.validate()) {
+			if(Nalog.dodavanjeNaloga(korisnickoImeTextField.getText(),
+					Nalog.hash(lozinkaTextField.getText()),
+					jibStaniceTextField.getText(),
+					administrativniRadnikRadioButton.isSelected() ? "AdministrativniRadnik" : "SalterRadnik",
+					imeTextField.getText(),
+					prezimeTextField.getText(),
+					jmbgTextField.getText(),
+					muskiRadioButton.isSelected() ? "Muški" : "Ženski",
+					adresaTextField.getText(),
+					Integer.parseInt(postanskiBrojTextField.getText()),
+					strucnaSpremaTextField.getText(),
+					brojTelefonaTextField.getText(),
+					emailTextField.getText())) {
+				lozinkaTextField.clear();
+				Alert alert=new Alert(AlertType.INFORMATION);
+	    		alert.setTitle("Informacija");
+	    		alert.setHeaderText(null);
+	    		alert.setContentText("Nalog uspjesno dodan.");
+	    		alert.showAndWait();
+			}
 		}
     }
 }

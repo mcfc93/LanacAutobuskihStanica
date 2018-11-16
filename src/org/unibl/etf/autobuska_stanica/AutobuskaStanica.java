@@ -112,12 +112,12 @@ public class AutobuskaStanica {
 	}
 
 	public String getAdresa() {
-		return ulicaIBroj + " " + postanskiBroj + " " + grad;
+		return ulicaIBroj + ", " + postanskiBroj + " " + grad;
 	}
 
 	@Override
 	public String toString() {
-		return "AutobuskaStanica [jib=" + jib + ", naziv=" + naziv + ", adresa=" + ulicaIBroj + " "
+		return "AutobuskaStanica [jib=" + jib + ", naziv=" + naziv + ", adresa=" + ulicaIBroj + ", "
 				+ postanskiBroj + " " + grad + ", brojTelefona=" + brojTelefona + ", brojPerona=" + brojPerona
 				+ ", webStranica=" + webStranica + ", email=" + email + "]";
 	}
@@ -132,7 +132,7 @@ public class AutobuskaStanica {
 	    	s = c.prepareCall("{call showBusStations()}");
 	       	r = s.executeQuery();
 	        while(r.next()) {
-		       	listaAutobuskihStanica.add(new AutobuskaStanica(r.getString("JIBStanice"), r.getString("Naziv"), r.getString("Adresa"), r.getInt("PostanskiBroj"), r.getString(5), r.getString("BrojTelefona"), r.getInt("BrojPerona"), r.getString("WebStranica"), r.getString("Email")));
+		       	listaAutobuskihStanica.add(new AutobuskaStanica(r.getString("JIBStanice"), r.getString("Naziv"), r.getString("Adresa"), r.getInt("PostanskiBroj"), r.getString("mjesto.naziv"), r.getString("BrojTelefona"), r.getInt("BrojPerona"), r.getString("WebStranica"), r.getString("Email")));
 	        }
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);

@@ -1,21 +1,12 @@
 package org.unibl.etf.administrator;
 
 import java.net.URL;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
-import org.unibl.etf.prijava.Nalog;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
-import org.unibl.etf.zaposleni.AdministrativniRadnik;
-import org.unibl.etf.zaposleni.Administrator;
-import org.unibl.etf.zaposleni.SalterskiRadnik;
 
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -26,15 +17,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
