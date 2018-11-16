@@ -46,7 +46,7 @@
          <tooltip>
             <Tooltip prefWidth="125.0" text="Lozinka mora sadržavati najmanje 6 karaktera" wrapText="true" />
          </tooltip></JFXPasswordField>
-      <JFXTextField promptText="JIB Stanice" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <JFXTextField fx:id="jibStaniceTextField" promptText="JIB Stanice" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <Label text="Tip naloga:" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.valignment="TOP">
          <GridPane.margin>
             <Insets top="10.0" />
@@ -92,7 +92,7 @@
             <Insets />
          </GridPane.margin>
       </JFXTextField>
-      <JFXTextField fx:id="adresaTextField" labelFloat="true" promptText="Adresa" GridPane.columnIndex="3" GridPane.rowIndex="1">
+      <JFXTextField fx:id="adresaTextField" labelFloat="true" promptText="Ulica i broj" GridPane.columnIndex="3" GridPane.rowIndex="1">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -100,7 +100,7 @@
             <Insets />
          </GridPane.margin>
       </JFXTextField>
-      <JFXTextField fx:id="brojPosteTextField" labelFloat="true" promptText="Poštanski broj" GridPane.columnIndex="3" GridPane.rowIndex="2">
+      <JFXTextField fx:id="postanskiBrojTextField" labelFloat="true" promptText="Poštanski broj" GridPane.columnIndex="3" GridPane.rowIndex="2">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -124,7 +124,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <JFXRadioButton fx:id="administrativniRadnikRadioButton1" prefHeight="17.0" prefWidth="145.0" selected="true" text="Muško" GridPane.columnIndex="3" GridPane.rowIndex="4">
+      <JFXRadioButton fx:id="muskoRadioButton" prefHeight="17.0" prefWidth="145.0" selected="true" text="Muško" GridPane.columnIndex="3" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets left="20.0" top="45.0" />
          </GridPane.margin>
@@ -132,7 +132,7 @@
             <ToggleGroup fx:id="polGroup" />
          </toggleGroup>
       </JFXRadioButton>
-      <JFXRadioButton fx:id="salterskiRadnikRadioButton1" text="Žensko" toggleGroup="$polGroup" GridPane.columnIndex="3" GridPane.rowIndex="5">
+      <JFXRadioButton fx:id="zenskoRadioButton" text="Žensko" toggleGroup="$polGroup" GridPane.columnIndex="3" GridPane.rowIndex="5">
          <GridPane.margin>
             <Insets left="20.0" top="5.0" />
          </GridPane.margin>
@@ -147,7 +147,7 @@
             <Insets />
          </opaqueInsets>
       </JFXTextField>
-      <JFXButton fx:id="potvrdiButton" prefHeight="25.0" prefWidth="100.0" text="Potvrdi" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="BOTTOM">
+      <JFXButton fx:id="potvrdiButton" onAction="#potvrdi" prefHeight="25.0" prefWidth="100.0" text="Potvrdi" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="BOTTOM">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>

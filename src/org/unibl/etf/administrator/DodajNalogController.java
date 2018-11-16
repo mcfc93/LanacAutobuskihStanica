@@ -3,6 +3,8 @@ package org.unibl.etf.administrator;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.unibl.etf.prijava.Nalog;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
@@ -11,35 +13,72 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 
 public class DodajNalogController implements Initializable {
-	
-	@FXML
+    @FXML
     private GridPane gridPane;
-	
-	@FXML
-	private JFXButton potvrdiButton;
-	
-	@FXML
+
+    @FXML
     private JFXTextField korisnickoImeTextField;
 
     @FXML
     private JFXPasswordField lozinkaTextField;
-    
+
+    @FXML
+    private JFXTextField jibStaniceTextField;
 
     @FXML
     private ToggleGroup tipGroup;
+
+    @FXML
+    private JFXRadioButton administrativniRadnikRadioButton;
     
     @FXML
     private JFXRadioButton salterskiRadnikRadioButton;
 
     @FXML
-    private JFXRadioButton administrativniRadnikRadioButton;
+    private JFXTextField imeTextField;
+
+    @FXML
+    private JFXTextField prezimeTextField;
+
+    @FXML
+    private JFXTextField jmbgTextField;
+
+    @FXML
+    private JFXTextField adresaTextField;
+
+    @FXML
+    private JFXTextField postanskiBrojTextField;
+
+    @FXML
+    private JFXTextField strucnaSpremaTextField;
+
+    @FXML
+    private ToggleGroup polGroup;
+    
+    @FXML
+    private JFXRadioButton muskoRadioButton;
+
+    @FXML
+    private JFXRadioButton zenskoRadioButton;
+
+    @FXML
+    private JFXTextField brojTelefonaTextField;
+
+    @FXML
+    private JFXTextField emailTextField;
+
+    @FXML
+    private JFXButton potvrdiButton;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -84,4 +123,23 @@ public class DodajNalogController implements Initializable {
 	    */
 	}
 	
+	@FXML
+    void potvrdi(ActionEvent event) {
+		String tipNaloga="SalterRadnik";
+		if(administrativniRadnikRadioButton.isSelected()) {
+			tipNaloga="AdministrativniRadnik";
+		}
+		String pol="Musko";
+		if(zenskoRadioButton.isSelected()) {
+			pol="Zensko";
+		}
+		if(Nalog.dodavanjeNaloga(korisnickoImeTextField.getText(), Nalog.hash(lozinkaTextField.getText()),jibStaniceTextField.getText(), tipNaloga, imeTextField.getText(), prezimeTextField.getText(), jmbgTextField.getText(), pol, adresaTextField.getText(), Integer.parseInt(postanskiBrojTextField.getText()), strucnaSpremaTextField.getText(), brojTelefonaTextField.getText(), emailTextField.getText())) {
+			lozinkaTextField.clear();
+			Alert alert=new Alert(AlertType.INFORMATION);
+    		alert.setTitle("Informacija");
+    		alert.setHeaderText(null);
+    		alert.setContentText("Nalog uspjesno dodan.");
+    		alert.showAndWait();
+		}
+    }
 }

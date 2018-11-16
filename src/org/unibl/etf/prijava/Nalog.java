@@ -156,14 +156,14 @@ public class Nalog implements Serializable {
 		return true;
 	}
 
-	//boolean provjeriKorisnickoIme(String korisnickoIme)
+	//public static boolean provjeriKorisnickoIme(String korisnickoIme)
 	
 	
-	public static boolean provjeriLozinku(String lozinka) {
+	public static boolean provjeraLozinke(String lozinka) {
 		return PrijavaController.nalog.getLozinka().equals(lozinka);
 	}
 	
-	public static boolean promijeniLozinku(String novaLozinka) {
+	public static boolean promjenaLozinke(String novaLozinka) {
 		Connection c = null;
 		CallableStatement s = null;
 	    try {
@@ -184,15 +184,40 @@ public class Nalog implements Serializable {
 		return false;
 	}
 	
-	public boolean dodavanjeNaloga() {
-		return true;
-	}
-	
-	public boolean izmjenaNaloga() {
+	public static boolean dodavanjeNaloga(String korisnickoIme, String lozinka, String idStanice, String tipNaloga, String ime, String prezime, String jmbg, String pol, String adresa, int postanskiBroj, String strucnaSprema, String brojTelefona, String email) {
+		Connection c = null;
+		CallableStatement s = null;
+	    try {
+	       	c=Util.getConnection();
+	    	s = c.prepareCall("{call addNewEmployee(?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+	       	s.setString(1, korisnickoIme);
+	       	s.setString(2, lozinka);
+	       	s.setString(3, idStanice);
+	       	s.setString(4, tipNaloga);
+	       	s.setString(5, ime);
+	       	s.setString(6, prezime);
+	       	s.setString(7, jmbg);
+	       	s.setString(8, pol);
+	       	s.setString(9, adresa);
+	       	s.setInt(10, postanskiBroj);
+	       	s.setString(11, strucnaSprema);
+	       	s.setString(12, brojTelefona);
+	       	s.setString(13, email);
+	       	s.execute();
+	       	return true;
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(s,c);
+	    }
 		return false;
 	}
 	
-	public boolean brisanjeNaloga() {
+	public static boolean izmjenaNaloga() {
+		return false;
+	}
+	
+	public static boolean brisanjeNaloga() {
 		return true;
 	}
 }

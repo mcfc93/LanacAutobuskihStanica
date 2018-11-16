@@ -70,7 +70,7 @@ public class ListaStanicaController implements Initializable {
     	
     	nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
         adresaColumn.setCellValueFactory(new PropertyValueFactory<>("adresa"));
-        brojPosteColumn.setCellValueFactory(new PropertyValueFactory<>("brojPoste"));
+        brojPosteColumn.setCellValueFactory(new PropertyValueFactory<>("postanskiBroj"));
         brojTelefonaColumn.setCellValueFactory(new PropertyValueFactory<>("brojTelefona"));
         brojPeronaColumn.setCellValueFactory(new PropertyValueFactory<>("brojPerona"));
 
@@ -89,7 +89,7 @@ public class ListaStanicaController implements Initializable {
                     if (!empty) {
                     	//System.out.println(item);
                     	button.getStyleClass().addAll("buttonTable", "buttonTableEdit");
-                    	button.setTooltip(new Tooltip("Izmijeni?"));
+                    	button.setTooltip(new Tooltip("Izmjeni?"));
                     	button.getTooltip().setAutoHide(false);
                     	button.getTooltip().setShowDelay(Duration.seconds(0.5));
                     	setGraphic(button);
