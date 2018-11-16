@@ -38,3 +38,11 @@ begin
 	INSERT INTO autobuska_stanica(JIBStanice,Naziv,Adresa,PostanskiBroj,BrojTelefona,BrojPerona,WebStranica,StanicaAktivna) VALUES (pJIBStanice,pNaziv,pAdresa,pPostanskiBroj,pBrojTelefona,pBrojPerona,pWebStranica,1);
 end $$
 delimiter ;
+
+delimiter $$
+CREATE PROCEDURE addNewEmployee(in pPostanskiBroj int(11), in pAdresa varchar(35), in pStrucnaSprema varchar(35),in pPol varchar(10),in pBrojTelefona varchar(25),in pEmail varchar(35),in pKorisnickoIme varchar(35),in pLozinka varchar(120),in pJIBStanice char(10),in pTip varchar(25),in pIme varchar(35),in pPrezime varchar(35), in pJMBG char(13))
+begin 
+	INSERT INTO zaposleni (JMBG,Ime,Prezime,Adresa,PostanskiBroj,StrucnaSprema,Pol,BrojTelefona,Email,JIBStanice) VALUES (pJMBG,pIme,pPrezime,pAdresa,pPostanskiBroj,pStrucnaSprema,pPol,pBrojTelefona,pEmail,pJIBStanice);
+    INSERT INTO nalog (JMBG,KorisnickoIme,Lozinka,Tip,JIBStanice) VALUES (pJMBG,pKorisnickoIme,pLozinka,pTip,pJIBStanice);
+end $$
+delimiter ;
