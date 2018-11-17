@@ -7,6 +7,7 @@ public class Prevoznik {
 	private String telefon;
 	private String mjesto;
 	private String webAdresa;
+	private String JIBPrevoznika;
 	public Prevoznik(String naziv, String email, String adresa, String webAdresa,String telefon, String mjesto) {
 		super();
 		this.naziv = naziv;
@@ -17,6 +18,21 @@ public class Prevoznik {
 		this.mjesto = mjesto;
 	}
 	
+	public Prevoznik(String naziv, String jib) {
+		// TODO Auto-generated constructor stub
+		this.naziv = naziv;
+		this.JIBPrevoznika = jib;
+	}
+	
+
+	public String getJIBPrevoznika() {
+		return JIBPrevoznika;
+	}
+
+	public void setJIBPrevoznika(String jIBPrevoznika) {
+		JIBPrevoznika = jIBPrevoznika;
+	}
+
 	public String getWebAdresa() {
 		return webAdresa;
 	}
@@ -57,8 +73,7 @@ public class Prevoznik {
 	}
 	@Override
 	public String toString() {
-		return "Prevoznik [naziv=" + naziv + ", email=" + email + ", adresa=" + adresa + ", telefon=" + telefon
-				+ ", mjesto=" + mjesto + "]";
+		return naziv;
 	}
 	
 	
