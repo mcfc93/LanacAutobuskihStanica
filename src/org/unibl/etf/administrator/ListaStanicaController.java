@@ -2,13 +2,17 @@ package org.unibl.etf.administrator;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -17,10 +21,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.autobuska_stanica.*;
+import org.unibl.etf.util.Util;
 
 
 public class ListaStanicaController implements Initializable {
@@ -52,7 +60,7 @@ public class ListaStanicaController implements Initializable {
     @FXML
     private TableColumn<AutobuskaStanica, AutobuskaStanica> obrisiColumn;
     
-    public static ObservableList<AutobuskaStanica> listaAutobuskihStanica;
+    private ObservableList<AutobuskaStanica> listaAutobuskihStanica;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -90,7 +98,25 @@ public class ListaStanicaController implements Initializable {
                     	setGraphic(button);
                     	button.setOnMouseClicked(
                     			event -> {
-                    				
+                    				try {
+                    					IzmjeniStanicuController.autobuskaStanica=item;
+                    					
+                    					Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/IzmjeniStanicu.fxml"));
+                    					Scene scene = new Scene(root);
+                    					Stage stage=new Stage();
+                    					stage.setScene(scene);
+                    					stage.setResizable(false);
+                    					stage.initStyle(StageStyle.UNDECORATED);
+                    					stage.initModality(Modality.APPLICATION_MODAL);
+                    					stage.showAndWait();
+                    					
+                    					int index=listaAutobuskihStanica.indexOf(item);
+                    					listaAutobuskihStanica.remove(item);
+                    			    	listaAutobuskihStanica.add(index, IzmjeniStanicuController.autobuskaStanica);
+                    					autobuskeStaniceTable.refresh();
+                    				} catch(Exception e) {
+                    					Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                    				}
                     			}
                     	);
                     } else {

@@ -96,9 +96,9 @@ public class DodajStanicuController implements Initializable {
 					webStranicaTextField.getText().trim(),
 					emailTextField.getText().trim())) {
 				Alert alert=new Alert(AlertType.INFORMATION);
-	    		alert.setTitle("Greška");
+	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);
-	    		alert.setContentText("Stanica uspjesno dodana.");
+	    		alert.setContentText("Stanica uspješno dodana.");
 	    		alert.showAndWait();
 			}
 		}

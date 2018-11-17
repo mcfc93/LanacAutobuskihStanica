@@ -2,13 +2,12 @@ package org.unibl.etf.autobuska_stanica;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-
-import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
 
 public class AutobuskaStanica {
@@ -174,6 +173,23 @@ public class AutobuskaStanica {
 	       	c=Util.getConnection();
 	    	s = c.prepareCall("{call removeBusStation(?)}");
 	    	s.setString(1, jib);
+	       	s.execute();
+	       	return true;
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(s,c);
+	    }
+	    return false;
+	}
+	
+	public static boolean izmjenaAutobuskeStanice(String jib, String naziv, String adresa, int brojPerona, String brojTelefona, String webStranica, String email) {
+		String sql="update autobuska_stanica set Naziv=?, Adresa=?, BrojPerona=?, BrojTelefona=?, WebStranica=?, Email=? where JIBStanice=?;";
+		Connection c = null;
+		PreparedStatement s = null;
+	    try {
+	       	c=Util.getConnection();
+	    	s = Util.prepareStatement(c, sql, false, naziv, adresa, brojPerona, brojTelefona, webStranica, email, jib);
 	       	s.execute();
 	       	return true;
 	    } catch(SQLException e) {
