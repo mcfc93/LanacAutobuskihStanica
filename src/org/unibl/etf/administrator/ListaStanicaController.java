@@ -55,7 +55,10 @@ public class ListaStanicaController implements Initializable {
     private TableColumn<?, ?> brojPeronaColumn;
     
     @FXML
-    private TableColumn<AutobuskaStanica, AutobuskaStanica> izmijeniColumn;
+    private TableColumn<AutobuskaStanica, AutobuskaStanica> blokirajColumn;
+    
+    @FXML
+    private TableColumn<AutobuskaStanica, AutobuskaStanica> izmjeniColumn;
     
     @FXML
     private TableColumn<AutobuskaStanica, AutobuskaStanica> obrisiColumn;
@@ -77,12 +80,57 @@ public class ListaStanicaController implements Initializable {
         brojTelefonaColumn.setCellValueFactory(new PropertyValueFactory<>("brojTelefona"));
         brojPeronaColumn.setCellValueFactory(new PropertyValueFactory<>("brojPerona"));
 
-        
-        izmijeniColumn.setCellValueFactory(
+        blokirajColumn.setCellValueFactory(
                 param -> new ReadOnlyObjectWrapper<>(param.getValue())
             );
         
-        izmijeniColumn.setCellFactory(tableCell -> {
+        blokirajColumn.setCellFactory(tableCell -> {
+            TableCell<AutobuskaStanica, AutobuskaStanica> cell = new TableCell<AutobuskaStanica, AutobuskaStanica>() {
+                private Button button = new Button("");
+            	//postaviti dimenzije
+                @Override
+                protected void updateItem(AutobuskaStanica item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (!empty) {
+                    	//System.out.println(item);
+                    	if("Blokirano".equals(item.getStanje())) {
+                    		button.getStyleClass().addAll("buttonTable", "buttonTableUnblock");
+                    		button.setTooltip(new Tooltip("Odblokiraj?"));
+                    	} else {
+                    		button.getStyleClass().addAll("buttonTable", "buttonTableBlock");
+                    		button.setTooltip(new Tooltip("Blokiraj?"));
+                    	}
+                    	button.getTooltip().setAutoHide(false);
+                    	button.getTooltip().setShowDelay(Duration.seconds(0.5));
+                    	setGraphic(button);
+                    	button.setOnMouseClicked(
+                    			event -> {
+                    				if("Blokirano".equals(item.getStanje())) {
+                    					AutobuskaStanica.blokiranjeAutobuskeStanice(item.getJib(), "Aktivno");
+                    					item.setStanje("Aktivno");
+                    					button.getStyleClass().remove("buttonTableUnblock");
+                    					button.getStyleClass().add("buttonTableBlock");
+                    				} else {
+                    					AutobuskaStanica.blokiranjeAutobuskeStanice(item.getJib(), "Blokirano");
+                    					item.setStanje("Blokirano");
+                    					button.getStyleClass().remove("buttonTableBlock");
+                    					button.getStyleClass().add("buttonTableUnblock");
+                    				}
+                    			}
+                    	);
+                    } else {
+                    	setGraphic(null);
+                    }
+                }
+            };
+            return cell;
+        });
+        
+        izmjeniColumn.setCellValueFactory(
+                param -> new ReadOnlyObjectWrapper<>(param.getValue())
+            );
+        
+        izmjeniColumn.setCellFactory(tableCell -> {
             TableCell<AutobuskaStanica, AutobuskaStanica> cell = new TableCell<AutobuskaStanica, AutobuskaStanica>() {
                 private Button button = new Button("");
             	//postaviti dimenzije
@@ -167,12 +215,12 @@ public class ListaStanicaController implements Initializable {
         	column.setReorderable(false);
         }
         
-        jibColumn.setMinWidth(80);
+        jibColumn.setMinWidth(75);
         jibColumn.setMaxWidth(125);
         
         nazivColumn.setMinWidth(100);
         
-        adresaColumn.setMinWidth(125);
+        adresaColumn.setMinWidth(100);
         
         brojTelefonaColumn.setMinWidth(85);
         brojTelefonaColumn.setMaxWidth(125);
@@ -180,12 +228,16 @@ public class ListaStanicaController implements Initializable {
         brojPeronaColumn.setMinWidth(75);
         brojPeronaColumn.setMaxWidth(75);
         
-        
-        izmijeniColumn.setText("");
-        izmijeniColumn.setMinWidth(35);
-        izmijeniColumn.setMaxWidth(35);
-        izmijeniColumn.setResizable(false);
-        izmijeniColumn.setSortable(false);
+        blokirajColumn.setText("");
+        blokirajColumn.setMinWidth(35);
+        blokirajColumn.setMaxWidth(35);
+        blokirajColumn.setResizable(false);
+        blokirajColumn.setSortable(false);
+        izmjeniColumn.setText("");
+        izmjeniColumn.setMinWidth(35);
+        izmjeniColumn.setMaxWidth(35);
+        izmjeniColumn.setResizable(false);
+        izmjeniColumn.setSortable(false);
         obrisiColumn.setText("");
         obrisiColumn.setMinWidth(35);
         obrisiColumn.setMaxWidth(35);

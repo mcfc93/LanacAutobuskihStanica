@@ -377,6 +377,52 @@
 	-fx-cursor: hand;
 }
 
+.buttonTableBlock {
+	-fx-background-image: url('img/block.png');
+	-fx-background-position: center;
+	-fx-background-repeat: no-repeat;
+	-fx-background-size: 25,25;
+	-fx-pref-height: 25px;
+    -fx-pref-width: 25px;
+	-fx-background-color: transparent;
+	-fx-border: none;
+	-fx-border-radius: 0px;
+	-fx-background-radius: 0px;
+	-fx-focus-traversable: false;
+	-fx-border-radius: 5;
+ 	-fx-background-radius: 5;
+}
+
+.buttonTableBlock:hover {
+	/*DRUGA SLIKA */
+	/*-fx-background-color: #9c27b0;*/
+	-fx-background-color: black;
+	-fx-cursor: hand;
+}
+
+.buttonTableUnblock {
+	-fx-background-image: url('img/unblock.png');
+	-fx-background-position: center;
+	-fx-background-repeat: no-repeat;
+	-fx-background-size: 25,25;
+	-fx-pref-height: 25px;
+    -fx-pref-width: 25px;
+	-fx-background-color: transparent;
+	-fx-border: none;
+	-fx-border-radius: 0px;
+	-fx-background-radius: 0px;
+	-fx-focus-traversable: false;
+	-fx-border-radius: 5;
+ 	-fx-background-radius: 5;
+}
+
+.buttonTableUnblock:hover {
+	/*DRUGA SLIKA */
+	/*-fx-background-color: #9c27b0;*/
+	-fx-background-color: black;
+	-fx-cursor: hand;
+}
+
 
 
 

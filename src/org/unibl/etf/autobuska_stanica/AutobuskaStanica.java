@@ -20,12 +20,13 @@ public class AutobuskaStanica {
 	private int brojPerona;
 	private String webStranica;
 	private String email;
+	private String stanje;
 	
 	public AutobuskaStanica() {
 		super();
 	}
 	
-	public AutobuskaStanica(String jib, String naziv, String ulicaIBroj, int postanskiBroj, String grad, String brojTelefona, int brojPerona, String webStranica, String email) {
+	public AutobuskaStanica(String jib, String naziv, String ulicaIBroj, int postanskiBroj, String grad, String brojTelefona, int brojPerona, String webStranica, String email, String stanje) {
 		super();
 		this.jib= jib;
 		this.naziv = naziv;
@@ -36,6 +37,7 @@ public class AutobuskaStanica {
 		this.brojPerona = brojPerona;
 		this.webStranica = webStranica;
 		this.email=email;
+		this.stanje=stanje;
 	}
 	
 	public String getJib() {
@@ -109,6 +111,14 @@ public class AutobuskaStanica {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public String getStanje() {
+		return stanje;
+	}
+
+	public void setStanje(String stanje) {
+		this.stanje = stanje;
+	}
 
 	public String getAdresa() {
 		return ulicaIBroj + ", " + postanskiBroj + " " + grad;
@@ -131,7 +141,7 @@ public class AutobuskaStanica {
 	    	s = c.prepareCall("{call showBusStations()}");
 	       	r = s.executeQuery();
 	        while(r.next()) {
-		       	listaAutobuskihStanica.add(new AutobuskaStanica(r.getString("JIBStanice"), r.getString("Naziv"), r.getString("Adresa"), r.getInt("PostanskiBroj"), r.getString("mjesto.naziv"), r.getString("BrojTelefona"), r.getInt("BrojPerona"), r.getString("WebStranica"), r.getString("Email")));
+		       	listaAutobuskihStanica.add(new AutobuskaStanica(r.getString("JIBStanice"), r.getString("Naziv"), r.getString("Adresa"), r.getInt("PostanskiBroj"), r.getString("mjesto.naziv"), r.getString("BrojTelefona"), r.getInt("BrojPerona"), r.getString("WebStranica"), r.getString("Email"), r.getString("Stanje")));
 	        }
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
@@ -173,6 +183,23 @@ public class AutobuskaStanica {
 	       	c=Util.getConnection();
 	    	s = c.prepareCall("{call removeBusStation(?)}");
 	    	s.setString(1, jib);
+	       	s.execute();
+	       	return true;
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(s,c);
+	    }
+	    return false;
+	}
+	
+	public static boolean blokiranjeAutobuskeStanice(String jib, String stanje) {
+		String sql="update autobuska_stanica set Stanje=? where JIBStanice=?;";
+		Connection c = null;
+		PreparedStatement s = null;
+	    try {
+	       	c=Util.getConnection();
+	    	s = Util.prepareStatement(c, sql, false, stanje, jib);
 	       	s.execute();
 	       	return true;
 	    } catch(SQLException e) {
