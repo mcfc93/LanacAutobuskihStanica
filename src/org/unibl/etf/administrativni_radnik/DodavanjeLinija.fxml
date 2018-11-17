@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTimePicker?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrativni_radnik.DodavanjeLinijaController">
+   <children>
+      <JFXTextField fx:id="polazisteTextField" layoutX="335.0" layoutY="46.0" promptText="Polaziste" />
+      <JFXTextField fx:id="odredisteTextField" layoutX="335.0" layoutY="92.0" promptText="Odrediste" />
+      <JFXTimePicker fx:id="vrijemePolaska" layoutX="335.0" layoutY="149.0" promptText="Vrijeme polaska" />
+      <JFXTimePicker fx:id="vrijemeDolaska" layoutX="335.0" layoutY="201.0" promptText="Vrijeme dolaska" />
+      <JFXTextField fx:id="cijenaJednokratnaTextField" layoutX="335.0" layoutY="262.0" promptText="Cijena (jednokratna)" />
+      <JFXTextField fx:id="cijenaMjesecnaTextField" layoutX="335.0" layoutY="312.0" promptText="Cijena (mjesecna)" />
+      <JFXButton fx:id="dodajRelacijuButton" layoutX="358.0" layoutY="373.0" onAction="#dodajRelaciju" text="Dodaj relaciju" />
+      <JFXTextField fx:id="nazivLinijeTextField" layoutX="30.0" layoutY="59.0" promptText="Naziv linije" />
+      <JFXComboBox fx:id="prevozniciComboBox" layoutX="51.0" layoutY="105.0" promptText="Prevoznik" />
+      <JFXComboBox fx:id="peroniComboBox" layoutX="70.0" layoutY="165.0" promptText="Peron" />
+      <JFXCheckBox fx:id="ponedjeljakCB" layoutX="180.0" layoutY="62.0" text="Ponedjeljak" />
+      <JFXCheckBox fx:id="utorakCB" layoutX="180.0" layoutY="96.0" text="Utorak" />
+      <JFXCheckBox fx:id="srijedaCB" layoutX="180.0" layoutY="130.0" text="Srijeda" />
+      <JFXCheckBox fx:id="cetvrtakCB" layoutX="180.0" layoutY="168.0" text="Cetvrtak" />
+      <JFXCheckBox fx:id="petakCB" layoutX="180.0" layoutY="206.0" text="Petak" />
+      <JFXCheckBox fx:id="subotaCB" layoutX="180.0" layoutY="244.0" text="Subota" />
+      <JFXCheckBox fx:id="nedjeljaCB" layoutX="180.0" layoutY="278.0" text="Nedjelja" />
+      <JFXButton fx:id="dodajLinijuButton" layoutX="44.0" layoutY="361.0" onAction="#dodajLiniju" text="Dodaj liniju" />
+   </children>
+</AnchorPane>

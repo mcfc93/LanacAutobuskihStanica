@@ -39,24 +39,16 @@ public class AdministrativniRadnikController implements Initializable {
 	
 	@FXML
     private ToggleGroup toggleGroup;
-	
 	@FXML
-	private ToggleButton dodajIliUkloniLinijuButton = new ToggleButton();
-	
+	private ToggleButton izmjenaLinijaButton = new ToggleButton();
 	@FXML
 	private ToggleButton odjavaButton = new ToggleButton();
-	
 	@FXML
-	private ToggleButton dodajIliUkloniPrevoznikaButton = new ToggleButton();
-	
+	private ToggleButton izmjenaPrevoznikaButton = new ToggleButton();	
 	@FXML
-	private ToggleButton izmjeniPrevoznikaButton = new ToggleButton();;
-	
+	private ToggleButton dodavanjeLinijaButton = new ToggleButton();;
 	@FXML
-	private ToggleButton c;
-	
-	@FXML
-	private ToggleButton d;
+	private ToggleButton dodavanjePrevoznikaButton = new ToggleButton();;
 	
 	private double xOffset=0;
     private double yOffset=0;
@@ -107,13 +99,44 @@ informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " +
 		 * startMethod(null);
 		 * 
 		 **********************************************/
-		dodajIliUkloniLinije();
+		radSaLinijama();
+	}
+	@FXML
+	public void radSaPrevoznicima() {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/IzmjenaPrevoznika.fxml"));
+			AnchorPane.setTopAnchor(root,0.0);
+			AnchorPane.setBottomAnchor(root,0.0);
+			AnchorPane.setLeftAnchor(root,0.0);
+			AnchorPane.setRightAnchor(root,0.0);
+			dataAnchorPane.getChildren().removeAll();
+			dataAnchorPane.getChildren().setAll(root);
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
 	}
 	
-	public void dodajIliUkloniLinije() {
+	@FXML
+	public void radSaLinijama() {
 		// TODO Auto-generated method stub
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/DodajIliUkloniLinije.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/RadSaLinijama.fxml"));
+			AnchorPane.setTopAnchor(root,0.0);
+			AnchorPane.setBottomAnchor(root,0.0);
+			AnchorPane.setLeftAnchor(root,0.0);
+			AnchorPane.setRightAnchor(root,0.0);
+			dataAnchorPane.getChildren().removeAll();
+			dataAnchorPane.getChildren().setAll(root);
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+	}
+	
+	@FXML
+	public void dodavanjeLinija() {
+		// TODO Auto-generated method stub
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/DodavanjeLinija.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
 			AnchorPane.setBottomAnchor(root,0.0);
 			AnchorPane.setLeftAnchor(root,0.0);
@@ -125,6 +148,23 @@ informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " +
 		}
 	}
 
+	@FXML
+	public void izmjenaPrevoznika() {
+		// TODO Auto-generated method stub
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/IzmjenaPrevoznika.fxml"));
+			AnchorPane.setTopAnchor(root,0.0);
+			AnchorPane.setBottomAnchor(root,0.0);
+			AnchorPane.setLeftAnchor(root,0.0);
+			AnchorPane.setRightAnchor(root,0.0);
+			dataAnchorPane.getChildren().removeAll();
+			dataAnchorPane.getChildren().setAll(root);
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+	}
+
+	
 	@FXML
 	public void odjava(ActionEvent event) {
 		if(PrijavaController.nalog.odjava()) {

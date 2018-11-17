@@ -9,6 +9,32 @@ public class Linija {
 	private String daniUSedmici;
 	private int peron;
 	private String nazivPrevoznika;
+	private String stanje;
+	
+	public Linija(int idLinije, String nazivLinije) {
+		super();
+		this.idLinije = idLinije;
+		this.nazivLinije = nazivLinije;
+	}
+	
+	public Linija(int idLinije,String nazivLinije,String daniUSedmici,int peron,String nazivPrevoznika,String stanje) {
+		super();
+		this.idLinije = idLinije;
+		this.nazivLinije = nazivLinije;
+		this.daniUSedmici = daniUSedmici;
+		this.peron = peron;
+		this.nazivPrevoznika = nazivPrevoznika;
+		this.stanje = stanje;
+	}
+
+	public String getStanje() {
+		return stanje;
+	}
+
+	public void setStanje(String stanje) {
+		this.stanje = stanje;
+	}
+
 	public Linija(int idLinije,String nazivLinije,String daniUSedmici,int peron,String nazivPrevoznika) {
 		super();
 		this.idLinije = idLinije;
@@ -93,8 +119,7 @@ public class Linija {
 
 	@Override
 	public String toString() {
-		return "Linija [idLinije=" + idLinije + ", nazivLinije=" + nazivLinije + ", idStanice=" + idStanice
-				+ ", daniUSedmici=" + daniUSedmici + ", peron=" + peron + "]";
+		return nazivLinije;
 	}
 
 

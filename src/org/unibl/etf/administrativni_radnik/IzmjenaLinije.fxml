@@ -12,34 +12,31 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrativni_radnik.IzmjenaLinijeController">
    <children>
       <JFXTextField fx:id="nazivLinijeTextField" labelFloat="true" layoutX="340.0" layoutY="169.0" promptText="Naziv linije" />
-      <JFXCheckBox fx:id="ponedjeljakCB" layoutX="377.0" layoutY="24.0" text="Ponedjeljak" />
-      <JFXCheckBox fx:id="utorakCB" layoutX="377.0" layoutY="52.0" text="Utorak" />
-      <JFXCheckBox fx:id="srijedaCB" layoutX="377.0" layoutY="88.0" text="Srijeda" />
-      <JFXCheckBox fx:id="petakCB" layoutX="483.0" layoutY="52.0" text="Petak" />
-      <JFXCheckBox fx:id="subotaCB" layoutX="486.0" layoutY="88.0" text="Subota" />
-      <JFXCheckBox fx:id="nedjeljaCB" layoutX="487.0" layoutY="122.0" text="Nedjelja" />
-      <JFXCheckBox fx:id="cetvrtakCB" layoutX="483.0" layoutY="24.0" text="Cetvrtak" />
-      <AnchorPane fx:id="relacijeAnchorPane" layoutX="7.0" layoutY="56.0" prefHeight="275.0" prefWidth="361.0">
-         <children>
-            <Label layoutX="45.0" layoutY="41.0" text="Polaziste:" />
-            <Label layoutX="42.0" layoutY="76.0" text="Odrediste:" />
-            <Label layoutX="15.0" layoutY="194.0" text="Cijena (jednokratna):" />
-            <Label layoutX="26.0" layoutY="124.0" text="Vrijeme polaska:" />
-            <Label layoutX="26.0" layoutY="161.0" text="Vrijeme dolaska:" />
-            <JFXTimePicker fx:id="vrijemePolaskaTimeChooser" layoutX="147.0" layoutY="110.0" />
-            <JFXTimePicker fx:id="vrijemeDolaskaTimeChooser" layoutX="147.0" layoutY="147.0" />
-            <JFXTextField fx:id="cijenaJednokratnaTextField" layoutX="147.0" layoutY="188.0" prefHeight="28.0" prefWidth="135.0" />
-            <TextField fx:id="polazisteTextField" editable="false" layoutX="147.0" layoutY="37.0" />
-            <TextField fx:id="odredisteTextField" editable="false" layoutX="147.0" layoutY="72.0" />
-            <JFXTextField fx:id="cijenaMjesecnaTextField" layoutX="147.0" layoutY="234.0" />
-            <Label layoutX="24.0" layoutY="238.0" text="Cijena (mjesecna):" />
-         </children>
-      </AnchorPane>
-      <JFXComboBox fx:id="relacijeComboBox" layoutX="120.0" layoutY="21.0" onAction="#comboBoxChange" promptText="Odaberite relaciju" />
-      <JFXButton fx:id="okButton" layoutX="337.0" layoutY="295.0" onAction="#izmjenaLinije" prefHeight="71.0" prefWidth="108.0" text="OK" />
-      <JFXButton fx:id="otkaziButton" layoutX="467.0" layoutY="295.0" prefHeight="71.0" prefWidth="101.0" text="Otkazi" />
-      <JFXButton fx:id="potvrdiButton" layoutX="118.0" layoutY="354.0" onAction="#izmjeniRelaciju" text="Potvrdi izmjenu relacije" />
-      <JFXComboBox fx:id="brojPeronaComboBox" labelFloat="true" layoutX="363.0" layoutY="214.0" promptText="Broj perona" />
-      <Label layoutX="39.0" layoutY="29.0" text="Relacije:" />
+      <JFXCheckBox fx:id="ponedjeljakCB" layoutX="408.0" layoutY="24.0" text="Ponedjeljak" />
+      <JFXCheckBox fx:id="utorakCB" layoutX="408.0" layoutY="48.0" text="Utorak" />
+      <JFXCheckBox fx:id="srijedaCB" layoutX="408.0" layoutY="72.0" text="Srijeda" />
+      <JFXCheckBox fx:id="petakCB" layoutX="515.0" layoutY="48.0" text="Petak" />
+      <JFXCheckBox fx:id="subotaCB" layoutX="515.0" layoutY="72.0" text="Subota" />
+      <JFXCheckBox fx:id="nedjeljaCB" layoutX="515.0" layoutY="96.0" text="Nedjelja" />
+      <JFXCheckBox fx:id="cetvrtakCB" layoutX="515.0" layoutY="24.0" text="Cetvrtak" />
+      <JFXButton fx:id="okButton" layoutX="340.0" layoutY="311.0" onAction="#izmjenaLinije" prefHeight="71.0" prefWidth="108.0" text="OK" />
+      <JFXButton fx:id="otkaziButton" layoutX="483.0" layoutY="311.0" prefHeight="71.0" prefWidth="101.0" text="Otkazi" />
+      <JFXButton fx:id="potvrdiButton" layoutX="79.0" layoutY="338.0" onAction="#izmjeniRelaciju" prefHeight="48.0" prefWidth="139.0" text="Potvrdi izmjenu relacije" />
+      <JFXComboBox fx:id="brojPeronaComboBox" labelFloat="true" layoutX="342.0" layoutY="217.0" promptText="Broj perona" />
+      <JFXCheckBox fx:id="linijaAktivnaCB" layoutX="20.0" layoutY="33.0" text="Linija aktivna" />
+      <Label layoutX="33.0" layoutY="132.0" text="Odrediste:" />
+      <Label layoutX="164.0" layoutY="34.0" text="Relacije:" />
+      <Label layoutX="36.0" layoutY="89.0" text="Polaziste:" />
+      <JFXComboBox fx:id="relacijeComboBox" layoutX="225.0" layoutY="30.0" onAction="#comboBoxChange" promptText="Odaberite relaciju" />
+      <Label layoutX="13.0" layoutY="260.0" text="Cijena (jednokratna):" />
+      <Label layoutX="13.0" layoutY="302.0" text="Cijena (mjesecna):" />
+      <Label layoutX="14.0" layoutY="209.0" text="Vrijeme dolaska:" />
+      <Label layoutX="14.0" layoutY="173.0" text="Vrijeme polaska:" />
+      <JFXTimePicker fx:id="vrijemeDolaskaTimeChooser" layoutX="132.0" layoutY="203.0" />
+      <JFXTextField fx:id="cijenaMjesecnaTextField" layoutX="132.0" layoutY="298.0" />
+      <JFXTextField fx:id="cijenaJednokratnaTextField" layoutX="132.0" layoutY="255.0" prefHeight="28.0" prefWidth="135.0" />
+      <JFXTimePicker fx:id="vrijemePolaskaTimeChooser" layoutX="132.0" layoutY="164.0" />
+      <TextField fx:id="odredisteTextField" editable="false" layoutX="125.0" layoutY="128.0" />
+      <TextField fx:id="polazisteTextField" editable="false" layoutX="125.0" layoutY="85.0" />
    </children>
 </AnchorPane>
