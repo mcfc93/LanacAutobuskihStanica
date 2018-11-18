@@ -12,9 +12,10 @@
           <TableColumn fx:id="idLinijeLinijeColumn" prefWidth="49.0" text="ID linije" />
             <TableColumn fx:id="nazivPrevoznikaColumn" prefWidth="125.0" text="Naziv prevoznika" />
             <TableColumn fx:id="peronLinijeColumn" minWidth="6.0" prefWidth="41.0" text="Peron" />
-            <TableColumn fx:id="daniUSedmiciColumn" prefWidth="131.0" text="Dani" />
-            <TableColumn fx:id="izmijeniColumn" prefWidth="46.0" text="Izmijeni" />
-            <TableColumn fx:id="izbrisiColumn" prefWidth="64.0" text="Izbrisi" />
+            <TableColumn fx:id="daniUSedmiciColumn" prefWidth="84.0" text="Dani" />
+            <TableColumn fx:id="izmijeniColumn" prefWidth="49.0" text="Izmijeni" />
+            <TableColumn fx:id="izbrisiColumn" prefWidth="48.0" text="Izbrisi" />
+            <TableColumn fx:id="deaktivirajColumn" prefWidth="41.0" text="Column X" />
         </columns>
       </TableView>
    </children>

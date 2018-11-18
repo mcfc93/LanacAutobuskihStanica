@@ -241,10 +241,8 @@ public class ProdajaKarataController implements Initializable {
 		    			    )));
 		    	}
 		});	
-		
 		karteTable.setItems(karteObs);		
 		ucitajRelacije();
-		System.out.println("aaa");
 		karteTable.setPlaceholder(new Label("Odaberite relaciju i datum"));
 		datum.setValue(LocalDate.now());		
 		nazivLinijeColumn.setCellValueFactory(new PropertyValueFactory<>("nazivLinije"));
@@ -253,7 +251,6 @@ public class ProdajaKarataController implements Initializable {
 		prevoznikColumn.setCellValueFactory(new PropertyValueFactory<>("nazivPrevoznika"));
 		cijenaColumn.setCellValueFactory(new PropertyValueFactory<>("cijena"));
 		peronColumn.setCellValueFactory(new PropertyValueFactory<>("peron"));
-		
 		datum.setDayCellFactory(picker -> new DateCell() {
 	        public void updateItem(LocalDate date, boolean empty) {
 	            super.updateItem(date, empty);
@@ -261,13 +258,8 @@ public class ProdajaKarataController implements Initializable {
 	            setDisable(empty || date.compareTo(today) < 0 );
 	        }
 	    });
-		
 	
-		
-		
-		
-		autoComplete();
-	    
+		autoComplete();    
 	    pretragaButton.disableProperty().bind(Bindings.createBooleanBinding(
 			    () -> !relacijeSet.contains(odredisteTextField.getText()),
 			    	odredisteTextField.textProperty()

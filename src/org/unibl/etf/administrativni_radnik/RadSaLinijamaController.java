@@ -75,6 +75,10 @@ public class RadSaLinijamaController implements Initializable {
 	private TableColumn<Linija,Linija> izmijeniColumn = new TableColumn<Linija,Linija>();
 	@FXML
 	private TableColumn<Linija,Linija> izbrisiColumn = new TableColumn<Linija,Linija>();
+	@FXML
+	private TableColumn<Linija,Linija> deaktivirajColumn = new TableColumn<Linija,Linija>();
+	
+	
 	public static int idLinije;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -146,6 +150,48 @@ public class RadSaLinijamaController implements Initializable {
              };
              return cell;
          });
+         
+        /* deaktivirajColumn.setCellFactory(tableCell -> {
+             TableCell<Linija, Linija> cell = new TableCell<Linija, Linija>() {
+                 private Button button = new Button("");
+             	//postaviti dimenzije
+                 @Override
+                 protected void updateItem(Linija item, boolean empty) {
+                     super.updateItem(item, empty);
+                     if (!empty) {
+                     	//System.out.println(item);
+                     	if("Blokirano".equals(item.getStanje())) {
+                     		button.getStyleClass().addAll("buttonTable", "buttonTableUnblock");
+                     		button.setTooltip(new Tooltip("Odblokiraj?"));
+                     	} else {
+                     		button.getStyleClass().addAll("buttonTable", "buttonTableBlock");
+                     		button.setTooltip(new Tooltip("Blokiraj?"));
+                     	}
+                     	button.getTooltip().setAutoHide(false);
+                     	button.getTooltip().setShowDelay(Duration.seconds(0.5));
+                     	setGraphic(button);
+                     	button.setOnMouseClicked(
+                     			event -> {
+                     				if("Blokirano".equals(item.getStanje())) {
+                     					AutobuskaStanica.blokiranjeAutobuskeStanice(item.getJib(), "Aktivno");
+                     					item.setStanje("Aktivno");
+                     					button.getStyleClass().remove("buttonTableUnblock");
+                     					button.getStyleClass().add("buttonTableBlock");
+                     				} else {
+                     					AutobuskaStanica.blokiranjeAutobuskeStanice(item.getJib(), "Blokirano");
+                     					item.setStanje("Blokirano");
+                     					button.getStyleClass().remove("buttonTableBlock");
+                     					button.getStyleClass().add("buttonTableUnblock");
+                     				}
+                     			}
+                     	);
+                     } else {
+                     	setGraphic(null);
+                     }
+                 }
+             };
+             return cell;
+         });*/
     	
 	}
 	
