@@ -6,17 +6,28 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 
+import org.unibl.etf.karta.Linija;
 import org.unibl.etf.karta.Prevoznik;
 import org.unibl.etf.util.Util;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class IzmjenaPrevoznikaController implements Initializable {
 
@@ -34,18 +45,71 @@ public class IzmjenaPrevoznikaController implements Initializable {
 	private TableColumn<Prevoznik,String> racunColumn = new TableColumn<>();
 	@FXML
 	private TableColumn<Prevoznik,String> emailColumn = new TableColumn<>();
+	@FXML
+	private TableColumn<Prevoznik,Prevoznik> izmijeniColumn = new TableColumn<>();
+	@FXML
+	private TableColumn<Prevoznik,Prevoznik> izbrisiColumn = new TableColumn<>();
+
+	public static Prevoznik odabraniPrevoznik;
+	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		prevozniciObsList.clear();
 		nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
 		adresaColumn.setCellValueFactory(new PropertyValueFactory<>("adresa"));
 		telefonColumn.setCellValueFactory(new PropertyValueFactory<>("telefon"));
 		racunColumn.setCellValueFactory(new PropertyValueFactory<>("racun"));
 		emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
 		ucitajPrevoznike();
-		
+		izmijeniColumn.setCellValueFactory(
+                param -> new ReadOnlyObjectWrapper<>(param.getValue())
+            );
+    	izmijeniColumn.setCellFactory(tableCell -> {
+            TableCell<Prevoznik, Prevoznik> cell = new TableCell<Prevoznik, Prevoznik>() {
+                private Button button = new Button("");
+            	//postaviti dimenzije
+                @Override
+                protected void updateItem(Prevoznik item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (!empty) {
+                    	//System.out.println(item);
+                    	button.getStyleClass().addAll("buttonTable", "buttonTableEdit");
+                    	button.setTooltip(new Tooltip("Izmijeni?"));
+                    	button.getTooltip().setAutoHide(false);
+                    	button.getTooltip().setShowDelay(Duration.seconds(0.5));
+                    	setGraphic(button);
+                    	button.setOnMouseClicked(
+                    			event -> showIzmjenaPrevoznika(item) 
+                    		);
+                    } else {
+                    	setGraphic(null);
+                    }
+                }
+				
+            };
+            return cell;
+        });
 	}
 
+	public void showIzmjenaPrevoznika(Prevoznik prevoznik) {
+		odabraniPrevoznik = prevoznik;
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/unibl/etf/administrativni_radnik/PrevoznikEdit.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle(prevoznik.getNaziv());
+            stage.setScene(new Scene(root1));  
+            stage.showAndWait();
+            int index = prevozniciObsList.indexOf(prevoznik);
+            prevozniciObsList.remove(prevoznik);
+            System.out.println("Izmjenjeni: " + odabraniPrevoznik);
+            prevozniciObsList.add(index, odabraniPrevoznik);
+            prevozniciTableView.refresh();
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+	}
 	public void ucitajPrevoznike() {
 		// TODO Auto-generated method stub
 		Connection c = null;
@@ -58,7 +122,7 @@ public class IzmjenaPrevoznikaController implements Initializable {
 			r = s.executeQuery();
 			while(r.next()) {
 				System.out.println("Aa");
-				prevozniciObsList.add(new Prevoznik(r.getString("NazivPrevoznika"), r.getString("Email"), r.getString("Adresa"), r.getString("Telefon"), r.getString("Naziv"), r.getString("WebAdresa"), r.getString("JIBPrevoznika"), r.getString("TekuciRacun")));
+				prevozniciObsList.add(new Prevoznik(r.getString("NazivPrevoznika"), r.getString("Email"), r.getString("Adresa"), r.getString("Telefon"), r.getInt("prevoznik.PostanskiBroj"), r.getString("WebAdresa"), r.getString("JIBPrevoznika"), r.getString("TekuciRacun")));
 				
 			}
 		} catch (SQLException e) {

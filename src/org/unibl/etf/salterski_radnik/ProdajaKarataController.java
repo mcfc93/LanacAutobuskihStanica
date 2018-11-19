@@ -404,7 +404,7 @@ public class ProdajaKarataController implements Initializable {
 					System.out.println("nadjena");
 					Time vrijemePolaska = r.getTime(2);
 					daniUSedmici = r.getString(1);
-					Prevoznik prevoznik = new Prevoznik(r.getString(3), r.getString(4), r.getString(5), r.getString(6), r.getString(7), "BL");
+					Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
 					Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10),r.getString(3));
 					Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
 					Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),"1111111111");
@@ -436,7 +436,7 @@ public class ProdajaKarataController implements Initializable {
 				daniUSedmici = r.getString(1);
 				Time vrijemePolaska = r.getTime(2);
 				if(zadovoljavaDatumVrijeme(daniUSedmici,vrijemePolaska)) {
-					Prevoznik prevoznik = new Prevoznik(r.getString(3), r.getString(4), r.getString(5), r.getString(6), r.getString(7), "BL");
+					Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
 					Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10),r.getString(3));
 					Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
 					Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),"1111111111");

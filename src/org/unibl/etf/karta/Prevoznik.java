@@ -5,11 +5,10 @@ public class Prevoznik {
 	private String email;
 	private String adresa;
 	private String telefon;
-	private String mjesto;
+	private int postanskiBroj;
 	private String webAdresa;
 	private String JIBPrevoznika;
 	private String racun;
-	
 	
 	public String getRacun() {
 		return racun;
@@ -19,27 +18,27 @@ public class Prevoznik {
 		this.racun = racun;
 	}
 
-	public Prevoznik(String naziv, String email, String adresa, String telefon, String mjesto, String webAdresa,
+	public Prevoznik(String naziv, String email, String adresa, String telefon, int postanskiBroj, String webAdresa,
 			String jIBPrevoznika, String racun) {
 		super();
 		this.naziv = naziv;
 		this.email = email;
 		this.adresa = adresa;
 		this.telefon = telefon;
-		this.mjesto = mjesto;
+		this.postanskiBroj = postanskiBroj;
 		this.webAdresa = webAdresa;
 		JIBPrevoznika = jIBPrevoznika;
 		this.racun = racun;
 	}
 
-	public Prevoznik(String naziv, String email, String adresa, String webAdresa,String telefon, String mjesto) {
+	public Prevoznik(String naziv, String email, String adresa, String webAdresa,String telefon, int postanskiBroj) {
 		super();
 		this.naziv = naziv;
 		this.email = email;
 		this.webAdresa = webAdresa;
 		this.adresa = adresa;
 		this.telefon = telefon;
-		this.mjesto = mjesto;
+		this.postanskiBroj = postanskiBroj;
 	}
 	
 	public Prevoznik(String naziv, String jib) {
@@ -48,6 +47,10 @@ public class Prevoznik {
 		this.JIBPrevoznika = jib;
 	}
 	
+
+	public Prevoznik(String nazivPrevoznika) {
+		this.naziv = nazivPrevoznika;
+	}
 
 	public String getJIBPrevoznika() {
 		return JIBPrevoznika;
@@ -89,16 +92,23 @@ public class Prevoznik {
 	public void setTelefon(String telefon) {
 		this.telefon = telefon;
 	}
-	public String getMjesto() {
-		return mjesto;
+	
+	public int getPostanskiBroj() {
+		return postanskiBroj;
 	}
-	public void setMjesto(String mjesto) {
-		this.mjesto = mjesto;
+
+	public void setPostanskiBroj(int postanskiBroj) {
+		this.postanskiBroj = postanskiBroj;
 	}
+	
+
 	@Override
 	public String toString() {
-		return naziv;
+		return "Prevoznik [naziv=" + naziv + ", email=" + email + ", adresa=" + adresa + ", telefon=" + telefon
+				+ ", postanskiBroj=" + postanskiBroj + ", webAdresa=" + webAdresa + ", JIBPrevoznika=" + JIBPrevoznika
+				+ ", racun=" + racun + "]";
 	}
+
 	
 	
 	
