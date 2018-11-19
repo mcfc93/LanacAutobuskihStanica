@@ -83,7 +83,7 @@
                   </ImageView>
                </graphic>
             </ToggleButton>
-            <ToggleButton fx:id="dodavanjePrevoznikaButton" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="288.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="200.0" text="Dodavanje prevoznika" toggleGroup="$toggleGroup">
+            <ToggleButton fx:id="dodavanjePrevoznikaButton" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="288.0" mnemonicParsing="false" onAction="#dodavanjePrevoznika" prefHeight="28.0" prefWidth="200.0" text="Dodavanje prevoznika" toggleGroup="$toggleGroup">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="20.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>

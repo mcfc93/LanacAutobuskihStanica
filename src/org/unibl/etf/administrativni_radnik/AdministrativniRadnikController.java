@@ -133,6 +133,21 @@ informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " +
 	}
 	
 	@FXML
+	public void dodavanjePrevoznika() {
+		// TODO Auto-generated method stub
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/DodavanjePrevoznika.fxml"));
+			AnchorPane.setTopAnchor(root,0.0);
+			AnchorPane.setBottomAnchor(root,0.0);
+			AnchorPane.setLeftAnchor(root,0.0);
+			AnchorPane.setRightAnchor(root,0.0);
+			dataAnchorPane.getChildren().removeAll();
+			dataAnchorPane.getChildren().setAll(root);
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+	}
+	@FXML
 	public void dodavanjeLinija() {
 		// TODO Auto-generated method stub
 		try {

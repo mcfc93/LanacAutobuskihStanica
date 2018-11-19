@@ -8,6 +8,30 @@ public class Prevoznik {
 	private String mjesto;
 	private String webAdresa;
 	private String JIBPrevoznika;
+	private String racun;
+	
+	
+	public String getRacun() {
+		return racun;
+	}
+
+	public void setRacun(String racun) {
+		this.racun = racun;
+	}
+
+	public Prevoznik(String naziv, String email, String adresa, String telefon, String mjesto, String webAdresa,
+			String jIBPrevoznika, String racun) {
+		super();
+		this.naziv = naziv;
+		this.email = email;
+		this.adresa = adresa;
+		this.telefon = telefon;
+		this.mjesto = mjesto;
+		this.webAdresa = webAdresa;
+		JIBPrevoznika = jIBPrevoznika;
+		this.racun = racun;
+	}
+
 	public Prevoznik(String naziv, String email, String adresa, String webAdresa,String telefon, String mjesto) {
 		super();
 		this.naziv = naziv;
