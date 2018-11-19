@@ -240,11 +240,6 @@ System.out.println(getPostalCodeList());
 		        		 hasErrors.set(true);
 		        	 }
 		        	 */
-		        	 /*
-		        	if(!jmbgTextField.getText().matches("((+)[0-9]2)?[0-9]{3}(/)[0-9]{3}(-)[0-9]{3}[0-9]*")) {
-		        		hasErrors.set(true);
-		        	}
-		        	*/
 		        }
 			}
 		};
@@ -261,11 +256,6 @@ System.out.println(getPostalCodeList());
 	        		hasErrors.set(true);
 		        } else {
 		        	 hasErrors.set(false);
-		        	 /*
-		        	if(!textField.getText().matches("((+)[0-9]2)?[0-9]{3}(/)[0-9]{3}(-)[0-9]{3}[0-9]*")) {
-		        		hasErrors.set(true);
-		        	}
-		        	*/
 		        }
 			}
 		};
@@ -294,13 +284,12 @@ System.out.println(getPostalCodeList());
 		ValidatorBase emailValidator = new ValidatorBase("Nekorektan unos") {
 			@Override
 			protected void eval() {
-				if(!textField.getText().isEmpty() &&
-					!textField.getText().matches("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+(?:\\\\.[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$")) {
-						hasErrors.set(true);
-						}
-					else
-						hasErrors.set(false);
-					
+				if(!textField.getText().isEmpty()
+						&& !textField.getText().matches("^[a-z0-9]{3,}@[a-z0-9]{2,}\\.[a-z]{2,}$")) {
+					hasErrors.set(true);
+				} else {
+					hasErrors.set(false);
+				}
 			}
 		};
 		emailValidator.setIcon(new ImageView());
@@ -322,12 +311,12 @@ System.out.println(getPostalCodeList());
 		ValidatorBase postalCodeValidator = new ValidatorBase("Nekorektan unos") {
 			@Override
 			protected void eval() {
-				if(!textField.getText().isEmpty() &&
-					!getPostalCodeList().contains(textField.getText())) {
-						hasErrors.set(true);
-						}
-					else
-						hasErrors.set(false);
+				if(!textField.getText().isEmpty()
+						&& !getPostalCodeList().contains(textField.getText())) {
+					hasErrors.set(true);
+				} else {
+					hasErrors.set(false);
+				}
 			}
 		};
 		postalCodeValidator.setIcon(new ImageView());
@@ -353,13 +342,12 @@ System.out.println(getPostalCodeList());
 		ValidatorBase webValidator = new ValidatorBase("Nekorektan unos") {
 			@Override
 			protected void eval() {
-				if(!textField.getText().isEmpty() &&
-					!textField.getText().matches("^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?|^((http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$")) {
-						hasErrors.set(true);
-						}
-					else
-						hasErrors.set(false);
-					
+				if(!textField.getText().isEmpty()
+						&& !textField.getText().matches("https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]\\.[^\\s]{2,}")) {
+					hasErrors.set(true);
+				} else {
+					hasErrors.set(false);
+				}
 			}
 		};
 		webValidator.setIcon(new ImageView());
@@ -370,13 +358,13 @@ System.out.println(getPostalCodeList());
 		ValidatorBase phoneValidator = new ValidatorBase("Nekorektan unos") {	
 			@Override
 			protected void eval() {
-				if(!textField.getText().isEmpty() &&
-					!textField.getText().matches("^\\+(?:[0-9] ?){6,14}[0-9]$")) {
-						hasErrors.set(true);
-						}
-					else
-						hasErrors.set(false);
-					
+				if(!textField.getText().isEmpty()
+						&& !textField.getText().matches("^\\+(?:[0-9] ?){6,14}[0-9]$")) {
+						//!textField.getText().matches("^((\\+)[0-9]{2})?[0-9]{3}(/)[0-9]{3}(-)[0-9]{3}[0-9]*")) {
+					hasErrors.set(true);
+				} else {
+					hasErrors.set(false);
+				}
 			}
 		};
 		phoneValidator.setIcon(new ImageView());
