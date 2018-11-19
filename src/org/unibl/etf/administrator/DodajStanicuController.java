@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
+import org.unibl.etf.util.Util;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -52,30 +53,15 @@ public class DodajStanicuController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		jibTextField.getValidators().add(requredFieldValidator(jibTextField));
-		nazivTextField.getValidators().add(requredFieldValidator(nazivTextField));
-		brojPeronaTextField.getValidators().add(requredFieldValidator(brojPeronaTextField));
-		brojTelefonaTextField.getValidators().add(requredFieldValidator(brojTelefonaTextField));
-		adresaTextField.getValidators().add(requredFieldValidator(adresaTextField));
-		postanskiBrojTextField.getValidators().add(requredFieldValidator(postanskiBrojTextField));
-		webStranicaTextField.getValidators().add(requredFieldValidator(webStranicaTextField));
-		emailTextField.getValidators().add(requredFieldValidator(emailTextField));
+		jibTextField.getValidators().addAll(Util.requredFieldValidator(jibTextField), Util.jibValidator(jibTextField));
+		nazivTextField.getValidators().add(Util.requredFieldValidator(nazivTextField));
+		brojPeronaTextField.getValidators().addAll(Util.requredFieldValidator(brojPeronaTextField), Util.integerValidator(brojPeronaTextField));
+		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
+		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
+		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.postalCodeValidator(postanskiBrojTextField));
+		webStranicaTextField.getValidators().addAll(Util.requredFieldValidator(webStranicaTextField), Util.webValidator(webStranicaTextField));
+		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
 	}
-	
-	public ValidatorBase requredFieldValidator(JFXTextField textField) {
-    	ValidatorBase requiredFieldValidator = new RequiredFieldValidator();
-	    requiredFieldValidator.setMessage("Obavezan unos");
-	    requiredFieldValidator.setIcon(new ImageView());
-	    textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
-	        if(!newValue) {
-	        	textField.validate();
-	        }
-	    });
-	    textField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
-	        	textField.validate();
-	    });
-	    return requiredFieldValidator;
-    }
 	
 	@FXML
     void potvrdi(ActionEvent event) {

@@ -23,7 +23,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <ToggleButton fx:id="listaAutobuskihStanicaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="185.0" mnemonicParsing="false" onAction="#listaAutobuskihStanica" prefHeight="40.0" prefWidth="200.0" selected="true" text="Lista autobuskih stanica" wrapText="true">
+            <ToggleButton fx:id="listaAutobuskihStanicaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="185.0" mnemonicParsing="false" onAction="#listaAutobuskihStanica" prefHeight="40.0" prefWidth="200.0" selected="true" text="Upravljanje autobuskim stanicama" wrapText="true">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -50,19 +50,7 @@
                   <Insets left="20.0" />
                </padding>
             </ToggleButton>
-            <ToggleButton fx:id="privremenoBlokiranjeAutobuskeStaniceButton" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="265.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Privremeno blokiranje autobuske stanice" toggleGroup="$toggleGroup" wrapText="true">
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-               <graphic>
-                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@img/pauseStation.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </ToggleButton>
-            <ToggleButton fx:id="brisanjeKorisnickogNalogaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutX="-1.0" layoutY="345.0" mnemonicParsing="false" onAction="#brisanjeKorisnickogNaloga" prefHeight="40.0" prefWidth="200.0" text="Brisanje korisničkog naloga" toggleGroup="$toggleGroup" wrapText="true">
+            <ToggleButton fx:id="brisanjeKorisnickogNalogaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="305.0" mnemonicParsing="false" onAction="#brisanjeKorisnickogNaloga" prefHeight="40.0" prefWidth="200.0" text="Brisanje korisničkog naloga" toggleGroup="$toggleGroup" wrapText="true">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -74,7 +62,7 @@
                   <Insets left="20.0" />
                </padding>
             </ToggleButton>
-            <ToggleButton fx:id="dodavanjeKorisnickogNalogaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="305.0" mnemonicParsing="false" onAction="#dodavanjeKorisnickogNaloga" prefHeight="40.0" prefWidth="200.0" text="Dodavanje korisničkog naloga" toggleGroup="$toggleGroup" wrapText="true">
+            <ToggleButton fx:id="dodavanjeKorisnickogNalogaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutX="-1.0" layoutY="265.0" mnemonicParsing="false" onAction="#dodavanjeKorisnickogNaloga" prefHeight="40.0" prefWidth="200.0" text="Dodavanje korisničkog naloga" toggleGroup="$toggleGroup" wrapText="true">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>

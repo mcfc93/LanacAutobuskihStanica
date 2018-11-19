@@ -3,6 +3,7 @@ package org.unibl.etf.prijava;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.unibl.etf.util.Util;
 import org.unibl.etf.zaposleni.Zaposleni;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
@@ -81,51 +82,12 @@ public class UpravljanjeKorisnickimNalogomController implements Initializable {
 	    							, novaLozinka1TextField.textProperty()
 	    								, novaLozinka2TextField.textProperty()
 	    									));
-   		*/   		
+   		*/
 
-   		ValidatorBase samePasswordValidator = new ValidatorBase("Ne poklapa se") {
-			@Override
-			protected void eval() {
-				if(!novaLozinka1TextField.getText().trim().isEmpty()
-		        		&& !novaLozinka2TextField.getText().trim().isEmpty()
-		        			&& !novaLozinka1TextField.getText().equals(novaLozinka2TextField.getText())) {
-		        	 hasErrors.set(true);
-		        } else {
-		        	 hasErrors.set(false);
-		        }
-			}
-		};
-		samePasswordValidator.setIcon(new ImageView());
-
-   		staraLozinkaTextField.getValidators().add(requredFieldValidator(staraLozinkaTextField));
-   		novaLozinka1TextField.getValidators().add(requredFieldValidator(novaLozinka1TextField));
-   		novaLozinka2TextField.getValidators().addAll(requredFieldValidator(novaLozinka2TextField), samePasswordValidator);
+   		staraLozinkaTextField.getValidators().add(Util.requredFieldValidator(staraLozinkaTextField));
+   		novaLozinka1TextField.getValidators().add(Util.requredFieldValidator(novaLozinka1TextField));
+   		novaLozinka2TextField.getValidators().addAll(Util.requredFieldValidator(novaLozinka2TextField), Util.samePasswordValidator(novaLozinka1TextField, novaLozinka2TextField));
 	}
-	
-    public ValidatorBase requredFieldValidator(JFXPasswordField textField) {
-    	ValidatorBase requiredFieldValidator = new RequiredFieldValidator();
-	    requiredFieldValidator.setMessage("Obavezan unos");
-	    requiredFieldValidator.setIcon(new ImageView());
-	    
-	    
-	    textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
-	        if(!newValue) {
-	        	textField.validate();
-	        }
-	    });
-	    
-	    
-	    textField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
-	        //if(textField.getText().trim().isEmpty()) {
-	        	textField.validate();
-	        //} else {
-	        //	textField.resetValidation();
-	        //}
-	    });
-	    
-	    
-	    return requiredFieldValidator;
-    }
     
     @FXML
     void potvrdi(ActionEvent event) {

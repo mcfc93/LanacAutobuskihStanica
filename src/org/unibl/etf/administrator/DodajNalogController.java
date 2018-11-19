@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import org.unibl.etf.prijava.Nalog;
+import org.unibl.etf.util.Util;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
@@ -123,66 +124,19 @@ public class DodajNalogController implements Initializable {
 	    });
 	    */
 		
-		
-		
-		
-		ValidatorBase jmbgValidator = new ValidatorBase("Nekorektan unos") {
-			@Override
-			protected void eval() {
-				/*
-				if(!jmbgTextField.getText().isEmpty()
-						&& jmbgTextField.getText().length() != 13) {
-		        	 hasErrors.set(true);
-		       	*/
-				if(!jmbgTextField.getText().isEmpty()
-	        			&& !jmbgTextField.getText().matches("^[0-9]{13}$")) {
-	        		hasErrors.set(true);
-		        } else {
-		        	 hasErrors.set(false);
-		        	 /*
-		        	 try {
-		        		 Long.parseLong(jmbgTextField.getText());
-		        	 } catch(NumberFormatException e) {
-		        		 hasErrors.set(true);
-		        	 }
-		        	 */
-		        	 /*
-		        	if(!jmbgTextField.getText().matches("((+)[0-9]2)?[0-9]{3}(/)[0-9]{3}(-)[0-9]{3}[0-9]*")) {
-		        		hasErrors.set(true);
-		        	}
-		        	*/
-		        }
-			}
-		};
-		jmbgValidator.setIcon(new ImageView());
 
-   		korisnickoImeTextField.getValidators().add(requredFieldValidator(korisnickoImeTextField));
-   		//lozinkaTextField.getValidators().add(requredFieldValidator(lozinkaTextField));
-   		jibStaniceTextField.getValidators().add(requredFieldValidator(jibStaniceTextField));
-   		imeTextField.getValidators().add(requredFieldValidator(imeTextField));
-   		prezimeTextField.getValidators().add(requredFieldValidator(prezimeTextField));
-   		jmbgTextField.getValidators().addAll(requredFieldValidator(jmbgTextField), jmbgValidator);
-   		adresaTextField.getValidators().add(requredFieldValidator(adresaTextField));
-   		postanskiBrojTextField.getValidators().add(requredFieldValidator(postanskiBrojTextField));
-   		strucnaSpremaTextField.getValidators().add(requredFieldValidator(strucnaSpremaTextField));
-   		brojTelefonaTextField.getValidators().add(requredFieldValidator(brojTelefonaTextField));
-   		emailTextField.getValidators().add(requredFieldValidator(emailTextField));
+   		korisnickoImeTextField.getValidators().add(Util.requredFieldValidator(korisnickoImeTextField));
+   		//lozinkaTextField.getValidators().add(Util.requredFieldValidator(lozinkaTextField));
+   		jibStaniceTextField.getValidators().addAll(Util.requredFieldValidator(jibStaniceTextField), Util.jibValidator(jibStaniceTextField));
+   		imeTextField.getValidators().add(Util.requredFieldValidator(imeTextField));
+   		prezimeTextField.getValidators().add(Util.requredFieldValidator(prezimeTextField));
+   		jmbgTextField.getValidators().addAll(Util.requredFieldValidator(jmbgTextField), Util.jmbgValidator(jmbgTextField));
+   		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
+   		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.postalCodeValidator(postanskiBrojTextField));
+   		strucnaSpremaTextField.getValidators().add(Util.requredFieldValidator(strucnaSpremaTextField));
+   		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
+   		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
 	}
-	
-	public ValidatorBase requredFieldValidator(JFXTextField textField) {
-    	ValidatorBase requiredFieldValidator = new RequiredFieldValidator();
-	    requiredFieldValidator.setMessage("Obavezan unos");
-	    requiredFieldValidator.setIcon(new ImageView());
-	    textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
-	        if(!newValue) {
-	        	textField.validate();
-	        }
-	    });
-	    textField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
-	        	textField.validate();
-	    });
-	    return requiredFieldValidator;
-    }
 	
 	@FXML
     void potvrdi(ActionEvent event) {
