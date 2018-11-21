@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+
+import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
 
 public class AutobuskaStanica {
@@ -225,5 +227,26 @@ public class AutobuskaStanica {
 	    	Util.close(s,c);
 	    }
 	    return false;
+	}
+	
+	public static int getBrojPeronaStanice() {
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		String sql = "select BrojPerona from autobuska_stanica where JIBStanice=?";
+		try {
+			c = Util.getConnection();
+			s = c.prepareStatement(sql);
+			s.setString(1, PrijavaController.nalog.getIdStanice());
+			r = s.executeQuery();
+			if(r.next()) 
+				return r.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			Util.close(r, s, c);
+		}
+		return 0;
 	}
 }

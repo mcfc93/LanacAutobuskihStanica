@@ -5,30 +5,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
-
 import org.unibl.etf.karta.Karta;
-import org.unibl.etf.karta.Linija;
-import org.unibl.etf.karta.Prevoznik;
-import org.unibl.etf.karta.Relacija;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
-
-import com.jfoenix.controls.JFXAutoCompletePopup;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
-
-import javafx.beans.binding.Bindings;
+import com.jfoenix.validation.base.ValidatorBase;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -45,8 +36,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class InformacijeController implements Initializable{
 
-	public static Set<String> odredistaSet = new HashSet<>();
-	public static Set<String> polazistaSet = new HashSet<>();
 	private Set<String> mjestaSet = new HashSet<>();
 	private static ObservableList<Karta> karteObs = FXCollections.observableArrayList();
 	public static String nazivMjesta;
@@ -76,23 +65,19 @@ public class InformacijeController implements Initializable{
 	@FXML
 	private JFXRadioButton dolasciRadioButton;
 	@FXML
-	private JFXTextField mjesto = new JFXTextField();
-	private boolean polasci = true;
+	private JFXTextField mjestoTextField = new JFXTextField();
 	private static String daniUSedmici;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
 		karteTable.setItems(karteObs);
 		datum.setValue(LocalDate.now());
 		nazivMjesta = getNazivMjesta();
-		System.out.println("Naziv mjesta: " + nazivMjesta);
 		ucitajMjesta();
 		karteTable.setPlaceholder(new Label("Odaberite relaciju i datum"));
-		autoComplete(mjestaSet);
-		polasciRadioButton.setToggleGroup(toggleGroup);
-		dolasciRadioButton.setToggleGroup(toggleGroup);
+		Util.setAutocompleteList(mjestoTextField, mjestaSet);
 		polasciRadioButton.setSelected(true);
-		mjesto.setPromptText("Destinacija");
+		mjestoTextField.setPromptText("Destinacija");
+		
 		datum.setDayCellFactory(picker -> new DateCell() {
 	        public void updateItem(LocalDate date, boolean empty) {
 	            super.updateItem(date, empty);
@@ -100,26 +85,9 @@ public class InformacijeController implements Initializable{
 	            setDisable(empty || date.compareTo(today) < 0 );
 	        }
 	    });
-		toggleGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
-		    if (newValue == null) {
-		        oldValue.setSelected(true);
-		    }
-		    else
-		    	if(newValue.equals(polasciRadioButton)) {
-		    		karteObs.clear();
-		    		mjesto.setText("");
-		    		polasci = true;
-		    		mjesto.setPromptText("Destinacija");
-		    		
-		    	}
-		    	else {
-		    		mjesto.setText("");
-		    		karteObs.clear();
-		    		polasci  = false;
-		    		mjesto.setPromptText("Polaziste");		    		
-		    	}
-		});	
-		
+		toggleSetUp();
+		polasciRadioButton.setToggleGroup(toggleGroup);
+		dolasciRadioButton.setToggleGroup(toggleGroup);
 		nazivLinijeColumn.setCellValueFactory(new PropertyValueFactory<>("nazivLinije"));
 		vrijemePolaskaColumn.setCellValueFactory(new PropertyValueFactory<>("vrijemePolaska"));
 		vrijemeDolaskaColumn.setCellValueFactory(new PropertyValueFactory<>("vrijemeDolaska"));
@@ -127,13 +95,40 @@ public class InformacijeController implements Initializable{
 		cijenaColumn.setCellValueFactory(new PropertyValueFactory<>("cijena"));
 		peronColumn.setCellValueFactory(new PropertyValueFactory<>("peron"));
 		
-		pretragaButton.disableProperty().bind(Bindings.createBooleanBinding(
-			    () -> !mjestaSet.contains(mjesto.getText()),
-			    	mjesto.textProperty()
-			    ));
-		
+		ValidatorBase mjestoValidator = new ValidatorBase("Nekorektan unos") {
+			@Override
+			protected void eval() {
+				if(!mjestoTextField.getText().isEmpty() && !mjestaSet.contains(mjestoTextField.getText())) {
+					hasErrors.set(true);
+				} else {
+					hasErrors.set(false);
+				}
+			}
+		};
+		mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),mjestoValidator);
+	
 	}
 	
+	public void toggleSetUp() {
+		toggleGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
+		    if (newValue == null) {
+		        oldValue.setSelected(true);
+		    }
+		    else
+		    	if(newValue.equals(polasciRadioButton)) {
+		    		karteObs.clear();
+		    		mjestoTextField.clear();
+		    		mjestoTextField.setPromptText("Destinacija");
+		    		
+		    	}
+		    	else {
+		    		mjestoTextField.clear();
+		    		karteObs.clear();
+		    		mjestoTextField.setPromptText("Polaziste");		    		
+		    	}
+		});	
+	}
+
 	public boolean zadovoljavaDatumVrijeme(String daniUSedmici,Time vrijemePolaska) {
 		LocalTime localTime = LocalTime.now();
 		if(datum.getValue().equals(LocalDate.now())) {
@@ -145,62 +140,28 @@ public class InformacijeController implements Initializable{
 	
 	@FXML
 	public void getKarte() {
-		karteObs.clear();
-		Connection c = null;
-		PreparedStatement s = null;
-		ResultSet r = null;
-		String sqlQueryPolasci = "select DaniUSedmici,VrijemePolaska,NazivPrevoznika,Email,prevoznik.Adresa,WEBAdresa,Telefon,prevoznik.PostanskiBroj,NazivLinije,Peron,Polaziste,Odrediste,VrijemeDolaska,CijenaJednokratna,relacija.IdRelacije,relacija.IdLinije from linija join (relacija,prevoznik) "
-				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?)";
-		String sqlQueryDolasci = "select DaniUSedmici,VrijemePolaska,NazivPrevoznika,Email,prevoznik.Adresa,WEBAdresa,Telefon,prevoznik.PostanskiBroj,NazivLinije,Peron,Polaziste,Odrediste,VrijemeDolaska,CijenaJednokratna,relacija.IdRelacije,relacija.IdLinije from linija join (relacija,prevoznik) "
-				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Odrediste=? && Polaziste=?)";
-		
-		try {
-			c = Util.getConnection();
-			s = c.prepareStatement( (polasci)? sqlQueryPolasci: sqlQueryDolasci);
-			s.setString(1, getNazivMjesta());
-			s.setString(2, mjesto.getText());
-			r = s.executeQuery();
-			
-			if(polasci) {
-					s = c.prepareStatement(sqlQueryPolasci);
-					s.setString(1, getNazivMjesta());
-					s.setString(2, mjesto.getText());
-					r = s.executeQuery();
-					while(r.next()) {
-						daniUSedmici = r.getString(1);
-						Time vrijemePolaska = r.getTime(2);
-						if(daniUSedmici.contains(datum.getValue().getDayOfWeek().toString())) {
-							Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
-							Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10),r.getString(3));
-							Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
-							Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice());
-							System.out.println("nasao");
+		if(mjestoTextField.validate()){
+			karteObs.clear();
+			if(polasciRadioButton.isSelected()) {
+					for(Karta karta : Karta.getKarteList(nazivMjesta, mjestoTextField.getText())) {
+						daniUSedmici = karta.getLinija().getDaniUSedmici();
+						if(daniUSedmici.contains(datum.getValue().getDayOfWeek().toString()))
 							karteObs.add(karta);
-						}
-				}		
+					}	
 			}
 			else {
-				while(r.next()) {
-					daniUSedmici = r.getString(1);
-					Time vrijemePolaska = r.getTime(2);
-					if(zadovoljavaDatumVrijeme(daniUSedmici,vrijemePolaska)) {
-						Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
-						Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10),r.getString(3));
-						Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
-						Karta karta = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice());
-						System.out.println("nasao");
+				for(Karta karta : Karta.getKarteList(mjestoTextField.getText(),nazivMjesta)) {
+					daniUSedmici = karta.getLinija().getDaniUSedmici();
+					Time vrijemePolaska = karta.getVrijemePolaska();
+					System.out.println(karta.getVrijemePolaska());
+					if(zadovoljavaDatumVrijeme(daniUSedmici, vrijemePolaska))
 						karteObs.add(karta);
-					}
 				}
 			}
-			
-			} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			}
-		if(karteObs.isEmpty())
-			showPrazanSetAlert();
-		Util.close(r, s, c);
+			if(karteObs.isEmpty())
+				showPrazanSetAlert();
+		} 
+		
 	}
 
 	public void showPrazanSetAlert() {
@@ -212,49 +173,29 @@ public class InformacijeController implements Initializable{
 
 	}
 	public void ucitajMjesta() {
-		// TODO Auto-generated method stub
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
+		String sql = "select distinct Naziv from mjesto where Naziv!=?";
 		try {
 			c = Util.getConnection();
-			s = c.prepareStatement("select distinct Naziv from mjesto where Naziv!=?");
-			s.setString(1,nazivMjesta);
+			s = Util.prepareStatement(c, sql, false, nazivMjesta);
 			r = s.executeQuery();
 			while(r.next()) {
 				mjestaSet.add(r.getString(1));
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Util.close(r, s, c);
+		finally {
+			Util.close(r, s, c);
+		}
 	}
 
-
-	public void autoComplete(Set<String> polazistaSet2) {
-		JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
-		autoCompletePopup.getSuggestions().clear();
-	    autoCompletePopup.getSuggestions().addAll(polazistaSet2);
-	    autoCompletePopup.setSelectionHandler(event -> {
-	        mjesto.setText(event.getObject());
-	    });
-	     
-	    mjesto.textProperty().addListener(observable -> {
-	        autoCompletePopup.filter(string -> string.toLowerCase().contains(mjesto.getText().toLowerCase()));
-	        if (autoCompletePopup.getFilteredSuggestions().isEmpty() || mjesto.getText().isEmpty()) {
-	            autoCompletePopup.hide();
-	        } else {
-	            autoCompletePopup.show(mjesto);
-	        }
-	    });
-		
-	}
-
+	
 
 	public String getNazivMjesta() {
-		// TODO Auto-generated method stub
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
@@ -263,20 +204,16 @@ public class InformacijeController implements Initializable{
 				"where (autobuska_stanica.JIBStanice=?)";
 		try {
 			c = Util.getConnection();
-			s = c.prepareStatement(sql);
-			s.setString(1, PrijavaController.nalog.getIdStanice());
+			s = Util.prepareStatement(c, sql, false, PrijavaController.nalog.getIdStanice());
 			r = s.executeQuery();
-			while(r.next()) {
+			if(r.next())
 				return r.getString(1);
-				
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		finally {
+			Util.close(r, s, c);
+		}
 		return null;
 	}
-
-
-
-
 }

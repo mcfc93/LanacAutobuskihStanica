@@ -1,11 +1,14 @@
 package org.unibl.etf.karta;
 
 import java.io.File;
-import java.sql.Date;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
 
-import org.unibl.etf.zaposleni.Zaposleni;
+import org.unibl.etf.salterski_radnik.ProdajaKarataController;
+import org.unibl.etf.util.Util;
 
 public class MjesecnaKarta extends Karta {
 	private String ime;
@@ -16,7 +19,6 @@ public class MjesecnaKarta extends Karta {
 	public MjesecnaKarta(int idKarte, Linija linija, Relacija relacija, Time vrijemePolaska, Time vrijemeDolaska,
 			double cijena, LocalDate datumIzdavanja, Prevoznik prevoznik, String imeZaposlenog,String ime,String prezime,TipKarte tip,File slika,String JIBStanice) {
 		super(linija, relacija, vrijemePolaska, vrijemeDolaska, cijena, datumIzdavanja, prevoznik, imeZaposlenog,JIBStanice);
-		// TODO Auto-generated constructor stub
 		this.ime = ime;
 		this.prezime = prezime;
 		this.tip = tip;
@@ -56,6 +58,23 @@ public class MjesecnaKarta extends Karta {
 				+ ", prevoznik=" + prevoznik + ", imeZaposlenog=" + imeZaposlenog + ", peron=" + peron
 				+ ", nazivPrevoznika=" + nazivPrevoznika + ", nazivLinije=" + nazivLinije + "]";
 	}
+
+	
+	public static void kreirajKartu(Karta karta, int brojSjedista, LocalDate datum, String ime, String prezime, TipKarte tip,	String slikaPath) {
+		Karta.kreirajKartu(karta, brojSjedista, datum);
+		Connection c = null;
+		PreparedStatement s = null;
+		String sql = "insert into mjesecna_karta value (default,?,?,?,?,?,?)";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, karta.getCijena(), ime, prezime, slikaPath, tip.toString(), ProdajaKarataController.idKarte);
+			System.out.println(s.executeUpdate());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	
 	
 		

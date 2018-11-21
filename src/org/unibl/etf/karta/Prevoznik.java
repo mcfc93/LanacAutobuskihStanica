@@ -1,5 +1,14 @@
 package org.unibl.etf.karta;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.unibl.etf.util.Util;
+
 public class Prevoznik {
 	private String naziv;
 	private String email;
@@ -42,7 +51,6 @@ public class Prevoznik {
 	}
 	
 	public Prevoznik(String naziv, String jib) {
-		// TODO Auto-generated constructor stub
 		this.naziv = naziv;
 		this.JIBPrevoznika = jib;
 	}
@@ -104,12 +112,91 @@ public class Prevoznik {
 
 	@Override
 	public String toString() {
-		return "Prevoznik [naziv=" + naziv + ", email=" + email + ", adresa=" + adresa + ", telefon=" + telefon
-				+ ", postanskiBroj=" + postanskiBroj + ", webAdresa=" + webAdresa + ", JIBPrevoznika=" + JIBPrevoznika
-				+ ", racun=" + racun + "]";
+		return naziv;
 	}
 
+	public static List<Prevoznik> getPrevozniciList() {
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		List<Prevoznik> prevoznikList = new ArrayList<>();
+		String sql =  "select JIBPrevoznika,NazivPrevoznika,Telefon,Email,WebAdresa,TekuciRacun,Adresa,prevoznik.PostanskiBroj,Naziv from prevoznik join mjesto on (prevoznik.PostanskiBroj=mjesto.PostanskiBroj) where Stanje='Aktivno'";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false);
+			r = s.executeQuery();
+			while(r.next()) {
+				prevoznikList.add(new Prevoznik(r.getString("NazivPrevoznika"), r.getString("Email"), r.getString("Adresa"), r.getString("Telefon"), r.getInt("prevoznik.PostanskiBroj"), r.getString("WebAdresa"), r.getString("JIBPrevoznika"), r.getString("TekuciRacun")));
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			Util.close(r, s, c);
+		}
+		return prevoznikList;
+	}
 	
+	public static boolean izbrisiPrevoznika(Prevoznik prevoznik) {
+		Connection c = null;
+		PreparedStatement s = null;
+		String sql = "update prevoznik set Stanje='Izbrisano' where JIBPrevoznika=?";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, prevoznik.getJIBPrevoznika());
+			if(s.executeUpdate()==1)
+				return true;
+			else
+				return false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		finally {
+			Util.close(s, c);
+		}
+		return false;
+	}
 	
+	public static boolean izmjeniPrevoznika(String naziv,String telefon,String email,String webAdresa,String tekuciRacun,String adresa,String postanskiBroj,String jib) {
+		Connection c = null;
+		String sql = "update prevoznik "
+				+ "set NazivPrevoznika=?,Telefon=?,Email=?,WebAdresa=?,TekuciRacun=?,Adresa=?,PostanskiBroj=? "
+				+ "where JIBPrevoznika=?";
+		PreparedStatement s = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, naziv,telefon,email,
+					webAdresa,tekuciRacun,adresa,Integer.parseInt(postanskiBroj),jib);
+			if(s.executeUpdate()==1)
+				return true;
+			return false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			Util.close(s, c);
+		}
+		return false;
+	}
+
+	public static boolean dodajPrevoznika(String jib, String naziv, String telefon, String email, String webAdresa,
+			String tekuciRacun, String adresa, int postanskiBroj) {
+		
+		String sql = "insert into prevoznik value (?,?,?,?,?,?,?,?,default)";
+		Connection c = null;
+		PreparedStatement s = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, jib, naziv, telefon, email, webAdresa, tekuciRacun, adresa, postanskiBroj);
+			s.execute();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return false;
+	}
 	
 }

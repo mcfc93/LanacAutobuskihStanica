@@ -16,9 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -46,9 +44,11 @@ public class AdministrativniRadnikController implements Initializable {
 	@FXML
 	private ToggleButton izmjenaPrevoznikaButton = new ToggleButton();	
 	@FXML
-	private ToggleButton dodavanjeLinijaButton = new ToggleButton();;
+	private ToggleButton dodavanjeLinijaButton = new ToggleButton();
 	@FXML
-	private ToggleButton dodavanjePrevoznikaButton = new ToggleButton();;
+	private ToggleButton dodavanjePrevoznikaButton = new ToggleButton();
+	@FXML
+	private ToggleButton radSaNalogomButton = new ToggleButton();
 	
 	private double xOffset=0;
     private double yOffset=0;
@@ -56,7 +56,7 @@ public class AdministrativniRadnikController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " + PrijavaController.nalog.getZaposleni().getPrezime());
-		
+
 		//DragAndDrop
 		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
@@ -91,20 +91,13 @@ informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " +
 		    }
 		});
 		
-		/**********************************************
-		 * OVDJE DODAJES METODU SA PRVOG BUTTON
-		 * KOJA CE SE AUTOMATSKI POKRETATI KAD SE
-		 * OTVORI FORMA
-		 * 
-		 * startMethod(null);
-		 * 
-		 **********************************************/
+
 		radSaLinijama();
 	}
 	@FXML
 	public void radSaPrevoznicima() {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/IzmjenaPrevoznika.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/ListaPrevoznika.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
 			AnchorPane.setBottomAnchor(root,0.0);
 			AnchorPane.setLeftAnchor(root,0.0);
@@ -118,9 +111,23 @@ informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " +
 	
 	@FXML
 	public void radSaLinijama() {
-		// TODO Auto-generated method stub
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/RadSaLinijama.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/ListaLinija.fxml"));
+			AnchorPane.setTopAnchor(root,0.0);
+			AnchorPane.setBottomAnchor(root,0.0);
+			AnchorPane.setLeftAnchor(root,0.0);
+			AnchorPane.setRightAnchor(root,0.0);
+			dataAnchorPane.getChildren().removeAll();
+			dataAnchorPane.getChildren().setAll(root);
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+	}
+	
+	@FXML
+	void korisnickiNalog(ActionEvent event) {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/prijava/UpravljanjeKorisnickimNalogom.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
 			AnchorPane.setBottomAnchor(root,0.0);
 			AnchorPane.setLeftAnchor(root,0.0);
@@ -134,7 +141,6 @@ informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " +
 	
 	@FXML
 	public void dodavanjePrevoznika() {
-		// TODO Auto-generated method stub
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/DodavanjePrevoznika.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
@@ -149,7 +155,6 @@ informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " +
 	}
 	@FXML
 	public void dodavanjeLinija() {
-		// TODO Auto-generated method stub
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/DodavanjeLinija.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
@@ -165,7 +170,6 @@ informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " +
 
 	@FXML
 	public void izmjenaPrevoznika() {
-		// TODO Auto-generated method stub
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/IzmjenaPrevoznika.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);

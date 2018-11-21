@@ -1,6 +1,11 @@
 package org.unibl.etf.karta;
 
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.unibl.etf.util.Util;
 
 public class Linija {
 	private int idLinije;
@@ -43,8 +48,9 @@ public class Linija {
 		this.peron = peron;
 		this.nazivPrevoznika = nazivPrevoznika;
 	}
-	
-	
+	public Linija() {
+	}
+
 	public String getNazivPrevoznika() {
 		return nazivPrevoznika;
 	}
@@ -117,13 +123,89 @@ public class Linija {
 	}
 
 
+
 	@Override
 	public String toString() {
-		return nazivLinije;
+		return "Linija [idLinije=" + idLinije + ", nazivLinije=" + nazivLinije + ", idStanice=" + idStanice
+				+ ", daniUSedmici=" + daniUSedmici + ", peron=" + peron + ", nazivPrevoznika=" + nazivPrevoznika
+				+ ", stanje=" + stanje + "]";
+	}
+
+	public static int dodajLiniju(String naziv, int peron, String jibPrevoznika, String daniString) {
+		String sql = "insert into linija value (default,?,?,?,?,default)";
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, true, naziv,peron,jibPrevoznika,daniString);
+			if(s.executeUpdate()==1) { 
+				r = s.getGeneratedKeys();
+				if(r.next()) 
+					return(r.getInt(1));
+				else
+					return 0;
+			}
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
+		finally {
+			Util.close(r,s, c);
+		}
+		return 0;
+	}
+
+	public static boolean izmjeniLiniju(Linija odabranaLinija, String naziv, int peron, String daniString,
+			String stanje) {
+		String sql = "update linija set NazivLinije=?, Peron=?, DaniUSedmici=?, Stanje=? where IdLinije=?";
+		Connection c = null;
+		PreparedStatement s = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, naziv, peron, daniString, stanje, odabranaLinija.getIdLinije());
+			if(s.executeUpdate()==1)
+				return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			Util.close(s, c);
+		}
+		
+		
+		return false;
 	}
 
 
-	
+	public static boolean deaktivirajLiniju(int idLinije) {
+		String sql = "update linija set Stanje='Blokirano' where IdLinije=?";
+		Connection c = null;
+		PreparedStatement s = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, idLinije);
+			System.out.println(s.execute());
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public static boolean izbrisiLiniju(Linija linija) {
+		String sql = "update linija set Stanje='Izbrisano' where IdLinije=?";
+		Connection c = null;
+		PreparedStatement s = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, linija.getIdLinije());
+			System.out.println(s.execute());
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 	
 	
 	

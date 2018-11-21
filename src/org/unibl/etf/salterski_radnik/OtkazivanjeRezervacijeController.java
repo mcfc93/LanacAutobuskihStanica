@@ -3,24 +3,29 @@ package org.unibl.etf.salterski_radnik;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
+import org.unibl.etf.karta.Karta;
 import org.unibl.etf.util.Util;
-
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 public class OtkazivanjeRezervacijeController implements Initializable {
 
-	private int serijskiBroj;
 	@FXML
 	private JFXTextField serijskiBrojTextField = new JFXTextField();
 	@FXML
@@ -35,74 +40,92 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 	private TextField datumTextField = new TextField();
 	@FXML
 	private TextField cijenaTextField  = new TextField();
-	
+	@FXML
+	private ImageView checkMarkImageView = new ImageView();
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		
+		serijskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(serijskiBrojTextField),Util.integerValidator(serijskiBrojTextField));
+		checkMarkImageView.setVisible(false);
 	}
 	
 	@FXML
 	public void pretragaKarata() {
-		Connection c = null;
-		PreparedStatement s = null;
-		ResultSet r = null;
-		String sql = "select karta.SerijskiBroj,karta.Cijena,relacija.Polaziste,relacija.Odrediste,linija.NazivLinije,karta.Datum from karta "
-				+ "join (relacija,linija) on (karta.IdRelacije=relacija.IdRelacije) and (relacija.IdLinije=linija.IdLinije) "
-				+ " where karta.SerijskiBroj=?";
-		try {
-			c = Util.getConnection();
-			s = c.prepareStatement(sql);
-			System.out.println("Serijski broj: " + serijskiBrojTextField.getText());
-			s.setInt(1, Integer.parseInt(serijskiBrojTextField.getText()));
-			r = s.executeQuery();
-			if(r.next()) {
-				serijskiBroj = r.getInt(1);
-				System.out.println("Serial : " + serijskiBroj);
-				cijenaTextField.setText(String.valueOf(r.getDouble(2)));
-				relacijaTextField.setText(r.getString(4) + " - " + r.getString(3));
-				datumTextField.setText(r.getDate(6).toString());
-				linijaTextField.setText(r.getString(5));
-				
-			}
-			else {
-				showAlertPogresanSerijskiBroj();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		if(serijskiBrojTextField.validate())
+		{
+			Karta trazenaKarta = Karta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
+			System.out.println(trazenaKarta);
+			cijenaTextField.setText(trazenaKarta.getCijena()  + "KM");
+			relacijaTextField.setText(trazenaKarta.getRelacija().getPolaziste() + " - " + trazenaKarta.getRelacija().getOdrediste());
+			datumTextField.setText(trazenaKarta.getDatumIzdavanja().toString());
+			linijaTextField.setText(trazenaKarta.getLinija().getNazivLinije());				
+				}
+			else 
+				showAlertPogresanSerijskiBroj();	
+	
+	
 	}
 	
-	private void showAlertPogresanSerijskiBroj() {
+	public void showAlertPogresanSerijskiBroj() {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("GRESKA");
 			alert.setHeaderText("Pogresan serijski broj!");
 			alert.showAndWait();
 		}
 		
-	
+	public boolean showPotvrda() {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Kupovina");
+		alert.setHeaderText("Da li ste sigurni?");
+		Optional<ButtonType> action = alert.showAndWait();
+		return action.get().equals(ButtonType.OK);
+	}
 
 	@FXML
 	public void storniraj() {
-		Connection c = null;
-		PreparedStatement s = null;
-		String sql = "delete from karta where SerijskiBroj=?";
-		try {
-			c = Util.getConnection();
-			s = c.prepareStatement(sql);
-			s.setInt(1, serijskiBroj);
-			System.out.println(s.executeUpdate());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		finally {
-			Util.close(s, c);
-		}
-		cijenaTextField.setText("");
-		relacijaTextField.setText("");
-		datumTextField.setText("");
-		linijaTextField.setText("");
-		serijskiBrojTextField.setText("");
+			if(showPotvrda()) {
+				Connection c = null;
+				PreparedStatement s1 = null;
+				PreparedStatement s2 = null;
+				String sqlKarta = "update karta set Stanje='Izbrisano' where SerijskiBroj=?";
+				String sqlRezervacija = "update rezervacija set Stanje='Izbrisano' where SerijskiBroj=?";
+				try {
+					c = Util.getConnection();
+					s1 = Util.prepareStatement(c, sqlKarta, false, Integer.parseInt(serijskiBrojTextField.getText()));
+					s2 = Util.prepareStatement(c, sqlRezervacija, false, Integer.parseInt(serijskiBrojTextField.getText()));
+					if(s1.executeUpdate()==1 && s2.executeUpdate()==1)
+						showCheckMark();
+					s2.close();
+
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				finally {
+					Util.close(s1, c);
+				}
+				cijenaTextField.clear();
+				relacijaTextField.clear();
+				datumTextField.clear();
+				linijaTextField.clear();
+				serijskiBrojTextField.clear();
+				serijskiBrojTextField.resetValidation();
+			}
+	
+	}
+
+	
+	public void showCheckMark() {
+		// TODO Auto-generated method stub
+		checkMarkImageView.setVisible(true);
+		Timeline timeline = new Timeline();
+		timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(3),
+				new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent event) {
+	            checkMarkImageView.setVisible(false);
+	        }
+	    }));
+		timeline.play();
 	}
 }

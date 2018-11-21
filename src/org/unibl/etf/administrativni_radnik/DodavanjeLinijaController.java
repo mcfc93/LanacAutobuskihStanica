@@ -4,30 +4,27 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Time;
 import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.karta.Linija;
 import org.unibl.etf.karta.Prevoznik;
-import org.unibl.etf.prijava.PrijavaController;
+import org.unibl.etf.karta.Relacija;
 import org.unibl.etf.util.Util;
-
-import com.jfoenix.controls.JFXAutoCompletePopup;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
+import com.jfoenix.validation.base.ValidatorBase;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -39,7 +36,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import javafx.scene.control.Alert.AlertType;
@@ -51,7 +48,10 @@ public class DodavanjeLinijaController implements Initializable {
 	public static String daniString="";
 	public static ObservableList<Integer> peroni = FXCollections.observableArrayList();
 	public static List<String> mjestaList = new ArrayList<>();
-	
+	private static int idLinije;
+
+	@FXML
+	private ImageView questionMarkImageView = new ImageView();
 	@FXML
 	private JFXButton gotovoButton = new JFXButton();
 	@FXML
@@ -79,7 +79,7 @@ public class DodavanjeLinijaController implements Initializable {
 	@FXML
 	private JFXTimePicker vrijemeDolaska = new JFXTimePicker();
 	@FXML
-	private ImageView checkMark = new ImageView();
+	private ImageView checkMarkImageView = new ImageView();
 	@FXML
 	private JFXCheckBox ponedjeljakCB = new JFXCheckBox();
 	@FXML
@@ -94,67 +94,75 @@ public class DodavanjeLinijaController implements Initializable {
 	private JFXCheckBox subotaCB = new JFXCheckBox();
 	@FXML
 	private JFXCheckBox nedjeljaCB = new JFXCheckBox();
-	private static int idLinije;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		//setCB(true);
-		dodajLinijuButton.disableProperty().bind(Bindings.isEmpty(nazivLinijeTextField.textProperty()));
-		cijenaJednokratnaTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,7}([\\.]\\d{0,4})?")) {
-                    cijenaJednokratnaTextField.setText(oldValue);
-                }
-            }
-        });
-		cijenaMjesecnaTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,7}([\\.]\\d{0,4})?")) {
-                    cijenaMjesecnaTextField.setText(oldValue);
-                }
-            }
-        });
-		checkMark.setVisible(false);
+		questionMarkImageView.setPickOnBounds(true);
+		Tooltip.install(questionMarkImageView, new Tooltip("Ostavite prazno ako nema u ponudi."));
+		dodajRelacijuButton.setDisable(true);
+		checkMarkImageView.setVisible(false);
 		gotovoButton.setVisible(false);
 		relacijeDisable(true);
 		ucitajMjesta();
 		checkBoxInit();
 		loadCBListeners();
 		dodajteRelacijeLabel.setVisible(false);
-		ucitajPrevoznike();
-		int brojPerona = getBrojPerona();
+		int brojPerona = AutobuskaStanica.getBrojPeronaStanice();
 		for(int i=1;i<=brojPerona;++i)
 			peroni.add(i);
 		peroniComboBox.setItems(peroni);
 		peroniComboBox.getSelectionModel().selectFirst();
+		prevozniciObs.setAll(Prevoznik.getPrevozniciList());
 		prevozniciComboBox.setItems(prevozniciObs);
-		prevozniciComboBox.getSelectionModel().selectFirst();
+		prevozniciComboBox.getSelectionModel().selectFirst();		
+		validateSetUp();
 		
-		dodajRelacijuButton.disableProperty().bind(Bindings.createBooleanBinding(
-			    () -> !mjestaList.contains(odredisteTextField.getText()) || 
-			    		!mjestaList.contains(polazisteTextField.getText()) ||
-			    		cijenaJednokratnaTextField.getText().isEmpty() ||
-			    		cijenaMjesecnaTextField.getText().isEmpty() ||
-			    		odredisteTextField.getText().equals(polazisteTextField.getText()),
-			    		
-			    	odredisteTextField.textProperty(),
-			    	polazisteTextField.textProperty(),
-			    	cijenaJednokratnaTextField.textProperty(),
-			    	cijenaMjesecnaTextField.textProperty()
-			    ));	}
+	}
 
+	public void validateSetUp() {
+		nazivLinijeTextField.getValidators().add(Util.requredFieldValidator(nazivLinijeTextField));
+		polazisteTextField.getValidators().add(Util.requredFieldValidator(polazisteTextField));
+		odredisteTextField.getValidators().add(Util.requredFieldValidator(odredisteTextField));
+		cijenaJednokratnaTextField.getValidators().addAll(Util.requredFieldValidator(cijenaJednokratnaTextField),Util.doubleValidator(cijenaJednokratnaTextField));
+		cijenaMjesecnaTextField.getValidators().add(Util.doubleValidator(cijenaMjesecnaTextField));
+		
+		
+		ValidatorBase odredisteValidator = new ValidatorBase("Nekorektan unos") {
+			@Override
+			protected void eval() {
+				if(!odredisteTextField.getText().isEmpty() && !mjestaList.contains(odredisteTextField.getText())) {
+					hasErrors.set(true);
+				} else {
+					hasErrors.set(false);
+				}
+			}
+		};
+		ValidatorBase polazisteValidator = new ValidatorBase("Nekorektan unos") {
+			@Override
+			protected void eval() {
+				if((!polazisteTextField.getText().isEmpty() && !mjestaList.contains(polazisteTextField.getText()))) {
+					hasErrors.set(true);
+				} else {
+					hasErrors.set(false);
+				}
+			}
+		};
+		Util.setAutocompleteList(polazisteTextField, mjestaList);
+		Util.setAutocompleteList(odredisteTextField, mjestaList);
+		
+		polazisteTextField.getValidators().addAll(Util.requredFieldValidator(polazisteTextField),polazisteValidator);
+		odredisteTextField.getValidators().addAll(Util.requredFieldValidator(odredisteTextField),odredisteValidator);
+	}
 
 	public void relacijeDisable(boolean b) {
-		// TODO Auto-generated method stub
 		polazisteTextField.setDisable(b);
 		odredisteTextField.setDisable(b);
 		cijenaJednokratnaTextField.setDisable(b);
 		cijenaMjesecnaTextField.setDisable(b);
 		vrijemeDolaska.setDisable(b);
 		vrijemePolaska.setDisable(b);
+		dodajRelacijuButton.setDisable(b);
+		questionMarkImageView.setDisable(b);
 	}
-
 
 	public void ucitajMjesta() {
 		Connection c = null;
@@ -174,56 +182,9 @@ public class DodavanjeLinijaController implements Initializable {
 		finally {
 			Util.close(r, s, c);
 		}
-		autoCompletePolaziste();
-		autoCompleteOdrediste();
 	}
-
-
-	private void autoCompleteOdrediste() {
-		// TODO Auto-generated method stub
-		JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
-		autoCompletePopup.getSuggestions().clear();
-	    autoCompletePopup.getSuggestions().addAll(mjestaList);
-	    autoCompletePopup.setSelectionHandler(event -> {
-	        odredisteTextField.setText(event.getObject());
-	    });
-	     
-	    odredisteTextField.textProperty().addListener(observable -> {
-	        autoCompletePopup.filter(string -> string.toLowerCase().contains(odredisteTextField.getText().toLowerCase()));
-	        if (autoCompletePopup.getFilteredSuggestions().isEmpty() || odredisteTextField.getText().isEmpty()) {
-	            autoCompletePopup.hide();
-	        } else {
-	            autoCompletePopup.show(odredisteTextField);
-	        }
-	    });
-	}
-
-
-	public void autoCompletePolaziste() {
-		// TODO Auto-generated method stub
-		JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
-		autoCompletePopup.getSuggestions().clear();
-	    autoCompletePopup.getSuggestions().addAll(mjestaList);
-	    autoCompletePopup.setSelectionHandler(event -> {
-	        polazisteTextField.setText(event.getObject());
-	    });
-	     
-	    polazisteTextField.textProperty().addListener(observable -> {
-	        autoCompletePopup.filter(string -> string.toLowerCase().contains(polazisteTextField.getText().toLowerCase()));
-	        if (autoCompletePopup.getFilteredSuggestions().isEmpty() || polazisteTextField.getText().isEmpty()) {
-	            autoCompletePopup.hide();
-	        } else {
-	            autoCompletePopup.show(polazisteTextField);
-	        }
-	    });
-	
-	    
-	    
-	}
-
 
 	public void checkBoxInit() {
-		// TODO Auto-generated method stub
 		ponedjeljakCB.setSelected(true);
 		utorakCB.setSelected(true);
 		srijedaCB.setSelected(true);
@@ -238,58 +199,9 @@ public class DodavanjeLinijaController implements Initializable {
 		daniUSedmiciList.add("FRIDAY");
 		daniUSedmiciList.add("SATURDAY");
 		daniUSedmiciList.add("SUNDAY");
-		
 	}
-
-
-	private int getBrojPerona() {
-		Connection c = null;
-		PreparedStatement s = null;
-		ResultSet r = null;
-		String sql = "select BrojPerona from autobuska_stanica where JIBStanice=?";
-		try {
-			c = Util.getConnection();
-			s = c.prepareStatement(sql);
-			s.setString(1, PrijavaController.nalog.getIdStanice());
-			r = s.executeQuery();
-			if(r.next()) {
-				return r.getInt(1);
-			}
-			else
-				return 0;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		finally {
-			Util.close(r, s, c);
-		}
-		return 0;
-	}
-
-
-	public void ucitajPrevoznike() {
-		String sql = "select NazivPrevoznika,JIBPrevoznika from prevoznik where Stanje='Aktivno'";
-		Connection c = null;
-		PreparedStatement s = null;
-		ResultSet r = null;
-		try {
-			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false);
-			r = s.executeQuery();
-			while(r.next()) {
-				prevozniciObs.add(new Prevoznik(r.getString("NazivPrevoznika"),r.getString("JIBPrevoznika")));
-			}
-		} catch (SQLException e) {
-			// TODO: handle exception
-		}
-		finally {
-			Util.close(r, s, c);
-		}
-	}
-
 
 	public void mapiranjeDana() {
-		System.out.println("Velicina niza: " + daniUSedmiciList.size());
 		if(daniUSedmiciList.size()==1) {
 			daniString += daniUSedmiciList.get(0);
 			return;
@@ -322,6 +234,7 @@ public class DodavanjeLinijaController implements Initializable {
 			daniUSedmiciList.add("SUNDAY");
 		
 	}
+	
 	public boolean showPotvrda() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("");
@@ -330,36 +243,31 @@ public class DodavanjeLinijaController implements Initializable {
 		return action.get().equals(ButtonType.OK);
 	}
 	
+	public void disableCheckBox(boolean b) {
+		ponedjeljakCB.setDisable(b);
+		utorakCB.setDisable(b);
+		srijedaCB.setDisable(b);
+		cetvrtakCB.setDisable(b);
+		petakCB.setDisable(b);
+		subotaCB.setDisable(b);
+		nedjeljaCB.setDisable(b);
+		
+	}
 	@FXML
 	public void dodajLiniju() {
-		if(showPotvrda()) {
-			mapiranjeDana();
-			dodajteRelacijeLabel.setVisible(true);
-			System.out.println("Dani: " + daniString);
-			String sql = "insert into linija value (default,?,?,?,?,default)";
-			Connection c = null;
-			PreparedStatement s = null;
-			ResultSet r = null;
-			try {
-				c = Util.getConnection();
-				s = Util.prepareStatement(c, sql, true, nazivLinijeTextField.getText(),peroniComboBox.getValue(),prevozniciComboBox.getValue().getJIBPrevoznika(),daniString);
-				System.out.println(s.executeUpdate());
-				r = s.getGeneratedKeys();
-				if(r.next()) {
-					System.out.println("Kljuc: " + r.getInt(1));
-					idLinije = r.getInt(1);
-				}
-			} catch (SQLException e) {
-			e.printStackTrace();
+		if(nazivLinijeTextField.validate()) {
+			if(showPotvrda()) {
+				disableCheckBox(true);
+				mapiranjeDana();
+				dodajRelacijuButton.setDisable(false);
+				dodajteRelacijeLabel.setVisible(true);
+				dodajLinijuButton.setDisable(true);
+				idLinije = 	Linija.dodajLiniju(nazivLinijeTextField.getText(),peroniComboBox.getValue(),prevozniciComboBox.getValue().getJIBPrevoznika(),daniString);
+				nazivLinijeTextField.setDisable(true);
+				daniString="";
+				showDodajteRelacije();
+				relacijeDisable(false);
 			}
-			finally {
-				Util.close(r,s, c);
-			}
-			setCB(true);
-			nazivLinijeTextField.clear();
-			daniString="";
-			showDodajteRelacije();
-			relacijeDisable(false);
 		}
 	}
 	
@@ -375,23 +283,30 @@ public class DodavanjeLinijaController implements Initializable {
 	}
 
 	public void gotovUnos() {
+		disableCheckBox(false);
+		dodajRelacijuButton.setDisable(true);
 		checkBoxInit();
 		gotovoButton.setVisible(false);
 		nazivLinijeTextField.setDisable(false);
 		prevozniciComboBox.setDisable(false);
 		peroniComboBox.setDisable(false);
 		nazivLinijeTextField.clear();
-		prevozniciComboBox.setValue(null);
+		prevozniciComboBox.getSelectionModel().selectFirst();
 		peroniComboBox.setValue(1);
 		polazisteTextField.clear();
 		odredisteTextField.clear();
 		cijenaJednokratnaTextField.clear();
 		cijenaMjesecnaTextField.clear();
 		relacijeDisable(true);
+		dodajLinijuButton.setDisable(false);
+		polazisteTextField.resetValidation();
+		odredisteTextField.resetValidation();
+		cijenaJednokratnaTextField.resetValidation();
+		cijenaMjesecnaTextField.resetValidation();
+		nazivLinijeTextField.resetValidation();
 	}
 
 	public void loadCBListeners() {
-		// TODO Auto-generated method stub
 		ponedjeljakCB.selectedProperty().addListener(new ChangeListener<Boolean>() {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -462,58 +377,46 @@ public class DodavanjeLinijaController implements Initializable {
 	}
 	
 	public boolean vrijemeValidno() {
-		return vrijemePolaska.getValue()!=null && vrijemeDolaska.getValue()!=null && !vrijemeDolaska.getValue().equals(vrijemePolaska.getValue()) && !vrijemeDolaska.getValue().isBefore(vrijemePolaska.getValue());
+		return vrijemePolaska.getValue()!=null && vrijemeDolaska.getValue()!=null && !vrijemeDolaska.getValue().equals(vrijemePolaska.getValue());
 	}
+	
 	@FXML
 	public void dodajRelaciju() {
 		if(!vrijemeValidno()) {
 			showVrijemeNijeValidno();
 			return;
 		}
-		mapiranjeDana();
-		String sql = "insert into relacija value (default,?,?,?,?,?,?,?)";
-		Connection c = null;
-		PreparedStatement s = null;
-		try {
-			c = Util.getConnection();
-			s = c.prepareStatement(sql);
-			s.setInt(1, idLinije);
-			s.setString(2, polazisteTextField.getText());
-			s.setString(3, odredisteTextField.getText());
-			s.setTime(4, Time.valueOf(vrijemePolaska.getValue()));
-			s.setTime(5, Time.valueOf(vrijemeDolaska.getValue()));
-			s.setDouble(6, Double.parseDouble(cijenaJednokratnaTextField.getText()));
-			if(cijenaMjesecnaTextField.getText().isEmpty())
-				s.setDouble(7, 0);
-			else
-				s.setDouble(7, Double.parseDouble(cijenaMjesecnaTextField.getText()));
-			System.out.println(s.executeUpdate());
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		finally {
-			Util.close(s, c);
-		}
-		checkMark.setVisible(true);
-		Timeline timeline = new Timeline();
-		timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(3),
-		    new EventHandler<ActionEvent>() {
-
-		        @Override
-		        public void handle(ActionEvent event) {
-		            checkMark.setVisible(false);
+		if(polazisteTextField.validate() & 
+				odredisteTextField.validate() & 
+					cijenaJednokratnaTextField.validate() & 
+						((cijenaMjesecnaTextField.getText().isEmpty())? true : cijenaMjesecnaTextField.validate())){
+			mapiranjeDana();
+			Relacija.dodajRelaciju(idLinije,polazisteTextField.getText(),odredisteTextField.getText(),Time.valueOf(vrijemePolaska.getValue()),
+								Time.valueOf(vrijemeDolaska.getValue()),Double.parseDouble(cijenaJednokratnaTextField.getText()),
+								cijenaMjesecnaTextField.getText());	
+			checkMarkImageView.setVisible(true);
+			Timeline timeline = new Timeline();
+			timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(3),
+					new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent event) {
+							checkMarkImageView.setVisible(false);
 		        }
 		    }));
-		timeline.play();
-		polazisteTextField.clear();
-		odredisteTextField.clear();
-		vrijemePolaska.setValue(null);
-		vrijemeDolaska.setValue(null);
-		cijenaJednokratnaTextField.clear();
-		cijenaMjesecnaTextField.clear();
+			timeline.play();
+			
+			vrijemePolaska.setValue(null);
+			vrijemeDolaska.setValue(null);
+			polazisteTextField.clear();
+			odredisteTextField.clear();
+			cijenaJednokratnaTextField.clear();
+			cijenaMjesecnaTextField.clear();
+			cijenaJednokratnaTextField.resetValidation();
+			cijenaMjesecnaTextField.resetValidation();
+			polazisteTextField.resetValidation();
+			odredisteTextField.resetValidation();
 	}
-
+	}
 
 	public void showVrijemeNijeValidno() {
 		Alert alert = new Alert(AlertType.ERROR);

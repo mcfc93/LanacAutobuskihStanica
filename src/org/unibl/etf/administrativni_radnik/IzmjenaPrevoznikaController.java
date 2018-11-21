@@ -1,138 +1,88 @@
 package org.unibl.etf.administrativni_radnik;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-
-import org.unibl.etf.karta.Linija;
 import org.unibl.etf.karta.Prevoznik;
 import org.unibl.etf.util.Util;
-
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-public class IzmjenaPrevoznikaController implements Initializable {
-
-	public static ObservableList<Prevoznik> prevozniciObsList = FXCollections.observableArrayList();
+public class IzmjenaPrevoznikaController implements Initializable{
 	
 	@FXML
-	private TableView<Prevoznik> prevozniciTableView = new TableView<>();
+	private JFXTextField nazivTextField = new JFXTextField();
 	@FXML
-	private TableColumn<Prevoznik,String> nazivColumn = new TableColumn<>();
+	private JFXTextField adresaTextField = new JFXTextField();
 	@FXML
-	private TableColumn<Prevoznik,String> adresaColumn = new TableColumn<>();
+	private JFXTextField emailTextField = new JFXTextField();
 	@FXML
-	private TableColumn<Prevoznik,String> telefonColumn = new TableColumn<>();
+	private JFXTextField telefonTextField = new JFXTextField();
 	@FXML
-	private TableColumn<Prevoznik,String> racunColumn = new TableColumn<>();
+	private JFXTextField webAdresaTextField = new JFXTextField();
 	@FXML
-	private TableColumn<Prevoznik,String> emailColumn = new TableColumn<>();
+	private JFXTextField tekuciRacunTextField = new JFXTextField();
 	@FXML
-	private TableColumn<Prevoznik,Prevoznik> izmijeniColumn = new TableColumn<>();
+	private JFXTextField postanskiBrojTextField = new JFXTextField();
 	@FXML
-	private TableColumn<Prevoznik,Prevoznik> izbrisiColumn = new TableColumn<>();
-
-	public static Prevoznik odabraniPrevoznik;
-	
+	private JFXTextField jibTextField = new JFXTextField();
+	@FXML
+	private JFXButton okButton = new JFXButton();
+	@FXML
+	private JFXButton otkaziButton = new JFXButton();
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		prevozniciObsList.clear();
-		nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
-		adresaColumn.setCellValueFactory(new PropertyValueFactory<>("adresa"));
-		telefonColumn.setCellValueFactory(new PropertyValueFactory<>("telefon"));
-		racunColumn.setCellValueFactory(new PropertyValueFactory<>("racun"));
-		emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-		ucitajPrevoznike();
-		izmijeniColumn.setCellValueFactory(
-                param -> new ReadOnlyObjectWrapper<>(param.getValue())
-            );
-    	izmijeniColumn.setCellFactory(tableCell -> {
-            TableCell<Prevoznik, Prevoznik> cell = new TableCell<Prevoznik, Prevoznik>() {
-                private Button button = new Button("");
-            	//postaviti dimenzije
-                @Override
-                protected void updateItem(Prevoznik item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (!empty) {
-                    	//System.out.println(item);
-                    	button.getStyleClass().addAll("buttonTable", "buttonTableEdit");
-                    	button.setTooltip(new Tooltip("Izmijeni?"));
-                    	button.getTooltip().setAutoHide(false);
-                    	button.getTooltip().setShowDelay(Duration.seconds(0.5));
-                    	setGraphic(button);
-                    	button.setOnMouseClicked(
-                    			event -> showIzmjenaPrevoznika(item) 
-                    		);
-                    } else {
-                    	setGraphic(null);
-                    }
-                }
-				
-            };
-            return cell;
-        });
+		jibTextField.setEditable(false);
+		jibTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getJIBPrevoznika());
+		nazivTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getNaziv());
+		adresaTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getAdresa());
+		emailTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getEmail());
+		telefonTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getTelefon());
+		webAdresaTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getWebAdresa());
+		tekuciRacunTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getRacun());
+		postanskiBrojTextField.setText(String.valueOf(ListaPrevoznikaController.odabraniPrevoznik.getPostanskiBroj()));
+		Util.setAutocompleteList(postanskiBrojTextField, Util.getPostalCodeList());
+		
+		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
+		nazivTextField.getValidators().add(Util.requredFieldValidator(nazivTextField));
+		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField),Util.emailValidator(emailTextField));
+		telefonTextField.getValidators().addAll(Util.requredFieldValidator(telefonTextField),Util.phoneValidator(telefonTextField));
+		webAdresaTextField.getValidators().addAll(Util.requredFieldValidator(webAdresaTextField),Util.webValidator(webAdresaTextField));
+		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField),Util.postalCodeValidator(postanskiBrojTextField));
+		tekuciRacunTextField.getValidators().addAll(Util.requredFieldValidator(tekuciRacunTextField),Util.integerValidator(tekuciRacunTextField));
+
 	}
 
-	public void showIzmjenaPrevoznika(Prevoznik prevoznik) {
-		odabraniPrevoznik = prevoznik;
-		try {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/unibl/etf/administrativni_radnik/PrevoznikEdit.fxml"));
-            Parent root1 = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setTitle(prevoznik.getNaziv());
-            stage.setScene(new Scene(root1));  
-            stage.showAndWait();
-            int index = prevozniciObsList.indexOf(prevoznik);
-            prevozniciObsList.remove(prevoznik);
-            System.out.println("Izmjenjeni: " + odabraniPrevoznik);
-            prevozniciObsList.add(index, odabraniPrevoznik);
-            prevozniciTableView.refresh();
-		} catch(Exception e) {
-			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-		}
+	@FXML
+	public void otkazi() {
+		 Stage stage = (Stage) otkaziButton.getScene().getWindow();
+		    stage.close();
 	}
-	public void ucitajPrevoznike() {
-		// TODO Auto-generated method stub
-		Connection c = null;
-		PreparedStatement s = null;
-		ResultSet r = null;
-		String sql =  "select JIBPrevoznika,NazivPrevoznika,Telefon,Email,WebAdresa,TekuciRacun,Adresa,prevoznik.PostanskiBroj,Naziv from prevoznik join mjesto on (prevoznik.PostanskiBroj=mjesto.PostanskiBroj)";
-		try {
-			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false);
-			r = s.executeQuery();
-			while(r.next()) {
-				System.out.println("Aa");
-				prevozniciObsList.add(new Prevoznik(r.getString("NazivPrevoznika"), r.getString("Email"), r.getString("Adresa"), r.getString("Telefon"), r.getInt("prevoznik.PostanskiBroj"), r.getString("WebAdresa"), r.getString("JIBPrevoznika"), r.getString("TekuciRacun")));
-				
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		finally {
-			Util.close(r, s, c);
-			prevozniciTableView.setItems(prevozniciObsList);
-
-		}
+	@FXML
+	public void izmjeniPrevoznika() {
+	if(nazivTextField.validate() &
+			adresaTextField.validate() &
+				emailTextField.validate() &
+					telefonTextField.validate() &
+						webAdresaTextField.validate() &
+							postanskiBrojTextField.validate() &
+								tekuciRacunTextField.validate()) {
+		
+		Prevoznik.izmjeniPrevoznika(nazivTextField.getText(), telefonTextField.getText(), emailTextField.getText(), webAdresaTextField.getText(), 
+									tekuciRacunTextField.getText(), adresaTextField.getText(),postanskiBrojTextField.getText(), 
+									ListaPrevoznikaController.odabraniPrevoznik.getJIBPrevoznika());
+		ListaPrevoznikaController.odabraniPrevoznik.setAdresa(adresaTextField.getText());
+		ListaPrevoznikaController.odabraniPrevoznik.setNaziv(nazivTextField.getText());
+		ListaPrevoznikaController.odabraniPrevoznik.setTelefon(telefonTextField.getText());
+		ListaPrevoznikaController.odabraniPrevoznik.setEmail(emailTextField.getText());
+		ListaPrevoznikaController.odabraniPrevoznik.setWebAdresa(webAdresaTextField.getText());
+		ListaPrevoznikaController.odabraniPrevoznik.setRacun(tekuciRacunTextField.getText());
+		ListaPrevoznikaController.odabraniPrevoznik.setPostanskiBroj(Integer.parseInt(postanskiBrojTextField.getText()));
+		Stage stage = (Stage) okButton.getScene().getWindow();
+		stage.close();
 	}
-
+	}
 }

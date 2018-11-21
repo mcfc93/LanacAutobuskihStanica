@@ -1,17 +1,17 @@
 package org.unibl.etf.karta;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.unibl.etf.prijava.PrijavaController;
+import org.unibl.etf.salterski_radnik.ProdajaKarataController;
 import org.unibl.etf.util.Util;
-import org.unibl.etf.zaposleni.Zaposleni;
 
 public class Karta {
 	protected int idKarte;
@@ -27,7 +27,18 @@ public class Karta {
 	protected int peron;
 	protected String nazivPrevoznika;
 	protected String nazivLinije;
-	
+
+	public Karta(int idKarte, double cijena, String polaziste, String odrediste, String nazivLinije, Date datum) {
+		this.relacija = new Relacija();
+		this.linija = new Linija();
+		this.linija.setNazivLinije(nazivLinije);
+		this.idKarte = idKarte;
+		this.cijena = cijena;
+		this.relacija.setPolaziste(polaziste);
+		this.relacija.setOdrediste(odrediste);
+		this.nazivLinije = nazivLinije;
+		this.datumIzdavanja = datum.toLocalDate();
+	}
 	
 	public String getNazivLinije() {
 		return nazivLinije;
@@ -162,30 +173,125 @@ public class Karta {
 		return true;
 	}
 
-	
-	/*public static List<Karta> getKarteList(String polaziste,String odrediste, boolean jednokratna) {
-		List<Karta> listaKarata = new ArrayList<>();
+	public static List<Karta> getMjesecneKarteList(String polaziste,String odrediste) {
+		List<Karta> karteList = new ArrayList<>();
 		Connection c = null;
-		CallableStatement s = null;
+		PreparedStatement s = null;
 		ResultSet r = null;
+		String sql = "select DaniUSedmici,VrijemePolaska,NazivPrevoznika,Email,prevoznik.Adresa,WEBAdresa,Telefon,prevoznik.PostanskiBroj,NazivLinije,Peron,Polaziste,Odrediste,VrijemeDolaska,CijenaMjesecna,relacija.IdRelacije,relacija.IdLinije from linija join (relacija,prevoznik) "
+				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?)";
 		try {
-	       	c = Util.getConnection();
-	       	if(jednokratna)
-	       		s = c.prepareCall("{call jednokratneKarte(?,?)}");
-	       	else
-	       		s = c.prepareCall("{call mjesecneKarte(?,?)}");
-	       	s.setString(1, polaziste);
-	       	s.setString(2, odrediste);
-	       	r = s.executeQuery();
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, polaziste, odrediste);
+			r = s.executeQuery();
+			String daniUSedmici;
 	       	while(r.next()) {
-	       		
+	       		daniUSedmici = r.getString(1);
+				Time vrijemePolaska = r.getTime(2);
+				Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
+				Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10),r.getString(3));
+				Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
+	       		karteList.add(new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice()));
 	       	}
+	       	return karteList;
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
 		}
-	}*/
+		finally {
+			Util.close(r, s, c);
+		}
+		return null;
+	}
 	
+	public static List<Karta> getKarteList(String polaziste,String odrediste) {
+		List<Karta> karteList = new ArrayList<>();
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		String sql = "select DaniUSedmici,VrijemePolaska,NazivPrevoznika,Email,prevoznik.Adresa,WEBAdresa,Telefon,prevoznik.PostanskiBroj,NazivLinije,Peron,Polaziste,Odrediste,VrijemeDolaska,CijenaJednokratna,relacija.IdRelacije,relacija.IdLinije from linija join (relacija,prevoznik) "
+				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?)";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, polaziste, odrediste);
+			r = s.executeQuery();
+			String daniUSedmici;
+	       	while(r.next()) {
+	       		daniUSedmici = r.getString(1);
+				Time vrijemePolaska = r.getTime(2);
+				Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
+				Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10),r.getString(3));
+				Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
+	       		karteList.add(new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice()));
+	       	}
+	       	return karteList;
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			Util.close(r, s, c);
+		}
+		return null;
+	}
+	
+	public static void kreirajKartu(Karta karta,int brojSjedista, LocalDate datum) {
+		String sql = "insert into karta value (DEFAULT,?,?,?,?,?,DEFAULT)";
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, true, karta.getRelacija().getIdRelacije(), Date.valueOf(datum), brojSjedista, karta.getJIBStanice(),karta.getCijena());
+			s.executeUpdate();
+			r = s.getGeneratedKeys();
+			if(r.next()) 
+				ProdajaKarataController.idKarte = r.getInt(1);
+			} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			Util.close(r, s, c);
+		}
+	}
+	
+	public static void kreirajRezervaciju(String ime, String prezime, String brojTelefona, int idKarte) {
+		Connection c= null;
+		PreparedStatement s = null;
+		String sql = "insert into rezervacija value (default,?,?,?,?,'Aktivno')";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, Date.valueOf(LocalDate.now()), ime + " " +prezime, brojTelefona, idKarte);
+			s.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static Karta pronadjiKartu(int idKarte) {
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		String sql = "select karta.SerijskiBroj,karta.Cijena,relacija.Polaziste,relacija.Odrediste,linija.NazivLinije,karta.Datum from karta "
+				+ "join (relacija,linija) on (karta.IdRelacije=relacija.IdRelacije) and (relacija.IdLinije=linija.IdLinije) "
+				+ " where karta.SerijskiBroj=?";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, idKarte);
+			r = s.executeQuery();
+			if(r.next()) {
+				return new Karta(r.getInt("karta.SerijskiBroj"), r.getDouble("karta.Cijena"), r.getString("relacija.Polaziste"),
+						r.getString("relacija.Odrediste"), r.getString("linija.NazivLinije"), r.getDate("karta.Datum"));
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return null;
+	}
 	
 	
 }

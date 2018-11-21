@@ -1,6 +1,15 @@
 package org.unibl.etf.karta;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.unibl.etf.util.Util;
 
 public class Relacija {
 	
@@ -12,12 +21,8 @@ public class Relacija {
 	private Time vrijemeDolaska;
 	private double cijenaJednokratna;
 	private double cijenaMjesecna;
-	public Relacija() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	
-	
+
+	public Relacija() {super();}
 	public Relacija(int idLinije, int idRelacije, String polaziste, String odrediste, Time vrijemePolaska,
 			Time vrijemeDolaska, double cijenaJednokratna, double cijenaMjesecna) {
 		super();
@@ -134,7 +139,63 @@ public class Relacija {
 		return true;
 	}
 
-	
+
+	public static void dodajRelaciju(int idLinije, String polaziste, String odrediste, Time vrijemePolaska, Time vrijemeDolaska,
+			double cijenaJednokratna, String cijenaMjesecna) {
+		String sql = "insert into relacija value (default,?,?,?,?,?,?,?)";
+		Connection c = null;
+		PreparedStatement s = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c,sql,false,idLinije,polaziste,odrediste,vrijemePolaska,vrijemeDolaska,cijenaJednokratna,(cijenaMjesecna.isEmpty())? 0: Double.parseDouble(cijenaMjesecna));
+			System.out.println(s.executeUpdate());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			Util.close(s, c);
+		}
+	}
+
+
+	public static boolean izmjeniRelaciju(Relacija relacija, String cijenaJednokratna, String cijenaMjesecna, LocalTime vrijemePolaska,
+			LocalTime vrijemeDolaska) {
+		
+		String sql = "update relacija set CijenaJednokratna=?, CijenaMjesecna=?, VrijemePolaska=?, VrijemeDolaska=? where IdRelacije=?";
+		Connection c = null;
+		PreparedStatement s  = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, Double.parseDouble(cijenaJednokratna), cijenaMjesecna.isEmpty()? 0:Double.parseDouble(cijenaMjesecna),
+					vrijemePolaska,vrijemeDolaska,relacija.getIdRelacije());
+			System.out.println(s.executeUpdate());
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		return false;
+	}
+
+	public static List<Relacija> getRelacije(int idLinije) {
+		String sql = "select * from relacija where IdLinije=?";
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		List<Relacija> relacijeList = new ArrayList<>();
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, idLinije);
+			r = s.executeQuery();
+			while(r.next()) 
+				relacijeList.add(new Relacija(r.getInt("IdLinije"), r.getInt("IdRelacije"), r.getString("Polaziste"), r.getString("Odrediste"), r.getTime("VrijemePolaska"), r.getTime("VrijemeDolaska"), r.getDouble("CijenaJednokratna"), r.getDouble("CijenaMjesecna")));
+
+			return relacijeList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	
 }

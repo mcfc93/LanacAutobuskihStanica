@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.salterski_radnik.InformacijeController">
    <children>
-      <JFXTextField fx:id="mjesto" focusColor="#00bcd4" labelFloat="true" layoutX="115.0" layoutY="30.0" prefHeight="25.0" prefWidth="174.0" />
+      <JFXTextField fx:id="mjestoTextField" focusColor="#00bcd4" labelFloat="true" layoutX="115.0" layoutY="30.0" prefHeight="25.0" prefWidth="174.0" />
       <JFXRadioButton fx:id="polasciRadioButton" layoutX="14.0" layoutY="33.0" text="Polasci" textFill="WHITE" />
       <JFXRadioButton fx:id="dolasciRadioButton" layoutX="14.0" layoutY="68.0" text="Dolasci" textFill="WHITE" />
       <DatePicker fx:id="datum" layoutX="115.0" layoutY="73.0" />
