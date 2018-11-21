@@ -53,12 +53,14 @@ public class DodajStanicuController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		jibTextField.getValidators().addAll(Util.requredFieldValidator(jibTextField), Util.jibValidator(jibTextField));
+		Util.setAutocompleteList(postanskiBrojTextField, Util.getPostalCodeList());
+		
+		jibTextField.getValidators().addAll(Util.requredFieldValidator(jibTextField), Util.jibValidator(jibTextField), Util.collectionValidator(jibTextField, AutobuskaStanica.getJibList(), false, "Zauzeto"));
 		nazivTextField.getValidators().add(Util.requredFieldValidator(nazivTextField));
 		brojPeronaTextField.getValidators().addAll(Util.requredFieldValidator(brojPeronaTextField), Util.integerValidator(brojPeronaTextField));
 		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
 		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
-		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.postalCodeValidator(postanskiBrojTextField));
+		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Util.getPostalCodeList(), true, "Nekorektan unos"));
 		webStranicaTextField.getValidators().addAll(Util.requredFieldValidator(webStranicaTextField), Util.webValidator(webStranicaTextField));
 		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
 	}
@@ -81,6 +83,7 @@ public class DodajStanicuController implements Initializable {
 					Integer.parseInt(brojPeronaTextField.getText().trim()),
 					webStranicaTextField.getText().trim(),
 					emailTextField.getText().trim())) {
+				AutobuskaStanica.getJibList().add(jibTextField.getText().trim());
 				Alert alert=new Alert(AlertType.INFORMATION);
 	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);

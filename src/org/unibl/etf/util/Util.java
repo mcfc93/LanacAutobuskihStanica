@@ -17,6 +17,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import org.unibl.etf.prijava.Nalog;
+
 import com.jfoenix.controls.JFXAutoCompletePopup;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -193,16 +195,19 @@ System.out.println(getPostalCodeList());
 	
 	public static ValidatorBase integerValidator(JFXTextField textField) {
 		ValidatorBase integerValidator = new IntegerValidator();
-	    integerValidator.setMessage("Nije broj");
+	    integerValidator.setMessage("Nije cijeli broj");
 	    integerValidator.setIcon(new ImageView());
 	    textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
 	        if(!newValue) {
 	        	textField.validate();
 	        }
 	    });
+	    /*
 	    textField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
 	        	textField.validate();
 	    });
+	    */
+	    integerValidator.setIcon(new ImageView());
 	    return integerValidator;
 	}
 	
@@ -215,9 +220,12 @@ System.out.println(getPostalCodeList());
 	        	textField.validate();
 	        }
 	    });
+	    /*
 	    textField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
 	        	textField.validate();
 	    });
+	    */
+	    doubleValidator.setIcon(new ImageView());
 	    return doubleValidator;
 	}
 	
@@ -254,7 +262,7 @@ System.out.println(getPostalCodeList());
 			@Override
 			protected void eval() {
 				if(!textField.getText().isEmpty()
-	        			&& !textField.getText().matches("^[0-9]{13}$")) {
+	        			&& !textField.getText().matches("^[0-9]{10}$")) {
 	        		hasErrors.set(true);
 		        } else {
 		        	 hasErrors.set(false);
@@ -324,6 +332,23 @@ System.out.println(getPostalCodeList());
 		postalCodeValidator.setIcon(new ImageView());
 		return postalCodeValidator;
 	}
+	
+	public static ValidatorBase collectionValidator(JFXTextField textField, Collection<String> collection, boolean contains, String message) {
+		ValidatorBase postalCodeValidator = new ValidatorBase(message) {
+			@Override
+			protected void eval() {
+				if(!textField.getText().isEmpty()
+						&& (contains && !collection.contains(textField.getText())
+								|| (!contains && collection.contains(textField.getText())))) {
+					hasErrors.set(true);
+				} else {
+					hasErrors.set(false);
+				}
+			}
+		};
+		postalCodeValidator.setIcon(new ImageView());
+		return postalCodeValidator;
+	}
 
 	private static void loadPostalCodes() {
 		Connection c = null;
@@ -373,6 +398,21 @@ System.out.println(getPostalCodeList());
 		return phoneValidator;
 	}
 	
+	public static ValidatorBase iinValidator(JFXTextField textField) {
+		ValidatorBase iinValidator = new ValidatorBase("Nekorektan unos") {
+			@Override
+			protected void eval() {
+				if(!textField.getText().isEmpty()
+	        			&& !textField.getText().matches("^[0-9]{16}$")) {
+	        		hasErrors.set(true);
+		        } else {
+		        	 hasErrors.set(false);
+		        }
+			}
+		};
+		iinValidator.setIcon(new ImageView());
+		return iinValidator;
+	}
 	
 	public static void setAutocompleteList(JFXTextField textField, Collection<String> collection) {
 		JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();

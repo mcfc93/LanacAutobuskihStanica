@@ -12,6 +12,8 @@ import java.util.logging.Level;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
 
+import javafx.concurrent.Task;
+
 public class AutobuskaStanica {
 	private String jib;
 	private String naziv;
@@ -23,6 +25,23 @@ public class AutobuskaStanica {
 	private String webStranica;
 	private String email;
 	private String stanje;
+	
+	static {
+		Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() {
+            	System.out.println(Thread.currentThread());
+            	loadJibs();
+                return null;
+            }
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+System.out.println(getJibList());
+            }
+        };
+        new Thread(task).start();
+	}
 	
 	public AutobuskaStanica() {
 		super();
@@ -248,5 +267,31 @@ public class AutobuskaStanica {
 			Util.close(r, s, c);
 		}
 		return 0;
+	}
+	
+	private static List<String> jibList = new ArrayList<>();
+	
+	public static List<String> getJibList() {
+		return jibList;
+	}
+	/*
+	public static void setJibList(List<String> jibList) {
+		AutobuskaStanica.jibList = jibList;
+	}
+	*/
+	private static void loadJibs() {
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, "select JIBStanice from autobuska_stanica", false);
+			r = s.executeQuery();
+			while(r.next()) {
+				getJibList().add(r.getString(1));
+			}
+		} catch (SQLException e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
 	}
 }

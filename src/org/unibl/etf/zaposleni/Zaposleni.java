@@ -3,10 +3,15 @@ package org.unibl.etf.zaposleni;
 import java.io.Serializable;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import org.unibl.etf.util.Util;
+
+import javafx.concurrent.Task;
 
 public abstract class Zaposleni implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,6 +24,23 @@ public abstract class Zaposleni implements Serializable {
 	private String pol;
 	//private Date datumRodjenja;
 	private String email;
+	
+	static {
+		Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() {
+            	System.out.println(Thread.currentThread());
+            	loadJmbgs();
+                return null;
+            }
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+System.out.println(getJmbgList());
+            }
+        };
+        new Thread(task).start();
+	}
 	
 	public Zaposleni() {
 		super();
@@ -123,5 +145,31 @@ public abstract class Zaposleni implements Serializable {
 	    } finally {
 	    	Util.close(r,s,c);
 	    }
+	}
+	
+	private static List<String> jmbgList = new ArrayList<>();
+	
+	public static List<String> getJmbgList() {
+		return jmbgList;
+	}
+	/*
+	public static void setJmbgList(List<String> jmbgList) {
+		Zaposleni.jmbgList = jmbgList;
+	}
+	*/
+	private static void loadJmbgs() {
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, "select JMBG from zaposleni", false);
+			r = s.executeQuery();
+			while(r.next()) {
+				getJmbgList().add(r.getString(1));
+			}
+		} catch (SQLException e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
 	}
 }

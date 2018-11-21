@@ -3,8 +3,10 @@ package org.unibl.etf.administrator;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.prijava.Nalog;
 import org.unibl.etf.util.Util;
+import org.unibl.etf.zaposleni.Zaposleni;
 
 import com.jfoenix.controls.JFXAutoCompletePopup;
 import com.jfoenix.controls.JFXButton;
@@ -127,16 +129,17 @@ public class DodajNalogController implements Initializable {
 
 		
 		Util.setAutocompleteList(postanskiBrojTextField, Util.getPostalCodeList());
+		Util.setAutocompleteList(jibStaniceTextField, AutobuskaStanica.getJibList());
 		
 
-   		korisnickoImeTextField.getValidators().add(Util.requredFieldValidator(korisnickoImeTextField));
-   		//lozinkaTextField.getValidators().add(Util.requredFieldValidator(lozinkaTextField));
-   		jibStaniceTextField.getValidators().addAll(Util.requredFieldValidator(jibStaniceTextField), Util.jibValidator(jibStaniceTextField));
+   		korisnickoImeTextField.getValidators().addAll(Util.requredFieldValidator(korisnickoImeTextField), Util.collectionValidator(korisnickoImeTextField, Nalog.getUsernameList(), false, "Zauzeto"));
+   		lozinkaTextField.getValidators().add(Util.requredFieldValidator(lozinkaTextField));
+   		jibStaniceTextField.getValidators().addAll(Util.requredFieldValidator(jibStaniceTextField), Util.jibValidator(jibStaniceTextField), Util.collectionValidator(jibStaniceTextField, AutobuskaStanica.getJibList(), true, "Ne postoji"));
    		imeTextField.getValidators().add(Util.requredFieldValidator(imeTextField));
    		prezimeTextField.getValidators().add(Util.requredFieldValidator(prezimeTextField));
-   		jmbgTextField.getValidators().addAll(Util.requredFieldValidator(jmbgTextField), Util.jmbgValidator(jmbgTextField));
+   		jmbgTextField.getValidators().addAll(Util.requredFieldValidator(jmbgTextField), Util.jmbgValidator(jmbgTextField), Util.collectionValidator(jmbgTextField, Zaposleni.getJmbgList(), false, "Vec postoji"));
    		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
-   		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.postalCodeValidator(postanskiBrojTextField));
+   		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Util.getPostalCodeList(), true, "Nekorektan unos"));
    		strucnaSpremaTextField.getValidators().add(Util.requredFieldValidator(strucnaSpremaTextField));
    		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
    		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
@@ -169,6 +172,8 @@ public class DodajNalogController implements Initializable {
 					brojTelefonaTextField.getText(),
 					emailTextField.getText())) {
 				lozinkaTextField.clear();
+				Zaposleni.getJmbgList().add(jmbgTextField.getText().trim());
+				Nalog.getUsernameList().add(korisnickoImeTextField.getText().trim());
 				Alert alert=new Alert(AlertType.INFORMATION);
 	    		alert.setTitle("Informacija");
 	    		alert.setHeaderText(null);

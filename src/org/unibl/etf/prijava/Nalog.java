@@ -1,6 +1,7 @@
 package org.unibl.etf.prijava;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +11,9 @@ import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 
 import org.unibl.etf.zaposleni.Zaposleni;
+
+import javafx.concurrent.Task;
+
 import org.unibl.etf.zaposleni.Administrator;
 import org.unibl.etf.zaposleni.AdministrativniRadnik;
 import org.unibl.etf.zaposleni.SalterskiRadnik;
@@ -27,6 +31,23 @@ public class Nalog implements Serializable {
 	private String tip;
 	private boolean prijavljen;		//da li je trenutni korisnik prijavljen
 	private Zaposleni zaposleni;	//podaci o vlasniku naloga
+	
+	static {
+		Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() {
+            	System.out.println(Thread.currentThread());
+            	loadUsernames();
+                return null;
+            }
+            @Override
+            protected void succeeded(){
+                super.succeeded();
+System.out.println(getUsernameList());
+            }
+        };
+        new Thread(task).start();
+	}
 	
 	public Nalog() {
 		super();
@@ -285,5 +306,31 @@ public class Nalog implements Serializable {
 	    	Util.close(r,s,c);
 	    }
 	    return listaNaloga;
+	}
+	
+	private static List<String> usernameList = new ArrayList<>();
+	
+	public static List<String> getUsernameList() {
+		return usernameList;
+	}
+	/*
+	public static void setUsernameList(List<String> usernameList) {
+		Nalog.usernameList = usernameList;
+	}
+	*/
+	private static void loadUsernames() {
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, "select KorisnickoIme from nalog", false);
+			r = s.executeQuery();
+			while(r.next()) {
+				getUsernameList().add(r.getString(1));
+			}
+		} catch (SQLException e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
 	}
 }
