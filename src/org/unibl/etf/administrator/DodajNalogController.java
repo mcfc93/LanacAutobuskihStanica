@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import org.unibl.etf.prijava.Nalog;
 import org.unibl.etf.util.Util;
 
+import com.jfoenix.controls.JFXAutoCompletePopup;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
@@ -123,6 +124,9 @@ public class DodajNalogController implements Initializable {
 	        }
 	    });
 	    */
+
+		
+		Util.setAutocompleteList(postanskiBrojTextField, Util.getPostalCodeList());
 		
 
    		korisnickoImeTextField.getValidators().add(Util.requredFieldValidator(korisnickoImeTextField));

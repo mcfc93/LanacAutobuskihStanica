@@ -151,12 +151,6 @@ public class IzmjeniStanicuController implements Initializable {
 		    	autobuskaStanica.setPostanskiBroj(Integer.parseInt(postanskiBrojTextField.getText().trim()));
 		    	autobuskaStanica.setWebStranica(webStranicaTextField.getText().trim());
 		    	autobuskaStanica.setEmail(emailTextField.getText().trim());
-		    	
-		    	Alert alert=new Alert(AlertType.INFORMATION);
-	    		alert.setTitle("Obavještenje");
-	    		alert.setHeaderText(null);
-	    		alert.setContentText("Stanica uspješno izmjenjena.");
-	    		alert.showAndWait();
 	    	}
 
     	Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());

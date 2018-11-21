@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.FileHandler;
@@ -16,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import com.jfoenix.controls.JFXAutoCompletePopup;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.DoubleValidator;
@@ -307,7 +309,7 @@ System.out.println(getPostalCodeList());
 	}
 	*/
 	public static ValidatorBase postalCodeValidator(JFXTextField textField) {
-		System.out.println(getPostalCodeList());
+		//System.out.println(getPostalCodeList());
 		ValidatorBase postalCodeValidator = new ValidatorBase("Nekorektan unos") {
 			@Override
 			protected void eval() {
@@ -369,5 +371,32 @@ System.out.println(getPostalCodeList());
 		};
 		phoneValidator.setIcon(new ImageView());
 		return phoneValidator;
+	}
+	
+	
+	public static void setAutocompleteList(JFXTextField textField, Collection<String> collection) {
+		JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
+	    autoCompletePopup.getSuggestions().addAll(collection);
+	    //autoCompletePopup.setCellLimit(3);
+	    autoCompletePopup.setPrefWidth(150);
+	    //autoCompletePopup.setFixedCellSize(24);
+	    
+	    autoCompletePopup.setSelectionHandler(event -> {
+	        textField.setText(event.getObject());
+	
+	        // you can do other actions here when text completed
+	    });
+	
+	    // filtering options
+	    textField.textProperty().addListener(observable -> {
+	        autoCompletePopup.filter(string -> string.toLowerCase().contains(textField.getText().toLowerCase()));
+	        if (autoCompletePopup.getFilteredSuggestions().isEmpty() || textField.getText().isEmpty()) {
+	            autoCompletePopup.hide();
+	            // if you remove textField.getText.isEmpty() when text field is empty it suggests all options
+	            // so you can choose
+	        } else {
+	            autoCompletePopup.show(textField);
+	        }
+	    });
 	}
 }
