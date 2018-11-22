@@ -7,26 +7,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-
 import org.unibl.etf.util.Util;
 import org.unibl.etf.zaposleni.AdministrativniRadnik;
 import org.unibl.etf.zaposleni.Administrator;
-
 import com.jfoenix.controls.JFXCheckBox;
-
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-
-//import com.jfoenix.controls.JFXSpinner;
-
-//import java.util.logging.Level;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -39,7 +26,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
@@ -48,7 +34,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
 
 public class PrijavaController implements Initializable {
 	
@@ -76,12 +61,6 @@ public class PrijavaController implements Initializable {
 
     @FXML
     private Button prijavaButton;
-    
-    //@FXML
-    //private JFXSpinner spinner;
-    
-    //@FXML
-    //private ProgressBar progressBar;
     
     private double xOffset=0;
     private double yOffset=0;
@@ -111,8 +90,6 @@ System.out.println("nalog.ser");
 		greskaTextLabel.setVisible(false);
 		greskaBackgroundLabel.setVisible(false);
 		zapamtiMeCheckBox.setSelected(true);
-		//spinner.setVisible(false);
-		//progressBar.setVisible(false);
 		
 		if(korisnickoImeTextField.getText().trim().isEmpty()) {
 			//focus se moze traziti samo nakon sto se Stage inicijalizuje
@@ -191,18 +168,6 @@ System.out.println("nalog.ser");
 	
 	@FXML
     void prijava(ActionEvent event) {
-		
-		//prijavaButton.setText("");
-		//spinner.setVisible(true);
-		/*
-		progressBar.setVisible(true);
-		PauseTransition pause=new PauseTransition();
-		pause.setDuration(Duration.seconds(3));
-		pause.setOnFinished(e ->
-			System.out.println("Login Successfully")
-		);
-		pause.play();
-		*/
 		try {
 			if ((nalog=Nalog.prijava(korisnickoImeTextField.getText(), lozinkaTextField.getText())) != null) {
 				//((Stage)anchorPane.getScene().getWindow()).close();
@@ -315,10 +280,9 @@ System.out.println("nalog.ser");
 				korisnickoImeTextField.clear();
 				lozinkaTextField.clear();
 				//korisnickoImeTextField.requestFocus();
-				//progressBar.setVisible(false);
 			}
 		} catch(Exception e) {
-			Util.LOGGER.log(Level.SEVERE, e.toString());
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 			Alert alert=new Alert(AlertType.ERROR);
     		alert.setTitle("Greška");
     		alert.setHeaderText(null);

@@ -1,6 +1,7 @@
 package org.unibl.etf.administrator;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
@@ -13,12 +14,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -198,9 +202,26 @@ public class ListaStanicaController implements Initializable {
                     	setGraphic(button);
                     	button.setOnMouseClicked(
                     		event -> {
-                    			AutobuskaStanica.brisanjeAutobuskeStanice(item.getJib());
-                				getTableView().getItems().remove(item);
-                				System.out.println("Obrisano: " + item);
+                    			Alert alert=new Alert(AlertType.CONFIRMATION);
+            					alert.setTitle("Brisanje autobuske stanice");
+            					alert.setHeaderText(null);
+            					alert.setContentText("Da li ste sigurni?");
+            					alert.getButtonTypes().clear();
+            				    alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+            					Button yesButton=(Button)alert.getDialogPane().lookupButton(ButtonType.YES);
+            					yesButton.setText("Da");
+            					yesButton.setDefaultButton(false);
+            					Button noButton=(Button)alert.getDialogPane().lookupButton(ButtonType.NO);
+            					noButton.setText("Ne");
+            					noButton.setDefaultButton(true);
+            					
+            					Optional<ButtonType> rezultat = alert.showAndWait();
+
+            					if (rezultat.get() == ButtonType.YES) {
+	                    			AutobuskaStanica.brisanjeAutobuskeStanice(item.getJib());
+	                				getTableView().getItems().remove(item);
+	                				System.out.println("Obrisano: " + item);
+            					}
                     		}
                         );
                     } else {

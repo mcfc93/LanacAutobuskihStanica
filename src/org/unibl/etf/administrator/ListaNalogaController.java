@@ -1,6 +1,7 @@
 package org.unibl.etf.administrator;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.prijava.Nalog;
@@ -11,12 +12,15 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
@@ -93,9 +97,34 @@ public class ListaNalogaController implements Initializable {
                     	setGraphic(button);
                     	button.setOnMouseClicked(
                     		event -> {
-                    			Nalog.brisanjeNaloga(item.getZaposleni().getJmbg());
-                    			getTableView().getItems().remove(item);
-                				System.out.println("Obrisano: " + item);
+                    			Alert alert=new Alert(AlertType.CONFIRMATION);
+            					alert.setTitle("Brisanje korisničkog naloga");
+            					alert.setHeaderText(null);
+            					alert.setContentText("Da li ste sigurni?");
+            					alert.getButtonTypes().clear();
+            				    alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+            					Button yesButton=(Button)alert.getDialogPane().lookupButton(ButtonType.YES);
+            					yesButton.setText("Da");
+            					yesButton.setDefaultButton(false);
+            					Button noButton=(Button)alert.getDialogPane().lookupButton(ButtonType.NO);
+            					noButton.setText("Ne");
+            					noButton.setDefaultButton(true);
+            					
+            					Optional<ButtonType> rezultat = alert.showAndWait();
+
+            					if (rezultat.get() == ButtonType.YES) {
+            						if(!"Administrator".equals(item.getTip())) {
+		                    			Nalog.brisanjeNaloga(item.getZaposleni().getJmbg());
+		                    			getTableView().getItems().remove(item);
+		                				System.out.println("Obrisano: " + item);
+            						} else {
+            							Alert alertError=new Alert(AlertType.ERROR);
+            				    		alertError.setTitle("Greška");
+            				    		alertError.setHeaderText(null);
+            				    		alertError.setContentText("Nije moguće obrisati Administratorski nalog.");
+            				    		alertError.showAndWait();
+            						}
+            					}
                     		}
                         );
                     } else {

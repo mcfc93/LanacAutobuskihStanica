@@ -56,10 +56,23 @@ System.out.println("nalog.ser");
 			primaryStage.initStyle(StageStyle.UNDECORATED);    //brisanje _ [] X
 			//Modality.NONE, Modality.WINDOW_MODAL, Modality.APPLICATION_MODAL
 			//stage.initModality(Modality.APPLICATION_MODAL);
+			/*
+			primaryStage.setOnCloseRequest(event -> {
+				event.consume();
+				System.out.println("CLOSE");
+				Util.fileHandler.close();
+			});
+			*/
 			primaryStage.show();
 		} catch(Exception e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
+	}
+	
+	@Override
+	public void stop() {
+		System.out.println("CLOSE");
+		Util.fileHandler.close();
 	}
 	
 	public static void main(String[] args) {
