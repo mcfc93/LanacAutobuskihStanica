@@ -37,10 +37,12 @@ public class Util {
 	public static Properties PROPERTY = new Properties();
 	public static final Logger LOGGER = Logger.getLogger("Logger");
 	
+	public static FileHandler fileHandler=null;
+	
 	
 	static {
 		//postavljanje Logger-a
-		FileHandler fileHandler=null;
+		//FileHandler fileHandler=null;
 	    try {
 	    	//FileHandler fileHandler = new FileHandler(System.getProperty("user.home") + File.separator + "error.log", true);
 	    	fileHandler = new FileHandler("logs/error.log", true);	//append
@@ -52,9 +54,9 @@ public class Util {
 	        e.printStackTrace();
 	    } catch (IOException e) {
 	        e.printStackTrace();
-	    } finally {
+	    }/* finally {
 	    	fileHandler.close();
-	    }
+	    }*/
 		
 	    //ucitavanje properties fajla
 		try {
@@ -97,7 +99,7 @@ System.out.println(getPostalCodeList());
 		try {
 			c = DriverManager.getConnection(Util.PROPERTY.getProperty("jdbc.url"), Util.PROPERTY.getProperty("db.username"), Util.PROPERTY.getProperty("db.password"));
 		} catch (SQLException e) {
-			Util.LOGGER.log(Level.SEVERE, e.toString()/*, e*/);
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		return c;
 	}
@@ -207,7 +209,6 @@ System.out.println(getPostalCodeList());
 	        	textField.validate();
 	    });
 	    */
-	    integerValidator.setIcon(new ImageView());
 	    return integerValidator;
 	}
 	
@@ -225,7 +226,6 @@ System.out.println(getPostalCodeList());
 	        	textField.validate();
 	    });
 	    */
-	    doubleValidator.setIcon(new ImageView());
 	    return doubleValidator;
 	}
 	
@@ -262,7 +262,7 @@ System.out.println(getPostalCodeList());
 			@Override
 			protected void eval() {
 				if(!textField.getText().isEmpty()
-	        			&& !textField.getText().matches("^[0-9]{10}$")) {
+	        			&& !textField.getText().matches("^[0-9]{13}$")) {
 	        		hasErrors.set(true);
 		        } else {
 		        	 hasErrors.set(false);
@@ -289,6 +289,22 @@ System.out.println(getPostalCodeList());
 		samePasswordValidator.setIcon(new ImageView());
 		return samePasswordValidator;
 	}
+	
+	public static ValidatorBase passwordValidator(JFXPasswordField passwordField) {
+		ValidatorBase passwordValidator = new ValidatorBase("Minimalno 6 karaktera") {
+			@Override
+			protected void eval() {
+				if(!passwordField.getText().trim().isEmpty()
+		        		&& passwordField.getText().length() < 6) {
+		        	 hasErrors.set(true);
+		        } else {
+		        	 hasErrors.set(false);
+		        }
+			}
+		};
+		passwordValidator.setIcon(new ImageView());
+		return passwordValidator;
+    }
 	
 	public static ValidatorBase emailValidator(JFXTextField textField) {
 		ValidatorBase emailValidator = new ValidatorBase("Nekorektan unos") {
@@ -332,6 +348,21 @@ System.out.println(getPostalCodeList());
 		postalCodeValidator.setIcon(new ImageView());
 		return postalCodeValidator;
 	}
+
+	private static void loadPostalCodes() {
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, "select PostanskiBroj from mjesto", false);
+			r = s.executeQuery();
+			while(r.next())
+				getPostalCodeList().add(String.valueOf(r.getInt(1)));
+		} catch (SQLException e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+	}
 	
 	public static ValidatorBase collectionValidator(JFXTextField textField, Collection<String> collection, boolean contains, String message) {
 		ValidatorBase postalCodeValidator = new ValidatorBase(message) {
@@ -348,21 +379,6 @@ System.out.println(getPostalCodeList());
 		};
 		postalCodeValidator.setIcon(new ImageView());
 		return postalCodeValidator;
-	}
-
-	private static void loadPostalCodes() {
-		Connection c = null;
-		PreparedStatement s = null;
-		ResultSet r = null;
-		try {
-			c = Util.getConnection();
-			s = Util.prepareStatement(c, "select PostanskiBroj from mjesto", false);
-			r = s.executeQuery();
-			while(r.next())
-				getPostalCodeList().add(String.valueOf(r.getInt(1)));
-		} catch (SQLException e) {
-			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-		}
 	}
 	
 	public static ValidatorBase webValidator(JFXTextField textField) {
@@ -423,17 +439,12 @@ System.out.println(getPostalCodeList());
 	    
 	    autoCompletePopup.setSelectionHandler(event -> {
 	        textField.setText(event.getObject());
-	
-	        // you can do other actions here when text completed
 	    });
-	
-	    // filtering options
+
 	    textField.textProperty().addListener(observable -> {
 	        autoCompletePopup.filter(string -> string.toLowerCase().contains(textField.getText().toLowerCase()));
 	        if (autoCompletePopup.getFilteredSuggestions().isEmpty() || textField.getText().isEmpty()) {
 	            autoCompletePopup.hide();
-	            // if you remove textField.getText.isEmpty() when text field is empty it suggests all options
-	            // so you can choose
 	        } else {
 	            autoCompletePopup.show(textField);
 	        }

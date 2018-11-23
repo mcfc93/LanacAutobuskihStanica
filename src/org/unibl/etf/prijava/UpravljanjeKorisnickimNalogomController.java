@@ -85,7 +85,7 @@ public class UpravljanjeKorisnickimNalogomController implements Initializable {
    		*/
 
    		staraLozinkaTextField.getValidators().add(Util.requredFieldValidator(staraLozinkaTextField));
-   		novaLozinka1TextField.getValidators().add(Util.requredFieldValidator(novaLozinka1TextField));
+   		novaLozinka1TextField.getValidators().addAll(Util.requredFieldValidator(novaLozinka1TextField), Util.passwordValidator(novaLozinka1TextField));
    		novaLozinka2TextField.getValidators().addAll(Util.requredFieldValidator(novaLozinka2TextField), Util.samePasswordValidator(novaLozinka1TextField, novaLozinka2TextField));
 	}
     

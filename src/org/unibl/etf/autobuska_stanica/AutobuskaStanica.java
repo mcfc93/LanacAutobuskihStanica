@@ -215,12 +215,13 @@ System.out.println(getJibList());
 	}
 	
 	public static boolean blokiranjeAutobuskeStanice(String jib, String stanje) {
-		String sql="update autobuska_stanica set Stanje=? where JIBStanice=?;";
+		//String sql="update autobuska_stanica set Stanje=? where JIBStanice=?;";
+		String sql="update autobuska_stanica as a, nalog as n, zaposleni as z set a.Stanje=?, n.Stanje=?, z.Stanje=? where a.JIBStanice=? and a.JIBStanice=n.JIBStanice and n.JMBG=z.JMBG;";
 		Connection c = null;
 		PreparedStatement s = null;
 	    try {
 	       	c=Util.getConnection();
-	    	s = Util.prepareStatement(c, sql, false, stanje, jib);
+	    	s = Util.prepareStatement(c, sql, false, stanje, stanje, stanje, jib);
 	       	s.execute();
 	       	return true;
 	    } catch(SQLException e) {
@@ -261,7 +262,7 @@ System.out.println(getJibList());
 			if(r.next()) 
 				return r.getInt(1);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		finally {
 			Util.close(r, s, c);

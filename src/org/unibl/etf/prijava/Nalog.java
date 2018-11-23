@@ -149,7 +149,7 @@ System.out.println(getUsernameList());
 		    lozinka=sb.toString();
 		    //System.out.println(lozinka);
 		} catch(NoSuchAlgorithmException e) {
-			
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		return lozinka;
 	}

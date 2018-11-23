@@ -16,10 +16,12 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import com.jfoenix.validation.base.ValidatorBase;
 
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
@@ -126,14 +128,35 @@ public class DodajNalogController implements Initializable {
 	        }
 	    });
 	    */
-
+		/*
+		Platform.runLater(() -> {
+			Bounds boundsInScene = lozinkaTextField.localToScene(lozinkaTextField.getBoundsInLocal());
+			System.out.println("MinX=" + boundsInScene.getMinX() + ", MinY=" + boundsInScene.getMinY());
+			Bounds boundsInScreen = lozinkaTextField.localToScreen(lozinkaTextField.getBoundsInLocal());
+			System.out.println("MinX=" + boundsInScreen.getMinX() + ", MinY=" + boundsInScreen.getMinY());
+			
+			System.out.println(lozinkaTextField.getLayoutX() + " " + lozinkaTextField.getLayoutY());
+			
+			lozinkaTextField.setTooltip(new Tooltip("Lozinka mora sadržavati najmanje 6 karaktera"));
+			lozinkaTextField.getTooltip().setWrapText(true);
+			lozinkaTextField.getTooltip().maxWidth(125);
+		    
+		    lozinkaTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+		        if(newValue.length() < 6) {
+		        	lozinkaTextField.getTooltip().show(lozinkaTextField.getScene().getWindow(), boundsInScreen.getMinX(), boundsInScreen.getMinY());
+		        } else {
+		        	lozinkaTextField.getTooltip().hide();
+		        }
+		    });
+		});
+		*/
 		
 		Util.setAutocompleteList(postanskiBrojTextField, Util.getPostalCodeList());
 		Util.setAutocompleteList(jibStaniceTextField, AutobuskaStanica.getJibList());
 		
 
    		korisnickoImeTextField.getValidators().addAll(Util.requredFieldValidator(korisnickoImeTextField), Util.collectionValidator(korisnickoImeTextField, Nalog.getUsernameList(), false, "Zauzeto"));
-   		lozinkaTextField.getValidators().add(Util.requredFieldValidator(lozinkaTextField));
+   		lozinkaTextField.getValidators().addAll(Util.requredFieldValidator(lozinkaTextField), Util.passwordValidator(lozinkaTextField));
    		jibStaniceTextField.getValidators().addAll(Util.requredFieldValidator(jibStaniceTextField), Util.jibValidator(jibStaniceTextField), Util.collectionValidator(jibStaniceTextField, AutobuskaStanica.getJibList(), true, "Ne postoji"));
    		imeTextField.getValidators().add(Util.requredFieldValidator(imeTextField));
    		prezimeTextField.getValidators().add(Util.requredFieldValidator(prezimeTextField));
