@@ -5,12 +5,14 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
+import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.karta.Linija;
 import org.unibl.etf.util.Util;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,6 +28,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -33,7 +36,10 @@ public class ListaLinijaController implements Initializable {
 
 	public static ObservableList<Linija> linijeObsList;
 	public static Linija odabranaLinija;
+	public static MaskerPane progressPane = new MaskerPane();
 
+	@FXML
+	private AnchorPane anchorPane = new AnchorPane();
 	@FXML
 	private TableView<Linija> linijeTableView = new TableView<>();
 	@FXML
@@ -106,19 +112,33 @@ public class ListaLinijaController implements Initializable {
                      	//postavljanje CSS
                      	button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
                      	//postavljanje opisa
-                     	button.setTooltip(new Tooltip("Obri�i?"));
+                     	button.setTooltip(new Tooltip("Obriši?"));
                      	button.getTooltip().setAutoHide(false);
                      	button.getTooltip().setShowDelay(Duration.seconds(0.5));
                      	//dodavanje u kolonu
                      	setGraphic(button);
                      	button.setOnMouseClicked(
                      			event ->  {  
-                     				if(showPotvrda())
-                     					if(Linija.izbrisiLiniju(item)) {
-                     						linijeObsList.remove(item);
-                     				//linijeTableView.refresh();
-                     						showUspjesnoUklonjenaLinija();
-                     			}
+                     				if(showPotvrda()) {
+                     					maskerSetUp();
+            							Task<Void> task = new Task<Void>() {
+            					            @Override
+            					            protected Void call() /*throws Exception*/ {
+            					                progressPane.setVisible(true);
+                             					Linija.izbrisiLiniju(item);
+                             					linijeObsList.remove(item);
+                             					return null;
+            					            }
+            					            @Override
+            					            protected void succeeded(){
+            					                super.succeeded();
+            					                progressPane.setVisible(false);
+            									showUspjesnoUklonjenaLinija();
+            					            }
+            					        };
+            					        new Thread(task).start();
+                     				}
+                     					
                      			}
                          );
                      } else {
@@ -129,51 +149,20 @@ public class ListaLinijaController implements Initializable {
              };
              return cell;
          });
-         for (Linija linija : linijeObsList) {
-			System.out.println(linija.getStanje());
-		}
-        /* deaktivirajColumn.setCellFactory(tableCell -> {
-             TableCell<Linija, Linija> cell = new TableCell<Linija, Linija>() {
-                 private Button button = new Button("");
-             	//postaviti dimenzije
-                 @Override
-                 protected void updateItem(Linija item, boolean empty) {
-                     super.updateItem(item, empty);
-                     if (!empty) {
-                     	//System.out.println(item);
-                     	if("Blokirano".equals(item.getStanje())) {
-                     		button.getStyleClass().addAll("buttonTable", "buttonTableUnblock");
-                     		button.setTooltip(new Tooltip("Odblokiraj?"));
-                     	} else {
-                     		button.getStyleClass().addAll("buttonTable", "buttonTableBlock");
-                     		button.setTooltip(new Tooltip("Blokiraj?"));
-                     	}
-                     	button.getTooltip().setAutoHide(false);
-                     	button.getTooltip().setShowDelay(Duration.seconds(0.5));
-                     	setGraphic(button);
-                     	button.setOnMouseClicked(
-                     			event -> {
-                     				if("Blokirano".equals(item.getStanje())) {
-                     					item.setStanje("Aktivno");
-                     					button.getStyleClass().remove("buttonTableUnblock");
-                     					button.getStyleClass().add("buttonTableBlock");
-                     				} else {
-                     					item.setStanje("Blokirano");
-                     					button.getStyleClass().remove("buttonTableBlock");
-                     					button.getStyleClass().add("buttonTableUnblock");
-                     				}
-                     			}
-                     	);
-                     } else {
-                     	setGraphic(null);
-                     }
-                 }
-             };
-             return cell;
-         });
-    	*/
+        
 	}
-
+	public void maskerSetUp() {
+	  	progressPane = new MaskerPane();
+		progressPane.setText("Molimo sačekajte...");
+		progressPane.setVisible(false);
+		anchorPane.getChildren().add(progressPane);
+		AnchorPane.setTopAnchor(progressPane,0.0);
+		AnchorPane.setBottomAnchor(progressPane,0.0);
+		AnchorPane.setLeftAnchor(progressPane,0.0);
+		AnchorPane.setRightAnchor(progressPane,0.0);
+		
+	
+}
 	public boolean showPotvrda() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("");

@@ -108,8 +108,8 @@ public class InformacijeController implements Initializable{
 		};*/
 		//mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),mjestoValidator);
 		Util.setAutocompleteList(mjestoTextField, mjestaSet);
-		//mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),Util.collectionValidator(mjestoTextField, mjestaSet, true, "Unesite mjesto"));
-		mjestoTextField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+		mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),Util.collectionValidator(mjestoTextField, mjestaSet, true, "Unesite mjesto"));
+		/*mjestoTextField.focusedProperty().addListener(new ChangeListener<Boolean>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -122,7 +122,7 @@ public class InformacijeController implements Initializable{
 
 		});
 		
-		mjestoTextField.getValidators().add(new ValidatorBase("Obavezan unos") {
+		/*mjestoTextField.getValidators().add(new ValidatorBase("Obavezan unos") {
 			
 			@Override
 			protected void eval() {
@@ -143,7 +143,7 @@ public class InformacijeController implements Initializable{
 				else
 					hasErrors.set(false);
 			}
-		});
+		});*/
 	}
 	
 	public void toggleSetUp() {
