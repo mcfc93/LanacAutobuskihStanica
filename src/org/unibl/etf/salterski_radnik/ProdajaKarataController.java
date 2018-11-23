@@ -24,7 +24,6 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.validation.base.ValidatorBase;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -284,30 +283,8 @@ public class ProdajaKarataController implements Initializable {
 	
 	
 	public void validationSetUp() {
-		// TODO Auto-generated method stub
-
-		ValidatorBase odredisteValidator = new ValidatorBase("Nekorektan unos") {
-			@Override
-			protected void eval() {
-				if(!odredisteTextField.getText().isEmpty() && !relacijeSet.contains(odredisteTextField.getText())) {
-					hasErrors.set(true);
-				} else {
-					hasErrors.set(false);
-				}
-			}
-		};
-		ValidatorBase polazisteValidator = new ValidatorBase("Nekorektan unos") {
-			@Override
-			protected void eval() {
-				if(polazisteTextField.getText().isEmpty() | (!polazisteTextField.getText().isEmpty() && !relacijeSet.contains(polazisteTextField.getText()))) {
-					hasErrors.set(true);
-				} else {
-					hasErrors.set(false);
-				}
-			}
-		};
-		polazisteTextField.getValidators().addAll(Util.requredFieldValidator(polazisteTextField),polazisteValidator);
-		odredisteTextField.getValidators().addAll(Util.requredFieldValidator(odredisteTextField),odredisteValidator);
+		polazisteTextField.getValidators().addAll(Util.requredFieldValidator(polazisteTextField),Util.collectionValidator(polazisteTextField, relacijeSet, true, "Unesite polaziste"));
+		odredisteTextField.getValidators().addAll(Util.requredFieldValidator(odredisteTextField),Util.collectionValidator(odredisteTextField, relacijeSet, true, "Unesite odrediste"));
 		imeTextField.getValidators().add(Util.requredFieldValidator(imeTextField));
 		prezimeTextField.getValidators().add(Util.requredFieldValidator(prezimeTextField));
 		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField),Util.phoneValidator(brojTelefonaTextField));

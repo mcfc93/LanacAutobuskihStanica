@@ -18,6 +18,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.base.ValidatorBase;
+
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -74,7 +76,6 @@ public class InformacijeController implements Initializable{
 		nazivMjesta = getNazivMjesta();
 		ucitajMjesta();
 		karteTable.setPlaceholder(new Label("Odaberite relaciju i datum"));
-		Util.setAutocompleteList(mjestoTextField, mjestaSet);
 		polasciRadioButton.setSelected(true);
 		mjestoTextField.setPromptText("Destinacija");
 		
@@ -95,7 +96,7 @@ public class InformacijeController implements Initializable{
 		cijenaColumn.setCellValueFactory(new PropertyValueFactory<>("cijena"));
 		peronColumn.setCellValueFactory(new PropertyValueFactory<>("peron"));
 		
-		ValidatorBase mjestoValidator = new ValidatorBase("Nekorektan unos") {
+		/*ValidatorBase mjestoValidator = new ValidatorBase("Nekorektan unos") {
 			@Override
 			protected void eval() {
 				if(!mjestoTextField.getText().isEmpty() && !mjestaSet.contains(mjestoTextField.getText())) {
@@ -104,9 +105,45 @@ public class InformacijeController implements Initializable{
 					hasErrors.set(false);
 				}
 			}
-		};
-		mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),mjestoValidator);
-	
+		};*/
+		//mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),mjestoValidator);
+		Util.setAutocompleteList(mjestoTextField, mjestaSet);
+		//mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),Util.collectionValidator(mjestoTextField, mjestaSet, true, "Unesite mjesto"));
+		mjestoTextField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				// TODO Auto-generated method stub
+				if(!newValue)
+					mjestoTextField.validate();
+				else
+					System.out.println("focus");
+			}
+
+		});
+		
+		mjestoTextField.getValidators().add(new ValidatorBase("Obavezan unos") {
+			
+			@Override
+			protected void eval() {
+				// TODO Auto-generated method stub
+				if(mjestoTextField.getText().isEmpty())
+					hasErrors.set(true);
+				else
+					hasErrors.set(false);
+			}
+		});
+		mjestoTextField.getValidators().add(new ValidatorBase("Odaberite mjesto") {
+			
+			@Override
+			protected void eval() {
+				// TODO Auto-generated method stub
+				if(!mjestoTextField.getText().isEmpty() && !mjestaSet.contains(mjestoTextField.getText()))
+						hasErrors.set(true);
+				else
+					hasErrors.set(false);
+			}
+		});
 	}
 	
 	public void toggleSetUp() {

@@ -1,10 +1,6 @@
 package org.unibl.etf.administrativni_radnik;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -35,7 +31,7 @@ import javafx.util.Duration;
 
 public class ListaLinijaController implements Initializable {
 
-	public static ObservableList<Linija> linijeObsList = FXCollections.observableArrayList();
+	public static ObservableList<Linija> linijeObsList;
 	public static Linija odabranaLinija;
 
 	@FXML
@@ -61,8 +57,8 @@ public class ListaLinijaController implements Initializable {
 	public static int idLinije;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		linijeObsList.clear();
-		ucitajLinije();
+		linijeObsList = FXCollections.observableArrayList();
+		linijeObsList.setAll(Linija.getLinije());
 		linijeTableView.setItems(linijeObsList);
 		linijeTableView.setPlaceholder(new Label("Nema linija u tabeli."));
     	nazivLinijeColumn.setCellValueFactory(new PropertyValueFactory<>("nazivLinije"));
@@ -133,7 +129,9 @@ public class ListaLinijaController implements Initializable {
              };
              return cell;
          });
-         
+         for (Linija linija : linijeObsList) {
+			System.out.println(linija.getStanje());
+		}
         /* deaktivirajColumn.setCellFactory(tableCell -> {
              TableCell<Linija, Linija> cell = new TableCell<Linija, Linija>() {
                  private Button button = new Button("");
@@ -156,12 +154,10 @@ public class ListaLinijaController implements Initializable {
                      	button.setOnMouseClicked(
                      			event -> {
                      				if("Blokirano".equals(item.getStanje())) {
-                     					Linija.deaktivirajLiniju(item.getIdLinije(), "Aktivno");
                      					item.setStanje("Aktivno");
                      					button.getStyleClass().remove("buttonTableUnblock");
                      					button.getStyleClass().add("buttonTableBlock");
                      				} else {
-                     					Linija.deaktivirajLiniju(item.getIdLinije(), "Blokirano");
                      					item.setStanje("Blokirano");
                      					button.getStyleClass().remove("buttonTableBlock");
                      					button.getStyleClass().add("buttonTableUnblock");
@@ -174,8 +170,8 @@ public class ListaLinijaController implements Initializable {
                  }
              };
              return cell;
-         });*/
-    	
+         });
+    	*/
 	}
 
 	public boolean showPotvrda() {
@@ -186,27 +182,6 @@ public class ListaLinijaController implements Initializable {
 		return action.get().equals(ButtonType.OK);
 	}
 	
-	public void ucitajLinije() {
-    	String sqlQuery = "select IdLinije,NazivLinije,Peron,NazivPrevoznika,DaniUSedmici,linija.Stanje from linija join prevoznik on (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where linija.Stanje!='Izbrisano'";
-    	Connection c = null;
-    	ResultSet r = null;
-    	PreparedStatement s = null;
-    	try {
-			c = Util.getConnection();
-			s = c.prepareStatement(sqlQuery);
-			r = s.executeQuery();
-			while(r.next()) {
-				Linija linija = new Linija(r.getInt("IdLinije"), r.getString("NazivLinije"), r.getString("DaniUSedmici"), r.getInt("Peron"),r.getString("NazivPrevoznika"),r.getString("Stanje"));
-				linijeObsList.add(linija);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-    	finally {
-			Util.close(r, s, c);
-		}
-    	
-	}
 	
 
 	
@@ -221,8 +196,6 @@ public class ListaLinijaController implements Initializable {
             stage.showAndWait();
             int index = linijeObsList.indexOf(linija);
             linijeObsList.remove(linija);
-            System.out.println("Nova linija: " + odabranaLinija);
-            System.out.println("Dani nove linije: " + odabranaLinija.getDaniUSedmici());
             linijeObsList.add(index, odabranaLinija);
             linijeTableView.refresh();
 		} catch(Exception e) {

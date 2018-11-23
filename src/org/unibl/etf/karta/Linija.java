@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.unibl.etf.util.Util;
 
@@ -177,13 +179,13 @@ public class Linija {
 	}
 
 
-	public static boolean deaktivirajLiniju(int idLinije) {
-		String sql = "update linija set Stanje='Blokirano' where IdLinije=?";
+	public static boolean deaktivirajLiniju(int idLinije,String stanje) {
+		String sql = "update linija set Stanje=? where IdLinije=?";
 		Connection c = null;
 		PreparedStatement s = null;
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false, idLinije);
+			s = Util.prepareStatement(c, sql,false, stanje, idLinije);
 			System.out.println(s.execute());
 			return true;
 		} catch (SQLException e) {
@@ -205,6 +207,30 @@ public class Linija {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public static List<Linija> getLinije() {
+		// TODO Auto-generated method stub
+		String sqlQuery = "select IdLinije,NazivLinije,Peron,NazivPrevoznika,DaniUSedmici,linija.Stanje from linija join prevoznik on (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where linija.Stanje!='Izbrisano'";
+    	Connection c = null;
+    	ResultSet r = null;
+    	PreparedStatement s = null;
+    	List<Linija> linijeList = new ArrayList<>();
+    	try {
+			c = Util.getConnection();
+			s = c.prepareStatement(sqlQuery);
+			r = s.executeQuery();
+			while(r.next()) 
+				linijeList.add( new Linija(r.getInt("IdLinije"), r.getString("NazivLinije"), r.getString("DaniUSedmici"), r.getInt("Peron"),r.getString("NazivPrevoznika"),r.getString("Stanje")));
+			return linijeList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	finally {
+			Util.close(r, s, c);
+		}
+		
+		return null;
 	}
 	
 	
