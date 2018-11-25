@@ -171,7 +171,7 @@ public class DodajNalogController implements Initializable {
 	@FXML
     void potvrdi(ActionEvent event) {
 		if(korisnickoImeTextField.validate()
-				/*& lozinkaTextField.validate()*/
+				& lozinkaTextField.validate()
 					& jibStaniceTextField.validate()
 						& imeTextField.validate()
 							& prezimeTextField.validate()
@@ -184,7 +184,7 @@ public class DodajNalogController implements Initializable {
 			if(Nalog.dodavanjeNaloga(korisnickoImeTextField.getText(),
 					Nalog.hash(lozinkaTextField.getText()),
 					jibStaniceTextField.getText(),
-					administrativniRadnikRadioButton.isSelected() ? "AdministrativniRadnik" : "SalterRadnik",
+					administrativniRadnikRadioButton.isSelected() ? "Administrativni radnik" : "Šalterski radnik",
 					imeTextField.getText(),
 					prezimeTextField.getText(),
 					jmbgTextField.getText(),

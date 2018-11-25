@@ -19,10 +19,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.util.Duration;
 
 public class ListaNalogaController implements Initializable {
@@ -122,6 +125,26 @@ public class ListaNalogaController implements Initializable {
             				    		alertError.setTitle("Greška");
             				    		alertError.setHeaderText(null);
             				    		alertError.setContentText("Nije moguće obrisati Administratorski nalog.");
+            				    		
+            				    		Label label = new Label("Label:");
+            				    		
+            				    		TextArea textArea=new TextArea("Detalji");
+            				    		textArea.setFocusTraversable(false);
+            				    		textArea.setEditable(false);
+            				    		textArea.setWrapText(true);
+            				    		
+            				    		textArea.setMaxWidth(Double.MAX_VALUE);
+            				    	    textArea.setMaxHeight(Double.MAX_VALUE);
+            				    	    GridPane.setVgrow(textArea, Priority.ALWAYS);
+            				    	    GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+            				    	    GridPane expContent = new GridPane();
+            				    	    expContent.setMaxWidth(Double.MAX_VALUE);
+            				    	    expContent.add(label, 0, 0);
+            				    	expContent.add(textArea, 0, 1);
+            				    		
+            				    		alertError.getDialogPane().setExpandableContent(expContent);
+            				    		
             				    		alertError.showAndWait();
             						}
             					}

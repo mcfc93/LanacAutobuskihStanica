@@ -182,7 +182,7 @@ System.out.println(getUsernameList());
 	    		if("Administrator".equals(r.getString("Tip"))) {
 	       			nalog.zaposleni=new Administrator();
 	       			nalog.zaposleni.selectZaposleni(nalog.korisnickoIme);
-	       		} else if("AdministrativniRadnik".equals(r.getString("Tip"))) {
+	       		} else if("Administrativni radnik".equals(r.getString("Tip"))) {
 	       			nalog.zaposleni=new AdministrativniRadnik();
 	       			nalog.zaposleni.selectZaposleni(nalog.korisnickoIme);
 	        	} else {
