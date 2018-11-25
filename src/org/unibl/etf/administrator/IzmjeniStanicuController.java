@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import com.jfoenix.validation.base.ValidatorBase;
 
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -101,16 +102,19 @@ public class IzmjeniStanicuController implements Initializable {
 			stage.setOpacity(1.0);
 		});
 		
-		
-		
-		jibTextField.getValidators().addAll(Util.requredFieldValidator(jibTextField));
+		/*
+		Platform.runLater(() -> {
+			Util.setAutocompleteList(postanskiBrojTextField, Util.getPostalCodeList());
+		});
+		*/
+		jibTextField.getValidators().addAll(Util.requredFieldValidator(jibTextField), Util.jibValidator(jibTextField));
 		nazivTextField.getValidators().add(Util.requredFieldValidator(nazivTextField));
-		brojPeronaTextField.getValidators().add(Util.requredFieldValidator(brojPeronaTextField));
-		brojTelefonaTextField.getValidators().add(Util.requredFieldValidator(brojTelefonaTextField));
+		brojPeronaTextField.getValidators().addAll(Util.requredFieldValidator(brojPeronaTextField), Util.integerValidator(brojPeronaTextField));
+		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
 		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
 		postanskiBrojTextField.getValidators().add(Util.requredFieldValidator(postanskiBrojTextField));
-		webStranicaTextField.getValidators().add(Util.requredFieldValidator(webStranicaTextField));
-		emailTextField.getValidators().add(Util.requredFieldValidator(emailTextField));
+		webStranicaTextField.getValidators().addAll(Util.requredFieldValidator(webStranicaTextField), Util.webValidator(webStranicaTextField));
+		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
 		
 		
 		jibTextField.setDisable(true);
