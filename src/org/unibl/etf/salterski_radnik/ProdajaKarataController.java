@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
+import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.karta.Karta;
 import org.unibl.etf.karta.MjesecnaKarta;
 import org.unibl.etf.karta.TipKarte;
@@ -24,11 +25,11 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.validation.base.ValidatorBase;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -44,6 +45,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -62,6 +64,9 @@ public class ProdajaKarataController implements Initializable {
 	private static final double POPUST_DJACKA = 0.80;
 	private static final double POPUST_POVRATNA = 0.85;
 	public static int idKarte;
+	private static MaskerPane progressPane = new MaskerPane();
+	@FXML
+	private AnchorPane anchorPane = new AnchorPane();
 	@FXML
 	private ImageView slikaImageView = new ImageView();
 	@FXML
@@ -245,11 +250,27 @@ public class ProdajaKarataController implements Initializable {
 					imeTextField.validate() & prezimeTextField.validate())
 				{
 				if(showPotvrda()) {
-					int brojKarata = provjeriBrojKarata();
-					Karta.kreirajKartu(karta,brojKarata,datum.getValue());
-					karta.setIdKarte(idKarte);
-					MjesecnaKarta.kreirajKartu(karta, brojKarata+1, datum.getValue(), imeTextField.getText(),prezimeTextField.getText(),tipKarteComboBox.getValue(),odabranaSlika.getPath());	
-					showUspjesnaKupovina();	
+					
+					maskerSetUp();
+					Task<Void> task = new Task<Void>() {
+			            @Override
+			            protected Void call() /*throws Exception*/ {
+			            	System.out.println(Thread.currentThread());
+			                progressPane.setVisible(true);
+							int brojKarata = provjeriBrojKarata();
+							Karta.kreirajKartu(karta,brojKarata,datum.getValue());
+							karta.setIdKarte(idKarte);
+							MjesecnaKarta.kreirajKartu(karta, brojKarata+1, datum.getValue(), imeTextField.getText(),prezimeTextField.getText(),tipKarteComboBox.getValue(),odabranaSlika.getPath());	
+			                return null;
+			            }
+			            @Override
+			            protected void succeeded(){
+			                super.succeeded();
+			                progressPane.setVisible(false);
+							showUspjesnaKupovina();	
+			            }
+			        };
+			        new Thread(task).start();
 					imeTextField.resetValidation();
 					
 					}
@@ -259,22 +280,59 @@ public class ProdajaKarataController implements Initializable {
 				if(rezervacijaCheckBox.isSelected()) {
 					if(imeTextField.validate() & prezimeTextField.validate() & brojTelefonaTextField.validate()) {
 						if(showPotvrda()) {
-							for(int i=0;i<brojKarataZaKupovinu;++i) {
-								int brojKarata = provjeriBrojKarata();
-							Karta.kreirajKartu(karta, brojKarata+1, datum.getValue());
-							Karta.kreirajRezervaciju(imeTextField.getText(), prezimeTextField.getText(), brojTelefonaTextField.getText(), idKarte);
-							}
-							showUspjesnaKupovina();	
+							
+							maskerSetUp();
+							Task<Void> task = new Task<Void>() {
+					            @Override
+					            protected Void call() /*throws Exception*/ {
+					            	System.out.println(Thread.currentThread());
+					                progressPane.setVisible(true);
+					                for(int i=0;i<brojKarataZaKupovinu;++i) {
+										int brojKarata = provjeriBrojKarata();
+									Karta.kreirajKartu(karta, brojKarata+1, datum.getValue());
+									Karta.kreirajRezervaciju(imeTextField.getText(), prezimeTextField.getText(), brojTelefonaTextField.getText(), idKarte);
+									}
+					               return null;
+					            }
+					            @Override
+					            protected void succeeded(){
+					                super.succeeded();
+					                progressPane.setVisible(false);
+									showUspjesnaKupovina();	
+					            }
+					        };
+					        new Thread(task).start();
 						}
 					}
 				} 
 				else {
 					if(showPotvrda()) {
-						for(int i=0;i<brojKarataZaKupovinu;++i) {
-							int brojKarata = provjeriBrojKarata();
-						Karta.kreirajKartu(karta, brojKarata+1, datum.getValue());
-						}
-						showUspjesnaKupovina();	
+						maskerSetUp();
+						Task<Void> task = new Task<Void>() {
+				            @Override
+				            protected Void call() /*throws Exception*/ {
+				            	System.out.println(Thread.currentThread());
+				                progressPane.setVisible(true);
+								for(int i=0;i<brojKarataZaKupovinu;++i) {
+									int brojKarata = provjeriBrojKarata();
+								Karta.kreirajKartu(karta, brojKarata+1, datum.getValue());
+								}
+				                try {
+									Thread.sleep(2000);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+				                return null;
+				            }
+				            @Override
+				            protected void succeeded(){
+				                super.succeeded();
+				                progressPane.setVisible(false);
+								showUspjesnaKupovina();	
+				            }
+				        };
+				        new Thread(task).start();
 						imeTextField.resetValidation();
 						
 					}
@@ -282,36 +340,27 @@ public class ProdajaKarataController implements Initializable {
 			} 
 	}
 	
-	
-	public void validationSetUp() {
-		// TODO Auto-generated method stub
+	public void maskerSetUp() {
+		  	progressPane = new MaskerPane();
+			progressPane.setText("Molimo sačekajte...");
+			progressPane.setVisible(false);
+			anchorPane.getChildren().add(progressPane);
+			AnchorPane.setTopAnchor(progressPane,0.0);
+			AnchorPane.setBottomAnchor(progressPane,0.0);
+			AnchorPane.setLeftAnchor(progressPane,0.0);
+			AnchorPane.setRightAnchor(progressPane,0.0);
+			
+		
+	}
 
-		ValidatorBase odredisteValidator = new ValidatorBase("Nekorektan unos") {
-			@Override
-			protected void eval() {
-				if(!odredisteTextField.getText().isEmpty() && !relacijeSet.contains(odredisteTextField.getText())) {
-					hasErrors.set(true);
-				} else {
-					hasErrors.set(false);
-				}
-			}
-		};
-		ValidatorBase polazisteValidator = new ValidatorBase("Nekorektan unos") {
-			@Override
-			protected void eval() {
-				if(polazisteTextField.getText().isEmpty() | (!polazisteTextField.getText().isEmpty() && !relacijeSet.contains(polazisteTextField.getText()))) {
-					hasErrors.set(true);
-				} else {
-					hasErrors.set(false);
-				}
-			}
-		};
-		polazisteTextField.getValidators().addAll(Util.requredFieldValidator(polazisteTextField),polazisteValidator);
-		odredisteTextField.getValidators().addAll(Util.requredFieldValidator(odredisteTextField),odredisteValidator);
+	public void validationSetUp() {
+		polazisteTextField.getValidators().addAll(Util.requredFieldValidator(polazisteTextField),Util.collectionValidator(polazisteTextField, relacijeSet, true, "Unesite polaziste"));
+		odredisteTextField.getValidators().addAll(Util.requredFieldValidator(odredisteTextField),Util.collectionValidator(odredisteTextField, relacijeSet, true, "Unesite odrediste"));
 		imeTextField.getValidators().add(Util.requredFieldValidator(imeTextField));
 		prezimeTextField.getValidators().add(Util.requredFieldValidator(prezimeTextField));
 		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField),Util.phoneValidator(brojTelefonaTextField));
 	}
+	
 
 
 	public void toggleSetUp() {

@@ -97,7 +97,19 @@ public class IzmjenaLinijeController implements Initializable {
 		checkMark.setVisible(false);
 		nazivLinijeTextField.setText(ListaLinijaController.odabranaLinija.getNazivLinije());
 		relacijeObs.addAll(Relacija.getRelacije(ListaLinijaController.odabranaLinija.getIdLinije()));
-		relacijeComboBox.setItems(relacijeObs);
+		if(!relacijeObs.isEmpty()) {
+			relacijeComboBox.setItems(relacijeObs);
+			relacijeComboBox.getSelectionModel().selectFirst();
+			polazisteTextField.setText(relacijeComboBox.getValue().getPolaziste());
+			odredisteTextField.setText(relacijeComboBox.getValue().getOdrediste());
+			vrijemePolaskaTimeChooser.setValue(relacijeComboBox.getValue().getVrijemePolaska().toLocalTime());
+			vrijemeDolaskaTimeChooser.setValue(relacijeComboBox.getValue().getVrijemeDolaska().toLocalTime());
+			cijenaJednokratnaTextField.setText(Double.toString(relacijeComboBox.getValue().getCijenaJednokratna()));
+			if(relacijeComboBox.getValue().getCijenaMjesecna()==0)
+				cijenaMjesecnaTextField.clear();
+			else
+				cijenaMjesecnaTextField.setText(Double.toString(relacijeComboBox.getValue().getCijenaMjesecna()));
+		}
 		peroni = AutobuskaStanica.getBrojPeronaStanice();
 		for(int i=1;i<=peroni;++i)
 			peroniObs.add(i);
@@ -107,18 +119,10 @@ public class IzmjenaLinijeController implements Initializable {
 		checkBoxInit();
 		loadCBListeners();
 		validateSetup();
-		relacijeComboBox.getSelectionModel().selectFirst();
-		polazisteTextField.setText(relacijeComboBox.getValue().getPolaziste());
-		odredisteTextField.setText(relacijeComboBox.getValue().getOdrediste());
-		vrijemePolaskaTimeChooser.setValue(relacijeComboBox.getValue().getVrijemePolaska().toLocalTime());
-		vrijemeDolaskaTimeChooser.setValue(relacijeComboBox.getValue().getVrijemeDolaska().toLocalTime());
-		cijenaJednokratnaTextField.setText(Double.toString(relacijeComboBox.getValue().getCijenaJednokratna()));
-		if(relacijeComboBox.getValue().getCijenaMjesecna()==0)
-			cijenaMjesecnaTextField.clear();
-		else
-			cijenaMjesecnaTextField.setText(Double.toString(relacijeComboBox.getValue().getCijenaMjesecna()));
+
 	}
 	
+
 	public void validateSetup() {
 		cijenaJednokratnaTextField.getValidators().addAll(Util.requredFieldValidator(cijenaJednokratnaTextField),Util.doubleValidator(cijenaJednokratnaTextField));
 		cijenaMjesecnaTextField.getValidators().add(Util.doubleValidator(cijenaMjesecnaTextField));

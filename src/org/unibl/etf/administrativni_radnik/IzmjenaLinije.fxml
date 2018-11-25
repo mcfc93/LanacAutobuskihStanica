@@ -11,41 +11,41 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrativni_radnik.IzmjenaLinijeController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../administrator/administrator.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrativni_radnik.IzmjenaLinijeController">
    <children>
-      <JFXTextField fx:id="nazivLinijeTextField" labelFloat="true" layoutX="340.0" layoutY="169.0" promptText="Naziv linije" />
-      <JFXCheckBox fx:id="ponedjeljakCB" layoutX="408.0" layoutY="24.0" text="Ponedjeljak" />
-      <JFXCheckBox fx:id="utorakCB" layoutX="408.0" layoutY="48.0" text="Utorak" />
-      <JFXCheckBox fx:id="srijedaCB" layoutX="408.0" layoutY="72.0" text="Srijeda" />
-      <JFXCheckBox fx:id="petakCB" layoutX="515.0" layoutY="48.0" text="Petak" />
-      <JFXCheckBox fx:id="subotaCB" layoutX="515.0" layoutY="72.0" text="Subota" />
-      <JFXCheckBox fx:id="nedjeljaCB" layoutX="515.0" layoutY="96.0" text="Nedjelja" />
-      <JFXCheckBox fx:id="cetvrtakCB" layoutX="515.0" layoutY="24.0" text="Cetvrtak" />
-      <JFXButton fx:id="okButton" layoutX="340.0" layoutY="311.0" onAction="#izmjenaLinije" prefHeight="71.0" prefWidth="108.0" text="OK" />
-      <JFXButton fx:id="otkaziButton" layoutX="483.0" layoutY="311.0" onAction="#otkazi" prefHeight="71.0" prefWidth="101.0" text="Otkazi" />
-      <JFXButton fx:id="potvrdiButton" layoutX="39.0" layoutY="338.0" onAction="#izmjeniRelaciju" prefHeight="48.0" prefWidth="139.0" text="Potvrdi izmjenu relacije" />
-      <JFXComboBox fx:id="peronComboBox" labelFloat="true" layoutX="342.0" layoutY="217.0" promptText="Broj perona" />
+      <JFXTextField fx:id="nazivLinijeTextField" labelFloat="true" layoutX="20.0" layoutY="71.0" promptText="Naziv linije" />
+      <JFXCheckBox fx:id="ponedjeljakCB" layoutX="20.0" layoutY="119.0" text="Ponedjeljak" />
+      <JFXCheckBox fx:id="utorakCB" layoutX="20.0" layoutY="143.0" text="Utorak" />
+      <JFXCheckBox fx:id="srijedaCB" layoutX="20.0" layoutY="167.0" text="Srijeda" />
+      <JFXCheckBox fx:id="petakCB" layoutX="127.0" layoutY="143.0" text="Petak" />
+      <JFXCheckBox fx:id="subotaCB" layoutX="128.0" layoutY="167.0" text="Subota" />
+      <JFXCheckBox fx:id="nedjeljaCB" layoutX="127.0" layoutY="191.0" text="Nedjelja" />
+      <JFXCheckBox fx:id="cetvrtakCB" layoutX="127.0" layoutY="119.0" text="Cetvrtak" />
+      <JFXButton fx:id="okButton" layoutX="13.0" layoutY="263.0" onAction="#izmjenaLinije" prefHeight="71.0" prefWidth="108.0" text="OK" />
+      <JFXButton fx:id="otkaziButton" layoutX="146.0" layoutY="263.0" onAction="#otkazi" prefHeight="71.0" prefWidth="101.0" text="Otkazi" />
+      <JFXButton fx:id="potvrdiButton" layoutX="336.0" layoutY="328.0" onAction="#izmjeniRelaciju" prefHeight="48.0" prefWidth="139.0" text="Potvrdi izmjenu relacije" />
+      <JFXComboBox fx:id="peronComboBox" labelFloat="true" layoutX="175.0" layoutY="71.0" promptText="Broj perona" />
       <JFXCheckBox fx:id="linijaAktivnaCB" layoutX="20.0" layoutY="33.0" text="Linija aktivna" />
-      <Label layoutX="33.0" layoutY="132.0" text="Odrediste:" />
-      <Label layoutX="164.0" layoutY="34.0" text="Relacije:" />
-      <Label layoutX="36.0" layoutY="89.0" text="Polaziste:" />
-      <JFXComboBox fx:id="relacijeComboBox" layoutX="225.0" layoutY="30.0" onAction="#comboBoxChange" promptText="Odaberite relaciju" />
-      <Label layoutX="13.0" layoutY="260.0" text="Cijena (jednokratna):" />
-      <Label layoutX="13.0" layoutY="302.0" text="Cijena (mjesecna):" />
-      <Label layoutX="14.0" layoutY="209.0" text="Vrijeme dolaska:" />
-      <Label layoutX="14.0" layoutY="173.0" text="Vrijeme polaska:" />
-      <JFXTimePicker fx:id="vrijemeDolaskaTimeChooser" layoutX="132.0" layoutY="203.0" />
-      <JFXTextField fx:id="cijenaMjesecnaTextField" layoutX="132.0" layoutY="298.0" />
-      <JFXTextField fx:id="cijenaJednokratnaTextField" layoutX="132.0" layoutY="255.0" prefHeight="28.0" prefWidth="135.0" />
-      <JFXTimePicker fx:id="vrijemePolaskaTimeChooser" layoutX="132.0" layoutY="164.0" />
-      <TextField fx:id="odredisteTextField" editable="false" layoutX="125.0" layoutY="128.0" />
-      <TextField fx:id="polazisteTextField" editable="false" layoutX="125.0" layoutY="85.0" />
-      <ImageView fx:id="checkMark" fitHeight="59.0" fitWidth="69.0" layoutX="191.0" layoutY="333.0" pickOnBounds="true" preserveRatio="true">
+      <Label layoutX="320.0" layoutY="129.0" text="Odrediste:" />
+      <Label layoutX="326.0" layoutY="26.0" text="Relacije:" />
+      <Label layoutX="323.0" layoutY="88.0" text="Polaziste:" />
+      <JFXComboBox fx:id="relacijeComboBox" layoutX="407.0" layoutY="22.0" onAction="#comboBoxChange" promptText="Odaberite relaciju" />
+      <Label layoutX="293.0" layoutY="248.0" text="Cijena (jednokratna):" />
+      <Label layoutX="300.0" layoutY="290.0" text="Cijena (mjesecna):" />
+      <Label layoutX="304.0" layoutY="205.0" text="Vrijeme dolaska:" />
+      <Label layoutX="304.0" layoutY="168.0" text="Vrijeme polaska:" />
+      <JFXTimePicker fx:id="vrijemeDolaskaTimeChooser" layoutX="417.0" layoutY="199.0" />
+      <JFXTextField fx:id="cijenaMjesecnaTextField" layoutX="417.0" layoutY="286.0" />
+      <JFXTextField fx:id="cijenaJednokratnaTextField" layoutX="417.0" layoutY="242.0" prefHeight="28.0" prefWidth="135.0" />
+      <JFXTimePicker fx:id="vrijemePolaskaTimeChooser" layoutX="416.0" layoutY="161.0" />
+      <TextField fx:id="odredisteTextField" editable="false" layoutX="410.0" layoutY="125.0" />
+      <TextField fx:id="polazisteTextField" editable="false" layoutX="410.0" layoutY="79.0" />
+      <ImageView fx:id="checkMark" fitHeight="40.0" fitWidth="43.0" layoutX="505.0" layoutY="332.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@img/checkmark.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="questionMarkImageView" fitHeight="28.0" fitWidth="30.0" layoutX="278.0" layoutY="297.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="questionMarkImageView" fitHeight="28.0" fitWidth="30.0" layoutX="562.0" layoutY="284.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@img/question.png" />
          </image>

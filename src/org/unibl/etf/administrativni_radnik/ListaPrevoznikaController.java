@@ -1,13 +1,17 @@
 package org.unibl.etf.administrativni_radnik;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+
+import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.karta.Prevoznik;
 import org.unibl.etf.util.Util;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,19 +19,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class ListaPrevoznikaController implements Initializable {
 
 	public static ObservableList<Prevoznik> prevozniciObsList = FXCollections.observableArrayList();
-	
+	public static MaskerPane progressPane = new MaskerPane();
+	@FXML
+	private AnchorPane anchorPane = new AnchorPane();
 	@FXML
 	private TableView<Prevoznik> prevozniciTableView = new TableView<>();
 	@FXML
@@ -102,16 +110,35 @@ public class ListaPrevoznikaController implements Initializable {
                       	//postavljanje CSS
                       	button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
                       	//postavljanje opisa
-                      	button.setTooltip(new Tooltip("Obri�i?"));
+                      	button.setTooltip(new Tooltip("Obriši?"));
                       	button.getTooltip().setAutoHide(false);
                       	button.getTooltip().setShowDelay(Duration.seconds(0.5));
                       	//dodavanje u kolonu
                       	setGraphic(button);
                       	button.setOnMouseClicked(
-                      			event ->  { if(Prevoznik.izbrisiPrevoznika(item))
-                      							showUspjesnoUklonjenPrevoznik();
-                      						prevozniciObsList.remove(item);
-                      						
+                      			event ->  { 
+                      				if(showPotvrda()) {
+                      					maskerSetUp();
+            							Task<Void> task = new Task<Void>() {
+            					            @Override
+            					            protected Void call() /*throws Exception*/ {
+            					            	System.out.println(Thread.currentThread());
+            					                progressPane.setVisible(true);
+                                  				Prevoznik.izbrisiPrevoznika(item);
+                                  				prevozniciObsList.remove(item);		
+            					                return null;
+            					            }
+            					            @Override
+            					            protected void succeeded(){
+            					                super.succeeded();
+            					                progressPane.setVisible(false);
+            					                showUspjesnoUklonjenPrevoznik();
+            					            }
+            					        };
+            					        new Thread(task).start();
+                      					
+                      				}
+                      				
                       			}
                           );
                       } else {
@@ -122,13 +149,30 @@ public class ListaPrevoznikaController implements Initializable {
               return cell;
           });
 	}
-	
+	public boolean showPotvrda() {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("");
+		alert.setHeaderText("Da li ste sigurni?");
+		Optional<ButtonType> action = alert.showAndWait();
+		return action.get().equals(ButtonType.OK);
+	}
 	public void showUspjesnoUklonjenPrevoznik() {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setHeaderText("Uspjesno uklonjen prevoznik");
 		alert.showAndWait();
 	}
-
+	public void maskerSetUp() {
+	  	progressPane = new MaskerPane();
+		progressPane.setText("Molimo sačekajte...");
+		progressPane.setVisible(false);
+		anchorPane.getChildren().add(progressPane);
+		AnchorPane.setTopAnchor(progressPane,0.0);
+		AnchorPane.setBottomAnchor(progressPane,0.0);
+		AnchorPane.setLeftAnchor(progressPane,0.0);
+		AnchorPane.setRightAnchor(progressPane,0.0);
+		
+	
+}
 	public void showIzmjenaPrevoznika(Prevoznik prevoznik) {
 		odabraniPrevoznik = prevoznik;
 		try {
