@@ -156,12 +156,14 @@ public class InformacijeController implements Initializable{
 		    		karteObs.clear();
 		    		mjestoTextField.clear();
 		    		mjestoTextField.setPromptText("Destinacija");
+		    		mjestoTextField.resetValidation();
 		    		
 		    	}
 		    	else {
 		    		mjestoTextField.clear();
 		    		karteObs.clear();
 		    		mjestoTextField.setPromptText("Polaziste");		    		
+		    		mjestoTextField.resetValidation();
 		    	}
 		});	
 	}

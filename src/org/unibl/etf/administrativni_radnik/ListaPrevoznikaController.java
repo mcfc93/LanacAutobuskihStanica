@@ -27,7 +27,9 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 public class ListaPrevoznikaController implements Initializable {
@@ -181,6 +183,9 @@ public class ListaPrevoznikaController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle(prevoznik.getNaziv());
             stage.setScene(new Scene(root1));  
+            stage.setResizable(false);
+			stage.initStyle(StageStyle.UNDECORATED);
+			stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
             int index = prevozniciObsList.indexOf(prevoznik);
             prevozniciObsList.remove(prevoznik);

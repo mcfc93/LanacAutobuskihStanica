@@ -14,7 +14,7 @@
       <JFXRadioButton fx:id="polasciRadioButton" layoutX="14.0" layoutY="33.0" text="Polasci" textFill="WHITE" />
       <JFXRadioButton fx:id="dolasciRadioButton" layoutX="14.0" layoutY="68.0" text="Dolasci" textFill="WHITE" />
       <DatePicker fx:id="datum" layoutX="115.0" layoutY="73.0" />
-      <TableView fx:id="karteTable" layoutX="65.0" layoutY="122.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <TableView fx:id="karteTable" layoutX="65.0" layoutY="122.0" prefHeight="347.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <columns>
           <TableColumn fx:id="nazivLinijeColumn" prefWidth="171.0" text="Naziv linije" />
           <TableColumn fx:id="vrijemePolaskaColumn" prefWidth="128.0" text="Vrijeme polaska" />
@@ -24,6 +24,6 @@
             <TableColumn fx:id="peronColumn" prefWidth="50.0" text="Peron" />
         </columns>
       </TableView>
-      <JFXButton fx:id="pretragaButton" layoutX="412.0" layoutY="14.0" onAction="#getKarte" prefHeight="100.0" prefWidth="174.0" text="Pretraga" />
+      <JFXButton fx:id="pretragaButton" layoutX="362.0" layoutY="9.0" onAction="#getKarte" prefHeight="105.0" prefWidth="174.0" text="Pretraga" />
    </children>
 </AnchorPane>

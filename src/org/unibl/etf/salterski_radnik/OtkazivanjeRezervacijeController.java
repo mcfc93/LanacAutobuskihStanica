@@ -47,6 +47,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		serijskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(serijskiBrojTextField),Util.integerValidator(serijskiBrojTextField));
 		checkMarkImageView.setVisible(false);
+		stornirajButton.setDisable(true);
 	}
 	
 	@FXML
@@ -54,14 +55,16 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 		if(serijskiBrojTextField.validate())
 		{
 			Karta trazenaKarta = Karta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
-			System.out.println(trazenaKarta);
+			if(trazenaKarta==null)
+				showAlertPogresanSerijskiBroj();
+			stornirajButton.setDisable(false);
 			cijenaTextField.setText(trazenaKarta.getCijena()  + "KM");
 			relacijaTextField.setText(trazenaKarta.getRelacija().getPolaziste() + " - " + trazenaKarta.getRelacija().getOdrediste());
 			datumTextField.setText(trazenaKarta.getDatumIzdavanja().toString());
 			linijaTextField.setText(trazenaKarta.getLinija().getNazivLinije());				
-				}
-			else 
-				showAlertPogresanSerijskiBroj();	
+		}
+		else 
+			showAlertPogresanSerijskiBroj();	
 	
 	
 	}

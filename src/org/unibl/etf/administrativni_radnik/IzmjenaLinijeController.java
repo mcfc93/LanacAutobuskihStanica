@@ -29,11 +29,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.control.Alert.AlertType;
@@ -45,6 +48,8 @@ public class IzmjenaLinijeController implements Initializable {
 	private static String daniString="";
 	private int peroni;
 	
+	@FXML
+	private AnchorPane anchorPane = new AnchorPane();
 	@FXML
 	private ImageView checkMark = new ImageView();
 	@FXML
@@ -89,8 +94,41 @@ public class IzmjenaLinijeController implements Initializable {
 	private JFXTextField cijenaMjesecnaTextField = new JFXTextField();
 	@FXML
 	private ImageView questionMarkImageView = new ImageView(); 
+	@FXML
+	private ImageView exitImageView = new ImageView();
+	private double xOffset=0;
+    private double yOffset=0;
+	
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+				xOffset = stage.getX() - event.getScreenX();
+				yOffset = stage.getY() - event.getScreenY();
+			}
+		});
+		anchorPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+			   	Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+			    if(!stage.isMaximized()) {
+			    	stage.setX(event.getScreenX() + xOffset);
+			    	stage.setY(event.getScreenY() + yOffset);
+			    	stage.setOpacity(0.8);
+			    }
+			}
+		});
+						
+		anchorPane.setOnMouseReleased((event) -> {
+			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+			stage.setOpacity(1.0);
+		});
+		
+		
+		
 		daniString="";
 		daniUSedmiciList.clear();
 		Tooltip.install(questionMarkImageView, new Tooltip("Ostavite prazno ako nema u ponudi."));
@@ -130,7 +168,7 @@ public class IzmjenaLinijeController implements Initializable {
 
 	@FXML
 	private void otkazi() {
-		 Stage stage = (Stage) otkaziButton.getScene().getWindow();
+		 Stage stage = (Stage) exitImageView.getScene().getWindow();
 		    stage.close();
 	}
 	private void checkBoxInit() {

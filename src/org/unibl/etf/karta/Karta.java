@@ -293,5 +293,26 @@ public class Karta {
 		return null;
 	}
 	
-	
+	public static int provjeriBrojKarata(Karta k, Date datum) {
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		String sql = "select count(*) from karta join (relacija,linija) on (karta.IdRelacije=relacija.IdRelacije) and (relacija.IdLinije=linija.IdLinije) "
+				+ "where (linija.IdLinije=?) and (karta.Datum=?) and (karta.Stanje='Aktivno')";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, k.getLinija().getIdLinije(), datum);
+			r = s.executeQuery();
+			if(r.next())
+				return r.getInt(1);
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return 0;
+		}
+		finally {
+			Util.close(r, s, c);
+		}
+		return 0;
+	}
 }

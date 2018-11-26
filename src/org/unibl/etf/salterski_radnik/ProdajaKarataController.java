@@ -239,12 +239,11 @@ public class ProdajaKarataController implements Initializable {
 			return;
 		}
 		brojKarataZaKupovinu = brojKarataComboBox.getValue();
-		if(50-provjeriBrojKarata()<brojKarataZaKupovinu) {
+		Karta karta = karteTable.getSelectionModel().getSelectedItem();
+		if(50-Karta.provjeriBrojKarata(karta, Date.valueOf(datum.getValue()))<brojKarataZaKupovinu) {
 			showNedovoljnoMjesta();
 			return;
 		}
-		Karta karta = karteTable.getSelectionModel().getSelectedItem();
-
 			if(radioButtonMjesecna.isSelected()) {
 				if(polazisteTextField.validate() & odredisteTextField.validate() & 
 					imeTextField.validate() & prezimeTextField.validate())
@@ -255,7 +254,6 @@ public class ProdajaKarataController implements Initializable {
 					Task<Void> task = new Task<Void>() {
 			            @Override
 			            protected Void call() /*throws Exception*/ {
-			            	System.out.println(Thread.currentThread());
 			                progressPane.setVisible(true);
 							int brojKarata = provjeriBrojKarata();
 							Karta.kreirajKartu(karta,brojKarata,datum.getValue());
@@ -285,7 +283,6 @@ public class ProdajaKarataController implements Initializable {
 							Task<Void> task = new Task<Void>() {
 					            @Override
 					            protected Void call() /*throws Exception*/ {
-					            	System.out.println(Thread.currentThread());
 					                progressPane.setVisible(true);
 					                for(int i=0;i<brojKarataZaKupovinu;++i) {
 										int brojKarata = provjeriBrojKarata();
@@ -311,7 +308,6 @@ public class ProdajaKarataController implements Initializable {
 						Task<Void> task = new Task<Void>() {
 				            @Override
 				            protected Void call() /*throws Exception*/ {
-				            	System.out.println(Thread.currentThread());
 				                progressPane.setVisible(true);
 								for(int i=0;i<brojKarataZaKupovinu;++i) {
 									int brojKarata = provjeriBrojKarata();
@@ -349,8 +345,6 @@ public class ProdajaKarataController implements Initializable {
 			AnchorPane.setBottomAnchor(progressPane,0.0);
 			AnchorPane.setLeftAnchor(progressPane,0.0);
 			AnchorPane.setRightAnchor(progressPane,0.0);
-			
-		
 	}
 
 	public void validationSetUp() {

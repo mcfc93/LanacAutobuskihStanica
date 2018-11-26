@@ -5,39 +5,57 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTimePicker?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrativni_radnik.DodavanjeLinijaController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="org.unibl.etf.administrativni_radnik.DodavanjeLinijaController">
+  <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="37.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="10.0" prefWidth="133.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="20.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="10.0" prefWidth="189.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="19.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="10.0" prefWidth="169.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="38.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="80.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="80.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="80.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="90.0" minHeight="10.0" prefHeight="88.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="107.0" minHeight="10.0" prefHeight="74.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="65.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
+  </rowConstraints>
    <children>
-      <JFXTextField fx:id="polazisteTextField" layoutX="23.0" layoutY="209.0" promptText="Polaziste" />
-      <JFXTextField fx:id="odredisteTextField" layoutX="23.0" layoutY="266.0" promptText="Odrediste" />
-      <JFXTimePicker fx:id="vrijemePolaska" layoutX="169.0" layoutY="207.0" promptText="Vrijeme polaska" />
-      <JFXTimePicker fx:id="vrijemeDolaska" layoutX="169.0" layoutY="263.0" promptText="Vrijeme dolaska" />
-      <JFXTextField fx:id="cijenaJednokratnaTextField" layoutX="21.0" layoutY="317.0" promptText="Cijena (jednokratna)" />
-      <JFXTextField fx:id="cijenaMjesecnaTextField" layoutX="168.0" layoutY="317.0" promptText="Cijena (mjesecna)" />
-      <JFXButton fx:id="dodajRelacijuButton" layoutX="30.0" layoutY="379.0" onAction="#dodajRelaciju" prefHeight="53.0" prefWidth="118.0" text="Dodaj relaciju" />
-      <JFXTextField fx:id="nazivLinijeTextField" layoutX="23.0" layoutY="34.0" promptText="Naziv linije" />
-      <JFXComboBox fx:id="prevozniciComboBox" layoutX="120.0" layoutY="85.0" promptText="Prevoznik" />
-      <JFXComboBox fx:id="peroniComboBox" layoutX="21.0" layoutY="85.0" promptText="Peron" />
-      <JFXCheckBox fx:id="ponedjeljakCB" layoutX="236.0" layoutY="31.0" text="Ponedjeljak" />
-      <JFXCheckBox fx:id="utorakCB" layoutX="333.0" layoutY="31.0" text="Utorak" />
-      <JFXCheckBox fx:id="srijedaCB" layoutX="333.0" layoutY="66.0" text="Srijeda" />
-      <JFXCheckBox fx:id="cetvrtakCB" layoutX="236.0" layoutY="66.0" text="Cetvrtak" />
-      <JFXCheckBox fx:id="petakCB" layoutX="236.0" layoutY="104.0" text="Petak" />
-      <JFXCheckBox fx:id="subotaCB" layoutX="332.0" layoutY="104.0" text="Subota" />
-      <JFXCheckBox fx:id="nedjeljaCB" layoutX="236.0" layoutY="146.0" text="Nedjelja" />
-      <JFXButton fx:id="dodajLinijuButton" layoutX="457.0" layoutY="58.0" onAction="#dodajLiniju" prefHeight="53.0" prefWidth="77.0" text="Dodaj liniju" />
-      <JFXButton fx:id="gotovoButton" layoutX="457.0" layoutY="363.0" onAction="#gotovUnos" prefHeight="53.0" prefWidth="77.0" text="Gotovo" />
-      <ImageView fx:id="checkMarkImageView" fitHeight="39.0" fitWidth="44.0" layoutX="216.0" layoutY="386.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@img/checkmark.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="questionMarkImageView" fitHeight="25.0" fitWidth="39.0" layoutX="310.0" layoutY="317.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@img/question.png" />
-         </image></ImageView>
+      <JFXTextField fx:id="nazivLinijeTextField" labelFloat="true" promptText="Naziv linije" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+      <JFXComboBox fx:id="prevozniciComboBox" labelFloat="true" promptText="Prevoznik" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+      <JFXTextField fx:id="polazisteTextField" labelFloat="true" promptText="Polaziste" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+      <JFXTextField fx:id="odredisteTextField" labelFloat="true" promptText="Odrediste" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+      <JFXTextField fx:id="cijenaJednokratnaTextField" promptText="Cijena (jednokratna)" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+      <AnchorPane maxHeight="80.0" maxWidth="300.0" prefHeight="57.0" prefWidth="52.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+         <children>
+            <JFXCheckBox fx:id="ponedjeljakCB" layoutX="7.0" layoutY="5.0" text="PON" />
+            <JFXCheckBox fx:id="petakCB" layoutX="84.0" layoutY="5.0" text="PET" />
+            <JFXCheckBox fx:id="utorakCB" layoutX="7.0" layoutY="36.0" text="UTO" />
+            <JFXCheckBox fx:id="subotaCB" layoutX="84.0" layoutY="36.0" text="SUB" />
+         </children>
+      </AnchorPane>
+      <JFXComboBox fx:id="peroniComboBox" labelFloat="true" promptText="Peron" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+      <JFXButton fx:id="dodajLinijuButton" onAction="#dodajLiniju" prefHeight="51.0" prefWidth="105.0" text="Dodaj liniju" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+      <JFXTimePicker fx:id="vrijemePolaska" promptText="Vrijeme polaska" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+      <JFXTimePicker fx:id="vrijemeDolaska" promptText="Vrijeme dolaska" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+      <JFXTextField fx:id="cijenaMjesecnaTextField" labelFloat="true" promptText="Cijena (mjesecna)" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+      <JFXButton fx:id="dodajRelacijuButton" onAction="#dodajRelaciju" prefHeight="51.0" prefWidth="105.0" text="Dodaj relaciju" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+      <AnchorPane maxHeight="80.0" maxWidth="300.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+         <children>
+            <JFXCheckBox fx:id="srijedaCB" layoutX="7.0" layoutY="5.0" text="SRI" />
+            <JFXCheckBox fx:id="cetvrtakCB" layoutX="7.0" layoutY="31.0" text="CET" />
+            <JFXCheckBox fx:id="nedjeljaCB" layoutX="85.0" layoutY="5.0" text="NED" />
+         </children>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</GridPane>
