@@ -172,6 +172,27 @@ System.out.println(getJibList());
 	    return listaAutobuskihStanica;
 	}
 	
+	public static AutobuskaStanica getAutobuskaStanica(String jib) {
+		AutobuskaStanica autobuskaStanica=null;
+	    String sql="select JIBStanice,autobuska_stanica.Naziv,Adresa,autobuska_stanica.PostanskiBroj,mjesto.Naziv,BrojTelefona,BrojPerona,WebStranica,Email,Stanje from autobuska_stanica join mjesto on (autobuska_stanica.PostanskiBroj=mjesto.PostanskiBroj) where Stanje!='Izbrisano' and JIBStanice=?;";
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+	    try {
+	       	c=Util.getConnection();
+	    	s = Util.prepareStatement(c, sql, false, jib);
+	    	r = s.executeQuery();
+	       	if(r.next()) {
+	       		autobuskaStanica=new AutobuskaStanica(r.getString("JIBStanice"), r.getString("Naziv"), r.getString("Adresa"), r.getInt("PostanskiBroj"), r.getString("mjesto.naziv"), r.getString("BrojTelefona"), r.getInt("BrojPerona"), r.getString("WebStranica"), r.getString("Email"), r.getString("Stanje"));
+	       	}
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(s,c);
+	    }
+	    return autobuskaStanica;
+	}
+	
 	public static boolean dodavanjeAutobuskeStanice(String jib, String naziv, String adresa, int postanskiBroj, String brojTelefona, int brojPerona, String webStranica, String email) {
 		Connection c = null;
 		CallableStatement s = null;

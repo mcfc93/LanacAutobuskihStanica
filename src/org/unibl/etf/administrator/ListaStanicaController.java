@@ -205,7 +205,7 @@ public class ListaStanicaController implements Initializable {
                     			Alert alert=new Alert(AlertType.CONFIRMATION);
             					alert.setTitle("Brisanje autobuske stanice");
             					alert.setHeaderText(null);
-            					alert.setContentText("Da li ste sigurni?");
+            					alert.setContentText("Obriši?");
             					alert.getButtonTypes().clear();
             				    alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
             					Button yesButton=(Button)alert.getDialogPane().lookupButton(ButtonType.YES);
@@ -215,6 +215,9 @@ public class ListaStanicaController implements Initializable {
             					noButton.setText("Ne");
             					noButton.setDefaultButton(true);
             					
+            					alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+            					alert.getDialogPane().getStyleClass().addAll("alert", "alertDelete");
+            					            					
             					Optional<ButtonType> rezultat = alert.showAndWait();
 
             					if (rezultat.get() == ButtonType.YES) {

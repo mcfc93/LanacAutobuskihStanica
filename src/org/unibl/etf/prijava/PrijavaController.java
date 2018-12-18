@@ -9,6 +9,8 @@ import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+
+import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.util.Util;
 import org.unibl.etf.zaposleni.AdministrativniRadnik;
 import org.unibl.etf.zaposleni.Administrator;
@@ -24,6 +26,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -34,10 +37,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 
 public class PrijavaController implements Initializable {
 	
 	public static Nalog nalog=null;
+	public static AutobuskaStanica autobuskaStanica=null;
 	
 	private static final String SER_FILE="logs/nalog.ser";
 	
@@ -174,6 +179,9 @@ System.out.println("nalog.ser");
 				//((Stage)anchorPane.getScene().getWindow()).hide();
 				//((Node)event.getSource()).getScene().getWindow().hide();
 				
+				autobuskaStanica=AutobuskaStanica.getAutobuskaStanica(nalog.getIdStanice());
+System.out.println(autobuskaStanica);
+				
 				((Stage)((Node)event.getSource()).getScene().getWindow()).close();
 				
 				//nalog.setKorisnickoIme(korisnickoImeTextField.getText());
@@ -224,6 +232,7 @@ System.out.println("nalog.ser");
 				nalog.setLozinka(Nalog.hash(lozinkaTextField.getText()));
 				korisnickoImeTextField.clear();
 				lozinkaTextField.clear();
+				
 				
 				if(nalog.getZaposleni() instanceof Administrator) {
 					//administrator
@@ -287,6 +296,10 @@ System.out.println("nalog.ser");
     		alert.setTitle("Greška");
     		alert.setHeaderText(null);
     		alert.setContentText("Neuspješno povezivanje sa bazom.");
+    		
+    		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+			alert.getDialogPane().getStyleClass().add("alert");
+		  	
     		alert.showAndWait();
 		}
     }

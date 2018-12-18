@@ -190,7 +190,7 @@ System.out.println(getUsernameList());
 	        		nalog.zaposleni.selectZaposleni(nalog.korisnickoIme);
 	        	}
 	    		
-	    		System.out.println(nalog.zaposleni);
+System.out.println(nalog.zaposleni);
 	        }/* else {
 	        	return null;
             }*/

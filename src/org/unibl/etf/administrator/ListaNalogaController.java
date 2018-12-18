@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -103,7 +104,7 @@ public class ListaNalogaController implements Initializable {
                     			Alert alert=new Alert(AlertType.CONFIRMATION);
             					alert.setTitle("Brisanje korisničkog naloga");
             					alert.setHeaderText(null);
-            					alert.setContentText("Da li ste sigurni?");
+            					alert.setContentText("Obrši?");
             					alert.getButtonTypes().clear();
             				    alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
             					Button yesButton=(Button)alert.getDialogPane().lookupButton(ButtonType.YES);
@@ -113,6 +114,9 @@ public class ListaNalogaController implements Initializable {
             					noButton.setText("Ne");
             					noButton.setDefaultButton(true);
             					
+            					alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+            					alert.getDialogPane().getStyleClass().addAll("alert", "alertDelete");
+            					
             					Optional<ButtonType> rezultat = alert.showAndWait();
 
             					if (rezultat.get() == ButtonType.YES) {
@@ -121,11 +125,18 @@ public class ListaNalogaController implements Initializable {
 		                    			getTableView().getItems().remove(item);
 		                				System.out.println("Obrisano: " + item);
             						} else {
-            							Alert alertError=new Alert(AlertType.ERROR);
-            				    		alertError.setTitle("Greška");
-            				    		alertError.setHeaderText(null);
-            				    		alertError.setContentText("Nije moguće obrisati Administratorski nalog.");
-            				    		
+            							Alert alertWarning=new Alert(AlertType.WARNING);
+            				    		alertWarning.setTitle("Greška");
+            				    		alertWarning.setHeaderText(null);
+            				    		alertWarning.setContentText("Nije moguće obrisati Administratorski nalog.");
+            				    		/*
+            				    		DialogPane dialogPaneWarning = alertWarning.getDialogPane();
+            							dialogPaneWarning.getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+            							dialogPaneWarning.getStyleClass().add("alert");
+            							*/
+            							alertWarning.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+            							alertWarning.getDialogPane().getStyleClass().add("alert");
+            							/*
             				    		Label label = new Label("Label:");
             				    		
             				    		TextArea textArea=new TextArea("Detalji");
@@ -141,11 +152,11 @@ public class ListaNalogaController implements Initializable {
             				    	    GridPane expContent = new GridPane();
             				    	    expContent.setMaxWidth(Double.MAX_VALUE);
             				    	    expContent.add(label, 0, 0);
-            				    	expContent.add(textArea, 0, 1);
+            				    		expContent.add(textArea, 0, 1);
             				    		
-            				    		alertError.getDialogPane().setExpandableContent(expContent);
-            				    		
-            				    		alertError.showAndWait();
+            				    		alertWarning.getDialogPane().setExpandableContent(expContent);
+            				    		*/
+            				    		alertWarning.showAndWait();
             						}
             					}
                     		}
