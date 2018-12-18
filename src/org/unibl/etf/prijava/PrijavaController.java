@@ -10,12 +10,19 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
+import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
+import org.unibl.etf.util.Mjesto;
+import org.unibl.etf.util.Praznik;
+import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 import org.unibl.etf.zaposleni.AdministrativniRadnik;
 import org.unibl.etf.zaposleni.Administrator;
 import com.jfoenix.controls.JFXCheckBox;
+
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -37,6 +44,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 
 public class PrijavaController implements Initializable {
@@ -179,29 +187,12 @@ System.out.println("nalog.ser");
 				//((Stage)anchorPane.getScene().getWindow()).hide();
 				//((Node)event.getSource()).getScene().getWindow().hide();
 				
-				autobuskaStanica=AutobuskaStanica.getAutobuskaStanica(nalog.getIdStanice());
-System.out.println(autobuskaStanica);
-				
-				((Stage)((Node)event.getSource()).getScene().getWindow()).close();
 				
 				//nalog.setKorisnickoIme(korisnickoImeTextField.getText());
 				//nalog.setLozinka(lozinkaTextField.getText());
 				
 				
-				
-				
-				
-				
-				/**************************************************
-				* MOZDA BOLJE DA SE UCITA PREKO LOGIN FORME
-				* A NE OTVARANJE NOVOG PROZORA ZA ADMINISTRATORA,...
-				*
-				*
-				**************************************************/
-				
-				
-				
-				
+
 				//Serijalizacija ako je cekirano Remember me
 				if(zapamtiMeCheckBox.isSelected()) {
 					System.out.println("REMEMBER ME");
@@ -232,6 +223,61 @@ System.out.println(autobuskaStanica);
 				nalog.setLozinka(Nalog.hash(lozinkaTextField.getText()));
 				korisnickoImeTextField.clear();
 				lozinkaTextField.clear();
+				
+				
+
+				
+
+
+
+				MaskerPane progressPane = new MaskerPane();
+				progressPane.setText("Molimo sačekajte...");
+				progressPane.setVisible(false);
+				anchorPane.getChildren().add(progressPane);
+				AnchorPane.setTopAnchor(progressPane,0.0);
+				AnchorPane.setBottomAnchor(progressPane,0.0);
+				AnchorPane.setLeftAnchor(progressPane,0.0);
+				AnchorPane.setRightAnchor(progressPane,0.0);
+
+				//ucitavanje postanskih brojeva i praznika
+				/*
+				Platform.runLater(() -> {
+					loadPostalCodes();
+					System.out.println(getPostalCodeList());
+				});
+				*/
+				Task<Void> task = new Task<Void>() {
+					@Override
+					protected Void call() throws Exception {
+						System.out.println(Thread.currentThread());
+			          	progressPane.setVisible(true);
+			          	Mjesto.loadPostalCodes();
+			          	Mjesto.loadCities();
+			          	Mjesto.loadPlaces();
+			          	Praznik.loadHolidays();
+			          	Stajaliste.loadStajalista();
+			          	Thread.sleep(1000);
+			            return null;
+			        }
+			        @Override
+			        protected void succeeded(){
+			        super.succeeded();
+			        	progressPane.setVisible(false);
+System.out.println(Mjesto.getPostalCodeList());
+System.out.println(Mjesto.getCityList());
+System.out.println(Mjesto.getPlaceList());
+System.out.println(Praznik.getHolidayList());
+System.out.println(Stajaliste.getStajalisteList());
+
+						autobuskaStanica=AutobuskaStanica.getAutobuskaStanica(nalog.getIdStanice());
+System.out.println(autobuskaStanica);
+
+						((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+		          
+				
+				
+				
+				
 				
 				
 				if(nalog.getZaposleni() instanceof Administrator) {
@@ -281,7 +327,11 @@ System.out.println(autobuskaStanica);
 	           			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 	            	}
 				}
-	
+				
+			        }
+				};
+				new Thread(task).start();
+
 			} else {
 				greskaTextLabel.setText("Korisničko ime ili lozinka pogrešni!");
 				greskaTextLabel.setVisible(true);

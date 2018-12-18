@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
+import org.unibl.etf.util.Mjesto;
 import org.unibl.etf.util.Util;
 
 import com.jfoenix.controls.JFXButton;
@@ -48,14 +49,14 @@ public class DodajStanicuController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		Util.setAutocompleteList(postanskiBrojTextField, Util.getPostalCodeList());
+		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getPostalCodeList());
 		
 		jibTextField.getValidators().addAll(Util.requredFieldValidator(jibTextField), Util.jibValidator(jibTextField), Util.collectionValidator(jibTextField, AutobuskaStanica.getJibList(), false, "Zauzeto"));
 		nazivTextField.getValidators().add(Util.requredFieldValidator(nazivTextField));
 		brojPeronaTextField.getValidators().addAll(Util.requredFieldValidator(brojPeronaTextField), Util.integerValidator(brojPeronaTextField));
 		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
 		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
-		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Util.getPostalCodeList(), true, "Nekorektan unos"));
+		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), true, "Nekorektan unos"));
 		webStranicaTextField.getValidators().addAll(Util.requredFieldValidator(webStranicaTextField), Util.webValidator(webStranicaTextField));
 		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
 	}

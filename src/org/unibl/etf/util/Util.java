@@ -69,30 +69,6 @@ public class Util {
 		
 System.out.println(PROPERTY);
 		
-
-		//ucitavanje postanskih brojeva i praznika
-		/*
-		Platform.runLater(() -> {
-			loadPostalCodes();
-			System.out.println(getPostalCodeList());
-		});
-		*/
-		Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() {
-            	System.out.println(Thread.currentThread());
-            	loadPostalCodes();
-            	Praznik.loadHolidays();
-                return null;
-            }
-            @Override
-            protected void succeeded(){
-                super.succeeded();
-System.out.println(getPostalCodeList());
-System.out.println(Praznik.getHolidayList());
-            }
-        };
-        new Thread(task).start();
 	}
 	
 	//BAZA
@@ -324,23 +300,13 @@ System.out.println(Praznik.getHolidayList());
 		return emailValidator;
 	}
 	
-	private static List<String> postalCodeList = new ArrayList<>();
-	
-	public static List<String> getPostalCodeList() {
-		return postalCodeList;
-	}
-	/*
-	public static void setPostalCodeList(List<String> postalCodeList) {
-		Util.postalCodeList = postalCodeList;
-	}
-	*/
 	public static ValidatorBase postalCodeValidator(JFXTextField textField) {
 		//System.out.println(getPostalCodeList());
 		ValidatorBase postalCodeValidator = new ValidatorBase("Nekorektan unos") {
 			@Override
 			protected void eval() {
 				if(!textField.getText().isEmpty()
-						&& !getPostalCodeList().contains(textField.getText())) {
+						&& !Mjesto.getPostalCodeList().contains(textField.getText())) {
 					hasErrors.set(true);
 				} else {
 					hasErrors.set(false);
@@ -350,21 +316,8 @@ System.out.println(Praznik.getHolidayList());
 		postalCodeValidator.setIcon(new ImageView());
 		return postalCodeValidator;
 	}
-
-	private static void loadPostalCodes() {
-		Connection c = null;
-		PreparedStatement s = null;
-		ResultSet r = null;
-		try {
-			c = Util.getConnection();
-			s = Util.prepareStatement(c, "select PostanskiBroj from mjesto", false);
-			r = s.executeQuery();
-			while(r.next())
-				getPostalCodeList().add(String.valueOf(r.getInt(1)));
-		} catch (SQLException e) {
-			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-		}
-	}
+	
+	
 	
 	public static ValidatorBase collectionValidator(JFXTextField textField, Collection<String> collection, boolean contains, String message) {
 		ValidatorBase postalCodeValidator = new ValidatorBase(message) {

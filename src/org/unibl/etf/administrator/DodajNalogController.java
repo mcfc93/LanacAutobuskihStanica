@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.prijava.Nalog;
+import org.unibl.etf.util.Mjesto;
 import org.unibl.etf.util.Util;
 import org.unibl.etf.zaposleni.Zaposleni;
 
@@ -158,7 +159,7 @@ public class DodajNalogController implements Initializable {
 		});
 		*/
 		
-		Util.setAutocompleteList(postanskiBrojTextField, Util.getPostalCodeList());
+		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getPostalCodeList());
 		Util.setAutocompleteList(jibStaniceTextField, AutobuskaStanica.getJibList());
 		
 
@@ -169,7 +170,7 @@ public class DodajNalogController implements Initializable {
    		prezimeTextField.getValidators().add(Util.requredFieldValidator(prezimeTextField));
    		jmbgTextField.getValidators().addAll(Util.requredFieldValidator(jmbgTextField), Util.jmbgValidator(jmbgTextField), Util.collectionValidator(jmbgTextField, Zaposleni.getJmbgList(), false, "Vec postoji"));
    		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
-   		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Util.getPostalCodeList(), true, "Nekorektan unos"));
+   		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), true, "Nekorektan unos"));
    		strucnaSpremaTextField.getValidators().add(Util.requredFieldValidator(strucnaSpremaTextField));
    		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
    		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
