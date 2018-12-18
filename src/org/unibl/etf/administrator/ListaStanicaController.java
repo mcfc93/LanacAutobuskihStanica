@@ -236,17 +236,17 @@ public class ListaStanicaController implements Initializable {
         	column.setReorderable(false);
         }
         
-        jibColumn.setMinWidth(75);
-        jibColumn.setMaxWidth(125);
+        jibColumn.setMinWidth(95);
+        jibColumn.setMaxWidth(150);
         
         nazivColumn.setMinWidth(100);
         
-        adresaColumn.setMinWidth(100);
+        adresaColumn.setMinWidth(95);
         
-        brojTelefonaColumn.setMinWidth(85);
-        brojTelefonaColumn.setMaxWidth(125);
+        brojTelefonaColumn.setMinWidth(100);
+        brojTelefonaColumn.setMaxWidth(150);
         
-        brojPeronaColumn.setMinWidth(75);
+        brojPeronaColumn.setMinWidth(45);
         brojPeronaColumn.setMaxWidth(75);
         
         blokirajColumn.setText("");

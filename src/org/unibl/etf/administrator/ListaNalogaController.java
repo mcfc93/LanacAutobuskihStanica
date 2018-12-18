@@ -170,8 +170,8 @@ public class ListaNalogaController implements Initializable {
 		tipColumn.setMinWidth(125);
 		tipColumn.setMaxWidth(150);
 		
-		idStaniceColumn.setMinWidth(75);
-		idStaniceColumn.setMaxWidth(85);
+		idStaniceColumn.setMinWidth(80);
+		idStaniceColumn.setMaxWidth(125);
 		
 		imeColumn.setMinWidth(70);
 		imeColumn.setMaxWidth(150);

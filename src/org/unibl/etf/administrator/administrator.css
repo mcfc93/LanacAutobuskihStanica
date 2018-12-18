@@ -460,3 +460,11 @@
 .jfx-radio-button .radio-container:hover{
     -fx-cursor: hand;
 }
+
+.mjesecnaAnchor {
+	-fx-border-color: BLACK;
+	-fx-border-radius: 5 5 5 5;
+ 	-fx-background-radius: 7 7 7 7;
+	-fx-border-width: 2px;
+	-fx-background-color: blue;
+}

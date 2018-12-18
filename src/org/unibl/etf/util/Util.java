@@ -70,7 +70,7 @@ public class Util {
 System.out.println(PROPERTY);
 		
 
-		//ucitavanje postanskih brojeva
+		//ucitavanje postanskih brojeva i praznika
 		/*
 		Platform.runLater(() -> {
 			loadPostalCodes();
@@ -82,12 +82,14 @@ System.out.println(PROPERTY);
             protected Void call() {
             	System.out.println(Thread.currentThread());
             	loadPostalCodes();
+            	Praznik.loadHolidays();
                 return null;
             }
             @Override
             protected void succeeded(){
                 super.succeeded();
 System.out.println(getPostalCodeList());
+System.out.println(Praznik.getHolidayList());
             }
         };
         new Thread(task).start();

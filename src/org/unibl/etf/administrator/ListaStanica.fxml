@@ -13,7 +13,7 @@
           <TableColumn fx:id="nazivColumn" minWidth="20.0" text="Naziv" />
           <TableColumn fx:id="adresaColumn" minWidth="20.0" text="Adresa" />
             <TableColumn fx:id="brojTelefonaColumn" minWidth="20.0" text="Broj telefona" />
-            <TableColumn fx:id="brojPeronaColumn" minWidth="20.0" text="Broj perona" />
+            <TableColumn fx:id="brojPeronaColumn" minWidth="20.0" text="Perona" />
             <TableColumn fx:id="blokirajColumn" prefWidth="75.0" text="BLOCK" />
             <TableColumn fx:id="izmjeniColumn" minWidth="20.0" text="EDIT" />
             <TableColumn fx:id="obrisiColumn" minWidth="20.0" text="REMOVE" />

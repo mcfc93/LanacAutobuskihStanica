@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane fx:id="anchorPane" prefHeight="250.0" prefWidth="400.0" stylesheets="@../administrator/administrator.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="org.unibl.etf.administrativni_radnik.MjesecnaKartaController">
+   <children>
+      <AnchorPane fx:id="menuLine" layoutX="2.0" layoutY="-1.0" prefHeight="25.0" prefWidth="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="close" layoutX="612.0" layoutY="6.0" onMouseClicked="#close" prefHeight="20.0" prefWidth="20.0" styleClass="close" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/close.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+         </children>
+      </AnchorPane>
+      <JFXButton fx:id="stampajButton" layoutX="181.0" layoutY="161.0" onAction="#stampaj" prefHeight="25.0" prefWidth="100.0" text="Štampaj" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="120.0" />
+      <JFXButton fx:id="nazadButton" layoutX="288.0" layoutY="161.0" onMouseClicked="#close" prefHeight="25.0" prefWidth="100.0" text="Nazad" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+      <AnchorPane fx:id="mjesecnaAnchorPane" layoutX="14.0" layoutY="38.0" prefHeight="166.0" prefWidth="200.0" styleClass="mjesecnaAnchor" stylesheets="@../administrator/administrator.css" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="40.0">
+         <children>
+            <ImageView fitHeight="115.0" fitWidth="85.0" layoutX="14.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../administrator/img/delete.png" />
+               </image>
+            </ImageView>
+            <Label layoutY="1.0" prefHeight="17.0" prefWidth="85.0" text="Prevoznik" textFill="WHITE" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="2.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="137.0" layoutY="70.0" style="-fx-rotate: 270;" text="MJESEČNA KARTA" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="246.0" layoutY="141.0" text="# SERIAL NUMBER" textFill="#e4d3d3" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="10.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="14.0" layoutY="133.0" text="LINIJA" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

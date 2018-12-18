@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleButton?>
@@ -9,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="800.0" stylesheets="@administrator.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.AdministratorController">
+<AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.AdministratorController">
    <children>
       <AnchorPane fx:id="anchorMenu" layoutY="5.0" maxWidth="350.0" minHeight="200.0" prefHeight="200.0" prefWidth="200.0" styleClass="anchorMenu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -133,4 +134,8 @@
       </AnchorPane>
       <AnchorPane fx:id="dataAnchorPane" layoutX="200.0" layoutY="30.0" prefHeight="470.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
    </children>
+   <stylesheets>
+      <URL value="@administrator.css" />
+      <URL value="@../application.css" />
+   </stylesheets>
 </AnchorPane>
