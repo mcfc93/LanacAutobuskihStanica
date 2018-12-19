@@ -49,14 +49,16 @@ public class DodajStanicuController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getPostalCodeList());
+		//Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getPostalCodeList());
+		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());
 		
 		jibTextField.getValidators().addAll(Util.requredFieldValidator(jibTextField), Util.jibValidator(jibTextField), Util.collectionValidator(jibTextField, AutobuskaStanica.getJibList(), false, "Zauzeto"));
 		nazivTextField.getValidators().add(Util.requredFieldValidator(nazivTextField));
 		brojPeronaTextField.getValidators().addAll(Util.requredFieldValidator(brojPeronaTextField), Util.integerValidator(brojPeronaTextField));
 		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
 		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
-		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), true, "Nekorektan unos"));
+		//postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), true, "Nekorektan unos"));
+		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
 		webStranicaTextField.getValidators().addAll(Util.requredFieldValidator(webStranicaTextField), Util.webValidator(webStranicaTextField));
 		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
 	}
@@ -74,7 +76,8 @@ public class DodajStanicuController implements Initializable {
 			if(AutobuskaStanica.dodavanjeAutobuskeStanice(jibTextField.getText().trim(),
 					nazivTextField.getText().trim(),
 					adresaTextField.getText().trim(),
-					Integer.parseInt(postanskiBrojTextField.getText().trim()),
+					/*Integer.parseInt(postanskiBrojTextField.getText().trim()),*/
+					Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()),
 					brojTelefonaTextField.getText().trim(),
 					Integer.parseInt(brojPeronaTextField.getText().trim()),
 					webStranicaTextField.getText().trim(),

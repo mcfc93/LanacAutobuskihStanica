@@ -53,7 +53,7 @@ public class Mjesto {
 		Util.postalCodeList = postalCodeList;
 	}
 	*/
-
+/*
 	public static void loadPostalCodes() {
 		Connection c = null;
 		PreparedStatement s = null;
@@ -68,13 +68,13 @@ public class Mjesto {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 	}
-	
+*/
 	private static List<String> cityList = new ArrayList<>();
 	
 	public static List<String> getCityList() {
 		return cityList;
 	}
-	
+/*
 	public static void loadCities() {
 		Connection c = null;
 		PreparedStatement s = null;
@@ -88,6 +88,12 @@ public class Mjesto {
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
+	}
+*/
+	private static List<String> cityPostalCodeList = new ArrayList<>();
+	
+	public static List<String> getCityPostalCodeList() {
+		return cityPostalCodeList;
 	}
 	
 	private static List<Mjesto> placeList = new ArrayList<>();
@@ -104,8 +110,14 @@ public class Mjesto {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, "select PostanskiBroj, Naziv from mjesto", false);
 			r = s.executeQuery();
-			while(r.next())
-				getPlaceList().add(new Mjesto(r.getInt(1), r.getString(2)));
+			while(r.next()) {
+				int postanskiBroj=r.getInt(1);
+				String naziv=r.getString(2);
+				getPlaceList().add(new Mjesto(postanskiBroj, naziv));
+				getPostalCodeList().add(String.valueOf(postanskiBroj));
+				getCityList().add(naziv);
+				getCityPostalCodeList().add(postanskiBroj + " - " + naziv);
+			}
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}

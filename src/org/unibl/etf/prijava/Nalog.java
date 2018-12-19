@@ -32,23 +32,6 @@ public class Nalog implements Serializable {
 	private boolean prijavljen;		//da li je trenutni korisnik prijavljen
 	private Zaposleni zaposleni;	//podaci o vlasniku naloga
 	
-	static {
-		Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() {
-            	System.out.println(Thread.currentThread());
-            	loadUsernames();
-                return null;
-            }
-            @Override
-            protected void succeeded(){
-                super.succeeded();
-System.out.println(getUsernameList());
-            }
-        };
-        new Thread(task).start();
-	}
-	
 	public Nalog() {
 		super();
 	}
@@ -318,7 +301,7 @@ System.out.println(nalog.zaposleni);
 		Nalog.usernameList = usernameList;
 	}
 	*/
-	private static void loadUsernames() {
+	public static void loadUsernames() {
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;

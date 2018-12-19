@@ -72,13 +72,13 @@ System.out.println(PROPERTY);
 	}
 	
 	//BAZA
-	public static Connection getConnection() {
+	public static Connection getConnection() throws SQLException{
 		Connection c = null;
-		try {
+		//try {
 			c = DriverManager.getConnection(Util.PROPERTY.getProperty("jdbc.url"), Util.PROPERTY.getProperty("db.username"), Util.PROPERTY.getProperty("db.password"));
-		} catch (SQLException e) {
-			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-		}
+		//} catch (SQLException e) {
+		//	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		//}
 		return c;
 	}
 	
@@ -319,7 +319,7 @@ System.out.println(PROPERTY);
 	
 	
 	
-	public static ValidatorBase collectionValidator(JFXTextField textField, Collection<String> collection, boolean contains, String message) {
+	public static ValidatorBase collectionValidator(JFXTextField textField, Collection<?> collection, boolean contains, String message) {
 		ValidatorBase postalCodeValidator = new ValidatorBase(message) {
 			@Override
 			protected void eval() {

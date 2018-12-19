@@ -5,10 +5,13 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
+import org.unibl.etf.prijava.Nalog;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
+import org.unibl.etf.zaposleni.Zaposleni;
 
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -103,6 +106,26 @@ public class AdministratorController implements Initializable {
 		
 		//toggleGroup.getSelectedToggle().
 		listaAutobuskihStanica(null);
+		
+		//Ucitavanje podataka iz Baze za Autocomplete
+		Task<Void> task = new Task<Void>() {
+			@Override
+            protected Void call() {
+            	System.out.println(Thread.currentThread());
+            	AutobuskaStanica.loadJibs();
+            	Nalog.loadUsernames();
+            	Zaposleni.loadJmbgs();
+                return null;
+            }
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+System.out.println(AutobuskaStanica.getJibList());
+System.out.println(Nalog.getUsernameList());
+System.out.println(Zaposleni.getJmbgList());
+            }
+        };
+        new Thread(task).start();
 	}
 	
 	@FXML

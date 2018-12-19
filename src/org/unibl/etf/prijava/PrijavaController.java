@@ -251,8 +251,8 @@ System.out.println("nalog.ser");
 					protected Void call() throws Exception {
 						System.out.println(Thread.currentThread());
 			          	progressPane.setVisible(true);
-			          	Mjesto.loadPostalCodes();
-			          	Mjesto.loadCities();
+			          	//Mjesto.loadPostalCodes();
+			          	//Mjesto.loadCities();
 			          	Mjesto.loadPlaces();
 			          	Praznik.loadHolidays();
 			          	Stajaliste.loadStajalista();
@@ -266,6 +266,7 @@ System.out.println("nalog.ser");
 System.out.println(Mjesto.getPostalCodeList());
 System.out.println(Mjesto.getCityList());
 System.out.println(Mjesto.getPlaceList());
+System.out.println(Mjesto.getCityPostalCodeList());
 System.out.println(Praznik.getHolidayList());
 System.out.println(Stajaliste.getStajalisteList());
 

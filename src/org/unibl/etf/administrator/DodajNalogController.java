@@ -159,7 +159,8 @@ public class DodajNalogController implements Initializable {
 		});
 		*/
 		
-		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getPostalCodeList());
+		//Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getPostalCodeList());
+		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());
 		Util.setAutocompleteList(jibStaniceTextField, AutobuskaStanica.getJibList());
 		
 
@@ -170,7 +171,8 @@ public class DodajNalogController implements Initializable {
    		prezimeTextField.getValidators().add(Util.requredFieldValidator(prezimeTextField));
    		jmbgTextField.getValidators().addAll(Util.requredFieldValidator(jmbgTextField), Util.jmbgValidator(jmbgTextField), Util.collectionValidator(jmbgTextField, Zaposleni.getJmbgList(), false, "Vec postoji"));
    		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
-   		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), true, "Nekorektan unos"));
+   		//postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), true, "Nekorektan unos"));
+   		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
    		strucnaSpremaTextField.getValidators().add(Util.requredFieldValidator(strucnaSpremaTextField));
    		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
    		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
@@ -206,7 +208,8 @@ public class DodajNalogController implements Initializable {
 					jmbgTextField.getText(),
 					muskiRadioButton.isSelected() ? "Muški" : "Ženski",
 					adresaTextField.getText(),
-					Integer.parseInt(postanskiBrojTextField.getText()),
+					//Integer.parseInt(postanskiBrojTextField.getText()),
+					Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()),
 					strucnaSpremaTextField.getText(),
 					brojTelefonaTextField.getText(),
 					emailTextField.getText())) {

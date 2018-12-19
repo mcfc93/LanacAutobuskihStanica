@@ -25,23 +25,6 @@ public abstract class Zaposleni implements Serializable {
 	//private Date datumRodjenja;
 	private String email;
 	
-	static {
-		Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() {
-            	System.out.println(Thread.currentThread());
-            	loadJmbgs();
-                return null;
-            }
-            @Override
-            protected void succeeded() {
-                super.succeeded();
-System.out.println(getJmbgList());
-            }
-        };
-        new Thread(task).start();
-	}
-	
 	public Zaposleni() {
 		super();
 	}
@@ -157,7 +140,7 @@ System.out.println(getJmbgList());
 		Zaposleni.jmbgList = jmbgList;
 	}
 	*/
-	private static void loadJmbgs() {
+	public static void loadJmbgs() {
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;

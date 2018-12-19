@@ -26,23 +26,6 @@ public class AutobuskaStanica {
 	private String email;
 	private String stanje;
 	
-	static {
-		Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() {
-            	System.out.println(Thread.currentThread());
-            	loadJibs();
-                return null;
-            }
-            @Override
-            protected void succeeded() {
-                super.succeeded();
-System.out.println(getJibList());
-            }
-        };
-        new Thread(task).start();
-	}
-	
 	public AutobuskaStanica() {
 		super();
 	}
@@ -301,7 +284,7 @@ System.out.println(getJibList());
 		AutobuskaStanica.jibList = jibList;
 	}
 	*/
-	private static void loadJibs() {
+	public static void loadJibs() {
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;

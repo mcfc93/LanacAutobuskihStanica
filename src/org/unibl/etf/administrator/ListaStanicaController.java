@@ -152,6 +152,8 @@ public class ListaStanicaController implements Initializable {
                     			event -> {
                     				try {
                     					IzmjeniStanicuController.autobuskaStanica=item;
+                    					int index=listaAutobuskihStanica.indexOf(item);
+                    					autobuskeStaniceTable.getSelectionModel().select(item);
                     					
                     					Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/IzmjeniStanicu.fxml"));
                     					Scene scene = new Scene(root);
@@ -162,10 +164,11 @@ public class ListaStanicaController implements Initializable {
                     					stage.initModality(Modality.APPLICATION_MODAL);
                     					stage.showAndWait();
                     					
-                    					int index=listaAutobuskihStanica.indexOf(item);
+                    					
                     					listaAutobuskihStanica.remove(item);
                     			    	listaAutobuskihStanica.add(index, IzmjeniStanicuController.autobuskaStanica);
                     					autobuskeStaniceTable.refresh();
+                    					autobuskeStaniceTable.getSelectionModel().select(item);
                     				} catch(Exception e) {
                     					Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                     				}
