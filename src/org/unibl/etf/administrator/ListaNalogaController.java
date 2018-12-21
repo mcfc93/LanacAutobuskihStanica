@@ -39,21 +39,21 @@ public class ListaNalogaController implements Initializable {
 
     @FXML
     private TableColumn<?, ?> korisnickoImeColumn;
-
-    @FXML
-    private TableColumn<?, ?> lozinkaColumn;
-
-    @FXML
-    private TableColumn<?, ?> tipColumn;
-    
-    @FXML
-    private TableColumn<?, ?> idStaniceColumn;
     
     @FXML
     private TableColumn<?, ?> imeColumn;
 
     @FXML
     private TableColumn<?, ?> prezimeColumn;
+
+    @FXML
+    private TableColumn<?, ?> jmbgColumn;
+
+    @FXML
+    private TableColumn<?, ?> tipColumn;
+    
+    @FXML
+    private TableColumn<?, ?> idStaniceColumn;
     
     @FXML
     private TableColumn<Nalog, Nalog> izmijeniColumn;
@@ -72,11 +72,12 @@ public class ListaNalogaController implements Initializable {
 		naloziTable.setFocusTraversable(false);
 		
 		korisnickoImeColumn.setCellValueFactory(new PropertyValueFactory<>("korisnickoIme"));
-		lozinkaColumn.setCellValueFactory(new PropertyValueFactory<>("lozinka"));
-		tipColumn.setCellValueFactory(new PropertyValueFactory<>("tip"));
-		idStaniceColumn.setCellValueFactory(new PropertyValueFactory<>("idStanice"));
 		imeColumn.setCellValueFactory(new PropertyValueFactory<>("ime"));
 		prezimeColumn.setCellValueFactory(new PropertyValueFactory<>("prezime"));
+		jmbgColumn.setCellValueFactory(new PropertyValueFactory<>("jmbg"));
+		tipColumn.setCellValueFactory(new PropertyValueFactory<>("tip"));
+		idStaniceColumn.setCellValueFactory(new PropertyValueFactory<>("idStanice"));
+		
 		
 		obrisiColumn.setCellValueFactory(
         		param -> new ReadOnlyObjectWrapper<>(param.getValue())
@@ -174,21 +175,22 @@ public class ListaNalogaController implements Initializable {
 		}
 		
 		korisnickoImeColumn.setMinWidth(100);
-		korisnickoImeColumn.setMaxWidth(250);
+		korisnickoImeColumn.setMaxWidth(350);
 		
-		lozinkaColumn.setMinWidth(60);
+		imeColumn.setMinWidth(70);
+		imeColumn.setMaxWidth(350);
 		
-		tipColumn.setMinWidth(125);
+		prezimeColumn.setMinWidth(70);
+		prezimeColumn.setMaxWidth(350);
+		
+		jmbgColumn.setMinWidth(80);
+		jmbgColumn.setMaxWidth(125);
+		
+		tipColumn.setMinWidth(95);
 		tipColumn.setMaxWidth(150);
 		
 		idStaniceColumn.setMinWidth(80);
 		idStaniceColumn.setMaxWidth(125);
-		
-		imeColumn.setMinWidth(70);
-		imeColumn.setMaxWidth(150);
-		
-		prezimeColumn.setMinWidth(70);
-		prezimeColumn.setMaxWidth(150);
 		
 		obrisiColumn.setText("");
         obrisiColumn.setMinWidth(35);

@@ -20,6 +20,7 @@ import java.util.logging.SimpleFormatter;
 import org.unibl.etf.prijava.Nalog;
 
 import com.jfoenix.controls.JFXAutoCompletePopup;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.DoubleValidator;
@@ -170,6 +171,28 @@ System.out.println(PROPERTY);
 	    });
 	    
 	    
+	    return requiredFieldValidator;
+    }
+	
+	public static <T> ValidatorBase requredFieldValidator(JFXComboBox<T> comboBox) {
+    	ValidatorBase requiredFieldValidator = new RequiredFieldValidator();
+	    requiredFieldValidator.setMessage("Obavezan unos");
+	    requiredFieldValidator.setIcon(new ImageView());
+	    comboBox.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
+	        if(!newValue) {
+	        	comboBox.validate();
+	        }
+	    });
+	    comboBox.selectionModelProperty().addListener((observable, oldValue,newValue)->{
+	        if(newValue != null) {
+	        	comboBox.validate();
+	        }
+	    });
+	    /*
+	    comboBox.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+	        	textField.validate();
+	    });
+	    */
 	    return requiredFieldValidator;
     }
 	
@@ -383,6 +406,22 @@ System.out.println(PROPERTY);
 		};
 		iinValidator.setIcon(new ImageView());
 		return iinValidator;
+	}
+	
+	public static ValidatorBase dateValidator(JFXTextField textField) {
+		ValidatorBase dateValidator = new ValidatorBase("Format: dan/mjesec") {
+			@Override
+			protected void eval() {
+				if(!textField.getText().isEmpty()
+	        			&& !textField.getText().matches("^(0?[1-9]|[12][0-9]|3[01])[/](0?[1-9]|1[012])$")) {
+	        		hasErrors.set(true);
+		        } else {
+		        	 hasErrors.set(false);
+		        }
+			}
+		};
+		dateValidator.setIcon(new ImageView());
+		return dateValidator;
 	}
 	
 	public static void setAutocompleteList(JFXTextField textField, Collection<String> collection) {

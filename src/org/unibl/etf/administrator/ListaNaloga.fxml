@@ -4,16 +4,16 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.ListaNalogaController">
+<AnchorPane fx:id="anchorPane" prefHeight="470.0" prefWidth="600.0" stylesheets="@administrator.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrator.ListaNalogaController">
    <children>
       <TableView fx:id="naloziTable" layoutX="15.0" layoutY="15.0" prefHeight="440.0" prefWidth="570.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
         <columns>
           <TableColumn fx:id="korisnickoImeColumn" prefWidth="75.0" text="Korisničko ime" />
-          <TableColumn fx:id="lozinkaColumn" prefWidth="75.0" text="Lozinka" />
-            <TableColumn fx:id="tipColumn" prefWidth="75.0" text="Tip" />
-            <TableColumn fx:id="idStaniceColumn" prefWidth="75.0" text="ID Stanice" />
             <TableColumn fx:id="imeColumn" prefWidth="75.0" text="Ime" />
             <TableColumn fx:id="prezimeColumn" prefWidth="75.0" text="Prezime" />
+          <TableColumn fx:id="jmbgColumn" prefWidth="75.0" text="JMBG" />
+            <TableColumn fx:id="tipColumn" prefWidth="75.0" text="Tip" />
+            <TableColumn fx:id="idStaniceColumn" prefWidth="75.0" text="ID Stanice" />
             <TableColumn fx:id="obrisiColumn" prefWidth="75.0" text="DELETE" />
         </columns>
          <columnResizePolicy>

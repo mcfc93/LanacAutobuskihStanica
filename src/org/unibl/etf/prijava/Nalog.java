@@ -113,6 +113,10 @@ public class Nalog implements Serializable {
 	public String getPrezime() {
 		return zaposleni.getPrezime();
 	}
+	
+	public String getJmbg() {
+		return zaposleni.getJmbg();
+	}
 
 	@Override
 	public String toString() {

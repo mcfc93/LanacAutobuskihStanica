@@ -51,18 +51,6 @@
                   <Insets left="20.0" />
                </padding>
             </ToggleButton>
-            <ToggleButton fx:id="brisanjeKorisnickogNalogaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="305.0" mnemonicParsing="false" onAction="#brisanjeKorisnickogNaloga" prefHeight="40.0" prefWidth="200.0" text="Brisanje korisničkog naloga" toggleGroup="$toggleGroup" wrapText="true">
-               <graphic>
-                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@img/removeAccount_v2.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-            </ToggleButton>
             <ToggleButton fx:id="dodavanjeKorisnickogNalogaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutX="-1.0" layoutY="265.0" mnemonicParsing="false" onAction="#dodavanjeKorisnickogNaloga" prefHeight="40.0" prefWidth="200.0" text="Dodavanje korisničkog naloga" toggleGroup="$toggleGroup" wrapText="true">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
@@ -75,11 +63,23 @@
                   <Insets left="20.0" />
                </padding>
             </ToggleButton>
-            <ToggleButton fx:id="odjavaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="446.0" mnemonicParsing="false" onAction="#odjava" prefHeight="40.0" prefWidth="200.0" text="Odjava" toggleGroup="$toggleGroup" AnchorPane.bottomAnchor="14.0">
+            <ToggleButton fx:id="brisanjeKorisnickogNalogaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="305.0" mnemonicParsing="false" onAction="#brisanjeKorisnickogNaloga" prefHeight="40.0" prefWidth="200.0" text="Brisanje korisničkog naloga" toggleGroup="$toggleGroup" wrapText="true">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/logout.png" />
+                        <Image url="@img/removeAccount_v2.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </ToggleButton>
+            <ToggleButton fx:id="upravljanjePerzistentnimPodacimaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutX="-1.0" layoutY="345.0" mnemonicParsing="false" onAction="#upravljanjePerzistentnimPodacima" prefHeight="40.0" prefWidth="200.0" text="Upravljanje perzistentnim podacima" toggleGroup="$toggleGroup" wrapText="true">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/database.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -92,6 +92,18 @@
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@img/settings.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </ToggleButton>
+            <ToggleButton fx:id="odjavaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="446.0" mnemonicParsing="false" onAction="#odjava" prefHeight="40.0" prefWidth="200.0" text="Odjava" toggleGroup="$toggleGroup" AnchorPane.bottomAnchor="14.0">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/logout.png" />
                      </image>
                   </ImageView>
                </graphic>

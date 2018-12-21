@@ -103,6 +103,10 @@ public class Mjesto {
 	}
 	
 	public static void loadPlaces() {
+		getPlaceList().clear();
+		getPostalCodeList().clear();
+		getCityList().clear();
+		getCityPostalCodeList().clear();
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
@@ -121,5 +125,39 @@ public class Mjesto {
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
+	}
+	
+	public static boolean dodavanjeMjesta(int postanskiBroj, String naziv) {
+		String sql="insert into mjesto set PostanskiBroj=?, Naziv=?;";
+		Connection c = null;
+		PreparedStatement s = null;
+	    try {
+	       	c=Util.getConnection();
+	    	s = Util.prepareStatement(c, sql, false, postanskiBroj, naziv);
+	       	s.execute();
+	       	return true;
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(s,c);
+	    }
+	    return false;
+	}
+	
+	public static boolean izmjenaMjesta(int postanskiBroj, String naziv, int oldPostanskiBroj) {
+		String sql="update mjesto set PostanskiBroj=?, Naziv=? where PostanskiBroj=?;";
+		Connection c = null;
+		PreparedStatement s = null;
+	    try {
+	       	c=Util.getConnection();
+	    	s = Util.prepareStatement(c, sql, false, postanskiBroj, naziv, oldPostanskiBroj);
+	       	s.execute();
+	       	return true;
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(s,c);
+	    }
+	    return false;
 	}
 }

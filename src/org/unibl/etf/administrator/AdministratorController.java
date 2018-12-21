@@ -63,6 +63,9 @@ public class AdministratorController implements Initializable {
 	@FXML
 	private ToggleButton upravljanjeKorisnickimNalogomButton;
 	
+	@FXML
+    private ToggleButton upravljanjePerzistentnimPodacimaButton;
+	
 	private double xOffset=0;
     private double yOffset=0;
 	
@@ -309,4 +312,19 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 	}
+	
+	@FXML
+    void upravljanjePerzistentnimPodacima(ActionEvent event) {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/UpravljanjePerzistentnimPodacima.fxml"));
+			AnchorPane.setTopAnchor(root,0.0);
+			AnchorPane.setBottomAnchor(root,0.0);
+			AnchorPane.setLeftAnchor(root,0.0);
+			AnchorPane.setRightAnchor(root,0.0);
+			dataAnchorPane.getChildren().removeAll();
+			dataAnchorPane.getChildren().setAll(root);
+		} catch(Exception e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+    }
 }

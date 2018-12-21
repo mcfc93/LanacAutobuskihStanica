@@ -148,6 +148,7 @@
 
 .naslovLabel {
 	-fx-text-fill: #ff0095;
+	-fx-font-size: 14px;
 	-fx-font-weight: bold;
 }
 

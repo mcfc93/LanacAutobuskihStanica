@@ -83,7 +83,7 @@
 	-fx-background-color: #2800ae;
 }
 
-.text-field, .password-field {
+.text-field, .password-field, .combo-box {
 	/*-fx-text-fill: white;*/
 	-fx-text-fill: #ff0095;
 	/*-fx-prompt-text-fill: white;*/
@@ -91,7 +91,7 @@
 	-fx-highlight-fill: #ff0095;
 }
 
-.jfx-text-field, .jfx-password-field {
+.jfx-text-field, .jfx-password-field, .jfx-combo-box{
 	/*-fx-text-fill: white;*/
 	-fx-text-fill: #ff0095;
 	/*-jfx-focus-color: BLUE;*/
@@ -102,13 +102,13 @@
 	-jfx-disable-animation: false;
 }
 
-.jfx-text-field:error, .jfx-password-field:error {
+.jfx-text-field:error, .jfx-password-field:error, .jfx-combo-box:error {
     -jfx-focus-color: red;
     -jfx-unfocus-color: red;
     -fx-highlight-fill: red;
 }
 
-.jfx-text-field .error-label, .jfx-password-field .error-label {
+.jfx-text-field .error-label, .jfx-password-field .error-label, .jfx-combo-box .error-label{
     -fx-text-fill: red;
     -fx-font-size: 7pt;
     -fx-pref-height: 20;
@@ -116,7 +116,7 @@
     -fx-alignment: top-left;
 }
 
-.jfx-text-field .error-icon, .jfx-password-field .error-icon {
+.jfx-text-field .error-icon, .jfx-password-field .error-icon, .jfx-combo-box .error-icon {
     /*-fx-fill: red;*/
    	-fx-image: url("/org/unibl/etf/administrator/img/warning-24.png");
 }
@@ -467,4 +467,12 @@
  	-fx-background-radius: 7 7 7 7;
 	-fx-border-width: 2px;
 	-fx-background-color: blue;
+}
+
+
+
+.naslovLabel {
+	-fx-text-fill: #ff0095;
+	-fx-font-size: 14px;
+	-fx-font-weight: bold;
 }

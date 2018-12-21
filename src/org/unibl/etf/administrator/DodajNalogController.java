@@ -180,14 +180,6 @@ public class DodajNalogController implements Initializable {
 	
 	@FXML
     void potvrdi(ActionEvent event) {
-		WritableImage image = gridPane.snapshot(new SnapshotParameters(), null);
-		File file = new File("C:\\JavaProjects\\GUI\\src\\menu\\images\\screenshoot.png");
-		try {
-			ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-		}catch (IOException e) {
-		    System.out.println("EXCEPTION");
-		}
-		
 		if(korisnickoImeTextField.validate()
 				& lozinkaTextField.validate()
 					& jibStaniceTextField.validate()

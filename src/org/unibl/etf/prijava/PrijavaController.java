@@ -102,6 +102,7 @@ System.out.println("nalog.ser");
 		greskaTextLabel.setVisible(false);
 		greskaBackgroundLabel.setVisible(false);
 		zapamtiMeCheckBox.setSelected(true);
+		prijavaButton.setDefaultButton(true);
 		
 		if(korisnickoImeTextField.getText().trim().isEmpty()) {
 			//focus se moze traziti samo nakon sto se Stage inicijalizuje
@@ -171,11 +172,13 @@ System.out.println("nalog.ser");
 	
 	@FXML
     void enterPressed(KeyEvent event) {
+		/*
 		if(!korisnickoImeTextField.getText().isEmpty()
 				&& !lozinkaTextField.getText().isEmpty()
 					&& event.getCode().equals(KeyCode.ENTER)) {
 			prijava(new ActionEvent(event.getSource(), prijavaButton));
 		}
+		*/
     }
 	
 	@FXML

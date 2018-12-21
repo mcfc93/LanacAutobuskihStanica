@@ -3,15 +3,24 @@ package org.unibl.etf.administrativni_radnik;
 import java.net.URL;
 import java.util.ResourceBundle;
 import org.unibl.etf.karta.Prevoznik;
+import org.unibl.etf.util.Mjesto;
 import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class IzmjenaPrevoznikaController implements Initializable{
 	
+	@FXML
+	private AnchorPane anchorPane = new AnchorPane();
 	@FXML
 	private JFXTextField nazivTextField = new JFXTextField();
 	@FXML
@@ -31,7 +40,10 @@ public class IzmjenaPrevoznikaController implements Initializable{
 	@FXML
 	private JFXButton okButton = new JFXButton();
 	@FXML
-	private JFXButton otkaziButton = new JFXButton();
+	private ImageView exitImageView = new ImageView();
+	private double xOffset=0;
+    private double yOffset=0;
+	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -43,23 +55,22 @@ public class IzmjenaPrevoznikaController implements Initializable{
 		telefonTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getTelefon());
 		webAdresaTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getWebAdresa());
 		tekuciRacunTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getRacun());
-		postanskiBrojTextField.setText(String.valueOf(ListaPrevoznikaController.odabraniPrevoznik.getPostanskiBroj()));
-		Util.setAutocompleteList(postanskiBrojTextField, Util.getPostalCodeList());
-		
+		postanskiBrojTextField.setText(String.valueOf(ListaPrevoznikaController.odabraniPrevoznik.getPostanskiBroj() + " - " + Mjesto.getPlaceList().stream().filter(m -> m.getPostanskiBroj()==ListaPrevoznikaController.odabraniPrevoznik.getPostanskiBroj()).findFirst().get().getNaziv()));
+		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());	
 		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
 		nazivTextField.getValidators().add(Util.requredFieldValidator(nazivTextField));
 		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField),Util.emailValidator(emailTextField));
 		telefonTextField.getValidators().addAll(Util.requredFieldValidator(telefonTextField),Util.phoneValidator(telefonTextField));
 		webAdresaTextField.getValidators().addAll(Util.requredFieldValidator(webAdresaTextField),Util.webValidator(webAdresaTextField));
-		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField),Util.postalCodeValidator(postanskiBrojTextField));
+		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField),Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
 		tekuciRacunTextField.getValidators().addAll(Util.requredFieldValidator(tekuciRacunTextField),Util.integerValidator(tekuciRacunTextField));
-
+		Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Greska.");
 	}
 
 	@FXML
-	public void otkazi() {
-		 Stage stage = (Stage) otkaziButton.getScene().getWindow();
-		    stage.close();
+	public void exit() {
+		Stage stage = (Stage) exitImageView.getScene().getWindow();
+	    stage.close();
 	}
 	@FXML
 	public void izmjeniPrevoznika() {
@@ -72,7 +83,7 @@ public class IzmjenaPrevoznikaController implements Initializable{
 								tekuciRacunTextField.validate()) {
 		
 		Prevoznik.izmjeniPrevoznika(nazivTextField.getText(), telefonTextField.getText(), emailTextField.getText(), webAdresaTextField.getText(), 
-									tekuciRacunTextField.getText(), adresaTextField.getText(),postanskiBrojTextField.getText(), 
+									tekuciRacunTextField.getText(), adresaTextField.getText(),postanskiBrojTextField.getText().split("-")[0].trim(), 
 									ListaPrevoznikaController.odabraniPrevoznik.getJIBPrevoznika());
 		ListaPrevoznikaController.odabraniPrevoznik.setAdresa(adresaTextField.getText());
 		ListaPrevoznikaController.odabraniPrevoznik.setNaziv(nazivTextField.getText());
@@ -80,7 +91,7 @@ public class IzmjenaPrevoznikaController implements Initializable{
 		ListaPrevoznikaController.odabraniPrevoznik.setEmail(emailTextField.getText());
 		ListaPrevoznikaController.odabraniPrevoznik.setWebAdresa(webAdresaTextField.getText());
 		ListaPrevoznikaController.odabraniPrevoznik.setRacun(tekuciRacunTextField.getText());
-		ListaPrevoznikaController.odabraniPrevoznik.setPostanskiBroj(Integer.parseInt(postanskiBrojTextField.getText()));
+		ListaPrevoznikaController.odabraniPrevoznik.setPostanskiBroj(Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()));
 		Stage stage = (Stage) okButton.getScene().getWindow();
 		stage.close();
 	}
