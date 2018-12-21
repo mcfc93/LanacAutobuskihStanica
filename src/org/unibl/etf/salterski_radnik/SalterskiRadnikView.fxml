@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="800.0" styleClass="anchorPane" stylesheets="@salterski_radnik.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.salterski_radnik.SalterskiRadnikController">
+<AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="800.0" styleClass="anchorPane" stylesheets="@../administrator/administrator.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.salterski_radnik.SalterskiRadnikController">
    <children>
       <AnchorPane layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="anchorMenu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -52,7 +52,7 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/logout.png" />
+                        <Image url="@../administrator/img/logout.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -71,7 +71,7 @@
                   <Insets left="20.0" />
                </padding>
             </ToggleButton>
-            <ToggleButton fx:id="otkazivanjeRezervacijeButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="216.0" mnemonicParsing="false" onAction="#otkazivanjeRezervacije" prefHeight="28.0" prefWidth="200.0" text="Otkazivanje rezervacije" toggleGroup="$toggleGroup">
+            <ToggleButton fx:id="otkazivanjeRezervacijeButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="216.0" mnemonicParsing="false" onAction="#otkazivanjeRezervacije" prefHeight="28.0" prefWidth="200.0" text="Storniranje karte" toggleGroup="$toggleGroup">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>

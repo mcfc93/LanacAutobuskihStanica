@@ -39,6 +39,7 @@ public class ListaLinijaController implements Initializable {
 	public static ObservableList<Linija> linijeObsList;
 	public static Linija odabranaLinija;
 	public static MaskerPane progressPane = new MaskerPane();
+	public static int idLinije;
 
 	@FXML
 	private AnchorPane anchorPane = new AnchorPane();
@@ -58,11 +59,6 @@ public class ListaLinijaController implements Initializable {
 	private TableColumn<Linija,Linija> izmijeniColumn = new TableColumn<Linija,Linija>();
 	@FXML
 	private TableColumn<Linija,Linija> izbrisiColumn = new TableColumn<Linija,Linija>();
-	@FXML
-	private TableColumn<Linija,Linija> deaktivirajColumn = new TableColumn<Linija,Linija>();
-	
-	
-	public static int idLinije;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		linijeObsList = FXCollections.observableArrayList();
@@ -77,6 +73,7 @@ public class ListaLinijaController implements Initializable {
     	izmijeniColumn.setCellValueFactory(
                 param -> new ReadOnlyObjectWrapper<>(param.getValue())
             );
+    	linijeTableView.setFocusTraversable(false);
     	izmijeniColumn.setCellFactory(tableCell -> {
             TableCell<Linija, Linija> cell = new TableCell<Linija, Linija>() {
                 private Button button = new Button("");
@@ -151,6 +148,17 @@ public class ListaLinijaController implements Initializable {
              };
              return cell;
          });
+         for(TableColumn<?,?> column:linijeTableView.getColumns()) 
+         	column.setReorderable(false);
+         idLinijeLinijeColumn.setMinWidth(50);
+         idLinijeLinijeColumn.setMaxWidth(70);
+         peronLinijeColumn.setMinWidth(50);
+         peronLinijeColumn.setMaxWidth(70);
+         izbrisiColumn.setMinWidth(35);
+         izbrisiColumn.setMaxWidth(35);
+         izmijeniColumn.setMinWidth(35);
+         izmijeniColumn.setMaxWidth(35);
+         
         
 	}
 	public void maskerSetUp() {

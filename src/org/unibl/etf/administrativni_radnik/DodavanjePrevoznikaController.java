@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import org.unibl.etf.karta.Prevoznik;
+import org.unibl.etf.util.Mjesto;
 import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -52,8 +53,9 @@ public class DodavanjePrevoznikaController implements Initializable{
 		jibTextField.getValidators().addAll(Util.requredFieldValidator(jibTextField),Util.jibValidator(jibTextField));
 		webAdresaTextField.getValidators().addAll(Util.requredFieldValidator(webAdresaTextField),Util.webValidator(webAdresaTextField));
 		telefonTextField.getValidators().addAll(Util.requredFieldValidator(telefonTextField),Util.phoneValidator(telefonTextField));
-		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField),Util.postalCodeValidator(postanskiBrojTextField));
-		Util.setAutocompleteList(postanskiBrojTextField, Util.getPostalCodeList());
+		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField),		Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
+		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());
+
 		tekuciRacunTextField.getValidators().addAll(Util.requredFieldValidator(tekuciRacunTextField),Util.integerValidator(tekuciRacunTextField));
 		nazivTextField.getValidators().add(Util.requredFieldValidator(nazivTextField));
 		tekuciRacunTextField.getValidators().addAll(Util.requredFieldValidator(tekuciRacunTextField),Util.integerValidator(tekuciRacunTextField));
@@ -73,7 +75,7 @@ public class DodavanjePrevoznikaController implements Initializable{
 									webAdresaTextField.validate() &
 										postanskiBrojTextField.validate()) {
 		if(Prevoznik.dodajPrevoznika(jibTextField.getText(),nazivTextField.getText(),telefonTextField.getText(),emailTextField.getText(),
-				webAdresaTextField.getText(),tekuciRacunTextField.getText(),adresaTextField.getText(),Integer.parseInt(postanskiBrojTextField.getText()))) {
+				webAdresaTextField.getText(),tekuciRacunTextField.getText(),adresaTextField.getText(),Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()))) {
 			showSuccess();
 		}
 	}

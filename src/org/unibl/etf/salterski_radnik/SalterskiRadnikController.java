@@ -57,7 +57,6 @@ public class SalterskiRadnikController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-	
 		toggleGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
 		    if (newValue == null) {
 		        oldValue.setSelected(true);
@@ -89,9 +88,7 @@ public class SalterskiRadnikController implements Initializable {
 		anchorPane.setOnMouseReleased((event) -> {
 			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 			stage.setOpacity(1.0);
-		});
-		System.out.println(PrijavaController.nalog.getIdStanice());
-		
+		});		
 		info();
 	}
 	

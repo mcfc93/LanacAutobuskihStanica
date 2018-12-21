@@ -1,9 +1,6 @@
 package org.unibl.etf.salterski_radnik;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -16,12 +13,18 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 public class OtkazivanjeRezervacijeController implements Initializable {
@@ -55,8 +58,10 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 		if(serijskiBrojTextField.validate())
 		{
 			Karta trazenaKarta = Karta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
-			if(trazenaKarta==null)
+			if(trazenaKarta==null) {
 				showAlertPogresanSerijskiBroj();
+				return;
+			}
 			stornirajButton.setDisable(false);
 			cijenaTextField.setText(trazenaKarta.getCijena()  + "KM");
 			relacijaTextField.setText(trazenaKarta.getRelacija().getPolaziste() + " - " + trazenaKarta.getRelacija().getOdrediste());
@@ -72,7 +77,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 	public void showAlertPogresanSerijskiBroj() {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("GRESKA");
-			alert.setHeaderText("Pogresan serijski broj!");
+			alert.setHeaderText("Pogresan serijski broj ili karta vec stornirana!");
 			alert.showAndWait();
 		}
 		
@@ -87,25 +92,8 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 	@FXML
 	public void storniraj() {
 			if(showPotvrda()) {
-				Connection c = null;
-				PreparedStatement s1 = null;
-				PreparedStatement s2 = null;
-				String sqlKarta = "update karta set Stanje='Izbrisano' where SerijskiBroj=?";
-				String sqlRezervacija = "update rezervacija set Stanje='Izbrisano' where SerijskiBroj=?";
-				try {
-					c = Util.getConnection();
-					s1 = Util.prepareStatement(c, sqlKarta, false, Integer.parseInt(serijskiBrojTextField.getText()));
-					s2 = Util.prepareStatement(c, sqlRezervacija, false, Integer.parseInt(serijskiBrojTextField.getText()));
-					if(s1.executeUpdate()==1 && s2.executeUpdate()==1)
+				if(Karta.stornirajKartu(Integer.parseInt(serijskiBrojTextField.getText())))
 						showCheckMark();
-					s2.close();
-
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				finally {
-					Util.close(s1, c);
-				}
 				cijenaTextField.clear();
 				relacijaTextField.clear();
 				datumTextField.clear();
@@ -116,7 +104,21 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 	
 	}
 
-	
+	@FXML
+	public void pregledMjesecneKarte() {
+		try {
+	        Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/MjesecnaKartaView.fxml"));
+			Scene scene = new Scene(root);
+			Stage stage=new Stage();
+			stage.setScene(scene);
+			stage.setResizable(false);
+			stage.initStyle(StageStyle.UNDECORATED);
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.showAndWait();
+        } catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 	public void showCheckMark() {
 		// TODO Auto-generated method stub
 		checkMarkImageView.setVisible(true);

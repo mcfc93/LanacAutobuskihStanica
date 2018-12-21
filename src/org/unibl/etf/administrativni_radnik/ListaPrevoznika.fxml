@@ -13,8 +13,8 @@
             <TableColumn fx:id="telefonColumn" prefWidth="93.0" text="Telefon" />
             <TableColumn fx:id="racunColumn" prefWidth="100.0" text="Racun" />
             <TableColumn fx:id="emailColumn" prefWidth="71.0" text="Email" />
-            <TableColumn fx:id="izmijeniColumn" prefWidth="36.0" />
-            <TableColumn fx:id="izbrisiColumn" prefWidth="43.0" />
+            <TableColumn fx:id="izmijeniColumn" prefWidth="31.0" />
+            <TableColumn fx:id="izbrisiColumn" prefWidth="40.0" />
         </columns>
       </TableView>
    </children>

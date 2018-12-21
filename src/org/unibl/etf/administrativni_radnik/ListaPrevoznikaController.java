@@ -150,6 +150,12 @@ public class ListaPrevoznikaController implements Initializable {
               };
               return cell;
           });
+          
+          izbrisiColumn.setMinWidth(35);
+          izbrisiColumn.setMaxWidth(35);
+          izmijeniColumn.setMinWidth(35);
+          izmijeniColumn.setMaxWidth(35);
+          nazivColumn.setMaxWidth(300);
 	}
 	public boolean showPotvrda() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);

@@ -123,8 +123,20 @@ public class DodavanjeLinijaController implements Initializable {
 		polazisteTextField.getValidators().add(Util.requredFieldValidator(polazisteTextField));
 		odredisteTextField.getValidators().add(Util.requredFieldValidator(odredisteTextField));
 		cijenaJednokratnaTextField.getValidators().addAll(Util.requredFieldValidator(cijenaJednokratnaTextField),Util.doubleValidator(cijenaJednokratnaTextField));
-		cijenaMjesecnaTextField.getValidators().add(Util.doubleValidator(cijenaMjesecnaTextField));
+		//cijenaMjesecnaTextField.getValidators().add(Util.doubleValidator(cijenaMjesecnaTextField));
 		
+		cijenaMjesecnaTextField.getValidators().add(new ValidatorBase("Nije broj") {
+			
+			@Override
+			protected void eval() {
+				// TODO Auto-generated method stub
+				if(!cijenaMjesecnaTextField.getText().isEmpty() && !cijenaMjesecnaTextField.getText().matches("[0-9]+\\.[0-9]+"))
+					hasErrors.set(true);
+				else
+					hasErrors.set(false);
+				
+			}
+		});
 		
 		ValidatorBase odredisteValidator = new ValidatorBase("Nekorektan unos") {
 			@Override
@@ -267,6 +279,7 @@ public class DodavanjeLinijaController implements Initializable {
 				daniString="";
 				showDodajteRelacije();
 				relacijeDisable(false);
+				nazivLinijeTextField.resetValidation();
 			}
 		}
 	}
