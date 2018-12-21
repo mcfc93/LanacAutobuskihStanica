@@ -54,7 +54,10 @@ public class MjesecnaKartaController implements Initializable {
 	@FXML
 	private Label imeKorisnikaLabel = new Label();
 	@FXML
-	private static Label serijskiBrojLabel = new Label();
+	private Label serijskiBrojLabel;
+	
+	@FXML
+	private Label imePrezimeLabel;
 	
 	@FXML
     private AnchorPane anchorPane;
@@ -96,6 +99,7 @@ public class MjesecnaKartaController implements Initializable {
     	relacijaLabel.setText(karta.getRelacija().getPolaziste() + " - " + karta.getRelacija().getOdrediste());
     	mjesecVazenjaLabel.setText(String.valueOf(mjesecVazenja) + "\\" + localDate.getYear());
     	tipLabel.setText(karta.getTip().toString().toUpperCase());
+    	imePrezimeLabel.setText(karta.getIme() + " " + karta.getPrezime());
     	
     	anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
@@ -136,8 +140,10 @@ public class MjesecnaKartaController implements Initializable {
     void stampaj(ActionEvent event) {
     	System.out.println("Stampanje izz mjes cont");
     	System.out.println(karta);
-    	serijskiBrojLabel.setVisible(true);
-    	serijskiBrojLabel.setText(karta.getIdKarte());
+    	//Platform.runLater(() -> {
+    		serijskiBrojLabel.setVisible(true);
+    		serijskiBrojLabel.setText(karta.getIdKarte());
+    	//});
     	
     	
     	
@@ -157,10 +163,9 @@ public class MjesecnaKartaController implements Initializable {
 		
 			
 			
-    	Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
     	ProdajaKarataController.potvrda = true;
 
-		stage.close();
+    	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
     }
 public static int brojKarata;
 public static LocalDate datum;
@@ -174,7 +179,7 @@ public static TipKarte tipKarte;
 		
 		serijskiBroj = ProdajaKarataController.idKarte;
 		System.out.println("Serijski broj iz mjesCoontroller:" + serijskiBroj);
-		serijskiBrojLabel.setText("fas");
+		//serijskiBrojLabel.setText("fas");
 
 	}
 

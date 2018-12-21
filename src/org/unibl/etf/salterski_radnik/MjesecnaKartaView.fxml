@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="250.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.salterski_radnik.MjesecnaKartaController">
+<AnchorPane fx:id="anchorPane" prefHeight="250.0" prefWidth="400.0" stylesheets="@../administrator/administrator.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.salterski_radnik.MjesecnaKartaController">
    <children>
       <AnchorPane fx:id="menuLine" layoutX="2.0" layoutY="-1.0" prefHeight="25.0" prefWidth="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -57,6 +57,11 @@
                </font>
             </Label>
             <Label fx:id="serijskiBrojLabel" layoutX="300.0" layoutY="134.0" text="Serijski broj" textFill="WHITE" />
+            <Label fx:id="imePrezimeLabel" layoutX="135.0" layoutY="122.0" text="IME PREZIME" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>
