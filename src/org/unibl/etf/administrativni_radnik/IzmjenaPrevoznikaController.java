@@ -47,6 +47,30 @@ public class IzmjenaPrevoznikaController implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+				xOffset = stage.getX() - event.getScreenX();
+				yOffset = stage.getY() - event.getScreenY();
+			}
+		});
+		anchorPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+			   	Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+			    if(!stage.isMaximized()) {
+			    	stage.setX(event.getScreenX() + xOffset);
+			    	stage.setY(event.getScreenY() + yOffset);
+			    	stage.setOpacity(0.8);
+			    }
+			}
+		});
+		anchorPane.setOnMouseReleased((event) -> {
+			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+			stage.setOpacity(1.0);
+		});
+		
 		jibTextField.setEditable(false);
 		jibTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getJIBPrevoznika());
 		nazivTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getNaziv());

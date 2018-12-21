@@ -5,12 +5,14 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTimePicker?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="org.unibl.etf.administrativni_radnik.DodavanjeLinijaController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrativni_radnik.DodavanjeLinijaController">
   <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="37.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="10.0" prefWidth="133.0" />
@@ -57,5 +59,16 @@
             <JFXCheckBox fx:id="nedjeljaCB" layoutX="85.0" layoutY="5.0" text="NED" />
          </children>
       </AnchorPane>
+      <ImageView fx:id="questionMarkImageView" fitHeight="32.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="6" GridPane.valignment="TOP">
+         <image>
+            <Image url="@img/question.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="checkMarkImageView" fitHeight="47.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+         <image>
+            <Image url="@img/checkmark.png" />
+         </image>
+      </ImageView>
+      <JFXButton alignment="CENTER" style="-fx-background-color: yellow;" GridPane.columnIndex="3" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
    </children>
 </GridPane>

@@ -287,13 +287,11 @@ public class IzmjenaLinijeController implements Initializable {
 	@FXML
 	public void izmjenaLinije() {
 		mapiranjeDana();
-		System.out.println("Dani nakon mapiranja: " + daniString);
 		if(showPotvrda()) {
 			if(Linija.izmjeniLiniju(ListaLinijaController.odabranaLinija,nazivLinijeTextField.getText(),peronComboBox.getValue(),daniString, (linijaAktivnaCB.isSelected())? "Aktivno":"Blokirano")) {
 				ListaLinijaController.odabranaLinija.setStanje("Aktivno");
 				ListaLinijaController.odabranaLinija.setNazivLinije(nazivLinijeTextField.getText());
 				ListaLinijaController.odabranaLinija.setDaniUSedmici(daniString);
-				System.out.println("Dani nove linije iz izmjene: " + ListaLinijaController.odabranaLinija.getDaniUSedmici());
 				ListaLinijaController.odabranaLinija.setPeron(peronComboBox.getValue());
 				ListaLinijaController.odabranaLinija.setStanje(linijaAktivnaCB.isSelected()? "Aktivno":"Blokirano");
 				daniString="";
@@ -348,7 +346,6 @@ public class IzmjenaLinijeController implements Initializable {
 			showVrijemeNijeValidno();
 			return;
 		}
-		System.out.println(cijenaMjesecnaTextField.getText().isEmpty());
 		if(cijenaJednokratnaTextField.validate() & (  (cijenaMjesecnaTextField.getText().isEmpty()) ? true:cijenaMjesecnaTextField.validate() ) )
 		{
 			if(showPotvrda()) {

@@ -12,7 +12,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.salterski_radnik.ProdajaKarataController">
+<AnchorPane fx:id="anchorPane" prefHeight="470.0" prefWidth="600.0" stylesheets="@../administrator/administrator.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.salterski_radnik.ProdajaKarataController">
    <children>
       <JFXTextField fx:id="odredisteTextField" labelFloat="true" layoutX="150.0" layoutY="29.0" promptText="Odaberite odrediste" />
       <TableView fx:id="karteTable" layoutY="109.0" prefHeight="200.0" prefWidth="310.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="109.0">
@@ -29,23 +29,24 @@
          </columnResizePolicy>
       </TableView>
       <JFXButton fx:id="pretragaButton" layoutX="490.0" layoutY="17.0" onAction="#pretragaRelacija" prefHeight="77.0" prefWidth="94.0" text="Pretraga" />
-      <JFXButton fx:id="kupovinaButton" layoutX="492.0" layoutY="350.0" onAction="#kupovina" prefHeight="77.0" prefWidth="89.0" text="Kupovina" />
+      <JFXButton fx:id="kupovinaButton" layoutX="453.0" layoutY="350.0" onAction="#kupovina" prefHeight="77.0" prefWidth="128.0" text="Kupovina" />
       <DatePicker fx:id="datum" layoutX="300.0" layoutY="29.0" />
       <JFXTextField fx:id="imeTextField" labelFloat="true" layoutX="30.0" layoutY="321.0" promptText="Ime" />
       <JFXTextField fx:id="prezimeTextField" layoutX="30.0" layoutY="363.0" promptText="Prezime" />
-      <JFXButton fx:id="odaberiSlikuButton" layoutX="308.0" layoutY="423.0" onAction="#odaberiSliku" text="Odaberi sliku" />
-      <JFXRadioButton fx:id="radioButtonObicna" layoutX="14.0" layoutY="33.0" text="Obicna karta" textFill="WHITE" />
-      <JFXRadioButton fx:id="radioButtonMjesecna" layoutX="14.0" layoutY="68.0" text="Mjesecna karta" textFill="WHITE" />
-      <JFXComboBox fx:id="tipKarteComboBox" labelFloat="true" layoutX="185.0" layoutY="363.0" promptText="Tip karte" unFocusColor="WHITE" />
+      <JFXButton fx:id="odaberiSlikuButton" layoutX="182.0" layoutY="416.0" onAction="#odaberiSliku" text="Odaberi sliku" />
+      <JFXRadioButton fx:id="radioButtonObicna" layoutX="14.0" layoutY="33.0" text="Obicna karta" />
+      <JFXRadioButton fx:id="radioButtonMjesecna" layoutX="14.0" layoutY="68.0" text="Mjesecna karta" />
+      <JFXComboBox fx:id="tipKarteComboBox" labelFloat="true" layoutX="30.0" layoutY="416.0" promptText="Tip karte" unFocusColor="WHITE" />
       <JFXCheckBox fx:id="rezervacijaCheckBox" checkedColor="#1fdbf8" layoutX="387.0" layoutY="76.0" text="Rezervacija" />
       <JFXTextField fx:id="polazisteTextField" labelFloat="true" layoutX="150.0" layoutY="69.0" promptText="Odaberite polaziste" />
-      <JFXTextField fx:id="brojTelefonaTextField" labelFloat="true" layoutX="30.0" layoutY="410.0" promptText="Broj telefona" />
+      <JFXTextField fx:id="brojTelefonaTextField" labelFloat="true" layoutX="30.0" layoutY="415.0" promptText="Broj telefona" />
       <JFXComboBox fx:id="brojKarataComboBox" labelFloat="true" layoutX="168.0" layoutY="69.0" promptText="Broj karata" unFocusColor="WHITE" />
       <JFXCheckBox fx:id="povratnaKartaCheckBox" checkedColor="#1fdbf8" layoutX="302.0" layoutY="76.0" text="Povratna" />
-      <ImageView fx:id="slikaImageView" fitHeight="94.0" fitWidth="127.0" layoutX="304.0" layoutY="318.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="slikaImageView" fitHeight="85.0" fitWidth="99.0" layoutX="185.0" layoutY="321.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../administrativni_radnik/img/silhouette.jpg" />
          </image>
       </ImageView>
+      <JFXButton fx:id="produziButton" layoutX="302.0" layoutY="350.0" onAction="#produziKartu" prefHeight="77.0" prefWidth="128.0" text="Produzi kartu" />
    </children>
 </AnchorPane>
