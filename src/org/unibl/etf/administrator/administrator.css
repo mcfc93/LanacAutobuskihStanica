@@ -476,3 +476,31 @@
 	-fx-font-size: 14px;
 	-fx-font-weight: bold;
 }
+
+
+
+.searchTextField {
+	-fx-border-radius: 20px;
+	-fx-border-color: #ff0095;
+	-fx-background-radius: 20px;
+	-fx-background-color: transparent;
+	-fx-border-width: 2px;
+	
+	-fx-text-fill: #ff0095;
+	-fx-prompt-text-fill: BLACK;
+	-fx-highlight-fill: #ff0095;
+	
+	-fx-background-image:url('img/search.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: left 5px center;
+   	-fx-background-size: 15px 15px;
+   	-fx-padding: 0px 20px 0px 20px;
+}
+
+.clearImageView {
+	-fx-image:url('img/clear.png');
+}
+
+.clearImageView:hover {
+	-fx-cursor: hand;
+}
