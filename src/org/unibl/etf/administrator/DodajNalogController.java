@@ -1,11 +1,7 @@
 package org.unibl.etf.administrator;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import javax.imageio.ImageIO;
 
 import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.prijava.Nalog;
@@ -13,28 +9,17 @@ import org.unibl.etf.util.Mjesto;
 import org.unibl.etf.util.Util;
 import org.unibl.etf.zaposleni.Zaposleni;
 
-import com.jfoenix.controls.JFXAutoCompletePopup;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.validation.RequiredFieldValidator;
-import com.jfoenix.validation.base.ValidatorBase;
 
-import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Bounds;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 
 public class DodajNalogController implements Initializable {
@@ -159,6 +144,8 @@ public class DodajNalogController implements Initializable {
 		});
 		*/
 		
+		potvrdiButton.setDefaultButton(true);
+		
 		//Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getPostalCodeList());
 		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());
 		Util.setAutocompleteList(jibStaniceTextField, AutobuskaStanica.getJibList());
@@ -209,10 +196,17 @@ public class DodajNalogController implements Initializable {
 				Zaposleni.getJmbgList().add(jmbgTextField.getText().trim());
 				Nalog.getUsernameList().add(korisnickoImeTextField.getText().trim());
 				Alert alert=new Alert(AlertType.INFORMATION);
-	    		alert.setTitle("Informacija");
+	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);
 	    		alert.setContentText("Nalog uspjesno dodan.");
+	    		
+	    		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+				alert.getDialogPane().getStyleClass().add("alert");
+				
 	    		alert.showAndWait();
+			} else {
+				//NASTALA GRESKA
+				Util.showBugAlert();
 			}
 		}
     }

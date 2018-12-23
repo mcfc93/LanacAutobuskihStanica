@@ -110,15 +110,23 @@ public class ListaStanicaController implements Initializable {
                     	button.setOnMouseClicked(
                     			event -> {
                     				if("Blokirano".equals(item.getStanje())) {
-                    					AutobuskaStanica.blokiranjeAutobuskeStanice(item.getJib(), "Aktivno");
-                    					item.setStanje("Aktivno");
-                    					button.getStyleClass().remove("buttonTableUnblock");
-                    					button.getStyleClass().add("buttonTableBlock");
+                    					if(AutobuskaStanica.blokiranjeAutobuskeStanice(item.getJib(), "Aktivno")) {
+                    						item.setStanje("Aktivno");
+                    						button.getStyleClass().remove("buttonTableUnblock");
+                    						button.getStyleClass().add("buttonTableBlock");
+                    					} else {
+                    						//NASTALA GRESKA
+                    						Util.showBugAlert();
+                    					}
                     				} else {
-                    					AutobuskaStanica.blokiranjeAutobuskeStanice(item.getJib(), "Blokirano");
-                    					item.setStanje("Blokirano");
-                    					button.getStyleClass().remove("buttonTableBlock");
-                    					button.getStyleClass().add("buttonTableUnblock");
+                    					if(AutobuskaStanica.blokiranjeAutobuskeStanice(item.getJib(), "Blokirano")) {
+	                    					item.setStanje("Blokirano");
+	                    					button.getStyleClass().remove("buttonTableBlock");
+	                    					button.getStyleClass().add("buttonTableUnblock");
+                    					} else {
+                    						//NASTALA GRESKA
+                    						Util.showBugAlert();
+                    					}
                     				}
                     			}
                     	);
@@ -224,9 +232,13 @@ public class ListaStanicaController implements Initializable {
             					Optional<ButtonType> rezultat = alert.showAndWait();
 
             					if (rezultat.get() == ButtonType.YES) {
-	                    			AutobuskaStanica.brisanjeAutobuskeStanice(item.getJib());
-	                				getTableView().getItems().remove(item);
-	                				System.out.println("Obrisano: " + item);
+	                    			if(AutobuskaStanica.brisanjeAutobuskeStanice(item.getJib())) {
+		                				getTableView().getItems().remove(item);
+		                				System.out.println("Obrisano: " + item);
+	                    			} else {
+	                    				//NASTALA GRESKA
+	                    				Util.showBugAlert();
+	                    			}
             					}
                     		}
                         );

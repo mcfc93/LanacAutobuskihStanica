@@ -12,8 +12,6 @@ import java.util.logging.Level;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
 
-import javafx.concurrent.Task;
-
 public class AutobuskaStanica {
 	private String jib;
 	private String naziv;

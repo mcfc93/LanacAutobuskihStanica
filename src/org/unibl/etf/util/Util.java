@@ -31,7 +31,12 @@ import com.jfoenix.validation.base.ValidatorBase;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 //klasa koja sadrzi sve pomocne alate
 public class Util {
@@ -424,6 +429,22 @@ System.out.println(PROPERTY);
 		return dateValidator;
 	}
 	
+	public static ValidatorBase lengthValidator(JFXTextField textField, int length) {
+		ValidatorBase lengthValidator = new ValidatorBase("Predugačak unos") {
+			@Override
+			protected void eval() {
+				if(!textField.getText().isEmpty()
+	        			&& textField.getText().length() > length) {
+	        		hasErrors.set(true);
+		        } else {
+		        	 hasErrors.set(false);
+		        }
+			}
+		};
+		lengthValidator.setIcon(new ImageView());
+		return lengthValidator;
+	}
+	
 	public static void setAutocompleteList(JFXTextField textField, Collection<String> collection) {
 		JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
 	    autoCompletePopup.getSuggestions().addAll(collection);
@@ -443,5 +464,17 @@ System.out.println(PROPERTY);
 	            autoCompletePopup.show(textField);
 	        }
 	    });
+	}
+
+	public static void showBugAlert() {
+		Alert alert=new Alert(AlertType.ERROR);
+		alert.setTitle("Greška");
+		alert.setHeaderText("NEOČEKIVANO PONAŠANJE!");
+		alert.setContentText("Popunite podatke ponovo, a u slučaju iste greške kontakrirajte Administratora sistema.");
+		
+		alert.getDialogPane().getStylesheets().add(Util.class.getResource("/org/unibl/etf/application.css").toExternalForm());
+		alert.getDialogPane().getStyleClass().addAll("alert", "alertBug");
+		
+		alert.showAndWait();
 	}
 }

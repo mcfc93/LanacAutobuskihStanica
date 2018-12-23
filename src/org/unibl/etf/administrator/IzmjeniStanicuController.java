@@ -8,20 +8,13 @@ import org.unibl.etf.util.Util;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.validation.RequiredFieldValidator;
-import com.jfoenix.validation.base.ValidatorBase;
 
-import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -119,6 +112,7 @@ public class IzmjeniStanicuController implements Initializable {
 		
 		jibTextField.setDisable(true);
 		postanskiBrojTextField.setDisable(true);
+		potvrdiButton.setDefaultButton(true);
 		
 		jibTextField.setText(autobuskaStanica.getJib());
 		nazivTextField.setText(autobuskaStanica.getNaziv());
@@ -155,10 +149,11 @@ public class IzmjeniStanicuController implements Initializable {
 		    	autobuskaStanica.setPostanskiBroj(Integer.parseInt(postanskiBrojTextField.getText().trim()));
 		    	autobuskaStanica.setWebStranica(webStranicaTextField.getText().trim());
 		    	autobuskaStanica.setEmail(emailTextField.getText().trim());
+	    	} else {
+	    		//NASTALA GRESKA
+				Util.showBugAlert();
 	    	}
-
-    	Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-		stage.close();
+	    	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
     	}
     }
 }

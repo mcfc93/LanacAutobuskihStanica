@@ -49,13 +49,15 @@ public class DodajStanicuController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		potvrdiButton.setDefaultButton(true);
+		
 		//Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getPostalCodeList());
 		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());
 		
 		jibTextField.getValidators().addAll(Util.requredFieldValidator(jibTextField), Util.jibValidator(jibTextField), Util.collectionValidator(jibTextField, AutobuskaStanica.getJibList(), false, "Zauzeto"));
 		nazivTextField.getValidators().add(Util.requredFieldValidator(nazivTextField));
 		brojPeronaTextField.getValidators().addAll(Util.requredFieldValidator(brojPeronaTextField), Util.integerValidator(brojPeronaTextField));
-		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
+		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField), Util.lengthValidator(brojTelefonaTextField, 15));
 		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
 		//postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), true, "Nekorektan unos"));
 		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
@@ -84,10 +86,17 @@ public class DodajStanicuController implements Initializable {
 					emailTextField.getText().trim())) {
 				AutobuskaStanica.getJibList().add(jibTextField.getText().trim());
 				Alert alert=new Alert(AlertType.INFORMATION);
-	    		alert.setTitle("Obavjeötenje");
+	    		alert.setTitle("Obavje≈°tenje");
 	    		alert.setHeaderText(null);
-	    		alert.setContentText("Stanica uspjeöno dodana.");
+	    		alert.setContentText("Stanica uspje≈°no dodana.");
+	    		
+	    		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+				alert.getDialogPane().getStyleClass().add("alert");
+				
 	    		alert.showAndWait();
+			} else {
+				//NASTALA GRESKA
+				Util.showBugAlert();
 			}
 		}
     }

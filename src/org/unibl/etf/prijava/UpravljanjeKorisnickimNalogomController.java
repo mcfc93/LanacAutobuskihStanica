@@ -7,20 +7,12 @@ import org.unibl.etf.util.Util;
 import org.unibl.etf.zaposleni.Zaposleni;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.validation.NumberValidator;
-import com.jfoenix.validation.RequiredFieldValidator;
-import com.jfoenix.validation.base.ValidatorBase;
-
-import javafx.beans.binding.Bindings;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 public class UpravljanjeKorisnickimNalogomController implements Initializable {
@@ -63,6 +55,8 @@ public class UpravljanjeKorisnickimNalogomController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		potvrdiButton.setDefaultButton(true);
+		
 		Zaposleni zaposleni=PrijavaController.nalog.getZaposleni();
 		imePrezimeTextField.setText(zaposleni.getIme() + " " + zaposleni.getPrezime());
    		jmbgTextField.setText(zaposleni.getJmbg());
@@ -93,15 +87,25 @@ public class UpravljanjeKorisnickimNalogomController implements Initializable {
     void potvrdi(ActionEvent event) {
     	// & umjesto && da se ne radi short-circuit evaluation
     	if(staraLozinkaTextField.validate() & novaLozinka1TextField.validate() & novaLozinka2TextField.validate()) {
-    		System.out.println("Validacija uspjesna.");
+    		//validacija uspjesna
     		if(Nalog.provjeraLozinke(Nalog.hash(staraLozinkaTextField.getText()))) {
     			if(Nalog.promjenaLozinke(Nalog.hash(novaLozinka1TextField.getText().trim()))) {
     				System.out.println("Nova lozinka: " + novaLozinka1TextField.getText());
     				System.out.println("Hash: " + Nalog.hash(novaLozinka1TextField.getText().trim()));
     				PrijavaController.nalog.setLozinka(Nalog.hash(novaLozinka1TextField.getText()));
-    			} else {
-    				//
     				
+    				Alert alert=new Alert(AlertType.INFORMATION);
+            		alert.setTitle("Obavještenje");
+            		alert.setHeaderText(null);
+            		alert.setContentText("Lozinka uspješno promjenjena.");
+            		
+            		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+    				alert.getDialogPane().getStyleClass().add("alert");
+            		
+            		alert.show();
+    			} else {
+    				//NASTALA GRESKA
+    				Util.showBugAlert();
     			}
     			
     			staraLozinkaTextField.clear();
@@ -112,10 +116,16 @@ public class UpravljanjeKorisnickimNalogomController implements Initializable {
     			novaLozinka2TextField.resetValidation();
     		} else {
     			staraLozinkaTextField.clear();
+    			staraLozinkaTextField.requestFocus();
+    			
     	 		Alert alert=new Alert(AlertType.ERROR);
-        		alert.setTitle("Gre�ka");
+        		alert.setTitle("Greška");
         		alert.setHeaderText(null);
-        		alert.setContentText("Lozinka pogre�na.");
+        		alert.setContentText("Lozinka pogrešna.");
+        		
+        		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+				alert.getDialogPane().getStyleClass().add("alert");
+        		
         		alert.showAndWait();
         	}
     	}

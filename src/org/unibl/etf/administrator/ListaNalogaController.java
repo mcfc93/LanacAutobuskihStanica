@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.prijava.Nalog;
+import org.unibl.etf.util.Util;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -15,18 +16,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.util.Duration;
 
 public class ListaNalogaController implements Initializable {
@@ -122,9 +119,13 @@ public class ListaNalogaController implements Initializable {
 
             					if (rezultat.get() == ButtonType.YES) {
             						if(!"Administrator".equals(item.getTip())) {
-		                    			Nalog.brisanjeNaloga(item.getZaposleni().getJmbg());
-		                    			getTableView().getItems().remove(item);
-		                				System.out.println("Obrisano: " + item);
+		                    			if(Nalog.brisanjeNaloga(item.getZaposleni().getJmbg())) {
+			                    			getTableView().getItems().remove(item);
+			                				System.out.println("Obrisano: " + item);
+		                    			} else {
+		                    				//NASTALA GRESKA
+		                    				Util.showBugAlert();
+		                    			}
             						} else {
             							Alert alertWarning=new Alert(AlertType.WARNING);
             				    		alertWarning.setTitle("Greška");

@@ -1,8 +1,6 @@
 package org.unibl.etf.administrator;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import org.unibl.etf.util.Mjesto;
@@ -165,13 +163,7 @@ odaberiPraznikComboBox.getSelectionModel().clearSelection();
     			opisTextField.resetValidation();
     		}
     	});
-    	
-    	
-    	
-    	
-    	
-    	
-    	}
+    }
 
     @FXML
     void potvrdiMjesto(ActionEvent event) {
@@ -193,10 +185,17 @@ System.out.println(Mjesto.getCityList());
 				Util.setAutocompleteList(odaberiMjestoTextField, Mjesto.getCityPostalCodeList());
 				
 				Alert alert=new Alert(AlertType.INFORMATION);
-	    		alert.setTitle("Informacija");
+	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);
 	    		alert.setContentText("Mjesto uspjesno dodano.");
+	    		
+	    		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+				alert.getDialogPane().getStyleClass().add("alert");
+	    		
 	    		alert.showAndWait();
+			} else {
+				//NASTALA GRESKA
+				Util.showBugAlert();
 			}
     	} else if(izmjeniMjestoRadioButton.isSelected()
 							&& (odaberiMjestoTextField.validate()
@@ -211,10 +210,17 @@ System.out.println(Mjesto.getCityList());
 				Util.setAutocompleteList(odaberiMjestoTextField, Mjesto.getCityPostalCodeList());
 				
 				Alert alert=new Alert(AlertType.INFORMATION);
-	    		alert.setTitle("Informacija");
+	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);
 	    		alert.setContentText("Mjesto uspjesno izmjenjeno.");
+	    		
+	    		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+				alert.getDialogPane().getStyleClass().add("alert");
+				
 	    		alert.showAndWait();
+    		} else {
+    			//NASTALA GRESKA
+				Util.showBugAlert();
     		}
     	}
     }
@@ -236,10 +242,17 @@ System.out.println(Praznik.getHolidayList());
 				odaberiPraznikComboBox.setItems(praznici);
 
     			Alert alert=new Alert(AlertType.INFORMATION);
-	    		alert.setTitle("Informacija");
+	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);
 	    		alert.setContentText("Praznik uspjesno dodan.");
+	    		
+	    		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+				alert.getDialogPane().getStyleClass().add("alert");
+				
 	    		alert.showAndWait();
+    		} else {
+    			//NASTALA GRESKA
+				Util.showBugAlert();
     		}
     	} else if(izmjeniPraznikRadioButton.isSelected()
     			&& (/*odaberiPraznikTextField.validate()*/
@@ -258,10 +271,17 @@ System.out.println(Praznik.getHolidayList());
 
 
     			Alert alert=new Alert(AlertType.INFORMATION);
-	    		alert.setTitle("Informacija");
+	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);
 	    		alert.setContentText("Praznik uspjesno izmjenjen.");
+	    		
+	    		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+				alert.getDialogPane().getStyleClass().add("alert");
+				
 	    		alert.showAndWait();
+    		} else {
+    			//NASTALA GRESKA
+				Util.showBugAlert();
     		}
     	} else if(obrisiPraznikRadioButton.isSelected()
     			&& /*odaberiPraznikTextField.validate()*/
@@ -277,10 +297,17 @@ System.out.println(Praznik.getHolidayList());
 				odaberiPraznikComboBox.setItems(praznici);
 
     			Alert alert=new Alert(AlertType.INFORMATION);
-	    		alert.setTitle("Informacija");
+	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);
 	    		alert.setContentText("Praznik uspjesno obrisan.");
+	    		
+	    		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+				alert.getDialogPane().getStyleClass().add("alert");
+	    		
 	    		alert.showAndWait();
+    		} else {
+    			//NASTALA GRESKA
+				Util.showBugAlert();
     		}
     	}
     }

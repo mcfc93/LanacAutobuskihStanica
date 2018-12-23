@@ -12,8 +12,6 @@ import java.nio.charset.StandardCharsets;
 
 import org.unibl.etf.zaposleni.Zaposleni;
 
-import javafx.concurrent.Task;
-
 import org.unibl.etf.zaposleni.Administrator;
 import org.unibl.etf.zaposleni.AdministrativniRadnik;
 import org.unibl.etf.zaposleni.SalterskiRadnik;
