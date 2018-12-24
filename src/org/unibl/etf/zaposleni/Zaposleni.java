@@ -141,6 +141,8 @@ public abstract class Zaposleni implements Serializable {
 	}
 	*/
 	public static void loadJmbgs() {
+		getJmbgList().clear();
+		
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;

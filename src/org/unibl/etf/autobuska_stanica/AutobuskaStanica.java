@@ -283,6 +283,7 @@ public class AutobuskaStanica {
 	}
 	*/
 	public static void loadJibs() {
+		getJibList().clear();
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
