@@ -193,7 +193,7 @@ public class Karta {
 		JIBStanice = jIBStanice;
 	}
 	public String getIdKarte() {
-		return String.format("%06d",idKarte);
+		return String.format("%013d",idKarte);
 	}
 	public void setIdKarte(int idKarte) {
 		this.idKarte = idKarte;

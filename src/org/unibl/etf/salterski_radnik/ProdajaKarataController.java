@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.MonthDay;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -19,6 +20,7 @@ import org.unibl.etf.karta.Karta;
 import org.unibl.etf.karta.MjesecnaKarta;
 import org.unibl.etf.karta.TipKarte;
 import org.unibl.etf.prijava.PrijavaController;
+import org.unibl.etf.util.Praznik;
 import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -46,6 +48,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -185,6 +188,21 @@ public class ProdajaKarataController implements Initializable {
 		Util.setAutocompleteList(polazisteTextField, relacijeSet);
 		//autoComplete();    
 		validationSetUp();
+		
+		
+		datum.setDayCellFactory(datePicker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                for(Praznik p: Praznik.getHolidayList()) {
+	                if (MonthDay.from(item).equals(MonthDay.of(p.getMjesec(), p.getDan()))) {
+	                    setTooltip(new Tooltip(p.getOpis()));
+	                    setStyle("-fx-background-color: #ff4444;");
+	                }
+                }
+            }
+        });
+        datum.setEditable(false);
 	}
 	
 

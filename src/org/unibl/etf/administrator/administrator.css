@@ -466,7 +466,18 @@
 	-fx-border-radius: 5 5 5 5;
  	-fx-background-radius: 7 7 7 7;
 	-fx-border-width: 2px;
+}
+
+.mjesecnaDjacka {
 	-fx-background-color: blue;
+}
+
+.mjesecnaPenzionerska {
+	-fx-background-color: red;
+}
+
+.mjesecnaRadnicka {
+	-fx-background-color: pink;
 }
 
 

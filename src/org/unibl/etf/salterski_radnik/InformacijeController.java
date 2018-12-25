@@ -19,6 +19,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -86,6 +87,7 @@ public class InformacijeController implements Initializable{
 	            setDisable(empty || date.compareTo(today) < 0 );
 	        }
 	    });
+		datum.setEditable(false);
 		toggleSetUp();
 		polasciRadioButton.setToggleGroup(toggleGroup);
 		dolasciRadioButton.setToggleGroup(toggleGroup);

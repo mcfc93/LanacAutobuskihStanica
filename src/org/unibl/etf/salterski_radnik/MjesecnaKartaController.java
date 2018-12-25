@@ -25,6 +25,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -43,6 +44,9 @@ public class MjesecnaKartaController implements Initializable {
 	
 	@FXML
 	private ImageView barcodeImageView;
+	
+	@FXML
+    private Label barcodeLabel;
 
 	@FXML
 	private ImageView exitImageView = new ImageView();
@@ -60,8 +64,7 @@ public class MjesecnaKartaController implements Initializable {
 	private Label tipLabel = new Label();
 	@FXML
 	private Label imeKorisnikaLabel = new Label();
-	@FXML
-	private Label serijskiBrojLabel;
+
 	
 	@FXML
 	private Label imePrezimeLabel;
@@ -92,8 +95,20 @@ public class MjesecnaKartaController implements Initializable {
 	}
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-    	serijskiBrojLabel.setMinWidth(Region.USE_PREF_SIZE);
-    	serijskiBrojLabel.setVisible(true);
+    	stampajButton.setDefaultButton(true);
+    	nazadButton.setCancelButton(true);
+    	
+    	if("DJACKA".equals(karta.getTip().toString())) {
+        	//mjesecnaAnchorPane.getStylesheets().add(getClass().getResource("/org/unibl/etf/administrator/administrator.css").toExternalForm());
+        	mjesecnaAnchorPane.getStyleClass().add("mjesecnaDjacka");
+        } else if("PENZIONERSKA".equals(karta.getTip().toString())) {
+        	mjesecnaAnchorPane.getStyleClass().add("mjesecnaPenzionerska");
+        } else {
+        	mjesecnaAnchorPane.getStyleClass().add("mjesecnaRadnicka");
+        }
+    	
+    	barcodeLabel.setMinWidth(Region.USE_PREF_SIZE);
+    	barcodeLabel.setVisible(true);
     	imeKorisnikaLabel.setMinWidth(Region.USE_PREF_SIZE);
     	prevoznikLabel.setMinWidth(Region.USE_PREF_SIZE);
     	linijaLabel.setMinWidth(Region.USE_PREF_SIZE);
@@ -101,31 +116,39 @@ public class MjesecnaKartaController implements Initializable {
     	mjesecVazenjaLabel.setMinWidth(Region.USE_PREF_SIZE);
     	tipLabel.setMinWidth(Region.USE_PREF_SIZE);
     	
-    	if(localDate.getMonthValue()==12) {
+    	/*
+    	if(localDate.getMonthValue()==DECEMBAR) {
     		mjesecVazenja = (localDate.getDayOfMonth()>25) ? JANUAR: DECEMBAR;
     		mjesecVazenjaString = String.valueOf(mjesecVazenja) + "-" + (localDate.getYear()+1);
     	}
-    	else 
-    	prevoznikLabel.setText(karta.getNazivPrevoznika());
+    	*/
+    	
+    	mjesecVazenjaString =
+    		(localDate.getDayOfMonth() >= 25?
+    			(((localDate.getMonthValue()+1)%12) + "-" + (localDate.getMonthValue()==DECEMBAR?localDate.getYear()+1:localDate.getYear())):
+    				(localDate.getMonthValue() + "-" + localDate.getYear()));
     	
     	if(!ProdajaKarataController.produzavanjeKarte) {
+    		prevoznikLabel.setText(karta.getNazivPrevoznika());
     		try {
-			slika.setImage(new Image(ProdajaKarataController.odabranaSlika.toURI().toString()));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    			slika.setImage(new Image(ProdajaKarataController.odabranaSlika.toURI().toString()));
+    		} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+    		}
     	}
     	else {
+    		prevoznikLabel.setText(karta.getPrevoznik().getNaziv());
     		try {
     			slika.setImage(new Image(karta.getSlika().toURI().toString()));
     		} catch (Exception e) {
-    			// TODO Auto-generated catch block
     			e.printStackTrace();
     		}
-    		serijskiBrojLabel.setText(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
+    		linijaLabel.setText(karta.getNazivLinije());
+    		barcodeLabel.setVisible(true);
+    		barcodeLabel.setText(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
     		BarcodeEAN codeEAN = new BarcodeEAN();
-    		System.out.println(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
+System.out.println(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
 	    	codeEAN.setCode(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
             codeEAN.setCodeType(BarcodeEAN.EAN13); 
             codeEAN.setBarHeight(40);
@@ -133,18 +156,26 @@ public class MjesecnaKartaController implements Initializable {
             java.awt.Image img = codeEAN.createAwtImage(java.awt.Color.BLACK, java.awt.Color.WHITE);
             BufferedImage bufferedImage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
             bufferedImage.getGraphics().drawImage(img, 0, 0, null);
-    		WritableImage image = mjesecnaAnchorPane.snapshot(new SnapshotParameters(), null);
-    		serijskiBrojLabel.setVisible(true);
-    		serijskiBrojLabel.setText(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
-            try {
+    		
+    		
+    		/*
+            //stampanje slike
+    		try {
     			ImageIO.write(bufferedImage, "png", new File("src\\barcode.png"));
     		} catch (IOException e) {
     			e.printStackTrace();
     		}
+    		*/
         	barcodeImageView.setImage(SwingFXUtils.toFXImage(bufferedImage, null));
     	}
-    		
-    	linijaLabel.setText(karta.getNazivLinije());
+    	
+    	//prevoznikLabel.setText(karta.getNazivPrevoznika());
+    	//prevoznikLabel.setText(karta.getPrevoznik().getNaziv());
+    	
+    	System.out.println("Prevoznik=" + karta.getPrevoznik().getNaziv());
+    	
+    	//linijaLabel.setText(karta.getNazivLinije());
+    	linijaLabel.setText(karta.getLinija().getNazivLinije());
     	relacijaLabel.setText(karta.getRelacija().getPolaziste() + " - " + karta.getRelacija().getOdrediste());
     	mjesecVazenjaLabel.setText(mjesecVazenjaString);
     	tipLabel.setText(karta.getTip().toString().toUpperCase());
@@ -189,18 +220,16 @@ public class MjesecnaKartaController implements Initializable {
     void stampaj(ActionEvent event) {
 
     	if(ProdajaKarataController.produzavanjeKarte) {
-        	System.out.println("-------------------------- produzavanje: " +Integer.parseInt(karta.getIdKarte()) );
-        	serijskiBrojLabel.setVisible(true);
-        	serijskiBrojLabel.setText(karta.getIdKarte());
-        	System.out.println(serijskiBrojLabel.getText());
+System.out.println("-------------------------- produzavanje: " + Integer.parseInt(karta.getIdKarte()) );
+        	barcodeLabel.setVisible(true);
+        	barcodeLabel.setText(karta.getIdKarte());
+System.out.println(barcodeLabel.getText());
     		//karta = MjesecnaKarta.pronadjiKartu(serijskiBroj);
     		//System.out.println("Pronadjena karta: " + karta);
     	//	MjesecnaKarta.produziKartu(karta);
     		
     		ProdajaKarataController.potvrda = true;
     		//MjesecnaKarta.produziKartu(karta);
-    		
-    		
     		
     		BarcodeEAN codeEAN = new BarcodeEAN();
     		System.out.println(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
@@ -211,21 +240,30 @@ public class MjesecnaKartaController implements Initializable {
             java.awt.Image img = codeEAN.createAwtImage(java.awt.Color.BLACK, java.awt.Color.WHITE);
             BufferedImage bufferedImage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
             bufferedImage.getGraphics().drawImage(img, 0, 0, null);
-    		WritableImage image = mjesecnaAnchorPane.snapshot(new SnapshotParameters(), null);
-    		serijskiBrojLabel.setVisible(true);
-    		serijskiBrojLabel.setText(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
-            try {
-    			ImageIO.write(bufferedImage, "png", new File("src\\barcode.png"));
-    		} catch (IOException e) {
-    			e.printStackTrace();
-    		}
+    		barcodeLabel.setVisible(true);
+    		barcodeLabel.setText(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
         	barcodeImageView.setImage(SwingFXUtils.toFXImage(bufferedImage, null));
-        	//postavljenje EAN-13 barcode brojeva na Label
-    		
-    		
-    		
-    		
-			File file = new File("src\\slikemjesecnekarte\\karta" + String.format("%06d", Integer.parseInt(karta.getIdKarte())) + "-" + mjesecVazenjaString + ".png");
+        	
+        	
+        	
+        	SnapshotParameters parameters = new SnapshotParameters();
+	        /*
+	        if("DJACKA".equals(karta.getTip().toString())) {
+	        	parameters.setFill(Color.DARKBLUE);
+	        	//mjesecnaAnchorPane.getStylesheets().add(getClass().getResource("/org/unibl/etf/administrator/administrator.css").toExternalForm());
+	        	mjesecnaAnchorPane.getStyleClass().add("mjesecnaDjacka");
+	        } else if("PENZIONERSKA".equals(karta.getTip().toString())) {
+	        	parameters.setFill(Color.PINK);
+	        	mjesecnaAnchorPane.getStyleClass().add("mjesecnaPenzionerska");
+	        } else {
+	        	parameters.setFill(Color.YELLOW);
+	        	mjesecnaAnchorPane.getStyleClass().add("mjesecnaRadnicka");
+	        }
+			*/
+	        
+			WritableImage image = mjesecnaAnchorPane.snapshot(parameters, null);
+        	
+        	File file = new File("src\\slikemjesecnekarte\\mjesecna_" + String.format("%013d", Integer.parseInt(karta.getIdKarte())) + "-" + mjesecVazenjaString + ".png");
 			try {
 				ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
 			}catch (IOException e) {
@@ -233,13 +271,52 @@ public class MjesecnaKartaController implements Initializable {
 			}
     		
     		
+    		
+    		/*
+    		BarcodeEAN codeEAN = new BarcodeEAN();
+    		System.out.println(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
+	    	codeEAN.setCode(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
+            codeEAN.setCodeType(BarcodeEAN.EAN13); 
+            codeEAN.setBarHeight(40);
+            //kreiranje slike
+            java.awt.Image img = codeEAN.createAwtImage(java.awt.Color.BLACK, java.awt.Color.WHITE);
+            BufferedImage bufferedImage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
+            bufferedImage.getGraphics().drawImage(img, 0, 0, null);
+    		WritableImage image = mjesecnaAnchorPane.snapshot(new SnapshotParameters(), null);
+    		barcodeLabel.setVisible(true);
+    		barcodeLabel.setText(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
+          
+    		//try {
+    		//	ImageIO.write(bufferedImage, "png", new File("src\\barcode.png"));
+    		//} catch (IOException e) {
+    		//	e.printStackTrace();
+    		//}
+   		
+        	barcodeImageView.setImage(SwingFXUtils.toFXImage(bufferedImage, null));
+    		
+    		
+    		
+    		
+			File file = new File("src\\slikemjesecnekarte\\karta" + String.format("%013d", Integer.parseInt(karta.getIdKarte())) + "-" + mjesecVazenjaString + ".png");
+			try {
+				ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+			}catch (IOException e) {
+				Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			}
+			
+			
+			System.out.println("Prevoznik=" + karta.getPrevoznik() + ", Linija=" + karta.getLinija() + ", Relacija=" + karta.getRelacija());
+    		System.out.println(karta.getNazivPrevoznika());
+    		System.out.println(karta.getNazivLinije());
+    		
 	    	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+	    	*/
     	}
     	else {
 	    	//System.out.println(karta);
 
-	    	serijskiBrojLabel.setVisible(true);
-	    	serijskiBrojLabel.setText(karta.getIdKarte());
+	    	barcodeLabel.setVisible(true);
+	    	barcodeLabel.setText(karta.getIdKarte());
 	    	int brojKarata = Karta.provjeriBrojKarata(karta, karta.getDatumPolaska());
 			Karta.kreirajKartu(karta, brojKarata+1, datum);
 			ProdajaKarataController.idMjesecneKarte = MjesecnaKarta.kreiraj2(karta);
@@ -250,10 +327,45 @@ public class MjesecnaKartaController implements Initializable {
 			System.out.println("SERIJSKI BROJ: " + ProdajaKarataController.idKarte);
 			System.out.println("Serijski mjesecne: " + ProdajaKarataController.idMjesecneKarte);
 			MjesecnaKarta.stampajKartu(karta, brojKarata+1, datum, karta.getIme() + " " + karta.getPrezime(), karta.getTip());
-			serijskiBrojLabel.setText(String.format("%13d",ProdajaKarataController.idMjesecneKarte));
+			barcodeLabel.setText(String.format("%013d",ProdajaKarataController.idMjesecneKarte));
+			
+			ProdajaKarataController.potvrda = true;
 			
 			
-
+			BarcodeEAN codeEAN = new BarcodeEAN();
+System.out.println(String.format("%013d", ProdajaKarataController.idMjesecneKarte));
+	    	codeEAN.setCode(String.format("%013d", ProdajaKarataController.idMjesecneKarte));
+	        codeEAN.setCodeType(BarcodeEAN.EAN13); 
+	        codeEAN.setBarHeight(40);
+	        java.awt.Image img = codeEAN.createAwtImage(java.awt.Color.BLACK, java.awt.Color.WHITE);
+	        BufferedImage bufferedImage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
+	        bufferedImage.getGraphics().drawImage(img, 0, 0, null);
+	        barcodeImageView.setImage(SwingFXUtils.toFXImage(bufferedImage, null));
+	        
+	        SnapshotParameters parameters = new SnapshotParameters();
+	        /*
+	        if("DJACKA".equals(karta.getTip().toString())) {
+	        	parameters.setFill(Color.DARKBLUE);
+	        	//mjesecnaAnchorPane.getStylesheets().add(getClass().getResource("/org/unibl/etf/administrator/administrator.css").toExternalForm());
+	        	mjesecnaAnchorPane.getStyleClass().add("mjesecnaDjacka");
+	        } else if("PENZIONERSKA".equals(karta.getTip().toString())) {
+	        	parameters.setFill(Color.PINK);
+	        	mjesecnaAnchorPane.getStyleClass().add("mjesecnaPenzionerska");
+	        } else {
+	        	parameters.setFill(Color.YELLOW);
+	        	mjesecnaAnchorPane.getStyleClass().add("mjesecnaRadnicka");
+	        }
+			*/
+	        
+			WritableImage image = mjesecnaAnchorPane.snapshot(parameters, null);
+			File file = new File("src\\slikemjesecnekarte\\mjesecna_" + String.format("%013d", ProdajaKarataController.idMjesecneKarte) + "-" + mjesecVazenjaString + ".png");
+			try {
+				ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+			}catch (IOException e) {
+				Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			}
+			
+			/*
     		BarcodeEAN codeEAN = new BarcodeEAN();
     		System.out.println(String.format("%013d", ProdajaKarataController.idMjesecneKarte));
 	    	codeEAN.setCode(String.format("%013d", ProdajaKarataController.idMjesecneKarte));
@@ -266,9 +378,20 @@ public class MjesecnaKartaController implements Initializable {
 
             
 			
+            
+            
+            
+            SnapshotParameters parameters = new SnapshotParameters();
+            if("DJACKA".equals(karta.getTip().toString())) {
+            	parameters.setFill(Color.DARKBLUE);
+            } else if("PENZIONERSKA".equals(karta.getTip().toString())) {
+            	parameters.setFill(Color.PINK);
+            } else {
+            	parameters.setFill(Color.YELLOW);
+            }
 			
-			WritableImage image = mjesecnaAnchorPane.snapshot(new SnapshotParameters(), null);
-			File file = new File("src\\slikemjesecnekarte\\karta" + String.format("%06d", ProdajaKarataController.idMjesecneKarte) + "-" + mjesecVazenja + "-" + localDate.getYear() + ".png");
+			WritableImage image = mjesecnaAnchorPane.snapshot(parameters, null);
+			File file = new File("src\\slikemjesecnekarte\\karta" + String.format("%013d", ProdajaKarataController.idMjesecneKarte) + "-" + mjesecVazenja + "-" + localDate.getYear() + ".png");
 			try {
 				ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
 			}catch (IOException e) {
@@ -278,6 +401,9 @@ public class MjesecnaKartaController implements Initializable {
 			
 	    	ProdajaKarataController.potvrda = true;
 	    	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+	    	*/
 	    }
+
+    	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
     }
 }

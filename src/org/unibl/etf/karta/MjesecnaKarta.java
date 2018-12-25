@@ -154,7 +154,7 @@ public class MjesecnaKarta extends Karta {
 		sb.append(String.format("%10s (%s) %10s%s", " ", "mjesecna" , " ", System.lineSeparator()));
 		sb.append(System.lineSeparator());
 		sb.append(String.format("Prodajno mjesto: %s%s", PrijavaController.autobuskaStanica.getGrad(), System.lineSeparator()));
-		sb.append(String.format("Serijski broj: %06d%s", ProdajaKarataController.idMjesecneKarte, System.lineSeparator()));
+		sb.append(String.format("Serijski broj: %013d%s", ProdajaKarataController.idMjesecneKarte, System.lineSeparator()));
 		sb.append(String.format("Relacija: %s - %s%s", karta.getRelacija().getPolaziste(), karta.getRelacija().getOdrediste(), System.lineSeparator()));
 		sb.append(String.format("Peron: %d%s", karta.getPeron(), System.lineSeparator()));
 		sb.append("Izdata: " + LocalDate.now() + " " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")) + System.lineSeparator());
@@ -166,7 +166,7 @@ public class MjesecnaKarta extends Karta {
 		sb.append(String.format("%10sHvala na povjerenju!", " "));
 		System.out.println("Scrrenshot, id mjesecne: " + ProdajaKarataController.idMjesecneKarte);
 		
-		File file = new File("src\\mjesecnekarte\\karta" + String.format("%06d", ProdajaKarataController.idMjesecneKarte) + ".txt");
+		File file = new File("src\\mjesecnekarte\\karta" + String.format("%013d", ProdajaKarataController.idMjesecneKarte) + ".txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 		    writer.append(sb);
 		    
@@ -185,7 +185,7 @@ public class MjesecnaKarta extends Karta {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, serijskiBroj);
 			s.executeUpdate();
-			File file = new File("src\\mjesecnekarte\\karta" + String.format("%06d", serijskiBroj)+".txt");
+			File file = new File("src\\mjesecnekarte\\karta" + String.format("%013d", serijskiBroj)+".txt");
 			if(file.exists())
 				System.out.println(file.delete());
 		} catch (SQLException e) {
