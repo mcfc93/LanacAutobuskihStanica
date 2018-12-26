@@ -6,45 +6,13 @@ import javafx.stage.StageStyle;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.fxml.FXMLLoader;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.logging.Level;
-
-import org.unibl.etf.prijava.Nalog;
-import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
 
 
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
-		//
-		//if("src/org/unibl/etf/config.properties" !exists())
-		//otvori formu za config
-		
-		
-		//ucitavanje nalog.ser, ako postoji
-		/*
-    	File f=new File("garaza.ser");
-    	if(f.exists()) {
-    		try (ObjectInputStream ois = 
-    				new ObjectInputStream(
-    						new FileInputStream("garaza.ser")
-    				)
-    			)
-    		{
-    			PrijavaController.nalog=(Nalog)ois.readObject();
-System.out.println("nalog.ser");
-    		} catch(IOException e) {
-    			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-    		} catch(ClassNotFoundException e) {
-    			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-    		}
-    	}
-		*/
 		try {
 			AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/prijava/Prijava.fxml"));
 			Scene scene = new Scene(root);

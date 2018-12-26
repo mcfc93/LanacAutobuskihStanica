@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import org.controlsfx.control.Notifications;
 import org.unibl.etf.prijava.Nalog;
 
 import com.jfoenix.controls.JFXAutoCompletePopup;
@@ -31,12 +32,14 @@ import com.jfoenix.validation.base.ValidatorBase;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 //klasa koja sadrzi sve pomocne alate
 public class Util {
@@ -476,5 +479,22 @@ System.out.println(PROPERTY);
 		alert.getDialogPane().getStyleClass().addAll("alert", "alertBug");
 		
 		alert.showAndWait();
+	}
+	
+	public static Notifications getNotifications(String title, String text, String type) {
+		switch (type) {
+	        case "Warning": type="org/unibl/etf/img/alert-warning.png"; break;
+	        case "Information": type="org/unibl/etf/img/alert-information.png"; break;
+	        case "Confirmation": type="org/unibl/etf/img/alert-confirmation.png"; break;
+	        case "Error": type="org/unibl/etf/img/alert-error.png"; break;
+	        default: type="org/unibl/etf/img/alert-information.png"; 
+	    }
+		Notifications notificationBuilder = Notifications.create()
+             .title(title)
+             .text(text)
+             .graphic(new ImageView(type))
+             .hideAfter(Duration.seconds(5))
+             .position(Pos.BOTTOM_RIGHT);
+		return notificationBuilder;
 	}
 }

@@ -184,15 +184,19 @@ System.out.println(Mjesto.getPostalCodeList());
 System.out.println(Mjesto.getCityList());
 				Util.setAutocompleteList(odaberiMjestoTextField, Mjesto.getCityPostalCodeList());
 				
+				/*
 				Alert alert=new Alert(AlertType.INFORMATION);
 	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);
-	    		alert.setContentText("Mjesto uspjesno dodano.");
+	    		alert.setContentText("Mjesto uspješno dodano.");
 	    		
 	    		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
 				alert.getDialogPane().getStyleClass().add("alert");
 	    		
 	    		alert.showAndWait();
+	    		*/
+				
+				Util.getNotifications("Obavještenje", "Mjesto dodano.", "Information").show();
 			} else {
 				//NASTALA GRESKA
 				Util.showBugAlert();
@@ -209,15 +213,19 @@ System.out.println(Mjesto.getPostalCodeList());
 System.out.println(Mjesto.getCityList());
 				Util.setAutocompleteList(odaberiMjestoTextField, Mjesto.getCityPostalCodeList());
 				
+				/*
 				Alert alert=new Alert(AlertType.INFORMATION);
 	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);
-	    		alert.setContentText("Mjesto uspjesno izmjenjeno.");
+	    		alert.setContentText("Mjesto uspješno izmjenjeno.");
 	    		
 	    		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
 				alert.getDialogPane().getStyleClass().add("alert");
 				
 	    		alert.showAndWait();
+	    		*/
+				
+				Util.getNotifications("Obavještenje", "Mjesto izmjenjeno.", "Information").show();
     		} else {
     			//NASTALA GRESKA
 				Util.showBugAlert();
@@ -241,15 +249,19 @@ System.out.println(Praznik.getHolidayList());
 				praznici.addAll(Praznik.getHolidayList());
 				odaberiPraznikComboBox.setItems(praznici);
 
+				/*
     			Alert alert=new Alert(AlertType.INFORMATION);
 	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);
-	    		alert.setContentText("Praznik uspjesno dodan.");
+	    		alert.setContentText("Praznik uspješno dodan.");
 	    		
 	    		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
 				alert.getDialogPane().getStyleClass().add("alert");
 				
 	    		alert.showAndWait();
+	    		*/
+				
+				Util.getNotifications("Obavještenje", "Praznik dodan.", "Information").show();
     		} else {
     			//NASTALA GRESKA
 				Util.showBugAlert();
@@ -269,7 +281,7 @@ System.out.println(Praznik.getHolidayList());
 				praznici.addAll(Praznik.getHolidayList());
 				odaberiPraznikComboBox.setItems(praznici);
 
-
+				/*
     			Alert alert=new Alert(AlertType.INFORMATION);
 	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);
@@ -279,6 +291,9 @@ System.out.println(Praznik.getHolidayList());
 				alert.getDialogPane().getStyleClass().add("alert");
 				
 	    		alert.showAndWait();
+	    		*/
+				
+				Util.getNotifications("Obavještenje", "Praznik izmjenjen.", "Information").show();
     		} else {
     			//NASTALA GRESKA
 				Util.showBugAlert();
@@ -296,15 +311,19 @@ System.out.println(Praznik.getHolidayList());
 				praznici.addAll(Praznik.getHolidayList());
 				odaberiPraznikComboBox.setItems(praznici);
 
+				/*
     			Alert alert=new Alert(AlertType.INFORMATION);
 	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);
-	    		alert.setContentText("Praznik uspjesno obrisan.");
+	    		alert.setContentText("Praznik uspješno obrisan.");
 	    		
 	    		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
 				alert.getDialogPane().getStyleClass().add("alert");
 	    		
 	    		alert.showAndWait();
+	    		*/
+				
+				Util.getNotifications("Obavještenje", "Praznik obrisan.", "Information").show();
     		} else {
     			//NASTALA GRESKA
 				Util.showBugAlert();

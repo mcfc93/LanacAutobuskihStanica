@@ -94,6 +94,7 @@ public class UpravljanjeKorisnickimNalogomController implements Initializable {
     				System.out.println("Hash: " + Nalog.hash(novaLozinka1TextField.getText().trim()));
     				PrijavaController.nalog.setLozinka(Nalog.hash(novaLozinka1TextField.getText()));
     				
+    				/*
     				Alert alert=new Alert(AlertType.INFORMATION);
             		alert.setTitle("Obavještenje");
             		alert.setHeaderText(null);
@@ -103,6 +104,9 @@ public class UpravljanjeKorisnickimNalogomController implements Initializable {
     				alert.getDialogPane().getStyleClass().add("alert");
             		
             		alert.show();
+            		*/
+    				
+    				Util.getNotifications("Obavještenje", "Lozinka uspješno promjenjena.", "Information").show();
     			} else {
     				//NASTALA GRESKA
     				Util.showBugAlert();
@@ -117,7 +121,7 @@ public class UpravljanjeKorisnickimNalogomController implements Initializable {
     		} else {
     			staraLozinkaTextField.clear();
     			staraLozinkaTextField.requestFocus();
-    			
+    			/*
     	 		Alert alert=new Alert(AlertType.ERROR);
         		alert.setTitle("Greška");
         		alert.setHeaderText(null);
@@ -127,6 +131,8 @@ public class UpravljanjeKorisnickimNalogomController implements Initializable {
 				alert.getDialogPane().getStyleClass().add("alert");
         		
         		alert.showAndWait();
+        		*/
+    			Util.getNotifications("Greška", "Lozinka pogrešna!", "Error").show();
         	}
     	}
     }

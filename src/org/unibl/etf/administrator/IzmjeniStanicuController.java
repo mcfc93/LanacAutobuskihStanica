@@ -9,6 +9,7 @@ import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -149,7 +150,10 @@ public class IzmjeniStanicuController implements Initializable {
 		    	autobuskaStanica.setPostanskiBroj(Integer.parseInt(postanskiBrojTextField.getText().trim()));
 		    	autobuskaStanica.setWebStranica(webStranicaTextField.getText().trim());
 		    	autobuskaStanica.setEmail(emailTextField.getText().trim());
-	    	} else {
+		    	Platform.runLater(() -> {
+		    		Util.getNotifications("Obavještenje", "Autobuska stanica izmjenjena.", "Information").show();
+		    	});
+		    } else {
 	    		//NASTALA GRESKA
 				Util.showBugAlert();
 	    	}

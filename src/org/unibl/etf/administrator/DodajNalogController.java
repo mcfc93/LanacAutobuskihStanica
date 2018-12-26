@@ -110,7 +110,7 @@ public class DodajNalogController implements Initializable {
 	    
 	    
 	    /*
-	    lozinkaTextField.setTooltip(new Tooltip("Lozinka mora sadr�avati najmanje 6 karaktera"));
+	    lozinkaTextField.setTooltip(new Tooltip("Lozinka mora sadržavati najmanje 6 karaktera"));
 	    
 	    lozinkaTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
 	        if(newValue.length() < 6) {
@@ -130,7 +130,7 @@ public class DodajNalogController implements Initializable {
 			
 			System.out.println(lozinkaTextField.getLayoutX() + " " + lozinkaTextField.getLayoutY());
 			
-			lozinkaTextField.setTooltip(new Tooltip("Lozinka mora sadr�avati najmanje 6 karaktera"));
+			lozinkaTextField.setTooltip(new Tooltip("Lozinka mora sadržavati najmanje 6 karaktera"));
 			lozinkaTextField.getTooltip().setWrapText(true);
 			lozinkaTextField.getTooltip().maxWidth(125);
 		    
@@ -181,11 +181,11 @@ public class DodajNalogController implements Initializable {
 			if(Nalog.dodavanjeNaloga(korisnickoImeTextField.getText(),
 					Nalog.hash(lozinkaTextField.getText()),
 					jibStaniceTextField.getText(),
-					administrativniRadnikRadioButton.isSelected() ? "Administrativni radnik" : "�alterski radnik",
+					administrativniRadnikRadioButton.isSelected() ? "Administrativni radnik" : "Šalterski radnik",
 					imeTextField.getText(),
 					prezimeTextField.getText(),
 					jmbgTextField.getText(),
-					muskiRadioButton.isSelected() ? "Mu�ki" : "�enski",
+					muskiRadioButton.isSelected() ? "Muški" : "Ženski",
 					adresaTextField.getText(),
 					//Integer.parseInt(postanskiBrojTextField.getText()),
 					Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()),
@@ -195,8 +195,10 @@ public class DodajNalogController implements Initializable {
 				lozinkaTextField.clear();
 				Zaposleni.getJmbgList().add(jmbgTextField.getText().trim());
 				Nalog.getUsernameList().add(korisnickoImeTextField.getText().trim());
+				
+				/*
 				Alert alert=new Alert(AlertType.INFORMATION);
-	    		alert.setTitle("Obavje�tenje");
+	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);
 	    		alert.setContentText("Nalog uspjesno dodan.");
 	    		
@@ -204,6 +206,9 @@ public class DodajNalogController implements Initializable {
 				alert.getDialogPane().getStyleClass().add("alert");
 				
 	    		alert.showAndWait();
+	    		*/
+				
+				Util.getNotifications("Obavještenje", "Korisnički nalog kreiran.", "Information").show();
 			} else {
 				//NASTALA GRESKA
 				Util.showBugAlert();

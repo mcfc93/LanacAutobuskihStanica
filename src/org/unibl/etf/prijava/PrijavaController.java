@@ -284,6 +284,7 @@ System.out.println(autobuskaStanica);
 	    			try {
 	    				Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/AdministratorView.fxml"));
 	    				Scene scene = new Scene(root);
+	    				scene.getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
 	    				Stage stage=new Stage();
 	    				stage.setScene(scene);
 	    				//stage.setTitle("Administrator");
@@ -299,6 +300,7 @@ System.out.println(autobuskaStanica);
 	    			try {
 	    				Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/AdministrativniRadnikView.fxml"));
 	    				Scene scene = new Scene(root);
+	    				scene.getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
 	    				Stage stage=new Stage();
 	    				stage.setScene(scene);
 	    				//stage.setTitle("Administrativni radnik");
@@ -315,6 +317,7 @@ System.out.println(autobuskaStanica);
 	               	try {
 	            		Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/SalterskiRadnikView.fxml"));
 	           			Scene scene = new Scene(root);
+	           			scene.getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
 	           			Stage stage=new Stage();
 	           			stage.setScene(scene);
 	           			//stage.setTitle("Šalterski radnik");

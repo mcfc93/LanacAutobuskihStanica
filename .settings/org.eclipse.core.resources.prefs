@@ -1,6 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/org/unibl/etf/administrativni_radnik/ListaLinijaController.java=UTF-8
 encoding//src/org/unibl/etf/administrativni_radnik/ListaPrevoznikaController.java=UTF-8
+encoding//src/org/unibl/etf/administrator/DodajNalogController.java=UTF-8
 encoding//src/org/unibl/etf/administrator/DodajStanicuController.java=UTF-8
 encoding//src/org/unibl/etf/administrator/ListaNalogaController.java=UTF-8
 encoding//src/org/unibl/etf/administrator/ListaStanicaController.java=UTF-8

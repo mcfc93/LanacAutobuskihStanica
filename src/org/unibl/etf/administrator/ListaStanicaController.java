@@ -114,6 +114,8 @@ public class ListaStanicaController implements Initializable {
                     						item.setStanje("Aktivno");
                     						button.getStyleClass().remove("buttonTableUnblock");
                     						button.getStyleClass().add("buttonTableBlock");
+                    						
+                    						Util.getNotifications("Obavještenje", "Autobuska stanica odblokirana.", "Information").show();
                     					} else {
                     						//NASTALA GRESKA
                     						Util.showBugAlert();
@@ -123,6 +125,8 @@ public class ListaStanicaController implements Initializable {
 	                    					item.setStanje("Blokirano");
 	                    					button.getStyleClass().remove("buttonTableBlock");
 	                    					button.getStyleClass().add("buttonTableUnblock");
+	                    					
+	                    					Util.getNotifications("Obavještenje", "Autobuska stanica blokirana.", "Information").show();
                     					} else {
                     						//NASTALA GRESKA
                     						Util.showBugAlert();
@@ -177,6 +181,7 @@ public class ListaStanicaController implements Initializable {
                     			    	listaAutobuskihStanica.add(index, IzmjeniStanicuController.autobuskaStanica);
                     					autobuskeStaniceTable.refresh();
                     					autobuskeStaniceTable.getSelectionModel().select(item);
+                    					
                     				} catch(Exception e) {
                     					Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                     				}
@@ -235,6 +240,8 @@ public class ListaStanicaController implements Initializable {
 	                    			if(AutobuskaStanica.brisanjeAutobuskeStanice(item.getJib())) {
 		                				getTableView().getItems().remove(item);
 		                				System.out.println("Obrisano: " + item);
+		                				
+		                				Util.getNotifications("Obavještenje", "Autobuska stanica obrisana.", "Information").show();
 	                    			} else {
 	                    				//NASTALA GRESKA
 	                    				Util.showBugAlert();

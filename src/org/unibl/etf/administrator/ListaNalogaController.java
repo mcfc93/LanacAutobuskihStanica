@@ -122,6 +122,8 @@ public class ListaNalogaController implements Initializable {
 		                    			if(Nalog.brisanjeNaloga(item.getZaposleni().getJmbg())) {
 			                    			getTableView().getItems().remove(item);
 			                				System.out.println("Obrisano: " + item);
+			                				
+			                				Util.getNotifications("Obavještenje", "Korisnički nalog obrisan.", "Information").show();
 		                    			} else {
 		                    				//NASTALA GRESKA
 		                    				Util.showBugAlert();

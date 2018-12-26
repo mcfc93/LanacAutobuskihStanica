@@ -85,6 +85,8 @@ public class DodajStanicuController implements Initializable {
 					webStranicaTextField.getText().trim(),
 					emailTextField.getText().trim())) {
 				AutobuskaStanica.getJibList().add(jibTextField.getText().trim());
+				
+				/*
 				Alert alert=new Alert(AlertType.INFORMATION);
 	    		alert.setTitle("Obavještenje");
 	    		alert.setHeaderText(null);
@@ -94,6 +96,9 @@ public class DodajStanicuController implements Initializable {
 				alert.getDialogPane().getStyleClass().add("alert");
 				
 	    		alert.showAndWait();
+	    		*/
+				
+				Util.getNotifications("Obavještenje", "Autobuska stanica dodana.", "Information").show();
 			} else {
 				//NASTALA GRESKA
 				Util.showBugAlert();

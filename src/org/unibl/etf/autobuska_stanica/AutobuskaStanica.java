@@ -200,6 +200,7 @@ public class AutobuskaStanica {
 	}
 	
 	public static boolean brisanjeAutobuskeStanice(String jib) {
+		/*
 		Connection c = null;
 		CallableStatement s = null;
 	    try {
@@ -214,11 +215,27 @@ public class AutobuskaStanica {
 	    	Util.close(s,c);
 	    }
 	    return false;
+	    */
+		String sql="update autobuska_stanica, nalog, zaposleni set autobuska_stanica.Stanje=?, nalog.Stanje=?, zaposleni.Stanje=? where autobuska_stanica.JIBStanice=? and nalog.JIBStanice=autobuska_stanica.JIBStanice and nalog.JMBG=zaposleni.JMBG;";
+		Connection c = null;
+		PreparedStatement s = null;
+	    try {
+	       	c=Util.getConnection();
+	    	s = Util.prepareStatement(c, sql, false, "Izbrisano", "Izbrisano", "Izbrisano", jib);
+	       	s.execute();
+	       	return true;
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(s,c);
+	    }
+	    return false;
 	}
 	
 	public static boolean blokiranjeAutobuskeStanice(String jib, String stanje) {
 		//String sql="update autobuska_stanica set Stanje=? where JIBStanice=?;";
-		String sql="update autobuska_stanica as a, nalog as n, zaposleni as z set a.Stanje=?, n.Stanje=?, z.Stanje=? where a.JIBStanice=? and a.JIBStanice=n.JIBStanice and n.JMBG=z.JMBG;";
+		//String sql="update autobuska_stanica as a, nalog as n, zaposleni as z set a.Stanje=?, n.Stanje=?, z.Stanje=? where a.JIBStanice=? and a.JIBStanice=n.JIBStanice and n.JMBG=z.JMBG;";
+		String sql="update autobuska_stanica, nalog, zaposleni set autobuska_stanica.Stanje=?, nalog.Stanje=?, zaposleni.Stanje=? where autobuska_stanica.JIBStanice=? and nalog.JIBStanice=autobuska_stanica.JIBStanice and nalog.JMBG=zaposleni.JMBG;";
 		Connection c = null;
 		PreparedStatement s = null;
 	    try {
