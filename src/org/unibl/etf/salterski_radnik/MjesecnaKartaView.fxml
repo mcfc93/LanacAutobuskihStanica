@@ -36,12 +36,12 @@
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <Label fx:id="relacijaLabel" layoutX="120.0" layoutY="90.0" prefHeight="40.0" prefWidth="125.0" text="RELACIJA RELACIJA RELACIJA RELACIJA" textFill="WHITE" wrapText="true" AnchorPane.bottomAnchor="30.0">
+            <Label fx:id="relacijaLabel" layoutX="120.0" layoutY="55.0" prefHeight="60.0" prefWidth="125.0" style="-fx-alignment: top-left;" text="RELACIJA RELACIJA RELACIJA RELACIJA RELACIJA RELACIJA" textFill="WHITE" wrapText="true" AnchorPane.bottomAnchor="40.0">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <Label fx:id="linijaLabel" layoutX="120.0" layoutY="43.0" prefHeight="40.0" prefWidth="125.0" text="LINIJA LINIJA LINIJA LINIJA" textFill="WHITE" wrapText="true" AnchorPane.bottomAnchor="70.0">
+            <Label fx:id="linijaLabel" layoutX="120.0" layoutY="43.0" prefHeight="40.0" prefWidth="125.0" text="LINIJA LINIJA LINIJA LINIJA" textFill="WHITE" visible="false" wrapText="true" AnchorPane.bottomAnchor="70.0">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>

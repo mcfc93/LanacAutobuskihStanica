@@ -194,7 +194,7 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 		prodajaKarataButton.getStyleClass().removeAll("buttonMenu");
 		prodajaKarataButton.getStyleClass().add("buttonPressed");
 		try {
-			Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/ProdajaKarataView.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/ProdajaKarataView.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
 			AnchorPane.setBottomAnchor(root,0.0);
 			AnchorPane.setLeftAnchor(root,0.0);
