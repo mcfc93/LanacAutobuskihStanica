@@ -99,6 +99,23 @@ public class DodajStanicuController implements Initializable {
 	    		*/
 				
 				Util.getNotifications("Obavještenje", "Autobuska stanica dodana.", "Information").show();
+				
+				jibTextField.clear();
+				jibTextField.resetValidation();
+				nazivTextField.clear();
+				nazivTextField.resetValidation();
+				brojPeronaTextField.clear();
+				brojPeronaTextField.resetValidation();
+				brojTelefonaTextField.clear();
+				brojTelefonaTextField.resetValidation();
+				adresaTextField.clear();
+				adresaTextField.resetValidation();
+				postanskiBrojTextField.clear();
+				postanskiBrojTextField.resetValidation();
+				webStranicaTextField.clear();
+				webStranicaTextField.resetValidation();
+				emailTextField.clear();
+				emailTextField.resetValidation();
 			} else {
 				//NASTALA GRESKA
 				Util.showBugAlert();

@@ -192,7 +192,6 @@ public class DodajNalogController implements Initializable {
 					strucnaSpremaTextField.getText(),
 					brojTelefonaTextField.getText(),
 					emailTextField.getText())) {
-				lozinkaTextField.clear();
 				Zaposleni.getJmbgList().add(jmbgTextField.getText().trim());
 				Nalog.getUsernameList().add(korisnickoImeTextField.getText().trim());
 				
@@ -209,6 +208,31 @@ public class DodajNalogController implements Initializable {
 	    		*/
 				
 				Util.getNotifications("Obavještenje", "Korisnički nalog kreiran.", "Information").show();
+				
+				korisnickoImeTextField.clear();
+				korisnickoImeTextField.resetValidation();
+				lozinkaTextField.clear();
+				lozinkaTextField.resetValidation();
+				jibStaniceTextField.clear();
+				jibStaniceTextField.resetValidation();
+				administrativniRadnikRadioButton.setSelected(true);
+				imeTextField.clear();
+				imeTextField.resetValidation();
+				prezimeTextField.clear();
+				prezimeTextField.resetValidation();
+				jmbgTextField.clear();
+				jmbgTextField.resetValidation();
+				adresaTextField.clear();
+				adresaTextField.resetValidation();
+				postanskiBrojTextField.clear();
+				postanskiBrojTextField.resetValidation();
+				strucnaSpremaTextField.clear();
+				strucnaSpremaTextField.resetValidation();
+				muskiRadioButton.setSelected(true);
+				brojTelefonaTextField.clear();
+				brojTelefonaTextField.resetValidation();
+				emailTextField.clear();
+				emailTextField.resetValidation();
 			} else {
 				//NASTALA GRESKA
 				Util.showBugAlert();
