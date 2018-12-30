@@ -24,6 +24,7 @@ import com.jfoenix.controls.JFXAutoCompletePopup;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTimePicker;
 import com.jfoenix.validation.DoubleValidator;
 import com.jfoenix.validation.IntegerValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
@@ -142,7 +143,7 @@ System.out.println(PROPERTY);
 	}
 	
 	//VALIDATORI
-	public static ValidatorBase requredFieldValidator(JFXTextField textField) {
+	public static ValidatorBase requiredFieldValidator(JFXTextField textField) {
     	ValidatorBase requiredFieldValidator = new RequiredFieldValidator();
 	    requiredFieldValidator.setMessage("Obavezan unos");
 	    requiredFieldValidator.setIcon(new ImageView());
@@ -157,7 +158,7 @@ System.out.println(PROPERTY);
 	    return requiredFieldValidator;
     }
 	
-	public static ValidatorBase requredFieldValidator(JFXPasswordField passwordField) {
+	public static ValidatorBase requiredFieldValidator(JFXPasswordField passwordField) {
     	ValidatorBase requiredFieldValidator = new RequiredFieldValidator();
 	    requiredFieldValidator.setMessage("Obavezan unos");
 	    requiredFieldValidator.setIcon(new ImageView());
@@ -182,7 +183,7 @@ System.out.println(PROPERTY);
 	    return requiredFieldValidator;
     }
 	
-	public static <T> ValidatorBase requredFieldValidator(JFXComboBox<T> comboBox) {
+	public static <T> ValidatorBase requiredFieldValidator(JFXComboBox<T> comboBox) {
     	ValidatorBase requiredFieldValidator = new RequiredFieldValidator();
 	    requiredFieldValidator.setMessage("Obavezan unos");
 	    requiredFieldValidator.setIcon(new ImageView());
@@ -446,6 +447,25 @@ System.out.println(PROPERTY);
 		};
 		lengthValidator.setIcon(new ImageView());
 		return lengthValidator;
+	}
+	
+	public static ValidatorBase timeValidator(JFXTimePicker timePicker) {
+		ValidatorBase timeValidator = new ValidatorBase("Format: hh:mm") {
+			@Override
+			protected void eval() {
+				if(timePicker.getValue() == null) {
+					 hasErrors.set(true);
+			    } else {
+			    	 hasErrors.set(false);
+			    }
+			}
+		};
+		timeValidator.setIcon(new ImageView());
+		timePicker.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
+	        if(!newValue)
+	        	timePicker.validate();
+	    });
+		return timeValidator;
 	}
 	
 	public static void setAutocompleteList(JFXTextField textField, Collection<String> collection) {

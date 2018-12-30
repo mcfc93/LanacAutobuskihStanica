@@ -25,6 +25,7 @@ import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.beans.value.ChangeListener;
@@ -53,6 +54,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
@@ -118,7 +120,7 @@ public class ProdajaKarataController implements Initializable {
 	@FXML
 	private JFXComboBox<Integer> brojKarataComboBox;
 	@FXML
-	private DatePicker datum =  new DatePicker();
+	private JFXDatePicker datum;
 	@FXML
 	private JFXButton pretragaButton = new JFXButton();
 	@FXML
@@ -199,11 +201,12 @@ public class ProdajaKarataController implements Initializable {
             @Override
             public void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
-                //setDisable(empty || item.compareTo(LocalDate.now()) < 0 );
+                setDisable(empty || item.compareTo(LocalDate.now()) < 0 );
                 for(Praznik p: Praznik.getHolidayList()) {
 	                if (MonthDay.from(item).equals(MonthDay.of(p.getMjesec(), p.getDan()))) {
 	                    setTooltip(new Tooltip(p.getOpis()));
-	                    setStyle("-fx-background-color: #ff4444;");
+	                    //setStyle("-fx-background-color: #ff4444;");
+	                    setTextFill(Color.RED);
 	                }
                 }
             }
@@ -496,12 +499,12 @@ public class ProdajaKarataController implements Initializable {
 	}
 
 	public void validationSetUp() {
-		polazisteTextField.getValidators().addAll(Util.requredFieldValidator(polazisteTextField),Util.collectionValidator(polazisteTextField, relacijeSet, true, "Unesite polaziste"));
-		odredisteTextField.getValidators().addAll(Util.requredFieldValidator(odredisteTextField),Util.collectionValidator(odredisteTextField, relacijeSet, true, "Unesite odrediste"));
-		imeTextField.getValidators().add(Util.requredFieldValidator(imeTextField));
-		prezimeTextField.getValidators().add(Util.requredFieldValidator(prezimeTextField));
-		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField),Util.phoneValidator(brojTelefonaTextField));
-		serijskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(serijskiBrojTextField),Util.integerValidator(serijskiBrojTextField));
+		polazisteTextField.getValidators().addAll(Util.requiredFieldValidator(polazisteTextField),Util.collectionValidator(polazisteTextField, relacijeSet, true, "Unesite polaziste"));
+		odredisteTextField.getValidators().addAll(Util.requiredFieldValidator(odredisteTextField),Util.collectionValidator(odredisteTextField, relacijeSet, true, "Unesite odrediste"));
+		imeTextField.getValidators().add(Util.requiredFieldValidator(imeTextField));
+		prezimeTextField.getValidators().add(Util.requiredFieldValidator(prezimeTextField));
+		brojTelefonaTextField.getValidators().addAll(Util.requiredFieldValidator(brojTelefonaTextField),Util.phoneValidator(brojTelefonaTextField));
+		serijskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(serijskiBrojTextField),Util.integerValidator(serijskiBrojTextField));
 	}
 	
 

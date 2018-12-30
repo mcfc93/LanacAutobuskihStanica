@@ -84,11 +84,11 @@ public class UpravljanjePerzistentnimPodacimaController implements Initializable
     	odaberiMjestoTextField.setDisable(true);
     	
     	Util.setAutocompleteList(odaberiMjestoTextField, Mjesto.getCityPostalCodeList());
-    	odaberiMjestoTextField.getValidators().addAll(Util.requredFieldValidator(odaberiMjestoTextField), Util.collectionValidator(odaberiMjestoTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
+    	odaberiMjestoTextField.getValidators().addAll(Util.requiredFieldValidator(odaberiMjestoTextField), Util.collectionValidator(odaberiMjestoTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
      	ValidatorBase postalCodeValidator=Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), false, "Već postoji");
     	ValidatorBase cityValdator=Util.collectionValidator(nazivMjestaTextField, Mjesto.getCityList(), false, "Već postoji");
-    	postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.integerValidator(postanskiBrojTextField), postalCodeValidator);
-   		nazivMjestaTextField.getValidators().addAll(Util.requredFieldValidator(nazivMjestaTextField), cityValdator);
+    	postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.integerValidator(postanskiBrojTextField), postalCodeValidator);
+   		nazivMjestaTextField.getValidators().addAll(Util.requiredFieldValidator(nazivMjestaTextField), cityValdator);
    		
    		mjestoToggleGroup.selectedToggleProperty().addListener(listener -> {
     		if(dodajMjestoRadioButton.isSelected()) {
@@ -125,9 +125,9 @@ public class UpravljanjePerzistentnimPodacimaController implements Initializable
    		praznici.addAll(Praznik.getHolidayList());
     	odaberiPraznikComboBox.setItems(praznici);
     	//odaberiPraznikTextField.getValidators().addAll(Util.requredFieldValidator(odaberiPraznikTextField), Util.collectionValidator(odaberiPraznikTextField, praznici, true, "Nekorektan unos"));
-    	odaberiPraznikComboBox.getValidators().add(Util.requredFieldValidator(odaberiPraznikComboBox));
-    	datumTextField.getValidators().addAll(Util.requredFieldValidator(datumTextField), Util.dateValidator(datumTextField));
-    	opisTextField.getValidators().add(Util.requredFieldValidator(opisTextField));
+    	odaberiPraznikComboBox.getValidators().add(Util.requiredFieldValidator(odaberiPraznikComboBox));
+    	datumTextField.getValidators().addAll(Util.requiredFieldValidator(datumTextField), Util.dateValidator(datumTextField));
+    	opisTextField.getValidators().add(Util.requiredFieldValidator(opisTextField));
     	
     	praznikToggleGroup.selectedToggleProperty().addListener(listener -> {
     		if(dodajPraznikRadioButton.isSelected()) {

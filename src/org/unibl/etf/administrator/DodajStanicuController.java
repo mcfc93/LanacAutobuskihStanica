@@ -54,15 +54,15 @@ public class DodajStanicuController implements Initializable {
 		//Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getPostalCodeList());
 		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());
 		
-		jibTextField.getValidators().addAll(Util.requredFieldValidator(jibTextField), Util.jibValidator(jibTextField), Util.collectionValidator(jibTextField, AutobuskaStanica.getJibList(), false, "Zauzeto"));
-		nazivTextField.getValidators().add(Util.requredFieldValidator(nazivTextField));
-		brojPeronaTextField.getValidators().addAll(Util.requredFieldValidator(brojPeronaTextField), Util.integerValidator(brojPeronaTextField));
-		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField), Util.lengthValidator(brojTelefonaTextField, 15));
-		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
-		//postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), true, "Nekorektan unos"));
-		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
-		webStranicaTextField.getValidators().addAll(Util.requredFieldValidator(webStranicaTextField), Util.webValidator(webStranicaTextField));
-		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
+		jibTextField.getValidators().addAll(Util.requiredFieldValidator(jibTextField), Util.jibValidator(jibTextField), Util.collectionValidator(jibTextField, AutobuskaStanica.getJibList(), false, "Zauzeto"));
+		nazivTextField.getValidators().add(Util.requiredFieldValidator(nazivTextField));
+		brojPeronaTextField.getValidators().addAll(Util.requiredFieldValidator(brojPeronaTextField), Util.integerValidator(brojPeronaTextField));
+		brojTelefonaTextField.getValidators().addAll(Util.requiredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField), Util.lengthValidator(brojTelefonaTextField, 15));
+		adresaTextField.getValidators().add(Util.requiredFieldValidator(adresaTextField));
+		//postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), true, "Nekorektan unos"));
+		postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
+		webStranicaTextField.getValidators().addAll(Util.requiredFieldValidator(webStranicaTextField), Util.webValidator(webStranicaTextField));
+		emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
 	}
 	
 	@FXML

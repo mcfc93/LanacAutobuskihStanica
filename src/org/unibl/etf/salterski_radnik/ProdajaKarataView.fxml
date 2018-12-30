@@ -3,10 +3,10 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -116,11 +116,12 @@
                   </JFXRadioButton>
                </children>
             </GridPane>
-            <DatePicker fx:id="datum" GridPane.halignment="LEFT" GridPane.rowIndex="4">
+            <JFXComboBox fx:id="brojKarataComboBox" labelFloat="true" prefHeight="25.0" prefWidth="75.0" promptText="Broj karata" unFocusColor="WHITE" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="TOP" />
+            <JFXDatePicker fx:id="datum" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets top="30.0" />
-               </GridPane.margin></DatePicker>
-            <JFXComboBox fx:id="brojKarataComboBox" labelFloat="true" prefHeight="25.0" prefWidth="75.0" promptText="Broj karata" unFocusColor="WHITE" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="TOP" />
+               </GridPane.margin>
+            </JFXDatePicker>
          </children>
       </GridPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2">

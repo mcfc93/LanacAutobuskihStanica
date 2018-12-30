@@ -101,14 +101,14 @@ public class IzmjeniStanicuController implements Initializable {
 			Util.setAutocompleteList(postanskiBrojTextField, Util.getPostalCodeList());
 		});
 		*/
-		jibTextField.getValidators().addAll(Util.requredFieldValidator(jibTextField), Util.jibValidator(jibTextField));
-		nazivTextField.getValidators().add(Util.requredFieldValidator(nazivTextField));
-		brojPeronaTextField.getValidators().addAll(Util.requredFieldValidator(brojPeronaTextField), Util.integerValidator(brojPeronaTextField));
-		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
-		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
-		postanskiBrojTextField.getValidators().add(Util.requredFieldValidator(postanskiBrojTextField));
-		webStranicaTextField.getValidators().addAll(Util.requredFieldValidator(webStranicaTextField), Util.webValidator(webStranicaTextField));
-		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
+		jibTextField.getValidators().addAll(Util.requiredFieldValidator(jibTextField), Util.jibValidator(jibTextField));
+		nazivTextField.getValidators().add(Util.requiredFieldValidator(nazivTextField));
+		brojPeronaTextField.getValidators().addAll(Util.requiredFieldValidator(brojPeronaTextField), Util.integerValidator(brojPeronaTextField));
+		brojTelefonaTextField.getValidators().addAll(Util.requiredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
+		adresaTextField.getValidators().add(Util.requiredFieldValidator(adresaTextField));
+		postanskiBrojTextField.getValidators().add(Util.requiredFieldValidator(postanskiBrojTextField));
+		webStranicaTextField.getValidators().addAll(Util.requiredFieldValidator(webStranicaTextField), Util.webValidator(webStranicaTextField));
+		emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
 		
 		
 		jibTextField.setDisable(true);

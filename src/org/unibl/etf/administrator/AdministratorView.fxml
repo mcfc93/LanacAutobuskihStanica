@@ -26,7 +26,7 @@
             </Label>
             <ToggleButton fx:id="listaAutobuskihStanicaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="185.0" mnemonicParsing="false" onAction="#listaAutobuskihStanica" prefHeight="40.0" prefWidth="200.0" selected="true" text="Upravljanje autobuskim stanicama" wrapText="true">
                <graphic>
-                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="20.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@img/listStations.png" />
                      </image>

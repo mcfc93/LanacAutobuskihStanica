@@ -57,7 +57,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		serijskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(serijskiBrojTextField),Util.integerValidator(serijskiBrojTextField));
+		serijskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(serijskiBrojTextField),Util.integerValidator(serijskiBrojTextField));
 		checkMarkImageView.setVisible(false);
 		stornirajButton.setDisable(true);
 	}

@@ -8,6 +8,8 @@ import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,7 +22,7 @@ import javafx.stage.Stage;
 public class IzmjenaPrevoznikaController implements Initializable{
 	
 	@FXML
-	private AnchorPane anchorPane = new AnchorPane();
+	private AnchorPane anchorPane;
 	@FXML
 	private JFXTextField nazivTextField = new JFXTextField();
 	@FXML
@@ -39,8 +41,7 @@ public class IzmjenaPrevoznikaController implements Initializable{
 	private JFXTextField jibTextField = new JFXTextField();
 	@FXML
 	private JFXButton okButton = new JFXButton();
-	@FXML
-	private ImageView exitImageView = new ImageView();
+	
 	private double xOffset=0;
     private double yOffset=0;
 	
@@ -71,7 +72,12 @@ public class IzmjenaPrevoznikaController implements Initializable{
 			stage.setOpacity(1.0);
 		});
 		
-		jibTextField.setEditable(false);
+		
+		
+		jibTextField.setDisable(true);
+		postanskiBrojTextField.setDisable(true);
+		okButton.setDefaultButton(true);
+		
 		jibTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getJIBPrevoznika());
 		nazivTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getNaziv());
 		adresaTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getAdresa());
@@ -80,44 +86,54 @@ public class IzmjenaPrevoznikaController implements Initializable{
 		webAdresaTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getWebAdresa());
 		tekuciRacunTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getRacun());
 		postanskiBrojTextField.setText(String.valueOf(ListaPrevoznikaController.odabraniPrevoznik.getPostanskiBroj() + " - " + Mjesto.getPlaceList().stream().filter(m -> m.getPostanskiBroj()==ListaPrevoznikaController.odabraniPrevoznik.getPostanskiBroj()).findFirst().get().getNaziv()));
-		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());	
-		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
-		nazivTextField.getValidators().add(Util.requredFieldValidator(nazivTextField));
-		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField),Util.emailValidator(emailTextField));
-		telefonTextField.getValidators().addAll(Util.requredFieldValidator(telefonTextField),Util.phoneValidator(telefonTextField));
-		webAdresaTextField.getValidators().addAll(Util.requredFieldValidator(webAdresaTextField),Util.webValidator(webAdresaTextField));
-		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField),Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
-		tekuciRacunTextField.getValidators().addAll(Util.requredFieldValidator(tekuciRacunTextField),Util.integerValidator(tekuciRacunTextField));
-		Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Greska.");
+		
+		
+		//Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());	
+		//Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Greska.");
+		
+		jibTextField.getValidators().addAll(Util.requiredFieldValidator(jibTextField), Util.jibValidator(jibTextField));
+		nazivTextField.getValidators().add(Util.requiredFieldValidator(nazivTextField));
+		tekuciRacunTextField.getValidators().addAll(Util.requiredFieldValidator(tekuciRacunTextField), Util.iinValidator(tekuciRacunTextField));
+		telefonTextField.getValidators().addAll(Util.requiredFieldValidator(telefonTextField), Util.phoneValidator(telefonTextField));
+		adresaTextField.getValidators().add(Util.requiredFieldValidator(adresaTextField));
+		postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
+		webAdresaTextField.getValidators().addAll(Util.requiredFieldValidator(webAdresaTextField), Util.webValidator(webAdresaTextField));
+		emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
 	}
 
 	@FXML
-	public void exit() {
-		Stage stage = (Stage) exitImageView.getScene().getWindow();
-	    stage.close();
-	}
+    void close(MouseEvent event) {
+    	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+    }
+	
 	@FXML
-	public void izmjeniPrevoznika() {
-	if(nazivTextField.validate() &
-			adresaTextField.validate() &
-				emailTextField.validate() &
-					telefonTextField.validate() &
-						webAdresaTextField.validate() &
-							postanskiBrojTextField.validate() &
-								tekuciRacunTextField.validate()) {
-		
-		Prevoznik.izmjeniPrevoznika(nazivTextField.getText(), telefonTextField.getText(), emailTextField.getText(), webAdresaTextField.getText(), 
-									tekuciRacunTextField.getText(), adresaTextField.getText(),postanskiBrojTextField.getText().split("-")[0].trim(), 
-									ListaPrevoznikaController.odabraniPrevoznik.getJIBPrevoznika());
-		ListaPrevoznikaController.odabraniPrevoznik.setAdresa(adresaTextField.getText());
-		ListaPrevoznikaController.odabraniPrevoznik.setNaziv(nazivTextField.getText());
-		ListaPrevoznikaController.odabraniPrevoznik.setTelefon(telefonTextField.getText());
-		ListaPrevoznikaController.odabraniPrevoznik.setEmail(emailTextField.getText());
-		ListaPrevoznikaController.odabraniPrevoznik.setWebAdresa(webAdresaTextField.getText());
-		ListaPrevoznikaController.odabraniPrevoznik.setRacun(tekuciRacunTextField.getText());
-		ListaPrevoznikaController.odabraniPrevoznik.setPostanskiBroj(Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()));
-		Stage stage = (Stage) okButton.getScene().getWindow();
-		stage.close();
-	}
+	public void izmjeniPrevoznika(ActionEvent event) {
+		if(jibTextField.validate()
+				& nazivTextField.validate()
+					& adresaTextField.validate()
+						& emailTextField.validate()
+							& telefonTextField.validate()
+								& webAdresaTextField.validate()
+									& postanskiBrojTextField.validate()
+										& tekuciRacunTextField.validate()) {
+			if(Prevoznik.izmjeniPrevoznika(nazivTextField.getText(), telefonTextField.getText(), emailTextField.getText(), webAdresaTextField.getText(), 
+										tekuciRacunTextField.getText(), adresaTextField.getText(),postanskiBrojTextField.getText().split("-")[0].trim(), 
+										ListaPrevoznikaController.odabraniPrevoznik.getJIBPrevoznika())) {
+				ListaPrevoznikaController.odabraniPrevoznik.setAdresa(adresaTextField.getText());
+				ListaPrevoznikaController.odabraniPrevoznik.setNaziv(nazivTextField.getText());
+				ListaPrevoznikaController.odabraniPrevoznik.setTelefon(telefonTextField.getText());
+				ListaPrevoznikaController.odabraniPrevoznik.setEmail(emailTextField.getText());
+				ListaPrevoznikaController.odabraniPrevoznik.setWebAdresa(webAdresaTextField.getText());
+				ListaPrevoznikaController.odabraniPrevoznik.setRacun(tekuciRacunTextField.getText());
+				ListaPrevoznikaController.odabraniPrevoznik.setPostanskiBroj(Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()));
+				Platform.runLater(() -> {
+		    		Util.getNotifications("Obavještenje", "Prevoznik izmjenjen.", "Information").show();
+		    	});
+			} else {
+				//NASTALA GRESKA
+				Util.showBugAlert();
+			}
+			((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+		}
 	}
 }

@@ -9,13 +9,16 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.MonthDay;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
 import org.unibl.etf.karta.Karta;
 import org.unibl.etf.prijava.PrijavaController;
+import org.unibl.etf.util.Praznik;
 import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
@@ -31,33 +34,30 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 
 public class InformacijeController implements Initializable{
-
+	
 	private Set<String> mjestaSet = new HashSet<>();
 	private static ObservableList<Karta> karteObs = FXCollections.observableArrayList();
 	public static String nazivMjesta;
-
+	
+	
+	
+	
 	@FXML
 	private JFXButton pretragaButton = new JFXButton();
-	@FXML
-	private TableView<Karta> karteTable = new TableView<>();
-	@FXML
-	private TableColumn<Karta,String> nazivLinijeColumn = new TableColumn<>();
-	@FXML
-	private TableColumn<Karta,Double> cijenaColumn = new TableColumn<>();
-	@FXML
-	private TableColumn<Karta,LocalTime> vrijemePolaskaColumn = new TableColumn<>();
-	@FXML
-	private TableColumn<Karta,LocalTime> vrijemeDolaskaColumn = new TableColumn<>();
-	@FXML
-	private TableColumn<Karta,String> prevoznikColumn = new TableColumn<>();
-	@FXML
-	private TableColumn<Karta,Integer> peronColumn = new TableColumn<>();	
 	@FXML
 	private DatePicker datum = new DatePicker();
 	@FXML
@@ -70,8 +70,79 @@ public class InformacijeController implements Initializable{
 	private JFXTextField mjestoTextField = new JFXTextField();
 	private static String daniUSedmici;
 	
+	
+	
+	
+	
+	@FXML
+	private AnchorPane tableAnchorPane;
+	
+	@FXML
+    private TableView<Karta> karteTable;
+
+    @FXML
+    private TableColumn<Karta, String> nazivLinijeColumn;
+
+    @FXML
+    private TableColumn<Karta, LocalTime> vrijemePolaskaColumn;
+
+    @FXML
+    private TableColumn<Karta, LocalTime> vrijemeDolaskaColumn;
+
+    @FXML
+    private TableColumn<Karta, Double> cijenaColumn;
+
+    @FXML
+    private TableColumn<Karta, String> prevoznikColumn;
+
+    @FXML
+    private TableColumn<Karta, Integer> peronColumn;
+	
+	@FXML
+    private TextField traziTextField;
+
+    @FXML
+    private ImageView clearImageView;
+    
+    @FXML
+    private JFXComboBox<String> polasciDolasciComboBox;
+
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {		
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		clearImageView.setVisible(false);
+		
+		mjestoTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+        	if(!newValue.isEmpty()) {
+        		clearImageView.setVisible(true);
+        	} else {
+        		clearImageView.setVisible(false);
+        	}
+		});
+		
+		datum.setDayCellFactory(datePicker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                setDisable(empty || item.compareTo(LocalDate.now()) < 0 );
+                for(Praznik p: Praznik.getHolidayList()) {
+	                if (MonthDay.from(item).equals(MonthDay.of(p.getMjesec(), p.getDan()))) {
+	                    setTooltip(new Tooltip(p.getOpis()));
+	                    //setStyle("-fx-background-color: #ff4444;");
+	                    setTextFill(Color.RED);
+	                }
+                }
+            }
+        });
+        datum.setEditable(false);
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		karteTable.setItems(karteObs);
 		datum.setValue(LocalDate.now());
 		nazivMjesta = getNazivMjesta();
@@ -80,14 +151,7 @@ public class InformacijeController implements Initializable{
 		polasciRadioButton.setSelected(true);
 		mjestoTextField.setPromptText("Destinacija");
 		
-		datum.setDayCellFactory(picker -> new DateCell() {
-	        public void updateItem(LocalDate date, boolean empty) {
-	            super.updateItem(date, empty);
-	            LocalDate today = LocalDate.now();
-	            setDisable(empty || date.compareTo(today) < 0 );
-	        }
-	    });
-		datum.setEditable(false);
+		
 		toggleSetUp();
 		polasciRadioButton.setToggleGroup(toggleGroup);
 		dolasciRadioButton.setToggleGroup(toggleGroup);
@@ -99,9 +163,52 @@ public class InformacijeController implements Initializable{
 		peronColumn.setCellValueFactory(new PropertyValueFactory<>("peron"));
 		
 		Util.setAutocompleteList(mjestoTextField, mjestaSet);
-		mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),Util.collectionValidator(mjestoTextField, mjestaSet, true, "Unesite mjesto"));
+		//mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),Util.collectionValidator(mjestoTextField, mjestaSet, true, "Unesite mjesto"));
+		
+		
+		polasciDolasciComboBox.getItems().addAll("POLASCI", "DOLASCI");
+		polasciDolasciComboBox.getSelectionModel().selectFirst();
+		polasciDolasciComboBox.setStyle("-fx-font-weight: bold;");
+		
 		
 	}
+	
+	@FXML
+    void clear(MouseEvent event) {
+		mjestoTextField.clear();
+    }
+	
+	@FXML
+    void ucitajLinije(KeyEvent event) {
+		if(event.getCode().equals(KeyCode.ENTER)) {
+			Platform.runLater(() -> {
+				mjestoTextField.end();
+			});
+			//if(mjestoTextField.validate()){
+				karteObs.clear();
+				if(polasciRadioButton.isSelected()) {
+						for(Karta karta : Karta.getKarteList(nazivMjesta, mjestoTextField.getText())) {
+							daniUSedmici = karta.getLinija().getDaniUSedmici();
+							if(daniUSedmici.contains(datum.getValue().getDayOfWeek().toString()))
+								karteObs.add(karta);
+						}	
+				}
+				else {
+					for(Karta karta : Karta.getKarteList(mjestoTextField.getText(),nazivMjesta)) {
+						daniUSedmici = karta.getLinija().getDaniUSedmici();
+						karteObs.add(karta);
+					}
+				}
+				if(karteObs.isEmpty())
+					showPrazanSetAlert();
+			//}
+			
+		}
+    }
+	
+	
+	
+	
 	
 	public void toggleSetUp() {
 		toggleGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
@@ -124,8 +231,9 @@ public class InformacijeController implements Initializable{
 		    	}
 		});	
 	}
-
-	/*public boolean zadovoljavaDatumVrijeme(String daniUSedmici,Time vrijemePolaska) {
+	
+	/*
+	public boolean zadovoljavaDatumVrijeme(String daniUSedmici,Time vrijemePolaska) {
 		LocalTime localTime = LocalTime.now();
 		if(datum.getValue().equals(LocalDate.now())) {
 			return (localTime.compareTo(vrijemePolaska.toLocalTime())<0);
@@ -133,7 +241,7 @@ public class InformacijeController implements Initializable{
 		else
 			return (daniUSedmici.contains(datum.getValue().getDayOfWeek().toString())) && daniUSedmici.contains(datum.getValue().getDayOfWeek().toString());
 	}*/
-	
+	/*
 	@FXML
 	public void getKarte() {
 		if(mjestoTextField.validate()){
@@ -153,17 +261,16 @@ public class InformacijeController implements Initializable{
 			}
 			if(karteObs.isEmpty())
 				showPrazanSetAlert();
-		} 
-		
+		}
 	}
-
+	*/
 	public void showPrazanSetAlert() {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Obavjestenje");
 		alert.setHeaderText("Nema linija");
 		alert.setContentText("Za odabranu relaciju i datum nema linija ili su vec otisle.");
 		alert.showAndWait();
-
+	
 	}
 	public void ucitajMjesta() {
 		Connection c = null;
@@ -177,7 +284,7 @@ public class InformacijeController implements Initializable{
 			while(r.next()) {
 				mjestaSet.add(r.getString(1));
 			}
-
+	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -185,8 +292,6 @@ public class InformacijeController implements Initializable{
 			Util.close(r, s, c);
 		}
 	}
-
-	
 
 	public String getNazivMjesta() {
 		Connection c = null;

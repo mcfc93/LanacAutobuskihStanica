@@ -162,7 +162,7 @@ public class IzmjenaLinijeController implements Initializable {
 	
 
 	public void validateSetup() {
-		cijenaJednokratnaTextField.getValidators().addAll(Util.requredFieldValidator(cijenaJednokratnaTextField),Util.doubleValidator(cijenaJednokratnaTextField));
+		cijenaJednokratnaTextField.getValidators().addAll(Util.requiredFieldValidator(cijenaJednokratnaTextField),Util.doubleValidator(cijenaJednokratnaTextField));
 		cijenaMjesecnaTextField.getValidators().add(Util.doubleValidator(cijenaMjesecnaTextField));
 	}
 

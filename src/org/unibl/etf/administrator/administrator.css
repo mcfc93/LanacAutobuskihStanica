@@ -30,6 +30,11 @@
 	/*-fx-background-color: white;*/
 }
 
+/* * * * * * *
+ * 
+ * Button
+ * 
+ * * * * * * */
 .button {
 	-fx-background-color: #ff0095;
 	-fx-text-fill: white;
@@ -45,6 +50,11 @@
 	-fx-alignment: center;
 }
 
+/* * * * * * *
+ * 
+ * ToggleButton
+ * 
+ * * * * * * */
 .toggle-button {
 	-fx-background-color: transparent;
 	-fx-text-fill: white;
@@ -71,6 +81,11 @@
 	-fx-cursor: normal;
 }
 
+/* * * * * * *
+ * 
+ * SystemButtons
+ * 
+ * * * * * * */
 .close:hover {
 	-fx-background-color: #E61123;
 }
@@ -83,6 +98,11 @@
 	-fx-background-color: #2800ae;
 }
 
+/* * * * * * *
+ * 
+ * TextField / PasswordField
+ * 
+ * * * * * * */
 .text-field, .password-field, .combo-box {
 	/*-fx-text-fill: white;*/
 	-fx-text-fill: #ff0095;
@@ -91,6 +111,11 @@
 	-fx-highlight-fill: #ff0095;
 }
 
+/* * * * * * *
+ * 
+ * JFXTextField / JFXPasswordField
+ * 
+ * * * * * * */
 .jfx-text-field, .jfx-password-field, .jfx-combo-box{
 	/*-fx-text-fill: white;*/
 	-fx-text-fill: #ff0095;
@@ -108,7 +133,7 @@
     -fx-highlight-fill: red;
 }
 
-.jfx-text-field .error-label, .jfx-password-field .error-label, .jfx-combo-box .error-label{
+.jfx-text-field .error-label, .jfx-password-field .error-label, .jfx-combo-box .error-label {
     -fx-text-fill: red;
     -fx-font-size: 7pt;
     -fx-pref-height: 20;
@@ -121,6 +146,11 @@
    	-fx-image: url("/org/unibl/etf/administrator/img/warning-24.png");
 }
 
+/* * * * * * *
+ * 
+ * JFXAutocompletePopup
+ * 
+ * * * * * * */
 .jfx-autocomplete-popup {
 	-fx-fixed-cell-size: 24;
 	-jfx-cell-limit: 3;
@@ -130,7 +160,11 @@
 }
 
 
-
+/* * * * * * *
+ * 
+ * ScrollBars
+ * 
+ * * * * * * */
 /* TableView */
 .table-view > .virtual-flow > .scroll-bar {
     -fx-background-color: transparent;
@@ -140,7 +174,7 @@
 
 /* autocomplete */
 .scroll-bar {
-    -fx-background-color: pink;
+    -fx-background-color: white;
     -fx-background-insets: 0;
     -fx-padding: 0;
 }
@@ -202,7 +236,11 @@
 
 
 
-
+/* * * * * * *
+ * 
+ * TableView
+ * 
+ * * * * * * */
 .table-view {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
@@ -328,12 +366,11 @@
     -fx-padding: 0.0em 0.0416667em 0.0em 0.0416667em;
 }
 */
-
-
-
-
-
-
+/* * * * * * *
+ * 
+ * TableView Buttons
+ * 
+ * * * * * * */
 .buttonTableEdit {
 	-fx-background-image: url('img/edit.png');
 	-fx-background-position: center;
@@ -425,14 +462,14 @@
 	-fx-cursor: hand;
 }
 
-
-
-
-
-
-
-
-.masker-pane {}
+/* * * * * * *
+ * 
+ * MaskerPane
+ * 
+ * * * * * * */
+.masker-pane {
+	
+}
 
 .masker-pane .masker-glass {
     -fx-background-color: rgba(0, 0, 0, .5);
@@ -452,6 +489,11 @@
     -fx-background-radius: .1in;
 }
 
+/* * * * * * *
+ * 
+ * JFXRadioButton
+ * 
+ * * * * * * */
 .jfx-radio-button{
     -jfx-selected-color: #ff0095;
     -jfx-unselected-color: BLACK;
@@ -461,6 +503,11 @@
     -fx-cursor: hand;
 }
 
+/* * * * * * *
+ * 
+ * mjesecna karta
+ * 
+ * * * * * * */
 .mjesecnaAnchor {
 	-fx-border-color: BLACK;
 	-fx-border-radius: 5 5 5 5;
@@ -480,16 +527,22 @@
 	-fx-background-color: pink;
 }
 
-
-
+/* * * * * * *
+ * 
+ * - - - - -
+ * 
+ * * * * * * */
 .naslovLabel {
 	-fx-text-fill: #ff0095;
 	-fx-font-size: 14px;
 	-fx-font-weight: bold;
 }
 
-
-
+/* * * * * * *
+ * 
+ * SearchBox
+ * 
+ * * * * * * */
 .searchTextField {
 	-fx-border-radius: 20px;
 	-fx-border-color: #ff0095;
@@ -508,6 +561,37 @@
    	-fx-padding: 0px 20px 0px 20px;
 }
 
+.searchTextFieldJFX {
+	-fx-border-radius: 20px;
+	-fx-border-color: #ff0095;
+	-fx-background-radius: 20px;
+	-fx-background-color: transparent;
+	-fx-border-width: 2px;
+	
+	/*-fx-text-fill: #ff0095;*/
+	-fx-text-fill: BLACK;
+	/*-fx-font-weight: bold;*/
+	-fx-prompt-text-fill: BLACK;
+	-fx-highlight-fill: #ff0095;
+	
+	-fx-background-image:url('img/search.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: left 5px center;
+   	-fx-background-size: 15px 15px;
+   	-fx-padding: 0px 20px 0px 20px;
+   	
+	-jfx-focus-color: transparent;
+	-jfx-unfocus-color: transparent;
+	-jfx-label-float: false;
+	-jfx-disable-animation: true;
+}
+/*
+.searchTextFieldJFX:focused {
+	-fx-font-weight: normal;
+	-fx-prompt-text-fill: transparent;
+}
+*/
+
 .clearImageView {
 	-fx-image:url('img/clear.png');
 }
@@ -515,3 +599,151 @@
 .clearImageView:hover {
 	-fx-cursor: hand;
 }
+
+/* * * * * * *
+ * 
+ * JFXCheckBox 
+ * 
+ * * * * * * */
+.jfx-check-box {
+	-jfx-focus-color: #1fdbf8;
+	-jfx-unfocus-color: #5a5a5a;
+}
+
+.jfx-check-box {
+     -jfx-checked-color: #1fdbf8;
+     -jfx-unchecked-color: #5a5a5a;
+}
+
+.jfx-check-box .mark {
+     -fx-border-color: white;
+}
+
+/* * * * * * *
+ * 
+ * JFXTimePicker
+ * 
+ * * * * * * */
+.jfx-time-picker {
+    -jfx-default-color: #ff0095;
+}
+
+.jfx-time-picker,
+.jfx-time-picker:focused,
+.jfx-time-picker:focused:editable {
+    -fx-background-color: transparent, transparent, transparent, transparent;
+}
+
+.jfx-time-picker > .arrow-button,
+.jfx-time-picker:editable > .arrow-button,
+.jfx-time-picker:focused > .arrow-button,
+.jfx-time-picker:editable:focused > .arrow-button{
+    -fx-background-color: transparent;
+    -fx-padding: 1 8 1 8;
+}
+
+.jfx-time-picker > .arrow-button > .jfx-svg-glyph{
+    -fx-background-color: transparent;
+}
+
+.date-picker-popup > * > .spinner {
+    -fx-spacing: 0.25em; /* 3 */
+    -fx-alignment: CENTER;
+    -fx-fill-height: false;
+    -fx-background-color: transparent;
+}
+
+.date-picker-popup > * > .spinner > .label {
+    -fx-alignment: CENTER;
+}
+
+/* * * * * * *
+ * 
+ * JFXDatePicker
+ * 
+ * * * * * * */
+ .jfx-date-picker {
+    -jfx-default-color: #ff0095;
+}
+
+.jfx-date-picker,
+.jfx-date-picker:focused,
+.jfx-date-picker:focused:editable {
+    -fx-background-color: TRANSPARENT, TRANSPARENT, TRANSPARENT, TRANSPARENT;
+}
+
+.jfx-date-picker > .arrow-button,
+.jfx-date-picker:editable > .arrow-button,
+.jfx-date-picker:focused > .arrow-button,
+.jfx-date-picker:editable:focused > .arrow-button {
+    -fx-background-color: white;
+    -fx-padding: 1 8 1 8;
+}
+
+.jfx-date-picker .jfx-button {
+	-fx-background-color: #ff0095;
+	-fx-text-fill: white;
+	-fx-font-weight: bold;
+	-fx-border: none;
+	-fx-border-radius: 0px;
+	-fx-background-radius: 0px;
+	-fx-alignment: center;
+	
+	-fx-effect: dropshadow(three-pass-box, black, 10.0, 0.0, 4.0, 4.0);
+}
+
+.jfx-date-picker .jfx-button:hover {
+	-fx-background-color: pink;
+	-fx-alignment: center;
+}
+
+.jfx-date-picker .jfx-button > .jfx-svg-glyph {
+	-fx-background-color: white;
+}
+
+.jfx-date-picker > .arrow-button > .jfx-svg-glyph {
+    -fx-background-color: -jfx-default-color;
+}
+
+.date-picker-popup > .month-year-pane {
+    -fx-background-color: -jfx-default-color;
+}
+
+.date-picker-popup > * > .spinner {
+    -fx-spacing: 0.25em;
+    -fx-alignment: CENTER;
+    -fx-fill-height: false;
+    -fx-background-color: transparent;
+}
+
+.date-picker-popup > * > .spinner > .label {
+    -fx-alignment: CENTER;
+}
+
+.date-picker-popup > * > .date-picker-list-view > .virtual-flow > .clipped-container > .sheet > .data-picker-list-cell {
+    -fx-font-size: 16;
+    -fx-font-weight: NORMAL;
+    -fx-background-color: WHITE;
+    -fx-alignment: center;
+    -fx-text-fill: #313131;
+}
+
+.date-picker-popup > * > .date-picker-list-view > .virtual-flow > .clipped-container > .sheet > .data-picker-list-cell > .jfx-rippler {
+    -jfx-rippler-fill: grey;
+}
+
+.date-picker-popup > * > .date-picker-list-view > .virtual-flow > .clipped-container > .sheet > .data-picker-list-cell:hover {
+    -fx-background-color: #EDEDED;
+}
+
+.date-picker-popup > * > .date-picker-list-view > .virtual-flow > .clipped-container > .sheet > .data-picker-list-cell:selected-year {
+    -fx-font-size: 24;
+    -fx-font-weight: BOLD;
+    -fx-text-fill: -jfx-default-color;
+}
+
+/* * * * * * *
+ * 
+ * 
+ * 
+ * * * * * * */

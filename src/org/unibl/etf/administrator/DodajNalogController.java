@@ -151,18 +151,18 @@ public class DodajNalogController implements Initializable {
 		Util.setAutocompleteList(jibStaniceTextField, AutobuskaStanica.getJibList());
 		
 
-   		korisnickoImeTextField.getValidators().addAll(Util.requredFieldValidator(korisnickoImeTextField), Util.collectionValidator(korisnickoImeTextField, Nalog.getUsernameList(), false, "Zauzeto"));
-   		lozinkaTextField.getValidators().addAll(Util.requredFieldValidator(lozinkaTextField), Util.passwordValidator(lozinkaTextField));
-   		jibStaniceTextField.getValidators().addAll(Util.requredFieldValidator(jibStaniceTextField), Util.jibValidator(jibStaniceTextField), Util.collectionValidator(jibStaniceTextField, AutobuskaStanica.getJibList(), true, "Ne postoji"));
-   		imeTextField.getValidators().add(Util.requredFieldValidator(imeTextField));
-   		prezimeTextField.getValidators().add(Util.requredFieldValidator(prezimeTextField));
-   		jmbgTextField.getValidators().addAll(Util.requredFieldValidator(jmbgTextField), Util.jmbgValidator(jmbgTextField), Util.collectionValidator(jmbgTextField, Zaposleni.getJmbgList(), false, "Vec postoji"));
-   		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
-   		//postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), true, "Nekorektan unos"));
-   		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
-   		strucnaSpremaTextField.getValidators().add(Util.requredFieldValidator(strucnaSpremaTextField));
-   		brojTelefonaTextField.getValidators().addAll(Util.requredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
-   		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
+   		korisnickoImeTextField.getValidators().addAll(Util.requiredFieldValidator(korisnickoImeTextField), Util.collectionValidator(korisnickoImeTextField, Nalog.getUsernameList(), false, "Zauzeto"));
+   		lozinkaTextField.getValidators().addAll(Util.requiredFieldValidator(lozinkaTextField), Util.passwordValidator(lozinkaTextField));
+   		jibStaniceTextField.getValidators().addAll(Util.requiredFieldValidator(jibStaniceTextField), Util.jibValidator(jibStaniceTextField), Util.collectionValidator(jibStaniceTextField, AutobuskaStanica.getJibList(), true, "Ne postoji"));
+   		imeTextField.getValidators().add(Util.requiredFieldValidator(imeTextField));
+   		prezimeTextField.getValidators().add(Util.requiredFieldValidator(prezimeTextField));
+   		jmbgTextField.getValidators().addAll(Util.requiredFieldValidator(jmbgTextField), Util.jmbgValidator(jmbgTextField), Util.collectionValidator(jmbgTextField, Zaposleni.getJmbgList(), false, "Vec postoji"));
+   		adresaTextField.getValidators().add(Util.requiredFieldValidator(adresaTextField));
+   		//postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), true, "Nekorektan unos"));
+   		postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
+   		strucnaSpremaTextField.getValidators().add(Util.requiredFieldValidator(strucnaSpremaTextField));
+   		brojTelefonaTextField.getValidators().addAll(Util.requiredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
+   		emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
 	}
 	
 	@FXML

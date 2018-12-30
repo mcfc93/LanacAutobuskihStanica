@@ -6,8 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Time;
 import java.time.DayOfWeek;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -22,6 +24,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
 import com.jfoenix.validation.base.ValidatorBase;
+import com.sun.javafx.collections.ObservableListWrapper;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -36,13 +39,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
+import javafx.util.converter.LocalTimeStringConverter;
 import javafx.scene.control.Alert.AlertType;
 
 public class DodavanjeLinijaController implements Initializable {
-	
+	/*
 	private static List<String> daniUSedmiciList = new ArrayList<>();
 	public static ObservableList<Prevoznik> prevozniciObs = FXCollections.observableArrayList();
 	public static String daniString="";
@@ -129,7 +136,6 @@ public class DodavanjeLinijaController implements Initializable {
 			
 			@Override
 			protected void eval() {
-				// TODO Auto-generated method stub
 				if(!cijenaMjesecnaTextField.getText().isEmpty() && !cijenaMjesecnaTextField.getText().matches("[0-9]+\\.[0-9]+"))
 					hasErrors.set(true);
 				else
@@ -437,5 +443,175 @@ public class DodavanjeLinijaController implements Initializable {
 		alert.setHeaderText("Unosi o vremenima polaska i dolaska nisu validni.");
 		alert.showAndWait();
 	}
+	*/
+	public static ObservableList<Prevoznik> prevozniciObs = FXCollections.observableArrayList();
+	
+	@FXML
+    private GridPane gridPane;
+	
+	@FXML
+	private TableView<?> relacijeTableView;
+	
+	@FXML
+    private JFXTextField nazivLinijeTextField;
 
+    @FXML
+    private JFXComboBox<Prevoznik> prevoznikComboBox;
+
+    @FXML
+    private JFXComboBox<Integer> peronComboBox;
+
+    @FXML
+    private JFXButton dodajLinijuButton;
+    
+    @FXML
+    private JFXButton sledeciPolazakButton;
+
+    @FXML
+    private JFXButton krajUnosaButton;
+    
+    @FXML
+    private JFXCheckBox ponedeljakCheckBox;
+
+    @FXML
+    private JFXCheckBox utorakCheckBox;
+    
+    @FXML
+    private JFXCheckBox srijedaCheckBox;
+
+    @FXML
+    private JFXCheckBox cetvrtakCheckBox;
+    
+    @FXML
+    private JFXCheckBox petakCheckBox;
+
+    @FXML
+    private JFXCheckBox subotaCheckBox;
+
+    @FXML
+    private JFXCheckBox nedeljaCheckBox;
+    
+    @FXML
+    private JFXCheckBox odaberiSveCheckBox;
+    
+    @FXML
+    private JFXTimePicker vrijemePolaska1TimePicker;
+
+    @FXML
+    private JFXTimePicker vrijemeDolaska1TimePicker;
+    
+    @FXML
+    private JFXTimePicker vrijemePolaska2TimePicker;
+
+    @FXML
+    private JFXTimePicker vrijemeDolaska2TimePicker;
+    
+    @FXML
+    private JFXComboBox<?> zadrzavanjeComboBox;
+    
+    @FXML
+    private JFXTextField cijenaObicneKarteTextField;
+
+    @FXML
+    private JFXTextField cijenaMjesecneKarteTextField;
+
+    
+    @Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+    	krajUnosaButton.setDisable(true);
+		vrijemePolaska1TimePicker.setIs24HourView(true);
+		vrijemePolaska1TimePicker.converterProperty().set(new LocalTimeStringConverter(FormatStyle.SHORT, Locale.UK));
+		vrijemeDolaska1TimePicker.setIs24HourView(true);
+		vrijemeDolaska1TimePicker.converterProperty().set(new LocalTimeStringConverter(FormatStyle.SHORT, Locale.UK));
+		vrijemePolaska2TimePicker.setIs24HourView(true);
+		vrijemePolaska2TimePicker.converterProperty().set(new LocalTimeStringConverter(FormatStyle.SHORT, Locale.UK));
+		vrijemeDolaska2TimePicker.setIs24HourView(true);
+		vrijemeDolaska2TimePicker.converterProperty().set(new LocalTimeStringConverter(FormatStyle.SHORT, Locale.UK));
+		
+		nazivLinijeTextField.getValidators().add(Util.requiredFieldValidator(nazivLinijeTextField));
+		prevoznikComboBox.getValidators().add(Util.requiredFieldValidator(prevoznikComboBox));
+		peronComboBox.getValidators().add(Util.requiredFieldValidator(peronComboBox));
+		vrijemePolaska1TimePicker.getValidators().add(Util.timeValidator(vrijemePolaska1TimePicker));
+		vrijemeDolaska1TimePicker.getValidators().add(Util.timeValidator(vrijemeDolaska1TimePicker));
+		vrijemePolaska2TimePicker.getValidators().add(Util.timeValidator(vrijemePolaska2TimePicker));
+		vrijemeDolaska2TimePicker.getValidators().add(Util.timeValidator(vrijemeDolaska2TimePicker));
+		
+		//popunjavanje ComboBox
+		int brojPerona = AutobuskaStanica.getBrojPeronaStanice();
+		for(int i=1; i<=brojPerona; ++i)
+			peronComboBox.getItems().add(i);
+		prevoznikComboBox.setItems(new ObservableListWrapper<>(Prevoznik.getPrevozniciList()));	
+	}
+    
+    @FXML
+    void odaberiSveCheckBox(MouseEvent event) {
+		if (event.getSource() instanceof JFXCheckBox) {
+			if(odaberiSveCheckBox.isSelected()) {
+				ponedeljakCheckBox.setSelected(true);
+				utorakCheckBox.setSelected(true);
+				srijedaCheckBox.setSelected(true);
+				cetvrtakCheckBox.setSelected(true);
+				petakCheckBox.setSelected(true);
+				subotaCheckBox.setSelected(true);
+				nedeljaCheckBox.setSelected(true);
+			} else {
+				ponedeljakCheckBox.setSelected(false);
+				utorakCheckBox.setSelected(false);
+				srijedaCheckBox.setSelected(false);
+				cetvrtakCheckBox.setSelected(false);
+				petakCheckBox.setSelected(false);
+				subotaCheckBox.setSelected(false);
+				nedeljaCheckBox.setSelected(false);
+			}
+		}
+    }
+    
+    @FXML
+    void danCheckBox(MouseEvent event) {
+		if (event.getSource() instanceof JFXCheckBox) {
+	    	if(allCheckBoxesSelected()) {
+            	odaberiSveCheckBox.setSelected(true);
+            } else {
+            	odaberiSveCheckBox.setSelected(false);
+            }
+		}
+    }
+	
+	private boolean allCheckBoxesSelected() {
+		if(ponedeljakCheckBox.isSelected()
+			&& utorakCheckBox.isSelected()
+				&& srijedaCheckBox.isSelected()
+					&& cetvrtakCheckBox.isSelected()
+						&& petakCheckBox.isSelected()
+							&& subotaCheckBox.isSelected()
+								&& nedeljaCheckBox.isSelected()) {
+			return true;
+		}
+		return false;
+	}
+	
+	@FXML
+    void dodajLiniju(ActionEvent event) {
+		if(nazivLinijeTextField.validate()
+				& prevoznikComboBox.validate()
+					& peronComboBox.validate()) {
+			
+			Util.getNotifications("Obavještenje", "Linija dodana.", "Information").show();
+		}
+	}
+	
+	@FXML
+    void sledeciPolazak(ActionEvent event) {
+		if(vrijemePolaska1TimePicker.validate()
+				& vrijemeDolaska1TimePicker.validate()
+					&vrijemePolaska1TimePicker.validate()
+						& vrijemeDolaska1TimePicker.validate()) {
+			
+		}
+	}
+	
+	@FXML
+	void krajUnosa(ActionEvent event) {
+		
+	}
 }

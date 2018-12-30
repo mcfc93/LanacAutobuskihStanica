@@ -49,17 +49,17 @@ public class DodavanjePrevoznikaController implements Initializable{
 	}
 	
 	public void validateSetUp() {
-		emailTextField.getValidators().addAll(Util.requredFieldValidator(emailTextField),Util.emailValidator(emailTextField));
-		jibTextField.getValidators().addAll(Util.requredFieldValidator(jibTextField),Util.jibValidator(jibTextField));
-		webAdresaTextField.getValidators().addAll(Util.requredFieldValidator(webAdresaTextField),Util.webValidator(webAdresaTextField));
-		telefonTextField.getValidators().addAll(Util.requredFieldValidator(telefonTextField),Util.phoneValidator(telefonTextField));
-		postanskiBrojTextField.getValidators().addAll(Util.requredFieldValidator(postanskiBrojTextField),		Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
+		emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField),Util.emailValidator(emailTextField));
+		jibTextField.getValidators().addAll(Util.requiredFieldValidator(jibTextField),Util.jibValidator(jibTextField));
+		webAdresaTextField.getValidators().addAll(Util.requiredFieldValidator(webAdresaTextField),Util.webValidator(webAdresaTextField));
+		telefonTextField.getValidators().addAll(Util.requiredFieldValidator(telefonTextField),Util.phoneValidator(telefonTextField));
+		postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField),		Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
 		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());
 
-		tekuciRacunTextField.getValidators().addAll(Util.requredFieldValidator(tekuciRacunTextField),Util.integerValidator(tekuciRacunTextField));
-		nazivTextField.getValidators().add(Util.requredFieldValidator(nazivTextField));
-		tekuciRacunTextField.getValidators().addAll(Util.requredFieldValidator(tekuciRacunTextField),Util.integerValidator(tekuciRacunTextField));
-		adresaTextField.getValidators().add(Util.requredFieldValidator(adresaTextField));
+		tekuciRacunTextField.getValidators().addAll(Util.requiredFieldValidator(tekuciRacunTextField),Util.integerValidator(tekuciRacunTextField));
+		nazivTextField.getValidators().add(Util.requiredFieldValidator(nazivTextField));
+		tekuciRacunTextField.getValidators().addAll(Util.requiredFieldValidator(tekuciRacunTextField),Util.integerValidator(tekuciRacunTextField));
+		adresaTextField.getValidators().add(Util.requiredFieldValidator(adresaTextField));
 	}
 
 
