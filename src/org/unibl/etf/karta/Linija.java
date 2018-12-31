@@ -18,11 +18,7 @@ public class Linija {
 	private String nazivPrevoznika;
 	private String stanje;
 	
-	public Linija(int idLinije, String nazivLinije) {
-		super();
-		this.idLinije = idLinije;
-		this.nazivLinije = nazivLinije;
-	}
+	
 	
 	public Linija(int idLinije,String nazivLinije,String daniUSedmici,int peron,String nazivPrevoznika,String stanje) {
 		super();
@@ -51,6 +47,16 @@ public class Linija {
 		this.nazivPrevoznika = nazivPrevoznika;
 	}
 	public Linija() {
+	}
+
+	public Linija(String nazivLinije) {
+		this.nazivLinije = nazivLinije;
+	}
+
+	public Linija(String nazivLinije, Prevoznik prevoznik) {
+		// TODO Auto-generated constructor stub
+		this.nazivLinije = nazivLinije;
+		this.nazivPrevoznika = prevoznik.getNaziv();
 	}
 
 	public String getNazivPrevoznika() {

@@ -60,6 +60,10 @@ public class Prevoznik {
 		this.naziv = nazivPrevoznika;
 	}
 
+	public Prevoznik() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getJIBPrevoznika() {
 		return JIBPrevoznika;
 	}

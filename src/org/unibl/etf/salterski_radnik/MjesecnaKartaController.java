@@ -1,24 +1,16 @@
 package org.unibl.etf.salterski_radnik;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-
 import javax.imageio.ImageIO;
-
 import org.unibl.etf.karta.Karta;
 import org.unibl.etf.karta.MjesecnaKarta;
-import org.unibl.etf.karta.TipKarte;
 import org.unibl.etf.util.Util;
-
 import com.jfoenix.controls.JFXButton;
-
-import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -34,11 +26,26 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import com.itextpdf.text.pdf.Barcode;
+import com.itextpdf.text.pdf.BarcodeEAN;
+import javafx.embed.swing.SwingFXUtils;
 
 public class MjesecnaKartaController implements Initializable {
 	
 	public static MjesecnaKarta karta = new MjesecnaKarta();
+	public static LocalDate datum;
+	public static final int JANUAR = 1;
+	public static final int DECEMBAR = 12;
 	
+	@FXML
+	private ImageView barcodeImageView;
+
+	@FXML
+	private ImageView exitImageView = new ImageView();
 	@FXML
 	private ImageView slika = new ImageView();
 	@FXML
@@ -73,6 +80,9 @@ public class MjesecnaKartaController implements Initializable {
     public static int serijskiBroj;
     private double xOffset=0;
     private double yOffset=0;
+    public static int mjesecVazenja;
+    public static String mjesecVazenjaString;
+	public static LocalDate localDate = LocalDate.now();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -85,19 +95,36 @@ public class MjesecnaKartaController implements Initializable {
     	mjesecVazenjaLabel.setMinWidth(Region.USE_PREF_SIZE);
     	tipLabel.setMinWidth(Region.USE_PREF_SIZE);
     	
-    	
-    	LocalDate localDate = LocalDate.now();
-		int mjesecVazenja = (localDate.getDayOfMonth()>25) ? localDate.getMonthValue()+1: localDate.getMonthValue();
+    	if(localDate.getMonthValue()==12) {
+    		mjesecVazenja = (localDate.getDayOfMonth()>25) ? JANUAR: DECEMBAR;
+    		mjesecVazenjaString = String.valueOf(mjesecVazenja) + "-" + (localDate.getYear()+1);
+    		System.out.println("JEsete decembar : " + mjesecVazenjaString);
+    	}
+    	else 
     	prevoznikLabel.setText(karta.getNazivPrevoznika());
-    	try {
+    	
+    	if(!ProdajaKarataController.produzavanjeKarte) {
+    		try {
+    	
 			slika.setImage(new Image(ProdajaKarataController.odabranaSlika.toURI().toString()));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	}
+    	else {
+    		try {
+    	    	
+    			slika.setImage(new Image(karta.getSlika().toURI().toString()));
+    		} catch (Exception e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    	}
+    		
     	linijaLabel.setText(karta.getNazivLinije());
     	relacijaLabel.setText(karta.getRelacija().getPolaziste() + " - " + karta.getRelacija().getOdrediste());
-    	mjesecVazenjaLabel.setText(String.valueOf(mjesecVazenja) + "\\" + localDate.getYear());
+    	mjesecVazenjaLabel.setText(mjesecVazenjaString);
     	tipLabel.setText(karta.getTip().toString().toUpperCase());
     	imePrezimeLabel.setText(karta.getIme() + " " + karta.getPrezime());
     	
@@ -126,11 +153,10 @@ public class MjesecnaKartaController implements Initializable {
 			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 			stage.setOpacity(1.0);
 		});
-		
 	}
     
     @FXML
-    void close(ActionEvent event) {
+    void close(MouseEvent event) {
     	Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
     	ProdajaKarataController.potvrda = false;
 		stage.close();
@@ -138,53 +164,96 @@ public class MjesecnaKartaController implements Initializable {
 
     @FXML
     void stampaj(ActionEvent event) {
-    	System.out.println("Stampanje izz mjes cont");
-    	System.out.println(karta);
-    	//Platform.runLater(() -> {
+
+    	if(ProdajaKarataController.produzavanjeKarte) {
+        	System.out.println("-------------------------- produzavanje: " +Integer.parseInt(karta.getIdKarte()) );
+
+    		//karta = MjesecnaKarta.pronadjiKartu(serijskiBroj);
+    		//System.out.println("Pronadjena karta: " + karta);
+    	//	MjesecnaKarta.produziKartu(karta);
+    		
+    		ProdajaKarataController.potvrda = true;
+    		//MjesecnaKarta.produziKartu(karta);
+    		
+    		
+    		
+    		BarcodeEAN codeEAN = new BarcodeEAN();
+    		System.out.println(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
+	    	codeEAN.setCode(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
+            codeEAN.setCodeType(BarcodeEAN.EAN13); 
+            codeEAN.setBarHeight(40);
+            //kreiranje slike
+            java.awt.Image img = codeEAN.createAwtImage(java.awt.Color.BLACK, java.awt.Color.WHITE);
+            BufferedImage bufferedImage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
+            bufferedImage.getGraphics().drawImage(img, 0, 0, null);
+    		WritableImage image = mjesecnaAnchorPane.snapshot(new SnapshotParameters(), null);
     		serijskiBrojLabel.setVisible(true);
-    		serijskiBrojLabel.setText(karta.getIdKarte());
-    	//});
-    	
-    	
-    	
-    	int brojKarata = Karta.provjeriBrojKarata(karta, karta.getDatumPolaska());
-			Karta.kreirajKartu(karta, brojKarata+1, datum);
-			MjesecnaKartaController.kreirajKartu(karta,brojKarata+1,datum, karta.getIme(),karta.getPrezime(),karta.getTip(),karta.getSlika());
-			MjesecnaKarta.stampajKartu(karta, brojKarata+1, datum, karta.getIme() + " " + karta.getPrezime(), karta.getTip());
-			serijskiBrojLabel.setText(String.valueOf(ProdajaKarataController.idKarte));
-			System.out.println("ID: " + serijskiBrojLabel.getText());
-			WritableImage image = mjesecnaAnchorPane.snapshot(new SnapshotParameters(), null);
-			File file = new File("src\\screenshoot2.png");
+    		serijskiBrojLabel.setText(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
+            try {
+    			ImageIO.write(bufferedImage, "png", new File("src\\barcode.png"));
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		}
+        	barcodeImageView.setImage(SwingFXUtils.toFXImage(bufferedImage, null));
+        	//postavljenje EAN-13 barcode brojeva na Label
+    		
+    		
+    		
+    		
+			File file = new File("src\\slikemjesecnekarte\\karta" + String.format("%06d", Integer.parseInt(karta.getIdKarte())) + "-" + mjesecVazenjaString + ".png");
 			try {
 				ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
 			}catch (IOException e) {
 				Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 			}
-		
-			
-			
-    	ProdajaKarataController.potvrda = true;
+    		
+    		
+	    	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+    	}
+    	else {
+	    	//System.out.println(karta);
 
-    	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+	    	serijskiBrojLabel.setVisible(true);
+	    	serijskiBrojLabel.setText(karta.getIdKarte());
+	    	int brojKarata = Karta.provjeriBrojKarata(karta, karta.getDatumPolaska());
+			Karta.kreirajKartu(karta, brojKarata+1, datum);
+			ProdajaKarataController.idMjesecneKarte = MjesecnaKarta.kreiraj2(karta);
+			
+        	System.out.println("-------------------------- prodaja" + ProdajaKarataController.idMjesecneKarte);
+
+			serijskiBroj = ProdajaKarataController.idKarte;
+			System.out.println("SERIJSKI BROJ: " + ProdajaKarataController.idKarte);
+			System.out.println("Serijski mjesecne: " + ProdajaKarataController.idMjesecneKarte);
+			MjesecnaKarta.stampajKartu(karta, brojKarata+1, datum, karta.getIme() + " " + karta.getPrezime(), karta.getTip());
+			serijskiBrojLabel.setText(String.format("%13d",ProdajaKarataController.idMjesecneKarte));
+			
+
+    		BarcodeEAN codeEAN = new BarcodeEAN();
+    		System.out.println(String.format("%013d", ProdajaKarataController.idMjesecneKarte));
+	    	codeEAN.setCode(String.format("%013d", ProdajaKarataController.idMjesecneKarte));
+            codeEAN.setCodeType(BarcodeEAN.EAN13); 
+            codeEAN.setBarHeight(40);
+            //kreiranje slike
+            
+            java.awt.Image img = codeEAN.createAwtImage(java.awt.Color.BLACK, java.awt.Color.WHITE);
+            BufferedImage bufferedImage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
+            bufferedImage.getGraphics().drawImage(img, 0, 0, null);
+            barcodeImageView.setImage(SwingFXUtils.toFXImage(bufferedImage, null));
+
+            
+			
+			
+			WritableImage image = mjesecnaAnchorPane.snapshot(new SnapshotParameters(), null);
+			File file = new File("src\\slikemjesecnekarte\\karta" + String.format("%06d", ProdajaKarataController.idMjesecneKarte) + "-" + mjesecVazenja + "-" + localDate.getYear() + ".png");
+			try {
+				ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+			}catch (IOException e) {
+				Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			}
+			
+			
+	    	ProdajaKarataController.potvrda = true;
+	    	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+	    }
     }
-public static int brojKarata;
-public static LocalDate datum;
-public static String ime;
-public static String preziime;
-public static TipKarte tipKarte;
-	public static void kreirajKartu(Karta karta, int brojKarata, LocalDate datum, String ime, String prezime, TipKarte tipKarte,
-			File odabranaSlika) {
-		//MjesecnaKarta.kreirajKartu(karta, brojKarata+1, datum, ime, prezime,tipKarte,odabranaSlika.getPath());	
-		//MjesecnaKarta.stampajKartu(karta, brojKarata+1, datum, ime + " " + prezime, tipKarte);
-		
-		serijskiBroj = ProdajaKarataController.idKarte;
-		System.out.println("Serijski broj iz mjesCoontroller:" + serijskiBroj);
-		//serijskiBrojLabel.setText("fas");
-
-	}
-
-	public static void setSerijskiBroj() {
-		// TODO Auto-generated method stub
-		
-	}
 }

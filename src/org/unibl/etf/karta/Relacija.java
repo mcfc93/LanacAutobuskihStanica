@@ -22,6 +22,11 @@ public class Relacija {
 	private double cijenaJednokratna;
 	private double cijenaMjesecna;
 
+	public Relacija(String polaziste, String odrediste) {
+		super();
+		this.polaziste = polaziste;
+		this.odrediste = odrediste;
+	}
 	public Relacija() {super();}
 	public Relacija(int idLinije, int idRelacije, String polaziste, String odrediste, Time vrijemePolaska,
 			Time vrijemeDolaska, double cijenaJednokratna, double cijenaMjesecna) {
@@ -45,6 +50,12 @@ public class Relacija {
 		this.odrediste = odrediste;
 	}
 	
+	public Relacija(String polaziste, String odrediste, Time vrijemeDolaska) {
+		// TODO Auto-generated constructor stub
+		this.polaziste = polaziste;
+		this.odrediste = odrediste;
+		this.vrijemeDolaska = vrijemeDolaska;
+	}
 	public int getIdLinije() {
 		return idLinije;
 	}

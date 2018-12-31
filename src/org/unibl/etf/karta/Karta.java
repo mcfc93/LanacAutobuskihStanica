@@ -40,7 +40,50 @@ public class Karta {
 	protected int brojSjedista;
 	private boolean povratna;
 	private boolean rezervacija;
+	protected String polaziste;
+	protected String odrediste;
 	
+	
+	public String getPolaziste() {
+		return relacija.getPolaziste();
+	}
+
+////////////////////
+
+
+	public Karta(int idKarte, Linija linija, Relacija relacija, Time vrijemePolaska, Time vrijemeDolaska, double cijena,
+			LocalDate datumIzdavanja, Prevoznik prevoznik, String imeZaposlenog, String jIBStanice, int peron,
+			String nazivPrevoznika, String nazivLinije, Date datumPolaska, int brojSjedista, boolean povratna,
+			boolean rezervacija, String polaziste, String odrediste) {
+		super();
+		this.idKarte = idKarte;
+		this.linija = linija;
+		this.relacija = relacija;
+		this.vrijemePolaska = vrijemePolaska;
+		this.vrijemeDolaska = vrijemeDolaska;
+		this.cijena = cijena;
+		this.datumIzdavanja = datumIzdavanja;
+		this.prevoznik = prevoznik;
+		this.imeZaposlenog = imeZaposlenog;
+		JIBStanice = jIBStanice;
+		this.peron = peron;
+		this.nazivPrevoznika = nazivPrevoznika;
+		this.nazivLinije = nazivLinije;
+		this.datumPolaska = datumPolaska;
+		this.brojSjedista = brojSjedista;
+		this.povratna = povratna;
+		this.rezervacija = rezervacija;
+		this.polaziste = polaziste;
+		this.odrediste = odrediste;
+	}
+
+////////////////////
+
+	public String getOdrediste() {
+		return relacija.getOdrediste();
+	}
+
+
 	public boolean isRezervacija() {
 		return rezervacija;
 	}
@@ -108,11 +151,9 @@ public class Karta {
 		this.peron = peron;
 	}
 	public String getNazivPrevoznika() {
-		return nazivPrevoznika;
+		return linija.getNazivPrevoznika();
 	}
-	public void setNazivPrevoznika(String nazivPrevoznika) {
-		this.nazivPrevoznika = nazivPrevoznika;
-	}
+	
 	public Karta(Linija linija, Relacija relacija, Time vrijemePolaska, Time vrijemeDolaska, double cijena,
 			LocalDate datumIzdavanja, Prevoznik prevoznik, String imeZaposlenog, String JIBStanice) {
 		super();
@@ -131,8 +172,18 @@ public class Karta {
 	}
 	
 	
+	
 	public Karta() {
+		this.linija = new Linija();
+		this.prevoznik = new Prevoznik();
+		this.relacija = new Relacija();
+	}
+
+	public Karta(Linija linija, Relacija relacija, String daniUSedmici) {
 		// TODO Auto-generated constructor stub
+		this.linija = linija;
+		this.relacija = relacija;
+		this.linija.setDaniUSedmici(daniUSedmici);
 	}
 
 	public String getJIBStanice() {
@@ -283,7 +334,8 @@ public class Karta {
 				Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
 				Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10),r.getString(3));
 				Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
-	       		karteList.add(new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice()));
+				Karta k = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice());
+	       		karteList.add(k);
 	       	}
 	       	return karteList;
 		}
@@ -314,7 +366,8 @@ public class Karta {
 				Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
 				Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10),r.getString(3));
 				Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
-	       		karteList.add(new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice()));
+	       		Karta k = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice());
+	       		karteList.add(k);
 	       	}
 	       	return karteList;
 		}
@@ -327,7 +380,7 @@ public class Karta {
 		return null;
 	}
 	
-	public static void kreirajKartu(Karta karta,int brojSjedista, LocalDate datum) {
+	public static int kreirajKartu(Karta karta,int brojSjedista, LocalDate datum) {
 		String sql = "insert into karta value (DEFAULT,?,?,?,?,?,DEFAULT)";
 		Connection c = null;
 		PreparedStatement s = null;
@@ -339,7 +392,7 @@ public class Karta {
 			r = s.getGeneratedKeys();
 			if(r.next()) {
 				ProdajaKarataController.idKarte = r.getInt(1);
-				System.out.println("ID karte: " + ProdajaKarataController.idKarte);
+				return r.getInt(1);
 			}
 			} catch (SQLException e) {
 			e.printStackTrace();
@@ -347,6 +400,7 @@ public class Karta {
 		finally {
 			Util.close(r, s, c);
 		}
+		return 0;
 	}
 	
 	public static void kreirajRezervaciju(String ime, String prezime, String brojTelefona, int idKarte) {
@@ -392,29 +446,29 @@ public class Karta {
 		PreparedStatement s1 = null;
 		PreparedStatement s2 = null;
 		PreparedStatement s3 = null;
-		String sqlKarta = "update karta set Stanje='Stornirano' where SerijskiBroj=?";
-		String sqlRezervacija = "update rezervacija set Stanje='Stornirano' where SerijskiBroj=?";
-		String sqlMjesecna = "update mjesecna_karta set Stanje='Stornirano' where SerijskiBroj=?";
+		String sqlKarta = "update karta,rezervacija set karta.Stanje='Stornirano',rezervacija.Stanje='Stornirano' where karta.SerijskiBroj=? and rezervacija.SerijskiBroj=karta.SerijskiBroj";
+		//String sqlRezervacija = "update rezervacija set Stanje='Stornirano' where SerijskiBroj=?";
+		//String sqlMjesecna = "update mjesecna_karta set Stanje='Stornirano' where IdMjesecneKarte=?";
 		try {
 			c = Util.getConnection();
 			s1 = Util.prepareStatement(c, sqlKarta, false, serijskiBroj);
-			s2 = Util.prepareStatement(c, sqlRezervacija, false, serijskiBroj);
-			s3 = Util.prepareStatement(c, sqlMjesecna, false, serijskiBroj);
-			s2.executeUpdate();
-			s3.executeUpdate();
-			if(s1.executeUpdate()==1) {
-				s2.close();
-				s3.close();
+		//	s2 = Util.prepareStatement(c, sqlRezervacija, false, serijskiBroj);
+		//	s3 = Util.prepareStatement(c, sqlMjesecna, false, serijskiBroj);
+			//System.out.println(s2.executeUpdate());
+			
+			if(s1.executeUpdate()>0) {
+			//	s2.close();
+			//	s3.close();
 				File file = new File("src\\jednokratnekarte\\karta" + String.format("%06d", serijskiBroj)+".txt");
-				File file2 = new File("src\\mjesecnekarte\\karta" + String.format("%06d", serijskiBroj)+".txt");
-				if(file2.exists())
-					file2.delete();
+				//File file2 = new File("src\\mjesecnekarte\\karta" + String.format("%06d", serijskiBroj)+".txt");
+				//if(file2.exists())
+					//file2.delete();
 				if(file.exists())
-					file.delete();
+					System.out.println(file.delete());
 				return true;
 			}
 			s2.close();
-			s3.close();
+		//	s3.close();
 			return false;
 
 		} catch (SQLException e) {

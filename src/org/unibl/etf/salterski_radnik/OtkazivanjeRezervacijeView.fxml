@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -45,5 +47,11 @@
             <Image url="@img/checkmark.png" />
          </image>
       </ImageView>
+      <JFXRadioButton fx:id="jednokratnaKartaRadioButton" selected="true" text="Jednokratna karta" GridPane.columnIndex="1" GridPane.rowIndex="3">
+         <toggleGroup>
+            <ToggleGroup fx:id="toggleGroup" />
+         </toggleGroup>
+      </JFXRadioButton>
+      <JFXRadioButton fx:id="mjesecnaKartaRadioButton" text="Mjesecna karta" toggleGroup="$toggleGroup" GridPane.columnIndex="1" GridPane.rowIndex="4" />
    </children>
 </GridPane>
