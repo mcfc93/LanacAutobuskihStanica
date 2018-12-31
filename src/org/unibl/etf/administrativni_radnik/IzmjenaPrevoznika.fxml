@@ -12,6 +12,18 @@
 
 <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" stylesheets="@../administrator/administrator.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrativni_radnik.IzmjenaPrevoznikaController">
    <children>
+      <AnchorPane fx:id="menuLine" prefHeight="30.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="close" layoutX="572.0" layoutY="6.0" onMouseClicked="#close" prefHeight="20.0" prefWidth="20.0" styleClass="close" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../administrator/img/close.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Label>
+         </children>
+      </AnchorPane>
       <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
          <columnConstraints>
             <ColumnConstraints />
@@ -31,26 +43,16 @@
             <RowConstraints maxHeight="30.0" minHeight="20.0" prefHeight="25.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <JFXTextField fx:id="nazivTextField" promptText="Naziv prevoznika" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
             <JFXTextField fx:id="jibTextField" promptText="JIB" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <JFXTextField fx:id="adresaTextField" promptText="Ulica i broj" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-            <JFXTextField fx:id="telefonTextField" promptText="Broj telefona" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <JFXTextField fx:id="emailTextField" promptText="E-mail" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-            <JFXTextField fx:id="webAdresaTextField" promptText="Web stranica" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <JFXTextField fx:id="nazivTextField" promptText="Naziv prevoznika" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
             <JFXTextField fx:id="tekuciRacunTextField" promptText="Tekući racun" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <JFXTextField fx:id="telefonTextField" promptText="Broj telefona" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <JFXTextField fx:id="adresaTextField" promptText="Ulica i broj" GridPane.columnIndex="4" GridPane.rowIndex="1" />
             <JFXTextField fx:id="postanskiBrojTextField" promptText="Poštanski broj" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <JFXTextField fx:id="webAdresaTextField" promptText="Web stranica" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <JFXTextField fx:id="emailTextField" promptText="E-mail" GridPane.columnIndex="4" GridPane.rowIndex="4" />
             <JFXButton fx:id="okButton" alignment="CENTER" contentDisplay="CENTER" onAction="#izmjeniPrevoznika" prefHeight="25.0" prefWidth="100.0" text="Potvrdi" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
          </children>
       </GridPane>
-      <AnchorPane fx:id="menuLine" prefHeight="30.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Label fx:id="close" layoutX="572.0" layoutY="6.0" onMouseClicked="#close" prefHeight="20.0" prefWidth="20.0" styleClass="close" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="572.0" layoutY="6.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-               <image>
-                  <Image url="@../administrator/img/close.png" />
-               </image>
-            </ImageView>
-         </children>
-      </AnchorPane>
    </children>
 </AnchorPane>

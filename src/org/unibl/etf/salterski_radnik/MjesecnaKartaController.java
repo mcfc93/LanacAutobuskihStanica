@@ -11,6 +11,8 @@ import org.unibl.etf.karta.Karta;
 import org.unibl.etf.karta.MjesecnaKarta;
 import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
+
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -404,6 +406,10 @@ System.out.println(String.format("%013d", ProdajaKarataController.idMjesecneKart
 	    	*/
 	    }
 
+    	Platform.runLater(() -> {
+    		Util.getNotifications("Obavještenje", "Mjesečna karta kreirana.", "Information").show();
+    	});
+    	
     	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
     }
 }

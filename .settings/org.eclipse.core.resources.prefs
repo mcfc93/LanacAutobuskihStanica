@@ -9,5 +9,6 @@ encoding//src/org/unibl/etf/administrator/UpravljanjePerzistentnimPodacimaContro
 encoding//src/org/unibl/etf/prijava/Nalog.java=UTF-8
 encoding//src/org/unibl/etf/prijava/PrijavaController.java=UTF-8
 encoding//src/org/unibl/etf/prijava/UpravljanjeKorisnickimNalogomController.java=UTF-8
+encoding//src/org/unibl/etf/salterski_radnik/MjesecnaKartaController.java=UTF-8
 encoding//src/org/unibl/etf/salterski_radnik/ProdajaKarataController.java=UTF-8
 encoding//src/org/unibl/etf/util/Util.java=UTF-8

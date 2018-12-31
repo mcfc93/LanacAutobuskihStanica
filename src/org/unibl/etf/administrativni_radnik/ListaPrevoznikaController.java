@@ -34,8 +34,8 @@ import javafx.util.Duration;
 
 public class ListaPrevoznikaController implements Initializable {
 
-	public static ObservableList<Prevoznik> prevozniciObsList = FXCollections.observableArrayList();
-	public static MaskerPane progressPane = new MaskerPane();
+	public static ObservableList<Prevoznik> prevozniciObsList;
+	
 	@FXML
 	private AnchorPane anchorPane = new AnchorPane();
 	@FXML
@@ -51,27 +51,29 @@ public class ListaPrevoznikaController implements Initializable {
 	@FXML
 	private TableColumn<Prevoznik,String> emailColumn = new TableColumn<>();
 	@FXML
-	private TableColumn<Prevoznik,Prevoznik> izmijeniColumn = new TableColumn<>();
+	private TableColumn<Prevoznik,Prevoznik> izmjeniColumn = new TableColumn<>();
 	@FXML
-	private TableColumn<Prevoznik,Prevoznik> izbrisiColumn = new TableColumn<>();
+	private TableColumn<Prevoznik,Prevoznik> obrisiColumn = new TableColumn<>();
 
 	public static Prevoznik odabraniPrevoznik;
 	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		prevozniciObsList.clear();
-		prevozniciObsList.setAll(Prevoznik.getPrevozniciList());
+		prevozniciObsList = FXCollections.observableArrayList();
+		prevozniciTableView.setItems(prevozniciObsList);
+		
+		//prevozniciObsList.setAll(Prevoznik.getPrevozniciList());
 		nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
 		adresaColumn.setCellValueFactory(new PropertyValueFactory<>("adresa"));
 		telefonColumn.setCellValueFactory(new PropertyValueFactory<>("telefon"));
 		racunColumn.setCellValueFactory(new PropertyValueFactory<>("racun"));
 		emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-		prevozniciTableView.setItems(prevozniciObsList);
-		izmijeniColumn.setCellValueFactory(
+		
+		izmjeniColumn.setCellValueFactory(
                 param -> new ReadOnlyObjectWrapper<>(param.getValue())
             );
-    	izmijeniColumn.setCellFactory(tableCell -> {
+    	izmjeniColumn.setCellFactory(tableCell -> {
             TableCell<Prevoznik, Prevoznik> cell = new TableCell<Prevoznik, Prevoznik>() {
                 private Button button = new Button("");
             	//postaviti dimenzije
@@ -80,7 +82,7 @@ public class ListaPrevoznikaController implements Initializable {
                     super.updateItem(item, empty);
                     if (!empty) {
                     	button.getStyleClass().addAll("buttonTable", "buttonTableEdit");
-                    	button.setTooltip(new Tooltip("Izmijeni?"));
+                    	button.setTooltip(new Tooltip("Izmjeni?"));
                     	button.getTooltip().setAutoHide(false);
                     	button.getTooltip().setShowDelay(Duration.seconds(0.5));
                     	setGraphic(button);
@@ -96,81 +98,101 @@ public class ListaPrevoznikaController implements Initializable {
             return cell;
         });
     	
-    	 izbrisiColumn.setCellValueFactory(
-          		param -> new ReadOnlyObjectWrapper<>(param.getValue())
-          	);
+    	obrisiColumn.setCellValueFactory(
+    			param -> new ReadOnlyObjectWrapper<>(param.getValue())
+        );
           
-          izbrisiColumn.setCellFactory(tableCell -> {
-              TableCell<Prevoznik, Prevoznik> cell = new TableCell<Prevoznik, Prevoznik>() {
-                  private Button button = new Button("");
-              	//postaviti dimenzije
-                  @Override
-                  protected void updateItem(Prevoznik item, boolean empty) {
-                      super.updateItem(item, empty);
-                      if (!empty) {
-                         	//System.out.println(item);
-                      	//postavljanje CSS
-                      	button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
-                      	//postavljanje opisa
-                      	button.setTooltip(new Tooltip("Obriši?"));
-                      	button.getTooltip().setAutoHide(false);
-                      	button.getTooltip().setShowDelay(Duration.seconds(0.5));
-                      	//dodavanje u kolonu
-                      	setGraphic(button);
-                      	button.setOnMouseClicked(
-                      			event ->  { 
-                      				if(showPotvrda()) {
-                      					maskerSetUp();
-            							Task<Void> task = new Task<Void>() {
-            					            @Override
-            					            protected Void call() /*throws Exception*/ {
-            					            	System.out.println(Thread.currentThread());
-            					                progressPane.setVisible(true);
-                                  				Prevoznik.izbrisiPrevoznika(item);
-                                  				prevozniciObsList.remove(item);		
-            					                return null;
-            					            }
-            					            @Override
-            					            protected void succeeded(){
-            					                super.succeeded();
-            					                progressPane.setVisible(false);
-            					                showUspjesnoUklonjenPrevoznik();
-            					            }
-            					        };
-            					        new Thread(task).start();
-                      					
-                      				}
-                      				
-                      			}
-                          );
-                      } else {
-                      	setGraphic(null);
-                      }
-                  }
-              };
-              return cell;
-          });
-          
-          izbrisiColumn.setMinWidth(35);
-          izbrisiColumn.setMaxWidth(35);
-          izmijeniColumn.setMinWidth(35);
-          izmijeniColumn.setMaxWidth(35);
-          nazivColumn.setMaxWidth(300);
-	}
-	public boolean showPotvrda() {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("");
-		alert.setHeaderText("Da li ste sigurni?");
-		Optional<ButtonType> action = alert.showAndWait();
-		return action.get().equals(ButtonType.OK);
-	}
-	public void showUspjesnoUklonjenPrevoznik() {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setHeaderText("Uspjesno uklonjen prevoznik");
-		alert.showAndWait();
-	}
-	public void maskerSetUp() {
-	  	progressPane = new MaskerPane();
+    	obrisiColumn.setCellFactory(tableCell -> {
+    		TableCell<Prevoznik, Prevoznik> cell = new TableCell<Prevoznik, Prevoznik>() {
+        		private Button button = new Button("");
+        		//postaviti dimenzije
+                @Override
+                protected void updateItem(Prevoznik item, boolean empty) {
+                	super.updateItem(item, empty);
+                	if (!empty) {
+                		//postavljanje CSS
+						button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
+						//postavljanje opisa
+						button.setTooltip(new Tooltip("Obriši?"));
+						button.getTooltip().setAutoHide(false);
+						button.getTooltip().setShowDelay(Duration.seconds(0.5));
+						//dodavanje u kolonu
+						setGraphic(button);
+						button.setOnMouseClicked(
+							event -> {
+								Alert alert=new Alert(AlertType.CONFIRMATION);
+								alert.setTitle("Brisanje prevoznika");
+								alert.setHeaderText(null);
+								alert.setContentText("Obriši?");
+								alert.getButtonTypes().clear();
+								alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+								Button yesButton=(Button)alert.getDialogPane().lookupButton(ButtonType.YES);
+								yesButton.setText("Da");
+								yesButton.setDefaultButton(false);
+								Button noButton=(Button)alert.getDialogPane().lookupButton(ButtonType.NO);
+								noButton.setText("Ne");
+								noButton.setDefaultButton(true);
+								
+								alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+								alert.getDialogPane().getStyleClass().addAll("alert", "alertDelete");
+								
+								Optional<ButtonType> rezultat = alert.showAndWait();
+						
+								if (rezultat.get() == ButtonType.YES) {
+									if(Prevoznik.izbrisiPrevoznika(item)) {
+										getTableView().getItems().remove(item);
+										//prevozniciObsList.remove(item);
+
+								        Util.getNotifications("Obavještenje", "Prevoznik obrisan.", "Information").show();
+									} else {
+										//NASTALA GRESKA
+										Util.showBugAlert();
+									}
+								}
+							}
+						);
+					} else {
+						setGraphic(null);
+					}
+				}
+    		};
+            return cell;
+    	});
+    	
+    	for(TableColumn<?,?> column:prevozniciTableView.getColumns()) {
+        	column.setReorderable(false);
+        }
+    	
+    	//jibColumn.setMinWidth(95);
+        //jibColumn.setMaxWidth(150);
+        
+        nazivColumn.setMinWidth(85);
+        //nazivColumn.setMaxWidth(200);
+        
+        racunColumn.setMinWidth(100);
+        //racunColumn.setMaxWidth(175);
+        
+        adresaColumn.setMinWidth(85);
+        //adresaColumn.setMaxWidth(200);
+        
+        telefonColumn.setMinWidth(100);
+        telefonColumn.setMaxWidth(150);
+        
+        emailColumn.setMinWidth(100);
+        //emailColumn.setMaxWidth(175);
+        
+        izmjeniColumn.setText("");
+        izmjeniColumn.setMinWidth(35);
+        izmjeniColumn.setMaxWidth(35);
+        izmjeniColumn.setResizable(false);
+        izmjeniColumn.setSortable(false);
+        obrisiColumn.setText("");
+        obrisiColumn.setMinWidth(35);
+        obrisiColumn.setMaxWidth(35);
+        obrisiColumn.setResizable(false);
+        obrisiColumn.setSortable(false);
+        
+        MaskerPane progressPane = new MaskerPane();
 		progressPane.setText("Molimo sačekajte...");
 		progressPane.setVisible(false);
 		anchorPane.getChildren().add(progressPane);
@@ -179,11 +201,29 @@ public class ListaPrevoznikaController implements Initializable {
 		AnchorPane.setLeftAnchor(progressPane,0.0);
 		AnchorPane.setRightAnchor(progressPane,0.0);
 		
+		Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() /*throws Exception*/ {
+            	System.out.println(Thread.currentThread());
+                progressPane.setVisible(true);
+                prevozniciObsList.addAll(Prevoznik.getPrevozniciList());
+                return null;
+            }
+            @Override
+            protected void succeeded(){
+                super.succeeded();
+                progressPane.setVisible(false);
+            }
+        };
+        new Thread(task).start();
+	}
 	
-}
 	public void showIzmjenaPrevoznika(Prevoznik prevoznik) {
-		odabraniPrevoznik = prevoznik;
 		try {
+			odabraniPrevoznik = prevoznik;
+			prevozniciTableView.getSelectionModel().select(prevoznik);
+			int index = prevozniciObsList.indexOf(prevoznik);
+			
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/unibl/etf/administrativni_radnik/IzmjenaPrevoznika.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
@@ -193,14 +233,14 @@ public class ListaPrevoznikaController implements Initializable {
 			stage.initStyle(StageStyle.UNDECORATED);
 			stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-            int index = prevozniciObsList.indexOf(prevoznik);
+            
             prevozniciObsList.remove(prevoznik);
             prevozniciObsList.add(index, odabraniPrevoznik);
             prevozniciTableView.refresh();
+            prevozniciTableView.getSelectionModel().select(prevoznik);
 		} catch(Exception e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 	}
-
 
 }

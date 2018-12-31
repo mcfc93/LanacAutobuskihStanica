@@ -17,9 +17,7 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 
 public class DodajNalogController implements Initializable {
@@ -151,18 +149,18 @@ public class DodajNalogController implements Initializable {
 		Util.setAutocompleteList(jibStaniceTextField, AutobuskaStanica.getJibList());
 		
 
-   		korisnickoImeTextField.getValidators().addAll(Util.requiredFieldValidator(korisnickoImeTextField), Util.collectionValidator(korisnickoImeTextField, Nalog.getUsernameList(), false, "Zauzeto"));
+   		korisnickoImeTextField.getValidators().addAll(Util.requiredFieldValidator(korisnickoImeTextField), Util.collectionValidator(korisnickoImeTextField, Nalog.getUsernameList(), false, "Zauzeto"), Util.lengthValidator(korisnickoImeTextField, 30));
    		lozinkaTextField.getValidators().addAll(Util.requiredFieldValidator(lozinkaTextField), Util.passwordValidator(lozinkaTextField));
    		jibStaniceTextField.getValidators().addAll(Util.requiredFieldValidator(jibStaniceTextField), Util.jibValidator(jibStaniceTextField), Util.collectionValidator(jibStaniceTextField, AutobuskaStanica.getJibList(), true, "Ne postoji"));
-   		imeTextField.getValidators().add(Util.requiredFieldValidator(imeTextField));
-   		prezimeTextField.getValidators().add(Util.requiredFieldValidator(prezimeTextField));
+   		imeTextField.getValidators().addAll(Util.requiredFieldValidator(imeTextField), Util.lengthValidator(imeTextField, 35));
+   		prezimeTextField.getValidators().addAll(Util.requiredFieldValidator(prezimeTextField), Util.lengthValidator(prezimeTextField, 35));
    		jmbgTextField.getValidators().addAll(Util.requiredFieldValidator(jmbgTextField), Util.jmbgValidator(jmbgTextField), Util.collectionValidator(jmbgTextField, Zaposleni.getJmbgList(), false, "Vec postoji"));
-   		adresaTextField.getValidators().add(Util.requiredFieldValidator(adresaTextField));
+   		adresaTextField.getValidators().addAll(Util.requiredFieldValidator(adresaTextField), Util.lengthValidator(adresaTextField, 35));
    		//postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), true, "Nekorektan unos"));
    		postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
    		strucnaSpremaTextField.getValidators().add(Util.requiredFieldValidator(strucnaSpremaTextField));
-   		brojTelefonaTextField.getValidators().addAll(Util.requiredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
-   		emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
+   		brojTelefonaTextField.getValidators().addAll(Util.requiredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField), Util.lengthValidator(brojTelefonaTextField, 16));
+   		emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField), Util.emailValidator(emailTextField), Util.lengthValidator(emailTextField, 35));
 	}
 	
 	@FXML

@@ -38,7 +38,6 @@
       <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <JFXButton fx:id="dodajLinijuButton" onAction="#dodajLiniju" prefHeight="25.0" prefWidth="110.0" text="Dodaj liniju" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
       <JFXButton fx:id="krajUnosaButton" onAction="#krajUnosa" prefHeight="25.0" prefWidth="110.0" text="Kraj unosa" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="9" GridPane.valignment="BOTTOM" />
       <JFXButton fx:id="sledeciPolazakButton" onAction="#sledeciPolazak" prefHeight="25.0" prefWidth="110.0" text="Sledeći polazak" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
       <GridPane stylesheets="@../administrator/administrator.css" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="6">
@@ -66,9 +65,6 @@
       </GridPane>
       <JFXTimePicker fx:id="vrijemePolaska1TimePicker" maxWidth="140.0" minWidth="140.0" promptText="Vrijeme polaska" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="7" />
       <JFXTimePicker fx:id="vrijemeDolaska1TimePicker" maxWidth="140.0" minWidth="140.0" promptText="Vrijeme dolaska" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
-      <JFXTextField fx:id="nazivLinijeTextField" promptText="Naziv linije" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-      <JFXComboBox fx:id="prevoznikComboBox" prefWidth="500.0" promptText="Prevoznik" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-      <JFXComboBox fx:id="peronComboBox" prefWidth="500.0" promptText="Peron" GridPane.columnIndex="5" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
       <TableView fx:id="relacijeTableView" prefHeight="0.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="3" GridPane.rowSpan="3">
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -78,6 +74,10 @@
             <TableColumn prefWidth="75.0" text="Column 2" />
             <TableColumn prefWidth="75.0" text="Column 3" />
             <TableColumn prefWidth="75.0" text="Column 4" />
+            <TableColumn prefWidth="75.0" text="Column 5" />
+            <TableColumn prefWidth="75.0" text="Column 6" />
+            <TableColumn prefWidth="75.0" text="Column 7" />
+            <TableColumn prefWidth="75.0" text="Column 8" />
          </columns>
       </TableView>
       <JFXTimePicker fx:id="vrijemePolaska2TimePicker" maxWidth="140.0" minWidth="140.0" promptText="Vrijeme polaska" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="8" />
@@ -95,5 +95,29 @@
             <Font name="System Bold" size="11.0" />
          </font>
       </Label>
+      <GridPane GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="1">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="10.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="110.0" prefWidth="110.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <JFXTextField fx:id="nazivLinijeTextField" promptText="Naziv linije" GridPane.halignment="LEFT" />
+            <JFXComboBox fx:id="prevoznikComboBox" prefWidth="500.0" promptText="Prevoznik" GridPane.columnIndex="2" GridPane.halignment="LEFT" />
+            <JFXComboBox fx:id="peronComboBox" prefWidth="500.0" promptText="Peron" GridPane.columnIndex="4" GridPane.halignment="LEFT" />
+            <JFXButton fx:id="dodajLinijuButton" onAction="#dodajLiniju" prefHeight="25.0" prefWidth="110.0" text="Dodaj liniju" GridPane.columnIndex="8" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+            <JFXComboBox fx:id="prazniciComboBox" prefWidth="500.0" promptText="Praznici" GridPane.columnIndex="6" GridPane.halignment="LEFT" />
+         </children>
+      </GridPane>
+      <JFXButton fx:id="novoStajalisteButton" onAction="#novoStajaliste" text="Novo stajaliste" GridPane.columnIndex="6" GridPane.rowIndex="7" />
    </children>
 </GridPane>

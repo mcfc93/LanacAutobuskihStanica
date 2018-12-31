@@ -8,9 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -18,7 +16,6 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import org.controlsfx.control.Notifications;
-import org.unibl.etf.prijava.Nalog;
 
 import com.jfoenix.controls.JFXAutoCompletePopup;
 import com.jfoenix.controls.JFXComboBox;
@@ -30,16 +27,11 @@ import com.jfoenix.validation.IntegerValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
 import com.jfoenix.validation.base.ValidatorBase;
 
-import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Task;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 //klasa koja sadrzi sve pomocne alate
@@ -321,7 +313,7 @@ System.out.println(PROPERTY);
 			@Override
 			protected void eval() {
 				if(!textField.getText().isEmpty()
-						&& !textField.getText().matches("^[a-z0-9]{3,}@[a-z0-9]{2,}\\.[a-z]{2,}$")) {
+						&& !textField.getText().matches("^[a-z0-9]+-?[a-z0-9]+@[a-z0-9]{2,}\\.[a-z]{2,}$")) {
 					hasErrors.set(true);
 				} else {
 					hasErrors.set(false);
@@ -478,7 +470,7 @@ System.out.println(PROPERTY);
 	    autoCompletePopup.setSelectionHandler(event -> {
 	        textField.setText(event.getObject());
 	    });
-
+	    
 	    textField.textProperty().addListener(observable -> {
 	        autoCompletePopup.filter(string -> string.toLowerCase().contains(textField.getText().toLowerCase()));
 	        if (autoCompletePopup.getFilteredSuggestions().isEmpty() || textField.getText().isEmpty()) {

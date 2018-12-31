@@ -74,7 +74,7 @@
                   <Insets left="20.0" />
                </padding>
             </ToggleButton>
-            <ToggleButton fx:id="radSaNalogomButton" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="402.0" mnemonicParsing="false" onAction="#korisnickiNalog" prefHeight="40.0" prefWidth="200.0" text="Korisnički nalog" toggleGroup="$toggleGroup">
+            <ToggleButton fx:id="radSaNalogomButton" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="402.0" mnemonicParsing="false" onAction="#korisnickiNalog" prefHeight="40.0" prefWidth="200.0" text="Korisnički nalog" toggleGroup="$toggleGroup" AnchorPane.bottomAnchor="54.0">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>

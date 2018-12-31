@@ -102,13 +102,13 @@ public class IzmjeniStanicuController implements Initializable {
 		});
 		*/
 		jibTextField.getValidators().addAll(Util.requiredFieldValidator(jibTextField), Util.jibValidator(jibTextField));
-		nazivTextField.getValidators().add(Util.requiredFieldValidator(nazivTextField));
-		brojPeronaTextField.getValidators().addAll(Util.requiredFieldValidator(brojPeronaTextField), Util.integerValidator(brojPeronaTextField));
-		brojTelefonaTextField.getValidators().addAll(Util.requiredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField));
-		adresaTextField.getValidators().add(Util.requiredFieldValidator(adresaTextField));
-		postanskiBrojTextField.getValidators().add(Util.requiredFieldValidator(postanskiBrojTextField));
-		webStranicaTextField.getValidators().addAll(Util.requiredFieldValidator(webStranicaTextField), Util.webValidator(webStranicaTextField));
-		emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField), Util.emailValidator(emailTextField));
+		nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), Util.lengthValidator(nazivTextField, 35));
+		brojPeronaTextField.getValidators().addAll(Util.requiredFieldValidator(brojPeronaTextField), Util.integerValidator(brojPeronaTextField), Util.lengthValidator(brojPeronaTextField, 2));
+		brojTelefonaTextField.getValidators().addAll(Util.requiredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField), Util.lengthValidator(brojTelefonaTextField, 16));
+		adresaTextField.getValidators().addAll(Util.requiredFieldValidator(adresaTextField), Util.lengthValidator(adresaTextField, 35));
+		postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.postalCodeValidator(postanskiBrojTextField));
+		webStranicaTextField.getValidators().addAll(Util.requiredFieldValidator(webStranicaTextField), Util.webValidator(webStranicaTextField), Util.lengthValidator(webStranicaTextField, 35));
+		emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField), Util.emailValidator(emailTextField), Util.lengthValidator(emailTextField, 35));
 		
 		
 		jibTextField.setDisable(true);

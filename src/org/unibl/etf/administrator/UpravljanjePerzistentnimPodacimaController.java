@@ -18,9 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 
 public class UpravljanjePerzistentnimPodacimaController implements Initializable {
@@ -87,8 +85,8 @@ public class UpravljanjePerzistentnimPodacimaController implements Initializable
     	odaberiMjestoTextField.getValidators().addAll(Util.requiredFieldValidator(odaberiMjestoTextField), Util.collectionValidator(odaberiMjestoTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
      	ValidatorBase postalCodeValidator=Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), false, "Već postoji");
     	ValidatorBase cityValdator=Util.collectionValidator(nazivMjestaTextField, Mjesto.getCityList(), false, "Već postoji");
-    	postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.integerValidator(postanskiBrojTextField), postalCodeValidator);
-   		nazivMjestaTextField.getValidators().addAll(Util.requiredFieldValidator(nazivMjestaTextField), cityValdator);
+    	postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.integerValidator(postanskiBrojTextField), postalCodeValidator, Util.lengthValidator(postanskiBrojTextField, 7));
+   		nazivMjestaTextField.getValidators().addAll(Util.requiredFieldValidator(nazivMjestaTextField), Util.lengthValidator(nazivMjestaTextField, 35), cityValdator);
    		
    		mjestoToggleGroup.selectedToggleProperty().addListener(listener -> {
     		if(dodajMjestoRadioButton.isSelected()) {
@@ -127,7 +125,7 @@ public class UpravljanjePerzistentnimPodacimaController implements Initializable
     	//odaberiPraznikTextField.getValidators().addAll(Util.requredFieldValidator(odaberiPraznikTextField), Util.collectionValidator(odaberiPraznikTextField, praznici, true, "Nekorektan unos"));
     	odaberiPraznikComboBox.getValidators().add(Util.requiredFieldValidator(odaberiPraznikComboBox));
     	datumTextField.getValidators().addAll(Util.requiredFieldValidator(datumTextField), Util.dateValidator(datumTextField));
-    	opisTextField.getValidators().add(Util.requiredFieldValidator(opisTextField));
+    	opisTextField.getValidators().addAll(Util.requiredFieldValidator(opisTextField), Util.lengthValidator(opisTextField, 35));
     	
     	praznikToggleGroup.selectedToggleProperty().addListener(listener -> {
     		if(dodajPraznikRadioButton.isSelected()) {
@@ -182,6 +180,14 @@ System.out.println(Mjesto.getPlaceList());
 System.out.println(Mjesto.getCityPostalCodeList());
 System.out.println(Mjesto.getPostalCodeList());
 System.out.println(Mjesto.getCityList());
+				
+				odaberiMjestoTextField.clear();
+				odaberiMjestoTextField.resetValidation();
+				postanskiBrojTextField.clear();
+				postanskiBrojTextField.resetValidation();
+				nazivMjestaTextField.clear();
+				nazivMjestaTextField.resetValidation();
+
 				Util.setAutocompleteList(odaberiMjestoTextField, Mjesto.getCityPostalCodeList());
 				
 				/*
@@ -211,6 +217,14 @@ System.out.println(Mjesto.getPlaceList());
 System.out.println(Mjesto.getCityPostalCodeList());
 System.out.println(Mjesto.getPostalCodeList());
 System.out.println(Mjesto.getCityList());
+
+				odaberiMjestoTextField.clear();
+				odaberiMjestoTextField.resetValidation();
+				postanskiBrojTextField.clear();
+				postanskiBrojTextField.resetValidation();
+				nazivMjestaTextField.clear();
+				nazivMjestaTextField.resetValidation();
+
 				Util.setAutocompleteList(odaberiMjestoTextField, Mjesto.getCityPostalCodeList());
 				
 				/*
@@ -248,6 +262,13 @@ System.out.println(Praznik.getHolidayList());
 				praznici.clear();
 				praznici.addAll(Praznik.getHolidayList());
 				odaberiPraznikComboBox.setItems(praznici);
+				
+				odaberiPraznikComboBox.getSelectionModel().clearSelection();
+				odaberiPraznikComboBox.resetValidation();
+				datumTextField.clear();
+				datumTextField.resetValidation();
+				opisTextField.clear();
+				opisTextField.resetValidation();
 
 				/*
     			Alert alert=new Alert(AlertType.INFORMATION);
@@ -280,6 +301,13 @@ System.out.println(Praznik.getHolidayList());
 				praznici.clear();
 				praznici.addAll(Praznik.getHolidayList());
 				odaberiPraznikComboBox.setItems(praznici);
+				
+				odaberiPraznikComboBox.getSelectionModel().clearSelection();
+				odaberiPraznikComboBox.resetValidation();
+				datumTextField.clear();
+				datumTextField.resetValidation();
+				opisTextField.clear();
+				opisTextField.resetValidation();
 
 				/*
     			Alert alert=new Alert(AlertType.INFORMATION);
@@ -310,6 +338,13 @@ System.out.println(Praznik.getHolidayList());
 				praznici.clear();
 				praznici.addAll(Praznik.getHolidayList());
 				odaberiPraznikComboBox.setItems(praznici);
+				
+				odaberiPraznikComboBox.getSelectionModel().clearSelection();
+				odaberiPraznikComboBox.resetValidation();
+				datumTextField.clear();
+				datumTextField.resetValidation();
+				opisTextField.clear();
+				opisTextField.resetValidation();
 
 				/*
     			Alert alert=new Alert(AlertType.INFORMATION);

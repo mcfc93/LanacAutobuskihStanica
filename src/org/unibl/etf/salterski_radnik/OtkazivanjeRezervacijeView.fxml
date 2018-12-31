@@ -34,34 +34,6 @@
       <RowConstraints maxHeight="50.0" minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label alignment="CENTER" styleClass="zaposleniLabel" stylesheets="@../prijava/prijava.css" text="Naziv linije:" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-         <GridPane.margin>
-            <Insets right="20.0" />
-         </GridPane.margin></Label>
-      <TextField fx:id="linijaTextField" editable="false" prefHeight="25.0" prefWidth="100.0" styleClass="zaposleniTextField" stylesheets="@../prijava/prijava.css" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-      <Label contentDisplay="CENTER" styleClass="zaposleniLabel" stylesheets="@../prijava/prijava.css" text="Relacija:" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
-         <GridPane.margin>
-            <Insets right="20.0" />
-         </GridPane.margin></Label>
-      <Label styleClass="zaposleniLabel" stylesheets="@../prijava/prijava.css" text="Datum kupovine:" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
-         <GridPane.margin>
-            <Insets right="20.0" />
-         </GridPane.margin></Label>
-      <Label styleClass="zaposleniLabel" stylesheets="@../prijava/prijava.css" text="Cijena:" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER">
-         <GridPane.margin>
-            <Insets right="20.0" />
-         </GridPane.margin></Label>
-      <TextField fx:id="relacijaTextField" prefHeight="25.0" prefWidth="100.0" styleClass="zaposleniTextField" stylesheets="@../prijava/prijava.css" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-      <TextField fx:id="datumTextField" prefHeight="25.0" prefWidth="100.0" styleClass="zaposleniTextField" stylesheets="@../prijava/prijava.css" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-      <TextField fx:id="cijenaTextField" prefHeight="25.0" prefWidth="100.0" styleClass="zaposleniTextField" stylesheets="@../prijava/prijava.css" GridPane.columnIndex="4" GridPane.rowIndex="5" />
-      <JFXTextField fx:id="serijskiBrojTextField" prefHeight="25.0" prefWidth="125.0" promptText="Serijski broj karte" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <JFXButton fx:id="pretragaKarataButton" onAction="#pretragaKarata" prefHeight="25.0" prefWidth="100.0" text="Pretraga" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="BOTTOM" />
-      <JFXButton fx:id="stornirajButton" onAction="#storniraj" prefHeight="25.0" prefWidth="100.0" text="Storniraj" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="6" GridPane.valignment="BOTTOM" />
-      <ImageView fx:id="checkMarkImageView" fitHeight="42.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
-         <image>
-            <Image url="@img/checkmark.png" />
-         </image>
-      </ImageView>
       <GridPane prefHeight="0.0" prefWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.rowSpan="2">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -88,10 +60,38 @@
             <Label styleClass="naslovLabel" text="Vrsta karte:" GridPane.valignment="BOTTOM" />
          </children>
       </GridPane>
+      <JFXTextField fx:id="serijskiBrojTextField" prefHeight="25.0" prefWidth="125.0" promptText="Serijski broj karte" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <JFXButton fx:id="pretragaKarataButton" onAction="#pretragaKarata" prefHeight="25.0" prefWidth="100.0" text="Pretraga" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="BOTTOM" />
       <Label prefHeight="20.0" prefWidth="219.0" styleClass="naslovLabel" stylesheets="@../prijava/prijava.css" text="OSNOVNE INFORMACIJE:" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
+      <Label alignment="CENTER" styleClass="zaposleniLabel" stylesheets="@../prijava/prijava.css" text="Naziv linije:" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets right="20.0" />
+         </GridPane.margin></Label>
+      <TextField fx:id="linijaTextField" editable="false" focusTraversable="false" prefHeight="25.0" prefWidth="100.0" styleClass="zaposleniTextField" stylesheets="@../prijava/prijava.css" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+      <Label contentDisplay="CENTER" styleClass="zaposleniLabel" stylesheets="@../prijava/prijava.css" text="Relacija:" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets right="20.0" />
+         </GridPane.margin></Label>
+      <TextField fx:id="relacijaTextField" editable="false" focusTraversable="false" prefHeight="25.0" prefWidth="100.0" styleClass="zaposleniTextField" stylesheets="@../prijava/prijava.css" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+      <Label styleClass="zaposleniLabel" stylesheets="@../prijava/prijava.css" text="Datum kupovine:" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets right="20.0" />
+         </GridPane.margin></Label>
+      <TextField fx:id="datumTextField" editable="false" focusTraversable="false" prefHeight="25.0" prefWidth="100.0" styleClass="zaposleniTextField" stylesheets="@../prijava/prijava.css" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+      <Label styleClass="zaposleniLabel" stylesheets="@../prijava/prijava.css" text="Cijena:" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets right="20.0" />
+         </GridPane.margin></Label>
+      <TextField fx:id="cijenaTextField" editable="false" focusTraversable="false" prefHeight="25.0" prefWidth="100.0" styleClass="zaposleniTextField" stylesheets="@../prijava/prijava.css" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+      <JFXButton fx:id="stornirajButton" onAction="#storniraj" prefHeight="25.0" prefWidth="100.0" text="Storniraj" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="6" GridPane.valignment="BOTTOM" />
+      <ImageView fx:id="checkMarkImageView" fitHeight="42.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+         <image>
+            <Image url="@img/checkmark.png" />
+         </image>
+      </ImageView>
    </children>
 </GridPane>

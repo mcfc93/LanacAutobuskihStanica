@@ -2,25 +2,19 @@ package org.unibl.etf.administrativni_radnik;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import org.unibl.etf.karta.Prevoznik;
 import org.unibl.etf.util.Mjesto;
 import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.image.ImageView;
-import javafx.util.Duration;
+import javafx.scene.layout.GridPane;
 
-public class DodavanjePrevoznikaController implements Initializable{
-
+public class DodavanjePrevoznikaController implements Initializable {
 	@FXML
-	private ImageView successImageView = new ImageView();
+    private GridPane gridPane;
+	
 	@FXML
 	private JFXButton dodajPrevoznikaButton = new JFXButton();
 	@FXML
@@ -43,26 +37,18 @@ public class DodavanjePrevoznikaController implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		successImageView.setVisible(false);
-		validateSetUp();
-		
-	}
-	
-	public void validateSetUp() {
-		emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField),Util.emailValidator(emailTextField));
-		jibTextField.getValidators().addAll(Util.requiredFieldValidator(jibTextField),Util.jibValidator(jibTextField));
-		webAdresaTextField.getValidators().addAll(Util.requiredFieldValidator(webAdresaTextField),Util.webValidator(webAdresaTextField));
-		telefonTextField.getValidators().addAll(Util.requiredFieldValidator(telefonTextField),Util.phoneValidator(telefonTextField));
-		postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField),		Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
+		dodajPrevoznikaButton.setDefaultButton(true);
 		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());
 
-		tekuciRacunTextField.getValidators().addAll(Util.requiredFieldValidator(tekuciRacunTextField),Util.integerValidator(tekuciRacunTextField));
-		nazivTextField.getValidators().add(Util.requiredFieldValidator(nazivTextField));
-		tekuciRacunTextField.getValidators().addAll(Util.requiredFieldValidator(tekuciRacunTextField),Util.integerValidator(tekuciRacunTextField));
-		adresaTextField.getValidators().add(Util.requiredFieldValidator(adresaTextField));
+jibTextField.getValidators().addAll(Util.requiredFieldValidator(jibTextField), Util.jibValidator(jibTextField), Util.jibValidator(jibTextField)/*, Util.collectionValidator(jibTextField, Prevoznik.getJibList(), false, "Zauzeto")*/);
+		nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), Util.lengthValidator(nazivTextField, 35));
+		tekuciRacunTextField.getValidators().addAll(Util.requiredFieldValidator(tekuciRacunTextField), Util.iinValidator(tekuciRacunTextField));
+		telefonTextField.getValidators().addAll(Util.requiredFieldValidator(telefonTextField), Util.phoneValidator(telefonTextField), Util.lengthValidator(telefonTextField, 16));
+		adresaTextField.getValidators().addAll(Util.requiredFieldValidator(adresaTextField), Util.lengthValidator(adresaTextField, 35));
+		postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
+		webAdresaTextField.getValidators().addAll(Util.requiredFieldValidator(webAdresaTextField), Util.webValidator(webAdresaTextField), Util.lengthValidator(webAdresaTextField, 35));
+		emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField), Util.emailValidator(emailTextField), Util.lengthValidator(emailTextField, 35));
 	}
-
-
 	
 	@FXML
 	public void dodajPrevoznika() {
@@ -74,45 +60,33 @@ public class DodavanjePrevoznikaController implements Initializable{
 								adresaTextField.validate() &
 									webAdresaTextField.validate() &
 										postanskiBrojTextField.validate()) {
-		if(Prevoznik.dodajPrevoznika(jibTextField.getText(),nazivTextField.getText(),telefonTextField.getText(),emailTextField.getText(),
-				webAdresaTextField.getText(),tekuciRacunTextField.getText(),adresaTextField.getText(),Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()))) {
-			showSuccess();
+			if(Prevoznik.dodajPrevoznika(jibTextField.getText(),nazivTextField.getText(),telefonTextField.getText(),emailTextField.getText(),
+					webAdresaTextField.getText(),tekuciRacunTextField.getText(),adresaTextField.getText(),Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()))) {
+//Prevoznik.getJibList().add(jibTextField.getText().trim());
+				Util.getNotifications("Obavještenje", "Prevoznik dodan.", "Information").show();
+				
+				nazivTextField.clear();
+				jibTextField.clear();
+				postanskiBrojTextField.clear();
+				adresaTextField.clear();
+				webAdresaTextField.clear();
+				telefonTextField.clear();
+				emailTextField.clear();
+				tekuciRacunTextField.clear();
+
+				telefonTextField.resetValidation();
+				jibTextField.resetValidation();
+				adresaTextField.resetValidation();
+				webAdresaTextField.resetValidation();
+				emailTextField.resetValidation();
+				tekuciRacunTextField.resetValidation();
+				postanskiBrojTextField.resetValidation();
+				nazivTextField.resetValidation();
+			} else {
+				//NASTALA GRESKA
+				Util.showBugAlert();
+			}
 		}
-	}
 
 	}
-
-	public void showSuccess() {
-		Timeline timeline = new Timeline();
-		nazivTextField.clear();
-		jibTextField.clear();
-		postanskiBrojTextField.clear();
-		adresaTextField.clear();
-		webAdresaTextField.clear();
-		telefonTextField.clear();
-		emailTextField.clear();
-		tekuciRacunTextField.clear();
-		postanskiBrojTextField.clear();
-
-		telefonTextField.resetValidation();
-		jibTextField.resetValidation();
-		adresaTextField.resetValidation();
-		webAdresaTextField.resetValidation();
-		emailTextField.resetValidation();
-		tekuciRacunTextField.resetValidation();
-		postanskiBrojTextField.resetValidation();
-		nazivTextField.resetValidation();
-		
-		//successImageView.setImage(new Image(getClass().getResource("img/checkmark.png").toExternalForm()));
-		successImageView.setVisible(true);
-		timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(3),
-		    new EventHandler<ActionEvent>() {
-		        @Override
-		        public void handle(ActionEvent event) {
-		        	successImageView.setVisible(false);
-		        }
-		    }));
-		timeline.play();
-	}
-
 }
