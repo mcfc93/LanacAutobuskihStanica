@@ -26,7 +26,6 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
 import com.jfoenix.validation.base.ValidatorBase;
-import com.sun.javafx.collections.ObservableListWrapper;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -551,7 +550,8 @@ public class DodavanjeLinijaController implements Initializable {
 		int brojPerona = AutobuskaStanica.getBrojPeronaStanice();
 		for(int i=1; i<=brojPerona; ++i)
 			peronComboBox.getItems().add(i);
-		prevoznikComboBox.setItems(new ObservableListWrapper<>(Prevoznik.getPrevozniciList()));	
+		prevozniciObs.setAll(Prevoznik.getPrevozniciList());
+		prevoznikComboBox.setItems(prevozniciObs);
 	}
     
     @FXML
