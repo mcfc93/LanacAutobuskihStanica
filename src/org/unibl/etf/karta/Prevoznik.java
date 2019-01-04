@@ -1,11 +1,13 @@
 package org.unibl.etf.karta;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.unibl.etf.util.Util;
 
@@ -143,6 +145,7 @@ public class Prevoznik {
 	}
 	
 	public static boolean izbrisiPrevoznika(Prevoznik prevoznik) {
+		/*
 		Connection c = null;
 		PreparedStatement s = null;
 		String sql = "update prevoznik set Stanje='Izbrisano' where JIBPrevoznika=?";
@@ -160,6 +163,21 @@ public class Prevoznik {
 			Util.close(s, c);
 		}
 		return false;
+		*/
+		Connection c = null;
+		CallableStatement s = null;
+	    try {
+	       	c=Util.getConnection();
+	    	s = c.prepareCall("{call removePrevoznik(?)}");
+	    	s.setString(1, prevoznik.getJIBPrevoznika());
+	       	s.execute();
+	       	return true;
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(s,c);
+	    }
+	    return false;
 	}
 	
 	public static boolean izmjeniPrevoznika(String naziv,String telefon,String email,String webAdresa,String tekuciRacun,String adresa,String postanskiBroj,String jib) {
