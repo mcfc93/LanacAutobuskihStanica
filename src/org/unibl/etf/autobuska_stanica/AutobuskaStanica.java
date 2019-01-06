@@ -22,13 +22,14 @@ public class AutobuskaStanica {
 	private int brojPerona;
 	private String webStranica;
 	private String email;
+	private int idStajalista;
 	private String stanje;
 	
 	public AutobuskaStanica() {
 		super();
 	}
 	
-	public AutobuskaStanica(String jib, String naziv, String ulicaIBroj, int postanskiBroj, String grad, String brojTelefona, int brojPerona, String webStranica, String email, String stanje) {
+	public AutobuskaStanica(String jib, String naziv, String ulicaIBroj, int postanskiBroj, String grad, String brojTelefona, int brojPerona, String webStranica, String email, int idStajalista, String stanje) {
 		super();
 		this.jib= jib;
 		this.naziv = naziv;
@@ -39,6 +40,7 @@ public class AutobuskaStanica {
 		this.brojPerona = brojPerona;
 		this.webStranica = webStranica;
 		this.email=email;
+		this.idStajalista=idStajalista;
 		this.stanje=stanje;
 	}
 	
@@ -113,7 +115,15 @@ public class AutobuskaStanica {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
+	public int getIdStajalista() {
+		return idStajalista;
+	}
+
+	public void setIdStajalista(int idStajalista) {
+		this.idStajalista = idStajalista;
+	}
+
 	public String getStanje() {
 		return stanje;
 	}
@@ -125,12 +135,20 @@ public class AutobuskaStanica {
 	public String getAdresa() {
 		return ulicaIBroj + ", " + postanskiBroj + " " + grad;
 	}
-
+/*
 	@Override
 	public String toString() {
 		return "AutobuskaStanica [jib=" + jib + ", naziv=" + naziv + ", adresa=" + ulicaIBroj + ", "
 				+ postanskiBroj + " " + grad + ", brojTelefona=" + brojTelefona + ", brojPerona=" + brojPerona
 				+ ", webStranica=" + webStranica + ", email=" + email + "]";
+	}
+*/
+	@Override
+	public String toString() {
+		return "AutobuskaStanica [jib=" + jib + ", naziv=" + naziv + ", ulicaIBroj=" + ulicaIBroj + ", postanskiBroj="
+				+ postanskiBroj + ", grad=" + grad + ", brojTelefona=" + brojTelefona + ", brojPerona=" + brojPerona
+				+ ", webStranica=" + webStranica + ", email=" + email + ", idStajalista=" + idStajalista + ", stanje="
+				+ stanje + "]";
 	}
 	
 	public static List<AutobuskaStanica> listaStanica() {
@@ -143,7 +161,7 @@ public class AutobuskaStanica {
 	    	s = c.prepareCall("{call showBusStations()}");
 	       	r = s.executeQuery();
 	        while(r.next()) {
-		       	listaAutobuskihStanica.add(new AutobuskaStanica(r.getString("JIBStanice"), r.getString("Naziv"), r.getString("Adresa"), r.getInt("PostanskiBroj"), r.getString("mjesto.naziv"), r.getString("BrojTelefona"), r.getInt("BrojPerona"), r.getString("WebStranica"), r.getString("Email"), r.getString("Stanje")));
+		       	listaAutobuskihStanica.add(new AutobuskaStanica(r.getString("JIBStanice"), r.getString("Naziv"), r.getString("Adresa"), r.getInt("PostanskiBroj"), r.getString("mjesto.naziv"), r.getString("BrojTelefona"), r.getInt("BrojPerona"), r.getString("WebStranica"), r.getString("Email"), r.getInt("IdStajalista"), r.getString("Stanje")));
 	        }
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
@@ -152,10 +170,10 @@ public class AutobuskaStanica {
 	    }
 	    return listaAutobuskihStanica;
 	}
-	
+
 	public static AutobuskaStanica getAutobuskaStanica(String jib) {
 		AutobuskaStanica autobuskaStanica=null;
-	    String sql="select JIBStanice,autobuska_stanica.Naziv,Adresa,autobuska_stanica.PostanskiBroj,mjesto.Naziv,BrojTelefona,BrojPerona,WebStranica,Email,Stanje from autobuska_stanica join mjesto on (autobuska_stanica.PostanskiBroj=mjesto.PostanskiBroj) where Stanje!='Izbrisano' and JIBStanice=?;";
+	    String sql="select JIBStanice,autobuska_stanica.Naziv,Adresa,autobuska_stanica.PostanskiBroj,mjesto.Naziv,BrojTelefona,BrojPerona,WebStranica,IdStajalista,Email,Stanje from autobuska_stanica join mjesto on (autobuska_stanica.PostanskiBroj=mjesto.PostanskiBroj) where Stanje!='Izbrisano' and JIBStanice=?;";
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
@@ -164,7 +182,7 @@ public class AutobuskaStanica {
 	    	s = Util.prepareStatement(c, sql, false, jib);
 	    	r = s.executeQuery();
 	       	if(r.next()) {
-	       		autobuskaStanica=new AutobuskaStanica(r.getString("JIBStanice"), r.getString("Naziv"), r.getString("Adresa"), r.getInt("PostanskiBroj"), r.getString("mjesto.naziv"), r.getString("BrojTelefona"), r.getInt("BrojPerona"), r.getString("WebStranica"), r.getString("Email"), r.getString("Stanje"));
+	       		autobuskaStanica=new AutobuskaStanica(r.getString("JIBStanice"), r.getString("Naziv"), r.getString("Adresa"), r.getInt("PostanskiBroj"), r.getString("mjesto.naziv"), r.getString("BrojTelefona"), r.getInt("BrojPerona"), r.getString("WebStranica"), r.getString("Email"), r.getInt("IdStajalista"), r.getString("Stanje"));
 	       	}
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
@@ -269,13 +287,13 @@ public class AutobuskaStanica {
 	    return false;
 	}
 	
-	public static boolean izmjenaAutobuskeStanice(String jib, String naziv, String adresa, int brojPerona, String brojTelefona, String webStranica, String email) {
-		String sql="update autobuska_stanica set Naziv=?, Adresa=?, BrojPerona=?, BrojTelefona=?, WebStranica=?, Email=? where JIBStanice=?;";
+	public static boolean izmjenaAutobuskeStanice(String jib, String naziv, String adresa, int brojPerona, String brojTelefona, String webStranica, String email, int idStajalista) {
+		String sql="update autobuska_stanica, autobusko_stajaliste set autobuska_stanica.Naziv=?, autobusko_stajaliste.Naziv=?, Adresa=?, BrojPerona=?, BrojTelefona=?, WebStranica=?, Email=? where JIBStanice=? and autobusko_stajaliste.IdStajalista=?;";
 		Connection c = null;
 		PreparedStatement s = null;
 	    try {
 	       	c=Util.getConnection();
-	    	s = Util.prepareStatement(c, sql, false, naziv, adresa, brojPerona, brojTelefona, webStranica, email, jib);
+	    	s = Util.prepareStatement(c, sql, false, naziv, naziv, adresa, brojPerona, brojTelefona, webStranica, email, jib, idStajalista);
 	       	s.execute();
 	       	return true;
 	    } catch(SQLException e) {

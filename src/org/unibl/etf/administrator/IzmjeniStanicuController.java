@@ -141,7 +141,7 @@ public class IzmjeniStanicuController implements Initializable {
 								& postanskiBrojTextField.validate()
 									& webStranicaTextField.validate()
 										& emailTextField.validate()) {
-	    	if(AutobuskaStanica.izmjenaAutobuskeStanice(jibTextField.getText().trim(), nazivTextField.getText().trim(), adresaTextField.getText().trim(), Integer.parseInt(brojPeronaTextField.getText().trim()), brojTelefonaTextField.getText().trim(), webStranicaTextField.getText().trim(), emailTextField.getText().trim())) {
+	    	if(AutobuskaStanica.izmjenaAutobuskeStanice(jibTextField.getText().trim(), nazivTextField.getText().trim(), adresaTextField.getText().trim(), Integer.parseInt(brojPeronaTextField.getText().trim()), brojTelefonaTextField.getText().trim(), webStranicaTextField.getText().trim(), emailTextField.getText().trim(), autobuskaStanica.getIdStajalista())) {
 	    		//autobuskaStanica.setJib();
 		    	autobuskaStanica.setNaziv(nazivTextField.getText().trim());
 		    	autobuskaStanica.setBrojPerona(Integer.parseInt(brojPeronaTextField.getText().trim()));
