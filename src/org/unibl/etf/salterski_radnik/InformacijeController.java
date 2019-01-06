@@ -10,12 +10,17 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.MonthDay;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.unibl.etf.karta.Karta;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Praznik;
+import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -49,10 +54,9 @@ import javafx.scene.paint.Color;
 
 public class InformacijeController implements Initializable{
 	
-	private Set<String> mjestaSet = new HashSet<>();
+	private List<Stajaliste> stajalistaList = new ArrayList<>();
 	private static ObservableList<Karta> karteObs = FXCollections.observableArrayList();
-	public static String nazivMjesta;
-	
+	public static Stajaliste stajaliste = new Stajaliste();
 	
 	
 	
@@ -109,6 +113,13 @@ public class InformacijeController implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		
+		
+		stajalistaList = Stajaliste.getStajalisteList();
+		
+		// stajaliste = stajalistaList.stream().filter(s -> s.get()==)
+		
+		
 		clearImageView.setVisible(false);
 		
 		mjestoTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
@@ -145,8 +156,8 @@ public class InformacijeController implements Initializable{
 		
 		karteTable.setItems(karteObs);
 		datum.setValue(LocalDate.now());
-		nazivMjesta = getNazivMjesta();
-		ucitajMjesta();
+		//nazivMjesta = getNazivMjesta();
+	//	ucitajMjesta();
 		karteTable.setPlaceholder(new Label("Odaberite relaciju i datum"));
 		polasciRadioButton.setSelected(true);
 		mjestoTextField.setPromptText("Destinacija");
@@ -162,10 +173,10 @@ public class InformacijeController implements Initializable{
 		cijenaColumn.setCellValueFactory(new PropertyValueFactory<>("cijena"));
 		peronColumn.setCellValueFactory(new PropertyValueFactory<>("peron"));
 		
-		Util.setAutocompleteList(mjestoTextField, mjestaSet);
+		Util.setAutocompleteList(mjestoTextField, stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()));
 		//mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),Util.collectionValidator(mjestoTextField, mjestaSet, true, "Unesite mjesto"));
 		
-		
+		System.out.println("Stajaliste stanice: " +);
 		polasciDolasciComboBox.getItems().addAll("POLASCI", "DOLASCI");
 		polasciDolasciComboBox.getSelectionModel().selectFirst();
 		polasciDolasciComboBox.setStyle("-fx-font-weight: bold;");
@@ -187,15 +198,15 @@ public class InformacijeController implements Initializable{
 			//if(mjestoTextField.validate()){
 				karteObs.clear();
 				if(polasciRadioButton.isSelected()) {
-						for(Karta karta : Karta.getKarteList(nazivMjesta, mjestoTextField.getText())) {
-							daniUSedmici = karta.getLinija().getDaniUSedmici();
-							if(daniUSedmici.contains(datum.getValue().getDayOfWeek().toString()))
+						for(Karta karta : Karta.getKarteList(stajaliste, new Stajaliste(mjestoTextField.getText()))) {
+							daniUSedmici = karta.getRelacija().getDani();
+							if(daniUSedmici.contains(String.valueOf(datum.getValue().getDayOfWeek().getValue())))
 								karteObs.add(karta);
 						}	
 				}
 				else {
-					for(Karta karta : Karta.getKarteList(mjestoTextField.getText(),nazivMjesta)) {
-						daniUSedmici = karta.getLinija().getDaniUSedmici();
+					for(Karta karta : Karta.getKarteList(new Stajaliste(mjestoTextField.getText()),stajaliste)) {
+						daniUSedmici = karta.getRelacija().getDani();
 						karteObs.add(karta);
 					}
 				}
@@ -272,7 +283,7 @@ public class InformacijeController implements Initializable{
 		alert.showAndWait();
 	
 	}
-	public void ucitajMjesta() {
+	/*public void ucitajMjesta() {
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
@@ -291,7 +302,7 @@ public class InformacijeController implements Initializable{
 		finally {
 			Util.close(r, s, c);
 		}
-	}
+	}*/
 
 	public String getNazivMjesta() {
 		Connection c = null;

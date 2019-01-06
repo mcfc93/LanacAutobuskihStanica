@@ -62,7 +62,7 @@ public class ListaLinijaController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		linijeObsList = FXCollections.observableArrayList();
-		linijeObsList.setAll(Linija.getLinije());
+		//linijeObsList.setAll(Linija.getLinije());
 		linijeTableView.setItems(linijeObsList);
 		linijeTableView.setPlaceholder(new Label("Nema linija u tabeli."));
     	nazivLinijeColumn.setCellValueFactory(new PropertyValueFactory<>("nazivLinije"));

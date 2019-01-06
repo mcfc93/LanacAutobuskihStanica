@@ -85,7 +85,7 @@ public class IzmjenaPrevoznikaController implements Initializable{
 		telefonTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getTelefon());
 		webAdresaTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getWebAdresa());
 		tekuciRacunTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getRacun());
-		postanskiBrojTextField.setText(String.valueOf(ListaPrevoznikaController.odabraniPrevoznik.getPostanskiBroj() + " - " + Mjesto.getPlaceList().stream().filter(m -> m.getPostanskiBroj()==ListaPrevoznikaController.odabraniPrevoznik.getPostanskiBroj()).findFirst().get().getNaziv()));
+		postanskiBrojTextField.setText(String.valueOf(ListaPrevoznikaController.odabraniPrevoznik.getMjesto().getPostanskiBroj() + " - " + Mjesto.getPlaceList().stream().filter(m -> m.getPostanskiBroj()==ListaPrevoznikaController.odabraniPrevoznik.getMjesto().getPostanskiBroj()).findFirst().get().getNaziv()));
 		
 		
 		//Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());	
@@ -125,7 +125,7 @@ public class IzmjenaPrevoznikaController implements Initializable{
 				ListaPrevoznikaController.odabraniPrevoznik.setEmail(emailTextField.getText());
 				ListaPrevoznikaController.odabraniPrevoznik.setWebAdresa(webAdresaTextField.getText());
 				ListaPrevoznikaController.odabraniPrevoznik.setRacun(tekuciRacunTextField.getText());
-				ListaPrevoznikaController.odabraniPrevoznik.setPostanskiBroj(Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()));
+				ListaPrevoznikaController.odabraniPrevoznik.getMjesto().setPostanskiBroj(Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()));
 				Platform.runLater(() -> {
 		    		Util.getNotifications("Obavještenje", "Prevoznik izmjenjen.", "Information").show();
 		    	});

@@ -39,7 +39,7 @@ import javafx.embed.swing.SwingFXUtils;
 
 public class MjesecnaKartaController implements Initializable {
 	
-	public static MjesecnaKarta karta = new MjesecnaKarta();
+	public static MjesecnaKarta karta;
 	public static LocalDate datum;
 	public static final int JANUAR = 1;
 	public static final int DECEMBAR = 12;
@@ -131,7 +131,7 @@ public class MjesecnaKartaController implements Initializable {
     				(localDate.getMonthValue() + "-" + localDate.getYear()));
     	
     	if(!ProdajaKarataController.produzavanjeKarte) {
-    		prevoznikLabel.setText(karta.getNazivPrevoznika());
+    		prevoznikLabel.setText(karta.getRelacija().getLinija().getPrevoznik().getNaziv());
     		try {
     			slika.setImage(new Image(ProdajaKarataController.odabranaSlika.toURI().toString()));
     		} catch (Exception e) {
@@ -140,18 +140,18 @@ public class MjesecnaKartaController implements Initializable {
     		}
     	}
     	else {
-    		prevoznikLabel.setText(karta.getPrevoznik().getNaziv());
+    		prevoznikLabel.setText(karta.getRelacija().getLinija().getPrevoznik().getNaziv());
     		try {
     			slika.setImage(new Image(karta.getSlika().toURI().toString()));
     		} catch (Exception e) {
     			e.printStackTrace();
     		}
-    		linijaLabel.setText(karta.getNazivLinije());
+    		linijaLabel.setText(karta.getRelacija().getLinija().getNazivLinije());
     		barcodeLabel.setVisible(true);
-    		barcodeLabel.setText(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
+    		barcodeLabel.setText(String.format("%013d", karta.getSerijskiBroj()));
     		BarcodeEAN codeEAN = new BarcodeEAN();
-System.out.println(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
-	    	codeEAN.setCode(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
+System.out.println(String.format("%013d", karta.getSerijskiBroj()));
+	    	codeEAN.setCode(String.format("%013d", karta.getSerijskiBroj()));
             codeEAN.setCodeType(BarcodeEAN.EAN13); 
             codeEAN.setBarHeight(40);
             //kreiranje slike
@@ -174,10 +174,10 @@ System.out.println(String.format("%013d", Integer.parseInt(karta.getIdKarte())))
     	//prevoznikLabel.setText(karta.getNazivPrevoznika());
     	//prevoznikLabel.setText(karta.getPrevoznik().getNaziv());
     	
-    	System.out.println("Prevoznik=" + karta.getPrevoznik().getNaziv());
+    	System.out.println("Prevoznik=" + karta.getRelacija().getLinija().getPrevoznik().getNaziv());
     	
     	//linijaLabel.setText(karta.getNazivLinije());
-    	linijaLabel.setText(karta.getLinija().getNazivLinije());
+    	linijaLabel.setText(karta.getRelacija().getLinija().getNazivLinije());
     	relacijaLabel.setText(karta.getRelacija().getPolaziste() + " - " + karta.getRelacija().getOdrediste());
     	mjesecVazenjaLabel.setText(mjesecVazenjaString);
     	tipLabel.setText(karta.getTip().toString().toUpperCase());
@@ -222,10 +222,9 @@ System.out.println(String.format("%013d", Integer.parseInt(karta.getIdKarte())))
     void stampaj(ActionEvent event) {
 
     	if(ProdajaKarataController.produzavanjeKarte) {
-System.out.println("-------------------------- produzavanje: " + Integer.parseInt(karta.getIdKarte()) );
         	barcodeLabel.setVisible(true);
-        	barcodeLabel.setText(karta.getIdKarte());
-System.out.println(barcodeLabel.getText());
+        	barcodeLabel.setText(String.valueOf(karta.getSerijskiBroj()));
+        	System.out.println(barcodeLabel.getText());
     		//karta = MjesecnaKarta.pronadjiKartu(serijskiBroj);
     		//System.out.println("Pronadjena karta: " + karta);
     	//	MjesecnaKarta.produziKartu(karta);
@@ -234,8 +233,8 @@ System.out.println(barcodeLabel.getText());
     		//MjesecnaKarta.produziKartu(karta);
     		
     		BarcodeEAN codeEAN = new BarcodeEAN();
-    		System.out.println(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
-	    	codeEAN.setCode(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
+    		System.out.println(String.format("%013d", karta.getSerijskiBroj()));
+	    	codeEAN.setCode(String.format("%013d", karta.getSerijskiBroj()));
             codeEAN.setCodeType(BarcodeEAN.EAN13); 
             codeEAN.setBarHeight(40);
             //kreiranje slike
@@ -243,7 +242,7 @@ System.out.println(barcodeLabel.getText());
             BufferedImage bufferedImage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
             bufferedImage.getGraphics().drawImage(img, 0, 0, null);
     		barcodeLabel.setVisible(true);
-    		barcodeLabel.setText(String.format("%013d", Integer.parseInt(karta.getIdKarte())));
+    		barcodeLabel.setText(String.format("%013d", karta.getSerijskiBroj()));
         	barcodeImageView.setImage(SwingFXUtils.toFXImage(bufferedImage, null));
         	
         	
@@ -265,7 +264,7 @@ System.out.println(barcodeLabel.getText());
 	        
 			WritableImage image = mjesecnaAnchorPane.snapshot(parameters, null);
         	
-        	File file = new File("src\\slikemjesecnekarte\\mjesecna_" + String.format("%013d", Integer.parseInt(karta.getIdKarte())) + "-" + mjesecVazenjaString + ".png");
+        	File file = new File("src\\slikemjesecnekarte\\mjesecna_" + String.format("%013d", karta.getSerijskiBroj()) + "-" + mjesecVazenjaString + ".png");
 			try {
 				ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
 			}catch (IOException e) {
@@ -318,10 +317,10 @@ System.out.println(barcodeLabel.getText());
 	    	//System.out.println(karta);
 
 	    	barcodeLabel.setVisible(true);
-	    	barcodeLabel.setText(karta.getIdKarte());
+	    	barcodeLabel.setText(String.valueOf(karta.getSerijskiBroj()));
 	    	int brojKarata = Karta.provjeriBrojKarata(karta, karta.getDatumPolaska());
 			Karta.kreirajKartu(karta, brojKarata+1, datum);
-			ProdajaKarataController.idMjesecneKarte = MjesecnaKarta.kreiraj2(karta);
+			ProdajaKarataController.idMjesecneKarte = MjesecnaKarta.kreirajKartu(karta);
 			
         	System.out.println("-------------------------- prodaja" + ProdajaKarataController.idMjesecneKarte);
 

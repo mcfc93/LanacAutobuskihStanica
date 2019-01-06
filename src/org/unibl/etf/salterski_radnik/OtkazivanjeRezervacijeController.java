@@ -77,7 +77,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 				cijenaTextField.setText(trazenaKarta.getCijena()  + "KM");
 				relacijaTextField.setText(trazenaKarta.getRelacija().getPolaziste() + " - " + trazenaKarta.getRelacija().getOdrediste());
 				datumTextField.setText(trazenaKarta.getDatumIzdavanja().toString());
-				linijaTextField.setText(trazenaKarta.getLinija().getNazivLinije());		
+				linijaTextField.setText(trazenaKarta.getRelacija().getLinija().getNazivLinije());		
 				// otkazivanje jednokratne
 			}
 			else {
@@ -87,7 +87,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 				cijenaTextField.setText(mjesecnaKarta.getCijena()  + "KM");
 				relacijaTextField.setText(mjesecnaKarta.getRelacija().getPolaziste() + " - " + mjesecnaKarta.getRelacija().getOdrediste());
 				datumTextField.setText(mjesecnaKarta.getDatumIzdavanja().toString());
-				linijaTextField.setText(mjesecnaKarta.getLinija().getNazivLinije());		
+				linijaTextField.setText(mjesecnaKarta.getRelacija().getLinija().getNazivLinije());		
 			}
 			
 		}

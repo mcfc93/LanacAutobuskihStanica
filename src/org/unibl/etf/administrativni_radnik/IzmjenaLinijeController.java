@@ -138,8 +138,8 @@ public class IzmjenaLinijeController implements Initializable {
 		if(!relacijeObs.isEmpty()) {
 			relacijeComboBox.setItems(relacijeObs);
 			relacijeComboBox.getSelectionModel().selectFirst();
-			polazisteTextField.setText(relacijeComboBox.getValue().getPolaziste());
-			odredisteTextField.setText(relacijeComboBox.getValue().getOdrediste());
+			polazisteTextField.setText(relacijeComboBox.getValue().getPolaziste().getNaziv());
+			odredisteTextField.setText(relacijeComboBox.getValue().getOdrediste().getNaziv());
 			vrijemePolaskaTimeChooser.setValue(relacijeComboBox.getValue().getVrijemePolaska().toLocalTime());
 			vrijemeDolaskaTimeChooser.setValue(relacijeComboBox.getValue().getVrijemeDolaska().toLocalTime());
 			cijenaJednokratnaTextField.setText(Double.toString(relacijeComboBox.getValue().getCijenaJednokratna()));
@@ -155,7 +155,6 @@ public class IzmjenaLinijeController implements Initializable {
 		peronComboBox.setItems(peroniObs);
 		peronComboBox.setValue(ListaLinijaController.odabranaLinija.getPeron());
 		checkBoxInit();
-		loadCBListeners();
 		validateSetup();
 
 	}
@@ -171,41 +170,12 @@ public class IzmjenaLinijeController implements Initializable {
 		 Stage stage = (Stage) exitImageView.getScene().getWindow();
 		    stage.close();
 	}
+	
 	private void checkBoxInit() {
-		String daniUSedmici = ListaLinijaController.odabranaLinija.getDaniUSedmici();
-		if(daniUSedmici.contains("MONDAY")) {
-			ponedjeljakCB.setSelected(true);
-			daniUSedmiciList.add("MONDAY");
-		}
-		if(daniUSedmici.contains("TUESDAY")) {
-			utorakCB.setSelected(true);
-			daniUSedmiciList.add("TUESDAY");
-		}
-		if(daniUSedmici.contains("WEDNESDAY")) {
-			srijedaCB.setSelected(true);
-			daniUSedmiciList.add("WEDNESDAY");
-		}
-		if(daniUSedmici.contains("THURSDAY")) {
-			cetvrtakCB.setSelected(true);
-			daniUSedmiciList.add("THURSDAY");
-		}
-		if(daniUSedmici.contains("FRIDAY")) {
-			petakCB.setSelected(true);
-			daniUSedmiciList.add("FRIDAY");
-		}
-		if(daniUSedmici.contains("SATURDAY")) {
-			subotaCB.setSelected(true);
-			daniUSedmiciList.add("SATURDAY");
-		}
-		if(daniUSedmici.contains("SUNDAY")) {
-			nedjeljaCB.setSelected(true);
-			daniUSedmiciList.add("SUNDAY");
-
-		}
-		linijaAktivnaCB.setSelected("Aktivno".equals(ListaLinijaController.odabranaLinija.getStanje()));
+		
 	}
 	
-	public void loadCBListeners() {
+	/*public void loadCBListeners() {
 		ponedjeljakCB.selectedProperty().addListener(new ChangeListener<Boolean>() {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -273,7 +243,7 @@ public class IzmjenaLinijeController implements Initializable {
 		    }
 		});
 		
-	}
+	}*/
 
 	public boolean showPotvrda() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -286,22 +256,15 @@ public class IzmjenaLinijeController implements Initializable {
 
 	@FXML
 	public void izmjenaLinije() {
-		mapiranjeDana();
+		//mapiranjeDana();
 		if(showPotvrda()) {
-			if(Linija.izmjeniLiniju(ListaLinijaController.odabranaLinija,nazivLinijeTextField.getText(),peronComboBox.getValue(),daniString, (linijaAktivnaCB.isSelected())? "Aktivno":"Blokirano")) {
-				ListaLinijaController.odabranaLinija.setStanje("Aktivno");
-				ListaLinijaController.odabranaLinija.setNazivLinije(nazivLinijeTextField.getText());
-				ListaLinijaController.odabranaLinija.setDaniUSedmici(daniString);
-				ListaLinijaController.odabranaLinija.setPeron(peronComboBox.getValue());
-				ListaLinijaController.odabranaLinija.setStanje(linijaAktivnaCB.isSelected()? "Aktivno":"Blokirano");
-				daniString="";
-			}
-				daniString="";
-			 Stage stage = (Stage) okButton.getScene().getWindow();
+			ListaLinijaController.odabranaLinija.setNazivLinije(nazivLinijeTextField.getText());
+			ListaLinijaController.odabranaLinija.setPeron(peronComboBox.getValue());
+			if(Linija.izmjeniLiniju(ListaLinijaController.odabranaLinija)) {
+				Stage stage = (Stage) okButton.getScene().getWindow();
 			    stage.close();
+			}
 		}
-		daniString="";
-
 	}
 
 	public void mapiranjeDana() {
@@ -319,11 +282,12 @@ public class IzmjenaLinijeController implements Initializable {
 	
 	@FXML
 	public void comboBoxChange(ActionEvent event) {
-		polazisteTextField.setText(relacijeComboBox.getValue().getPolaziste());
-		odredisteTextField.setText(relacijeComboBox.getValue().getOdrediste());
+		polazisteTextField.setText(relacijeComboBox.getValue().getPolaziste().getNaziv());
+		odredisteTextField.setText(relacijeComboBox.getValue().getOdrediste().getNaziv());
 		vrijemePolaskaTimeChooser.setValue(relacijeComboBox.getValue().getVrijemePolaska().toLocalTime());
 		vrijemeDolaskaTimeChooser.setValue(relacijeComboBox.getValue().getVrijemeDolaska().toLocalTime());
 		cijenaJednokratnaTextField.setText(Double.toString(relacijeComboBox.getValue().getCijenaJednokratna()));
+		
 		if(relacijeComboBox.getValue().getCijenaMjesecna()==0)
 			cijenaMjesecnaTextField.clear();
 		else
@@ -349,8 +313,11 @@ public class IzmjenaLinijeController implements Initializable {
 		if(cijenaJednokratnaTextField.validate() & (  (cijenaMjesecnaTextField.getText().isEmpty()) ? true:cijenaMjesecnaTextField.validate() ) )
 		{
 			if(showPotvrda()) {
-				if(Relacija.izmjeniRelaciju(relacijeComboBox.getValue(),cijenaJednokratnaTextField.getText(),cijenaMjesecnaTextField.getText(),
-						vrijemePolaskaTimeChooser.getValue(),vrijemeDolaskaTimeChooser.getValue()))
+				relacijeComboBox.getValue().setCijenaJednokratna(Double.parseDouble(cijenaJednokratnaTextField.getText()));
+				//relacijeComboBox.getValue().setCijenaMjesecna(Double.parseDouble(cijenaMjesecnaTextField.getText()));
+				relacijeComboBox.getValue().setVrijemePolaska(Time.valueOf(vrijemePolaskaTimeChooser.getValue()));
+				relacijeComboBox.getValue().setVrijemeDolaska(Time.valueOf(vrijemeDolaskaTimeChooser.getValue()));
+				if(Relacija.izmijeniRelaciju(relacijeComboBox.getValue()))
 				{
 					relacijeComboBox.getValue().setCijenaJednokratna(Double.parseDouble(cijenaJednokratnaTextField.getText()));
 					relacijeComboBox.getValue().setVrijemePolaska(Time.valueOf(vrijemePolaskaTimeChooser.getValue()));

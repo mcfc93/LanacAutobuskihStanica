@@ -20,96 +20,91 @@ import java.util.logging.Level;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.salterski_radnik.ProdajaKarataController;
 import org.unibl.etf.salterski_radnik.SalterskiRadnikController;
+import org.unibl.etf.util.Mjesto;
+import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 
 public class Karta {
-	protected int idKarte;
-	protected Linija linija;
+	protected int serijskiBroj;
 	protected Relacija relacija;
-	protected Time vrijemePolaska;
-	protected Time vrijemeDolaska;
-	protected double cijena; 
-	protected LocalDate datumIzdavanja;
-	protected Prevoznik prevoznik;
-	protected String imeZaposlenog;
-	protected String JIBStanice;
-	protected int peron;
-	protected String nazivPrevoznika;
-	protected String nazivLinije;
+	protected Date datumIzdavanja;
 	protected Date datumPolaska;
 	protected int brojSjedista;
+	protected String JIBStanice;
 	private boolean povratna;
 	private boolean rezervacija;
-	protected String polaziste;
-	protected String odrediste;
 	
 	
-	public String getPolaziste() {
-		return relacija.getPolaziste();
-	}
+	
+	
 
-////////////////////
-
-
-	public Karta(int idKarte, Linija linija, Relacija relacija, Time vrijemePolaska, Time vrijemeDolaska, double cijena,
-			LocalDate datumIzdavanja, Prevoznik prevoznik, String imeZaposlenog, String jIBStanice, int peron,
-			String nazivPrevoznika, String nazivLinije, Date datumPolaska, int brojSjedista, boolean povratna,
-			boolean rezervacija, String polaziste, String odrediste) {
+	public Karta() {
 		super();
-		this.idKarte = idKarte;
-		this.linija = linija;
-		this.relacija = relacija;
-		this.vrijemePolaska = vrijemePolaska;
-		this.vrijemeDolaska = vrijemeDolaska;
-		this.cijena = cijena;
-		this.datumIzdavanja = datumIzdavanja;
-		this.prevoznik = prevoznik;
-		this.imeZaposlenog = imeZaposlenog;
-		JIBStanice = jIBStanice;
-		this.peron = peron;
-		this.nazivPrevoznika = nazivPrevoznika;
-		this.nazivLinije = nazivLinije;
-		this.datumPolaska = datumPolaska;
-		this.brojSjedista = brojSjedista;
-		this.povratna = povratna;
-		this.rezervacija = rezervacija;
-		this.polaziste = polaziste;
-		this.odrediste = odrediste;
-	}
-
-////////////////////
-
-	public String getOdrediste() {
-		return relacija.getOdrediste();
-	}
-
-
-	public boolean isRezervacija() {
-		return rezervacija;
-	}
-
-	public void setRezervacija(boolean rezervacija) {
-		this.rezervacija = rezervacija;
-	}
-
-	public Karta(int idKarte, double cijena, String polaziste, String odrediste, String nazivLinije, Date datum) {
 		this.relacija = new Relacija();
-		this.linija = new Linija();
-		this.linija.setNazivLinije(nazivLinije);
-		this.idKarte = idKarte;
-		this.cijena = cijena;
-		this.relacija.setPolaziste(polaziste);
-		this.relacija.setOdrediste(odrediste);
-		this.nazivLinije = nazivLinije;
-		this.datumIzdavanja = datum.toLocalDate();
+	}
+	/*
+	 * konstruktor za pronalazak obicnih karata
+	 * */
+	
+
+	public Karta(int serijskiBroj, Linija linija, Relacija relacija, Date datumIzdavanja) {
+		// TODO Auto-generated constructor stub
+		this.serijskiBroj = serijskiBroj;
+		this.setRelacija(relacija);
+		this.getRelacija().setLinija(linija);
+		this.datumIzdavanja = datumIzdavanja;
 	}
 	
-	public int getBrojSjedista() {
-		return brojSjedista;
+
+	public Karta(Relacija relacija) {
+		super();
+		this.relacija = relacija;
 	}
 
-	public void setBrojSjedista(int brojSjedista) {
-		this.brojSjedista = brojSjedista;
+	/*
+	 * konstruktor za ucitavanje mjesecnih karata
+	 */
+	
+	public Karta(Relacija relacija, double cijenaMjesecna) {
+		// TODO Auto-generated constructor stub
+		super();
+		this.relacija = relacija;
+		this.relacija.setCijenaMjesecna(cijenaMjesecna);
+	}
+
+
+	public double getCijena() {
+		return ProdajaKarataController.kupovinaMjesecne? relacija.getCijenaMjesecna(): relacija.getCijenaJednokratna();
+	}
+	public void setCijena(double cijena) {
+//		(ProdajaKarataController.kupovinaMjesecne==true) ? relacija.setCijenaMjesecna(cijena) : relacija.setCijenaJednokratna(cijena);
+	if(ProdajaKarataController.kupovinaMjesecne)
+		relacija.setCijenaMjesecna(cijena);
+	else
+		relacija.setCijenaJednokratna(cijena);
+	}
+	public int getSerijskiBroj() {
+		return serijskiBroj;
+	}
+
+	public void setSerijskiBroj(int serijskiBroj) {
+		this.serijskiBroj = serijskiBroj;
+	}
+
+	public Relacija getRelacija() {
+		return relacija;
+	}
+
+	public void setRelacija(Relacija relacija) {
+		this.relacija = relacija;
+	}
+
+	public Date getDatumIzdavanja() {
+		return datumIzdavanja;
+	}
+
+	public void setDatumIzdavanja(Date datumIzdavanja) {
+		this.datumIzdavanja = datumIzdavanja;
 	}
 
 	public Date getDatumPolaska() {
@@ -120,130 +115,20 @@ public class Karta {
 		this.datumPolaska = datumPolaska;
 	}
 
-	public String getNazivLinije() {
-		return nazivLinije;
-	}
-	public void setNazivLinije(String nazivLinije) {
-		this.nazivLinije = nazivLinije;
-	}
-	public Time getVrijemePolaska() {
-		return vrijemePolaska;
-	}
-	public void setVrijemePolaska(Time vrijemePolaska) {
-		this.vrijemePolaska = vrijemePolaska;
-	}
-	public Time getVrijemeDolaska() {
-		return vrijemeDolaska;
-	}
-	public void setVrijemeDolaska(Time vrijemeDolaska) {
-		this.vrijemeDolaska = vrijemeDolaska;
-	}
-	public String getImeZaposlenog() {
-		return imeZaposlenog;
-	}
-	public void setImeZaposlenog(String imeZaposlenog) {
-		this.imeZaposlenog = imeZaposlenog;
-	}
-	public int getPeron() {
-		return peron;
-	}
-	public void setPeron(int peron) {
-		this.peron = peron;
-	}
-	public String getNazivPrevoznika() {
-		return linija.getNazivPrevoznika();
-	}
-	
-	public Karta(Linija linija, Relacija relacija, Time vrijemePolaska, Time vrijemeDolaska, double cijena,
-			LocalDate datumIzdavanja, Prevoznik prevoznik, String imeZaposlenog, String JIBStanice) {
-		super();
-		this.linija = linija;
-		this.relacija = relacija;
-		this.vrijemePolaska = vrijemePolaska;
-		this.vrijemeDolaska = vrijemeDolaska;
-		this.cijena = cijena;
-		this.datumIzdavanja = datumIzdavanja;
-		this.prevoznik = prevoznik;
-		this.imeZaposlenog = imeZaposlenog;
-		this.nazivPrevoznika = prevoznik.getNaziv();
-		this.peron = linija.getPeron();
-		this.nazivLinije = linija.getNazivLinije();
-		this.JIBStanice = JIBStanice;
-	}
-	
-	
-	
-	public Karta() {
-		this.linija = new Linija();
-		this.prevoznik = new Prevoznik();
-		this.relacija = new Relacija();
+	public int getBrojSjedista() {
+		return brojSjedista;
 	}
 
-	public Karta(Linija linija, Relacija relacija, String daniUSedmici) {
-		// TODO Auto-generated constructor stub
-		this.linija = linija;
-		this.relacija = relacija;
-		this.linija.setDaniUSedmici(daniUSedmici);
+	public void setBrojSjedista(int brojSjedista) {
+		this.brojSjedista = brojSjedista;
 	}
 
 	public String getJIBStanice() {
 		return JIBStanice;
 	}
+
 	public void setJIBStanice(String jIBStanice) {
 		JIBStanice = jIBStanice;
-	}
-	public String getIdKarte() {
-		return String.format("%013d",idKarte);
-	}
-	public void setIdKarte(int idKarte) {
-		this.idKarte = idKarte;
-	}
-	public Linija getLinija() {
-		return linija;
-	}
-	public void setLinija(Linija linija) {
-		this.linija = linija;
-	}
-	public Relacija getRelacija() {
-		return relacija;
-	}
-	public void setRelacija(Relacija relacija) {
-		this.relacija = relacija;
-	}
-	public double getCijena() {
-		return cijena;
-	}
-	public void setCijena(double cijena) {
-		this.cijena = cijena;
-	}
-	public LocalDate getDatumIzdavanja() {
-		return datumIzdavanja;
-	}
-	public void setDatumIzdavanja(LocalDate datumIzdavanja) {
-		this.datumIzdavanja = datumIzdavanja;
-	}
-	public Prevoznik getPrevoznik() {
-		return prevoznik;
-	}
-	public void setPrevoznik(Prevoznik prevoznik) {
-		this.prevoznik = prevoznik;
-	}
-	public String getIzdaoZaposleni() {
-		return  PrijavaController.nalog.getIme();
-	}
-	public void setIzdaoZaposleni(String izdaoZaposleni) {
-		this.imeZaposlenog = izdaoZaposleni;
-	}
-	
-
-
-	@Override
-	public String toString() {
-		return "Karta [idKarte=" + idKarte + ", linija=" + linija + ", relacija=" + relacija + ", vrijemePolaska="
-				+ vrijemePolaska + ", vrijemeDolaska=" + vrijemeDolaska + ", cijena=" + cijena + ", datumIzdavanja="
-				+ datumIzdavanja + ", prevoznik=" + prevoznik + ", imeZaposlenog=" + imeZaposlenog + ", JIBStanice="
-				+ JIBStanice + ", peron=" + peron + ", nazivPrevoznika=" + nazivPrevoznika + ", nazivLinije="
-				+ nazivLinije + ", datumPolaska=" + datumPolaska + "]";
 	}
 
 	public boolean isPovratna() {
@@ -254,27 +139,15 @@ public class Karta {
 		this.povratna = povratna;
 	}
 
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + idKarte;
-		return result;
+	public boolean isRezervacija() {
+		return rezervacija;
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Karta other = (Karta) obj;
-		if (idKarte != other.idKarte)
-			return false;
-		return true;
+
+	public void setRezervacija(boolean rezervacija) {
+		this.rezervacija = rezervacija;
 	}
+
+
 
 	public void stampajKartu()  {
 		StringBuilder sb = new StringBuilder();
@@ -283,91 +156,53 @@ public class Karta {
 		sb.append(String.format("Informacije: %s%s", PrijavaController.autobuskaStanica.getBrojTelefona(), System.lineSeparator()));
 		sb.append(String.format("WEB stranica: %s%s", PrijavaController.autobuskaStanica.getWebStranica(), System.lineSeparator()));
 		sb.append(String.format("======================================%s%s", System.lineSeparator(),System.lineSeparator()));
-		sb.append(String.format("Prevoznik: %s%s", nazivPrevoznika, System.lineSeparator()));
-		sb.append(String.format("%s : %s%s", "Naziv linije:", nazivLinije, System.lineSeparator()));
+		sb.append(String.format("Prevoznik: %s%s", relacija.getLinija().getPrevoznik().getNaziv(), System.lineSeparator()));
+		sb.append(String.format("%s : %s%s", "Naziv linije:", relacija.getLinija().getNazivLinije(), System.lineSeparator()));
 		sb.append(System.lineSeparator());
 		sb.append(String.format("%10s %s %10s%s", " ", "AUTOBUSKA KARTA", " ", System.lineSeparator()));
 		sb.append(String.format("%10s (%s) %10s%s", " ", povratna? "povratna":"jednosmjerna" , " ", System.lineSeparator()));
 		sb.append(System.lineSeparator());
-
 		sb.append(String.format("Prodajno mjesto: %s%s", PrijavaController.autobuskaStanica.getGrad(), System.lineSeparator()));
-		sb.append(String.format("Serijski broj: %06d%s", idKarte, System.lineSeparator()));
-		sb.append(String.format("Peron: %d%s", peron, System.lineSeparator()));
+		sb.append(String.format("Serijski broj: %06d%s", serijskiBroj, System.lineSeparator()));
+		sb.append(String.format("Peron: %d%s", relacija.getLinija().getPeron() , System.lineSeparator()));
 		sb.append(String.format("Sjediste: %d%s", brojSjedista, System.lineSeparator()));
 		sb.append(String.format("Relacija: %s - %s%s" , relacija.getPolaziste(), relacija.getOdrediste(), System.lineSeparator()));
 		sb.append("Izdata: " + LocalDate.now() + " " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")) + System.lineSeparator());
-		sb.append("Polazak: " + datumPolaska + " " + vrijemePolaska + System.lineSeparator());
-		sb.append("Dolazak: " + vrijemeDolaska + System.lineSeparator());
-		sb.append(String.format("%20s %.2f KM%s", "Cijena:", cijena, System.lineSeparator()));
+		sb.append("Polazak: " + datumPolaska + " " + relacija.getVrijemePolaska() + System.lineSeparator());
+		sb.append("Dolazak: " + relacija.getVrijemeDolaska() + System.lineSeparator());
+		sb.append(String.format("%20s %.2f KM%s", "Cijena:" + relacija.getCijenaJednokratna(), System.lineSeparator()));
 		sb.append(String.format("%20s %.2f KM%s", "Rezervacija:", rezervacija? ProdajaKarataController.REZERVACIJA: 0, System.lineSeparator()));
 		sb.append(String.format("%20s %.2f KM%s", "Stanicna usluga:", ProdajaKarataController.STANICNA_USLUGA,System.lineSeparator()));
-		sb.append(String.format("%20s %.2f KM%s%s", "Ukupna cijena:", cijena+ProdajaKarataController.STANICNA_USLUGA+ (rezervacija? ProdajaKarataController.REZERVACIJA: 0),System.lineSeparator(),System.lineSeparator()));
-
+		sb.append(String.format("%20s %.2f KM%s%s", "Ukupna cijena:", relacija.getCijenaJednokratna() + ProdajaKarataController.STANICNA_USLUGA+ (rezervacija? ProdajaKarataController.REZERVACIJA: 0),System.lineSeparator(),System.lineSeparator()));
 		sb.append(String.format("Na zahtjev kontrolora pokazati kartu!%s", System.lineSeparator()));
-		sb.append(String.format("Biletar: %s%s%s", imeZaposlenog, System.lineSeparator(),System.lineSeparator()));
+		sb.append(String.format("Biletar: %s%s%s", PrijavaController.nalog.getZaposleni().getIme(), System.lineSeparator(),System.lineSeparator()));
 		sb.append(String.format("%10sHvala na povjerenju!", " "));
-		
-		File file = new File("src\\jednokratnekarte\\karta" + String.format("%06d", idKarte)+".txt");
+		File file = new File("karte\\" + String.format("%06d", serijskiBroj)+".txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 		    writer.append(sb);
-		    
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	public static List<Karta> getMjesecneKarteList(String polaziste,String odrediste) {
-		List<Karta> karteList = new ArrayList<>();
-		Connection c = null;
-		PreparedStatement s = null;
-		ResultSet r = null;
-		String sql = "select DaniUSedmici,VrijemePolaska,NazivPrevoznika,Email,prevoznik.Adresa,WEBAdresa,Telefon,prevoznik.PostanskiBroj,NazivLinije,Peron,Polaziste,Odrediste,VrijemeDolaska,CijenaMjesecna,relacija.IdRelacije,relacija.IdLinije from linija join (relacija,prevoznik) "
-				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and ( (Polaziste=? && Odrediste=?) or (Odrediste=? && Polaziste=?) )";
-		try {
-			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false, polaziste, odrediste, polaziste, odrediste);
-			r = s.executeQuery();
-			String daniUSedmici;
-	       	while(r.next()) {
-	       		daniUSedmici = r.getString(1);
-				Time vrijemePolaska = r.getTime(2);
-				Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
-				Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10),r.getString(3));
-				Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
-				Karta k = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice());
-	       		karteList.add(k);
-	       	}
-	       	return karteList;
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-		finally {
-			Util.close(r, s, c);
-		}
-		return null;
-	}
 	
-	public static List<Karta> getKarteList(String polaziste,String odrediste) {
+	public static List<Karta> getKarteList(Stajaliste polaziste,Stajaliste odrediste) {
 		List<Karta> karteList = new ArrayList<>();
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
-		String sql = "select DaniUSedmici,VrijemePolaska,NazivPrevoznika,Email,prevoznik.Adresa,WEBAdresa,Telefon,prevoznik.PostanskiBroj,NazivLinije,Peron,Polaziste,Odrediste,VrijemeDolaska,CijenaJednokratna,relacija.IdRelacije,relacija.IdLinije from linija join (relacija,prevoznik) "
-				+ "on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?)";
+		String sql = "select * from linija join (relacija,prevoznik) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno')";
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false, polaziste, odrediste);
-			r = s.executeQuery();
-			String daniUSedmici;
+			s = Util.prepareStatement(c, sql, false, polaziste.getIdStajalista(), odrediste.getIdStajalista());
+			r = s.executeQuery();		
 	       	while(r.next()) {
-	       		daniUSedmici = r.getString(1);
-				Time vrijemePolaska = r.getTime(2);
-				Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
-				Linija linija = new Linija(r.getInt(16),r.getString(9), daniUSedmici,r.getInt(10),r.getString(3));
-				Relacija relacija = new Relacija(r.getInt(15),r.getInt(16),r.getString(11), r.getString(12));
-	       		Karta k = new Karta(linija, relacija, vrijemePolaska, r.getTime(13), r.getDouble(14), LocalDate.now(), prevoznik, PrijavaController.nalog.getKorisnickoIme(),PrijavaController.nalog.getIdStanice());
-	       		karteList.add(k);
+	       		System.out.println("found");
+	       		Prevoznik prevoznik = new Prevoznik(r.getString("JIBPrevoznika"), r.getString("prevoznik.NazivPrevoznika"), r.getString("prevoznik.Telefon"), r.getString("prevoznik.Email"));
+	       		Linija linija = new Linija(r.getInt("linija.IdLinije"), r.getString("linija.NazivLinije"), r.getInt("linija.Peron"), prevoznik, r.getInt("linija.VoznjaPraznikom"));
+	       		Relacija relacija = new Relacija(r.getInt("relacija.IdRelacije"), linija, polaziste, odrediste, r.getTime("VrijemePolaska"), r.getTime("VrijemeDolaska"), r.getDouble("CijenaJednokratna"), r.getString("Dani"));
+	       		Karta karta = new Karta(relacija);
+	       		karteList.add(karta);
 	       	}
 	       	return karteList;
 		}
@@ -387,7 +222,7 @@ public class Karta {
 		ResultSet r = null;
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, true, karta.getRelacija().getIdRelacije(), Date.valueOf(datum), brojSjedista, karta.getJIBStanice(),karta.getCijena());
+			s = Util.prepareStatement(c, sql, true, karta.getRelacija().getIdRelacije(), Date.valueOf(datum), brojSjedista, karta.getJIBStanice(),karta.getRelacija().getCijenaJednokratna());
 			s.executeUpdate();
 			r = s.getGeneratedKeys();
 			if(r.next()) {
@@ -417,21 +252,20 @@ public class Karta {
 		}
 	}
 	
-	public static Karta pronadjiKartu(int idKarte) {
+	public static Karta pronadjiKartu(int serijskiBroj) {
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
-		String sql = "select karta.SerijskiBroj,karta.Cijena,relacija.Polaziste,relacija.Odrediste,linija.NazivLinije,karta.Datum from karta "
-				+ "join (relacija,linija) on (karta.IdRelacije=relacija.IdRelacije) and (relacija.IdLinije=linija.IdLinije) "
-				+ " where karta.SerijskiBroj=?";
+		String sql = "select linija.NazivLinije, karta.Cijena, relacija.Polaziste, relacija.Odrediste, karta.DatumIzdavanja from karta join (relacija,linija) on "
+				+ "(karta.IdRelacije=relacija.IdRelacije) and (relacija.IdLinije=linija.IdLinije) where karta.SerijskiBroj=?";
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false, idKarte);
+			s = Util.prepareStatement(c, sql, false, serijskiBroj);
 			r = s.executeQuery();
 			if(r.next()) {
-				return new Karta(r.getInt("karta.SerijskiBroj"), r.getDouble("karta.Cijena"), r.getString("relacija.Polaziste"),
-						r.getString("relacija.Odrediste"), r.getString("linija.NazivLinije"), r.getDate("karta.Datum"));
-				
+				Linija linija = new Linija(r.getString("NazivLinije"));
+				Relacija relacija = new Relacija(r.getString("relacija.Polazite"), r.getString("relacija.Odrediste"));
+				Karta karta = new Karta(serijskiBroj,linija,relacija,r.getDate("karta.DatumIzdavanja"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -480,7 +314,8 @@ public class Karta {
 		return false;
 	}
 	
-	public static int provjeriBrojKarata(Karta k, Date datum) {
+	
+	public static int provjeriBrojKarata(Karta karta, Date datum) {
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
@@ -488,7 +323,7 @@ public class Karta {
 				+ "where (linija.IdLinije=?) and (karta.Datum=?) and (karta.Stanje='Aktivno')";
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false, k.getLinija().getIdLinije(), datum);
+			s = Util.prepareStatement(c, sql, false, karta.getRelacija().getLinija().getIdLinije(), datum);
 			r = s.executeQuery();
 			if(r.next())
 				return r.getInt(1);

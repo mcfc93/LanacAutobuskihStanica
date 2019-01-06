@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import org.unibl.etf.util.Mjesto;
 import org.unibl.etf.util.Util;
 
 public class Prevoznik {
@@ -16,62 +17,120 @@ public class Prevoznik {
 	private String email;
 	private String adresa;
 	private String telefon;
-	private int postanskiBroj;
+	private Mjesto mjesto;
 	private String webAdresa;
 	private String JIBPrevoznika;
 	private String racun;
+
+
+	/*
+	 * konstruktor za ucitavanje linije
+	 * 
+	 */
 	
-	public String getRacun() {
-		return racun;
+	public Prevoznik(String naziv) {
+		super();
+		this.naziv = naziv;
 	}
-
-	public void setRacun(String racun) {
-		this.racun = racun;
+	
+	
+	/*
+	 * konstruktor za kreiranje karte
+	 * 
+	 */
+	
+	public Prevoznik(String naziv, String email, String telefon, String jIBPrevoznika) {
+		super();
+		this.naziv = naziv;
+		this.email = email;
+		this.telefon = telefon;
+		JIBPrevoznika = jIBPrevoznika;
 	}
+	
+	/*
+	 * konstruktor za ucitavanje liste prevoznika
+	 * 	r.getString("JIBPrevoznika"), r.getString("NazivPrevoznika"), r.getString("Telefon"), 
+	 * r.getString("Email"), r.getString("WEBAdresa"), r.getString("TekuciRacun"), r.getInt("Adresa"), mjesto));
 
-	public Prevoznik(String naziv, String email, String adresa, String telefon, int postanskiBroj, String webAdresa,
-			String jIBPrevoznika, String racun) {
+	 */
+
+	public Prevoznik(String JIBPrevoznika, String naziv, String telefon, String email ,String webAdresa,
+			String racun, String adresa, Mjesto mjesto) {
 		super();
 		this.naziv = naziv;
 		this.email = email;
 		this.adresa = adresa;
 		this.telefon = telefon;
-		this.postanskiBroj = postanskiBroj;
+		this.mjesto = mjesto;
 		this.webAdresa = webAdresa;
-		JIBPrevoznika = jIBPrevoznika;
+		this.JIBPrevoznika = JIBPrevoznika;
 		this.racun = racun;
+	}	
+
+	public static List<Prevoznik> getPrevozniciList() {
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		List<Prevoznik> prevoznikList = new ArrayList<>();
+		String sql =  "select JIBPrevoznika,NazivPrevoznika,Telefon,Email,WebAdresa,TekuciRacun,Adresa,prevoznik.PostanskiBroj,mjesto.Naziv from prevoznik join mjesto where Stanje='Aktivno'";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false);
+			r = s.executeQuery();
+			while(r.next()) {
+			//	prevoznikList.add(new Prevoznik(r.getString("NazivPrevoznika"), r.getString("Email"), r.getString("Adresa"), r.getString("Telefon"), r.getInt("prevoznik.PostanskiBroj"), r.getString("WebAdresa"), r.getString("JIBPrevoznika"), r.getString("TekuciRacun")));
+				Mjesto mjesto = new Mjesto(r.getString("mjesto.Naziv"), r.getInt("mjesto.PostanskiBroj"));
+				prevoznikList.add(new Prevoznik(r.getString("JIBPrevoznika"), r.getString("NazivPrevoznika"), r.getString("Telefon"), r.getString("Email"), r.getString("WEBAdresa"), r.getString("TekuciRacun"), r.getString("Adresa"), mjesto));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			Util.close(r, s, c);
+		}
+		return prevoznikList;
 	}
 
-	public Prevoznik(String naziv, String email, String adresa, String webAdresa,String telefon, int postanskiBroj) {
-		super();
+
+
+	public String getNaziv() {
+		return naziv;
+	}
+
+	public void setNaziv(String naziv) {
 		this.naziv = naziv;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
 		this.email = email;
-		this.webAdresa = webAdresa;
+	}
+
+	public String getAdresa() {
+		return adresa;
+	}
+
+	public void setAdresa(String adresa) {
 		this.adresa = adresa;
+	}
+
+	public String getTelefon() {
+		return telefon;
+	}
+
+	public void setTelefon(String telefon) {
 		this.telefon = telefon;
-		this.postanskiBroj = postanskiBroj;
-	}
-	
-	public Prevoznik(String naziv, String jib) {
-		this.naziv = naziv;
-		this.JIBPrevoznika = jib;
-	}
-	
-
-	public Prevoznik(String nazivPrevoznika) {
-		this.naziv = nazivPrevoznika;
 	}
 
-	public Prevoznik() {
-		// TODO Auto-generated constructor stub
+	public Mjesto getMjesto() {
+		return mjesto;
 	}
 
-	public String getJIBPrevoznika() {
-		return JIBPrevoznika;
-	}
-
-	public void setJIBPrevoznika(String jIBPrevoznika) {
-		JIBPrevoznika = jIBPrevoznika;
+	public void setMjesto(Mjesto mjesto) {
+		this.mjesto = mjesto;
 	}
 
 	public String getWebAdresa() {
@@ -82,80 +141,35 @@ public class Prevoznik {
 		this.webAdresa = webAdresa;
 	}
 
-	public String getNaziv() {
-		return naziv;
-	}
-	public void setNaziv(String naziv) {
-		this.naziv = naziv;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getAdresa() {
-		return adresa;
-	}
-	public void setAdresa(String adresa) {
-		this.adresa = adresa;
-	}
-	public String getTelefon() {
-		return telefon;
-	}
-	public void setTelefon(String telefon) {
-		this.telefon = telefon;
-	}
-	
-	public int getPostanskiBroj() {
-		return postanskiBroj;
+	public String getJIBPrevoznika() {
+		return JIBPrevoznika;
 	}
 
-	public void setPostanskiBroj(int postanskiBroj) {
-		this.postanskiBroj = postanskiBroj;
-	}
-	
-
-	@Override
-	public String toString() {
-		return naziv;
+	public void setJIBPrevoznika(String jIBPrevoznika) {
+		JIBPrevoznika = jIBPrevoznika;
 	}
 
-	public static List<Prevoznik> getPrevozniciList() {
-		Connection c = null;
-		PreparedStatement s = null;
-		ResultSet r = null;
-		List<Prevoznik> prevoznikList = new ArrayList<>();
-		String sql =  "select JIBPrevoznika,NazivPrevoznika,Telefon,Email,WebAdresa,TekuciRacun,Adresa,prevoznik.PostanskiBroj,Naziv from prevoznik join mjesto on (prevoznik.PostanskiBroj=mjesto.PostanskiBroj) where Stanje='Aktivno'";
-		try {
-			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false);
-			r = s.executeQuery();
-			while(r.next()) {
-				prevoznikList.add(new Prevoznik(r.getString("NazivPrevoznika"), r.getString("Email"), r.getString("Adresa"), r.getString("Telefon"), r.getInt("prevoznik.PostanskiBroj"), r.getString("WebAdresa"), r.getString("JIBPrevoznika"), r.getString("TekuciRacun")));
-				
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		finally {
-			Util.close(r, s, c);
-		}
-		return prevoznikList;
+	public String getRacun() {
+		return racun;
 	}
-	
+
+	public void setRacun(String racun) {
+		this.racun = racun;
+	}
+
 	public static boolean izbrisiPrevoznika(Prevoznik prevoznik) {
-		/*
 		Connection c = null;
 		PreparedStatement s = null;
 		String sql = "update prevoznik set Stanje='Izbrisano' where JIBPrevoznika=?";
+		String sqlLinija = "update linija set Stanje='Izbrisano' where JIBPrevoznika=?";
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, prevoznik.getJIBPrevoznika());
-			if(s.executeUpdate()==1)
-				return true;
-			else
-				return false;
+			s.executeUpdate();
+			s.close();
+			s = Util.prepareStatement(c, sqlLinija, false, prevoznik.getJIBPrevoznika());
+			s.executeUpdate();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 
@@ -163,8 +177,8 @@ public class Prevoznik {
 			Util.close(s, c);
 		}
 		return false;
-		*/
-		Connection c = null;
+		
+	/*	Connection c = null;
 		CallableStatement s = null;
 	    try {
 	       	c=Util.getConnection();
@@ -177,7 +191,7 @@ public class Prevoznik {
 	    } finally {
 	    	Util.close(s,c);
 	    }
-	    return false;
+	    return false;*/
 	}
 	
 	public static boolean izmjeniPrevoznika(String naziv,String telefon,String email,String webAdresa,String tekuciRacun,String adresa,String postanskiBroj,String jib) {

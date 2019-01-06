@@ -12,22 +12,69 @@ import org.unibl.etf.util.Util;
 public class Linija {
 	private int idLinije;
 	private String nazivLinije;
-	private int idStanice;
-	private String daniUSedmici;
 	private int peron;
-	private String nazivPrevoznika;
+	private Prevoznik prevoznik;
 	private String stanje;
+	private int voznjaPraznikom;
+
+	/*
+	 * konstruktor za ucitavanje relacije*/
+	public Linija(int idLinije) {
+		this.idLinije = idLinije;
+	}
+	/*
+	 * konstruktor za storniranje karte*/
+	public Linija(String nazivLinije) {
+		// TODO Auto-generated constructor stub
+		this.nazivLinije = nazivLinije;
+	}
+
 	
-	
-	
-	public Linija(int idLinije,String nazivLinije,String daniUSedmici,int peron,String nazivPrevoznika,String stanje) {
+	/*
+	 * konstruktor za kartu
+	 * 
+	 */
+	public Linija(int idLinije, String nazivLinije, int peron, Prevoznik prevoznik, int voznjaPraznikom) {
 		super();
 		this.idLinije = idLinije;
 		this.nazivLinije = nazivLinije;
-		this.daniUSedmici = daniUSedmici;
 		this.peron = peron;
-		this.nazivPrevoznika = nazivPrevoznika;
-		this.stanje = stanje;
+		this.prevoznik = prevoznik;
+		this.voznjaPraznikom = voznjaPraznikom;
+		this.stanje = "Aktivno";
+	}
+	
+
+	public int getIdLinije() {
+		return idLinije;
+	}
+	
+	public void setIdLinije(int idLinije) {
+		this.idLinije = idLinije;
+	}
+
+	public String getNazivLinije() {
+		return nazivLinije;
+	}
+
+	public void setNazivLinije(String nazivLinije) {
+		this.nazivLinije = nazivLinije;
+	}
+
+	public int getPeron() {
+		return peron;
+	}
+
+	public void setPeron(int peron) {
+		this.peron = peron;
+	}
+
+	public Prevoznik getPrevoznik() {
+		return prevoznik;
+	}
+
+	public void setPrevoznik(Prevoznik prevoznik) {
+		this.prevoznik = prevoznik;
 	}
 
 	public String getStanje() {
@@ -38,115 +85,23 @@ public class Linija {
 		this.stanje = stanje;
 	}
 
-	public Linija(int idLinije,String nazivLinije,String daniUSedmici,int peron,String nazivPrevoznika) {
-		super();
-		this.idLinije = idLinije;
-		this.nazivLinije = nazivLinije;
-		this.daniUSedmici = daniUSedmici;
-		this.peron = peron;
-		this.nazivPrevoznika = nazivPrevoznika;
-	}
-	public Linija() {
+	public int getVoznjaPraznikom() {
+		return voznjaPraznikom;
 	}
 
-	public Linija(String nazivLinije) {
-		this.nazivLinije = nazivLinije;
-	}
-
-	public Linija(String nazivLinije, Prevoznik prevoznik) {
-		// TODO Auto-generated constructor stub
-		this.nazivLinije = nazivLinije;
-		this.nazivPrevoznika = prevoznik.getNaziv();
-	}
-
-	public String getNazivPrevoznika() {
-		return nazivPrevoznika;
+	public void setVoznjaPraznikom(int voznjaPraznikom) {
+		this.voznjaPraznikom = voznjaPraznikom;
 	}
 
 
-	public void setNazivPrevoznika(String nazivPrevoznika) {
-		this.nazivPrevoznika = nazivPrevoznika;
-	}
-
-
-	public int getIdLinije() {
-		return idLinije;
-	}
-	public void setIdLinije(int idLinije) {
-		this.idLinije = idLinije;
-	}
-	public String getNazivLinije() {
-		return nazivLinije;
-	}
-	public void setNazivLinije(String nazivLinije) {
-		this.nazivLinije = nazivLinije;
-	}
-	public int getIdStanice() {
-		return idStanice;
-	}
-	public void setIdStanice(int idStanice) {
-		this.idStanice = idStanice;
-	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + idLinije;
-		return result;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Linija other = (Linija) obj;
-		if (idLinije != other.idLinije)
-			return false;
-		return true;
-	}
-
-
-	public int getPeron() {
-		return peron;
-	}
-
-
-	public void setPeron(int peron) {
-		this.peron = peron;
-	}
-
-
-	public String getDaniUSedmici() {
-		return daniUSedmici;
-	}
-
-
-	public void setDaniUSedmici(String daniUSedmici) {
-		this.daniUSedmici = daniUSedmici;
-	}
-
-
-
-	@Override
-	public String toString() {
-		return "Linija [idLinije=" + idLinije + ", nazivLinije=" + nazivLinije + ", idStanice=" + idStanice
-				+ ", daniUSedmici=" + daniUSedmici + ", peron=" + peron + ", nazivPrevoznika=" + nazivPrevoznika
-				+ ", stanje=" + stanje + "]";
-	}
-
-	public static int dodajLiniju(String naziv, int peron, String jibPrevoznika, String daniString) {
+	public static int dodajLiniju(Linija linija) {
 		String sql = "insert into linija value (default,?,?,?,?,default)";
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, true, naziv,peron,jibPrevoznika,daniString);
+			s = Util.prepareStatement(c, sql, true, linija.getNazivLinije(),linija.getPeron(),linija.getPrevoznik().getJIBPrevoznika(),linija.getVoznjaPraznikom());
 			if(s.executeUpdate()==1) { 
 				r = s.getGeneratedKeys();
 				if(r.next()) 
@@ -162,15 +117,37 @@ public class Linija {
 		}
 		return 0;
 	}
+	
+	
+/*	public static int dodajLiniju(Linija linija) {
+		String sql = "insert into linija value (default,?,?,?,default)";
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, true, linija.getNazivLinije(),linija.getPeron(),linija.getPrevoznik().getJIBPrevoznika());
+			System.out.println(s.executeUpdate());
+			r = s.getGeneratedKeys();
+			if(r.next()) {
+				return r.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	
+		
+	}*/
 
-	public static boolean izmjeniLiniju(Linija odabranaLinija, String naziv, int peron, String daniString,
-			String stanje) {
-		String sql = "update linija set NazivLinije=?, Peron=?, DaniUSedmici=?, Stanje=? where IdLinije=?";
+	public static boolean izmjeniLiniju(Linija linija) {
+		String sql = "update linija set NazivLinije=?, Peron=?, where IdLinije=?";
 		Connection c = null;
 		PreparedStatement s = null;
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false, naziv, peron, daniString, stanje, odabranaLinija.getIdLinije());
+			s = Util.prepareStatement(c, sql, false, linija.getNazivLinije(), linija.getPeron(), linija.getIdLinije());
 			if(s.executeUpdate()==1)
 				return true;
 		} catch (SQLException e) {
@@ -217,7 +194,7 @@ public class Linija {
 
 	public static List<Linija> getLinije() {
 		// TODO Auto-generated method stub
-		String sqlQuery = "select IdLinije,NazivLinije,Peron,NazivPrevoznika,DaniUSedmici,linija.Stanje from linija join prevoznik on (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where linija.Stanje!='Izbrisano'";
+		String sqlQuery = "select IdLinije,NazivLinije,Peron,NazivPrevoznika,linija.Stanje,VoznjaPraznikom from linija join prevoznik on (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where linija.Stanje!='Izbrisano'";
     	Connection c = null;
     	ResultSet r = null;
     	PreparedStatement s = null;
@@ -226,8 +203,10 @@ public class Linija {
 			c = Util.getConnection();
 			s = c.prepareStatement(sqlQuery);
 			r = s.executeQuery();
-			while(r.next()) 
-				linijeList.add( new Linija(r.getInt("IdLinije"), r.getString("NazivLinije"), r.getString("DaniUSedmici"), r.getInt("Peron"),r.getString("NazivPrevoznika"),r.getString("Stanje")));
+			while(r.next()) {
+				Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
+				linijeList.add(new Linija(r.getInt("IdLinije"), r.getString("NazivLinije"), r.getInt("Peron"),prevoznik, r.getInt("VoznjaPraznikom")));	
+			}
 			return linijeList;
 		} catch (SQLException e) {
 			e.printStackTrace();

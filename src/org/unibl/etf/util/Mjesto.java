@@ -9,19 +9,25 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class Mjesto {
-	int postanskiBroj;
-	String naziv;
+	protected int postanskiBroj;
+	protected String naziv;
 	
 	public Mjesto() {
 		super();
 	}
 	
-	public Mjesto(int postanskiBroj, String naziv) {
+	public Mjesto(String naziv,int postanskiBroj) {
 		super();
 		this.postanskiBroj = postanskiBroj;
 		this.naziv = naziv;
 	}
 	
+	
+	public Mjesto(String naziv) {
+		super();
+		this.naziv = naziv;
+	}
+
 	public int getPostanskiBroj() {
 		return postanskiBroj;
 	}
@@ -117,7 +123,7 @@ public class Mjesto {
 			while(r.next()) {
 				int postanskiBroj=r.getInt(1);
 				String naziv=r.getString(2);
-				getPlaceList().add(new Mjesto(postanskiBroj, naziv));
+				getPlaceList().add(new Mjesto(naziv, postanskiBroj));
 				getPostalCodeList().add(String.valueOf(postanskiBroj));
 				getCityList().add(naziv);
 				getCityPostalCodeList().add(postanskiBroj + " - " + naziv);
