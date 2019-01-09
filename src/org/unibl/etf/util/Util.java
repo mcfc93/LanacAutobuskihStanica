@@ -425,6 +425,22 @@ System.out.println(PROPERTY);
 		return dateValidator;
 	}
 	
+	public static ValidatorBase nameValidator(JFXTextField textField) {
+		ValidatorBase nameValidator = new ValidatorBase("Format: Xxx[-Xxx]") {
+			@Override
+			protected void eval() {
+				if(!textField.getText().isEmpty()
+	        			&& !textField.getText().matches("^(\\p{Lu}\\p{Ll}*(-\\p{Lu})?\\p{Ll}+)$")) {
+	        		hasErrors.set(true);
+		        } else {
+		        	 hasErrors.set(false);
+		        }
+			}
+		};
+		nameValidator.setIcon(new ImageView());
+		return nameValidator;
+	}
+	
 	public static ValidatorBase lengthValidator(JFXTextField textField, int length) {
 		ValidatorBase lengthValidator = new ValidatorBase("Predugačak unos") {
 			@Override

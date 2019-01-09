@@ -176,7 +176,7 @@ public class InformacijeController implements Initializable{
 		Util.setAutocompleteList(mjestoTextField, stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()));
 		//mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),Util.collectionValidator(mjestoTextField, mjestaSet, true, "Unesite mjesto"));
 		
-		System.out.println("Stajaliste stanice: " +);
+		System.out.println("Stajaliste stanice: " + PrijavaController.autobuskaStanica.getIdStajalista());
 		polasciDolasciComboBox.getItems().addAll("POLASCI", "DOLASCI");
 		polasciDolasciComboBox.getSelectionModel().selectFirst();
 		polasciDolasciComboBox.setStyle("-fx-font-weight: bold;");

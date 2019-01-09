@@ -335,6 +335,7 @@ public class AutobuskaStanica {
 		AutobuskaStanica.jibList = jibList;
 	}
 	*/
+	
 	public static void loadJibs() {
 		getJibList().clear();
 		Connection c = null;
@@ -346,6 +347,29 @@ public class AutobuskaStanica {
 			r = s.executeQuery();
 			while(r.next()) {
 				getJibList().add(r.getString(1));
+			}
+		} catch (SQLException e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+	}
+	
+	private static List<String> activeJibList = new ArrayList<>();
+	
+	public static List<String> getActiveJibList() {
+		return activeJibList;
+	}
+	
+	public static void loadActiveJibs() {
+		getActiveJibList().clear();
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, "select JIBStanice from autobuska_stanica where Stanje='Aktivno'", false);
+			r = s.executeQuery();
+			while(r.next()) {
+				getActiveJibList().add(r.getString(1));
 			}
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
