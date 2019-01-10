@@ -228,14 +228,14 @@ System.out.println("nalog.ser");
 
 
 
-				MaskerPane progressPane = new MaskerPane();
+				MaskerPane progressPane=Util.getMaskerPane(anchorPane); /*= new MaskerPane();
 				progressPane.setText("Molimo sačekajte...");
 				progressPane.setVisible(false);
 				anchorPane.getChildren().add(progressPane);
 				AnchorPane.setTopAnchor(progressPane,0.0);
 				AnchorPane.setBottomAnchor(progressPane,0.0);
 				AnchorPane.setLeftAnchor(progressPane,0.0);
-				AnchorPane.setRightAnchor(progressPane,0.0);
+				AnchorPane.setRightAnchor(progressPane,0.0);*/
 
 				//ucitavanje postanskih brojeva i praznika
 				/*
