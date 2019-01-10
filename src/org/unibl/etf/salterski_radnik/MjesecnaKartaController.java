@@ -98,8 +98,7 @@ public class MjesecnaKartaController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     	stampajButton.setDefaultButton(true);
-    	nazadButton.setCancelButton(true);
-    	
+    	nazadButton.setCancelButton(true);    	
     	if("DJACKA".equals(karta.getTip().toString())) {
         	//mjesecnaAnchorPane.getStylesheets().add(getClass().getResource("/org/unibl/etf/administrator/administrator.css").toExternalForm());
         	mjesecnaAnchorPane.getStyleClass().add("mjesecnaDjacka");
@@ -150,8 +149,7 @@ public class MjesecnaKartaController implements Initializable {
     		barcodeLabel.setVisible(true);
     		barcodeLabel.setText(String.format("%013d", karta.getSerijskiBroj()));
     		BarcodeEAN codeEAN = new BarcodeEAN();
-System.out.println(String.format("%013d", karta.getSerijskiBroj()));
-	    	codeEAN.setCode(String.format("%013d", karta.getSerijskiBroj()));
+    		codeEAN.setCode(String.format("%013d", karta.getSerijskiBroj()));
             codeEAN.setCodeType(BarcodeEAN.EAN13); 
             codeEAN.setBarHeight(40);
             //kreiranje slike
@@ -264,7 +262,7 @@ System.out.println(String.format("%013d", karta.getSerijskiBroj()));
 	        
 			WritableImage image = mjesecnaAnchorPane.snapshot(parameters, null);
         	
-        	File file = new File("src\\slikemjesecnekarte\\mjesecna_" + String.format("%013d", karta.getSerijskiBroj()) + "-" + mjesecVazenjaString + ".png");
+        	File file = new File("karte\\slike\\mjesecna_" + String.format("%013d", karta.getSerijskiBroj()) + "-" + mjesecVazenjaString + ".png");
 			try {
 				ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
 			}catch (IOException e) {
@@ -319,17 +317,13 @@ System.out.println(String.format("%013d", karta.getSerijskiBroj()));
 	    	barcodeLabel.setVisible(true);
 	    	barcodeLabel.setText(String.valueOf(karta.getSerijskiBroj()));
 	    	int brojKarata = Karta.provjeriBrojKarata(karta, karta.getDatumPolaska());
-			Karta.kreirajKartu(karta, brojKarata+1, datum);
+			// ------------------------------ Karta.kreirajKartu(karta, brojKarata+1, datum);
 			ProdajaKarataController.idMjesecneKarte = MjesecnaKarta.kreirajKartu(karta);
-			
-        	System.out.println("-------------------------- prodaja" + ProdajaKarataController.idMjesecneKarte);
-
 			serijskiBroj = ProdajaKarataController.idKarte;
 			System.out.println("SERIJSKI BROJ: " + ProdajaKarataController.idKarte);
 			System.out.println("Serijski mjesecne: " + ProdajaKarataController.idMjesecneKarte);
 			MjesecnaKarta.stampajKartu(karta, brojKarata+1, datum, karta.getIme() + " " + karta.getPrezime(), karta.getTip());
 			barcodeLabel.setText(String.format("%013d",ProdajaKarataController.idMjesecneKarte));
-			
 			ProdajaKarataController.potvrda = true;
 			
 			
@@ -359,7 +353,7 @@ System.out.println(String.format("%013d", ProdajaKarataController.idMjesecneKart
 			*/
 	        
 			WritableImage image = mjesecnaAnchorPane.snapshot(parameters, null);
-			File file = new File("src\\slikemjesecnekarte\\mjesecna_" + String.format("%013d", ProdajaKarataController.idMjesecneKarte) + "-" + mjesecVazenjaString + ".png");
+			File file = new File("karte\\slike\\mjesecna_" + String.format("%013d", ProdajaKarataController.idMjesecneKarte) + "-" + mjesecVazenjaString + ".png");
 			try {
 				ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
 			}catch (IOException e) {

@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.karta.Karta;
 import org.unibl.etf.karta.MjesecnaKarta;
@@ -29,6 +31,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -146,6 +150,7 @@ public class ProdajaKarataController implements Initializable {
 	private JFXTextField serijskiBrojTextField;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		datum.setValue(LocalDate.now());
 		slikaImageView.setVisible(false);
 		kupovinaButton.setDisable(true);
 		tipKarteSetUp();
@@ -174,7 +179,7 @@ public class ProdajaKarataController implements Initializable {
 		produziMjesecnuRadioButton.setVisible(false);
 		
 		karteTable.setItems(karteObs);		
-		ucitajRelacije();
+		//ucitajRelacije();
 		karteTable.setPlaceholder(new Label("Odaberite relaciju i datum"));
 		datum.setValue(LocalDate.now());		
 		nazivLinijeColumn.setCellValueFactory(new PropertyValueFactory<>("nazivLinije"));
@@ -192,8 +197,8 @@ public class ProdajaKarataController implements Initializable {
 	        }
 	    });
 		*/
-		Util.setAutocompleteList(odredisteTextField, relacijeSet);
-		Util.setAutocompleteList(polazisteTextField, relacijeSet);
+		Util.setAutocompleteList(odredisteTextField, InformacijeController.stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()));
+		Util.setAutocompleteList(polazisteTextField, InformacijeController.stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()));
 		//autoComplete();    
 		validationSetUp();
 		
@@ -218,11 +223,14 @@ public class ProdajaKarataController implements Initializable {
 
 	@FXML
 	public void pretragaRelacija() {
+		Stajaliste polaziste = InformacijeController.stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
+		Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(odredisteTextField.getText())).findFirst().get();
+
 		if(radioButtonObicna.isSelected()) {
 			if(odredisteTextField.validate()) {
 				kupovinaButton.setDisable(false);
 				karteObs.clear();
-				for (Karta karta : Karta.getKarteList(InformacijeController.stajaliste, new Stajaliste(odredisteTextField.getText()))) {
+				for (Karta karta : Karta.getKarteList(polaziste, odrediste)) {
 					daniUSedmici = karta.getRelacija().getDani();
 					if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
 						if(povratnaKartaCheckBox.isSelected())
@@ -239,9 +247,8 @@ public class ProdajaKarataController implements Initializable {
 			{
 					karteObs.clear();
 					if(kupovinaMjesecne) {
-						for (Karta karta : MjesecnaKarta.getMjesecneKarteList(new Stajaliste(polazisteTextField.getText()), new Stajaliste(odredisteTextField.getText()))) {
+						for (Karta karta : MjesecnaKarta.getMjesecneKarteList(polaziste, odrediste)) {
 							//daniUSedmici = karta.getLinija().getDaniUSedmici();
-							if(karta.getRelacija().getCijenaMjesecna()!=0) {
 								switch(tipKarteComboBox.getValue()) {
 								case DJACKA:
 									karta.getRelacija().setCijenaMjesecna(POPUST_DJACKA * karta.getRelacija().getCijenaMjesecna());
@@ -253,13 +260,15 @@ public class ProdajaKarataController implements Initializable {
 									break;
 								}
 								karteObs.add(karta);
-							}
 						}
+						// set vrijeme polaska na null ako je kupovina mjesecne karte
+						karteObs.stream().forEach(k -> { k.setVrijemeDolaska(null); k.setVrijemePolaska(null);});
+						
+						
 						if(karteObs.isEmpty())
 							showPrazanSetAlert();
 						else
 							kupovinaButton.setDisable(false);
-
 					}
 					else {
 						for (Karta karta : Karta.getKarteList(InformacijeController.stajaliste, new Stajaliste(odredisteTextField.getText()))) {
@@ -270,6 +279,7 @@ public class ProdajaKarataController implements Initializable {
 								karteObs.add(karta);
 							}
 						}
+						
 						if(karteObs.isEmpty())
 							showPrazanSetAlert();
 					}
@@ -277,211 +287,134 @@ public class ProdajaKarataController implements Initializable {
 		}
 	}
 	
+	
 	@FXML
-	public void kupovina() { 
-		if(produziMjesecnuRadioButton.isSelected()) {
-			if(serijskiBrojTextField.validate()) {
-				MjesecnaKartaController.karta = MjesecnaKarta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
-				if(MjesecnaKartaController.karta==null) {
-					showPogresanSerijskiBroj();
+	public void kupovina() {
+		if(karteTable.getSelectionModel().getSelectedItem()==null) {
+	    	Util.getNotifications("Greška", "Odaberite liniju iz tabele.", "Warning").show();
+			return;
+		}
+		Karta karta = karteTable.getSelectionModel().getSelectedItem();
+		
+		if(radioButtonMjesecna.isSelected()) {
+			// PRODUZAVANJE MJESECNE KARTE
+			if(produziMjesecnuRadioButton.isSelected()) {
+				if(serijskiBrojTextField.validate()) {
+					MjesecnaKartaController.karta = MjesecnaKarta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
+					if(MjesecnaKartaController.karta==null) {
+				    	Util.getNotifications("Greška", "Pogrešan serijski broj.", "Error").show();
+						return;
+					}
+					showPotvrda();
+				}
+				return;
+			}
+			// KUPOVINA MJESECNE KARTE
+			else {
+				if(odabranaSlika==null) {
+			    	Util.getNotifications("Greška", "Odaberite sliku.", "Warning").show();
+					return;
+				}
+				brojKarataZaKupovinu = brojKarataComboBox.getValue();
+				karta.setJIBStanice(PrijavaController.autobuskaStanica.getJib());
+				if(50-Karta.provjeriBrojKarata(karta, Date.valueOf(datum.getValue()))<brojKarataZaKupovinu) {
+			    	Util.getNotifications("Greška", "Nedovoljno slobodnih mjesta u autobusu.", "Warning").show();
 					return;
 				}
 				
-				//System.out.println("Pronadjena karta:" + MjesecnaKartaController.karta );
-				//MjesecnaKartaController.karta.setImeZaposlenog(PrijavaController.nalog.getIme());
-				MjesecnaKartaController.karta.setSerijskiBroj(Integer.parseInt(serijskiBrojTextField.getText()));
-				//MjesecnaKartaController.karta.setCijena(mjesecnaKarta.getCijena());
-				//MjesecnaKartaController.karta.setTip(mjesecnaKarta.getTip());
-				//System.out.println("mjesecna u prodaji: " + mjesecnaKarta);*/
-				if(showPotvrda()) {
-					MjesecnaKartaController.karta.setDatumPolaska(Date.valueOf(datum.getValue()));
-						maskerSetUp();
-						/*
-						Task<Void> task = new Task<Void>() {
-				            @Override*/
-				           // protected Void call() /*throws Exception*/ {
-				            //    progressPane.setVisible(true);
-							//	int brojKarata = Karta.provjeriBrojKarata(karta, Date.valueOf(datum.getValue()));
-							//	Karta.kreirajKartu(karta, brojKarata+1, datum.getValue());
-							//	MjesecnaKartaController.kreirajKartu(karta,brojKarata+1,datum.getValue(), imeTextField.getText(),prezimeTextField.getText(),tipKarteComboBox.getValue(),odabranaSlika);
-							/*	MjesecnaKarta.kreirajKartu(karta, brojKarata+1, datum.getValue(), imeTextField.getText(),prezimeTextField.getText(),tipKarteComboBox.getValue(),odabranaSlika.getPath());	
-								MjesecnaKarta.stampajKartu(karta, brojKarata+1, datum.getValue(), imeTextField.getText() + " " + prezimeTextField.getText(), tipKarteComboBox.getValue());
-								return null;
-				            }*/
-				          //  @Override
-				          //  protected void succeeded(){
-				          //      super.succeeded();
-				           //     progressPane.setVisible(false);
-							//	showUspjesnaKupovina();	
-				         //   }
-				      //  };
-				      //  new Thread(task).start();
-						serijskiBrojTextField.clear();
-						serijskiBrojTextField.resetValidation();
-						imeTextField.resetValidation();
-						
-						}
-				return;
-
-				}
-			}
-		
-		
-		
-		if(karteTable.getSelectionModel().getSelectedItem()==null) {
-			showOdaberiteLinijuAlert();
-			return;
-		}
-		if(kupovinaMjesecne & odabranaSlika==null) {
-			showOdaberiteSliku();
-			return;
-		}
-		brojKarataZaKupovinu = brojKarataComboBox.getValue();
-		Karta karta = karteTable.getSelectionModel().getSelectedItem();
-		//karta.setImeZaposlenog(PrijavaController.nalog.getIme());
-		if(50-Karta.provjeriBrojKarata(karta, Date.valueOf(datum.getValue()))<brojKarataZaKupovinu) {
-			showNedovoljnoMjesta();
-			return;
-		}
-			if(radioButtonMjesecna.isSelected()) {
-				if(!produzavanjeKarte) {
-				
-				
 				if(polazisteTextField.validate() & odredisteTextField.validate() & 
-					imeTextField.validate() & prezimeTextField.validate())
-				{
-					
+						imeTextField.validate() & prezimeTextField.validate()) { 
 					
 					MjesecnaKartaController.karta = new MjesecnaKarta(karta.getRelacija(),imeTextField.getText(),prezimeTextField.getText(),odabranaSlika,karta.getRelacija().getLinija().getPrevoznik().getNaziv(),tipKarteComboBox.getValue());
-					//MjesecnaKartaController.karta.setImeZaposlenog(PrijavaController.nalog.getIme());
-					//MjesecnaKartaController.karta.setPeron(karta.getPeron());
-					//MjesecnaKartaController.karta.setCijena(karta.getCijena());
-					//MjesecnaKartaController.karta.setNazivLinije(karta.getNazivLinije());
 					MjesecnaKartaController.datum = datum.getValue();
-
+					
 					if(showPotvrda()) {
-						
-						
-		            	karta.setDatumPolaska(Date.valueOf(datum.getValue()));
-						maskerSetUp();
-						
-						Task<Void> task = new Task<Void>() {
-				            @Override
-				            protected Void call() /*throws Exception*/ {
-				                progressPane.setVisible(true);
-								int brojKarata = Karta.provjeriBrojKarata(karta, Date.valueOf(datum.getValue()));
-								Karta.kreirajKartu(karta, brojKarata+1, datum.getValue());
-								//MjesecnaKartaController.kreirajKartu(karta,brojKarata+1,datum.getValue(), imeTextField.getText(),prezimeTextField.getText(),tipKarteComboBox.getValue(),odabranaSlika.getAbsolutePath());
-								
-								
-								// linija iznad je radil do sad
-								//idMjesecneKarte = MjesecnaKarta.kreirajKartu(karta, brojKarata+1, datum.getValue(), imeTextField.getText(),prezimeTextField.getText(),tipKarteComboBox.getValue(),odabranaSlika.getPath());	
-								//System.out.println("ID vracen iz baze: " + idMjesecneKarte);
-								karta.setSerijskiBroj(idMjesecneKarte);
-								MjesecnaKarta.stampajKartu(karta, brojKarata+1, datum.getValue(), imeTextField.getText() + " " + prezimeTextField.getText(), tipKarteComboBox.getValue());
-								return null;
-				            }
-				            @Override
-				           protected void succeeded(){
-				            	super.succeeded();
-				                progressPane.setVisible(false);
-								showUspjesnaKupovina();	
-				           }
-				       };
-				        new Thread(task).start();
-						imeTextField.resetValidation();
-						
-						}
-				}
-				
-				}
-				else
-				{
-					System.out.println("Produzi mjesecnu");
-					if(serijskiBrojTextField.validate()) {
-						System.out.println("validated");
+						Util.getNotifications("Potvrda", "Karte napravljene.", "Confirmation").show();
+						imeTextField.resetValidation();		
+						return;
 					}
-				}
-				
-			} // end mjesecna
-			else {
-				if(rezervacijaCheckBox.isSelected()) {
-					if(imeTextField.validate() & prezimeTextField.validate() & brojTelefonaTextField.validate()) {
-						if(showPotvrda()) {
-							//karta.setImeZaposlenog(PrijavaController.nalog.getIme());
-							karta.setRezervacija(true);
-							maskerSetUp();
-							Task<Void> task = new Task<Void>() {
-					            @Override
-					            protected Void call() /*throws Exception*/ {
-					            	karta.setDatumPolaska(Date.valueOf(datum.getValue()));
-									karta.setPovratna(povratnaKartaCheckBox.isSelected());
+				 }
+				        
+						
+				} // iznad ovog je } za kraj if
+					
+			
+		}
+		// KUPOVINA OBICNIH KARATA
+		else {
+			karta.setDatumPolaska(Date.valueOf(datum.getValue()));
+			brojKarataZaKupovinu = brojKarataComboBox.getValue();
 
-					                progressPane.setVisible(true);
-					                for(int i=0;i<brojKarataZaKupovinu;++i) {
-										int brojKarata = Karta.provjeriBrojKarata(karta, Date.valueOf(datum.getValue()));
-									Karta.kreirajKartu(karta, brojKarata+1, datum.getValue());
-									//karta.setIdKarte(idKarte);
-									karta.setSerijskiBroj(idKarte);
-									karta.setBrojSjedista(brojKarata+1);
-									karta.setRezervacija(true);
-									karta.stampajKartu();
-									Karta.kreirajRezervaciju(imeTextField.getText(), prezimeTextField.getText(), brojTelefonaTextField.getText(), idKarte);
-									}
-					               return null;
-					            }
-					            @Override
-					            protected void succeeded(){
-					                super.succeeded();
-					                progressPane.setVisible(false);
-									showUspjesnaKupovina();	
-					            }
-					        };
-					        new Thread(task).start();
-						}
-					}
-				} 
-				else {
+			// REZERVACIJA KARATA
+			if(rezervacijaCheckBox.isSelected()) {
+				if(imeTextField.validate() & prezimeTextField.validate() & brojTelefonaTextField.validate()) {
 					if(showPotvrda()) {
+						karta.setRezervacija(true);
 						maskerSetUp();
 						Task<Void> task = new Task<Void>() {
 				            @Override
 				            protected Void call() /*throws Exception*/ {
+				            	karta.setDatumPolaska(Date.valueOf(datum.getValue()));
+								karta.setPovratna(povratnaKartaCheckBox.isSelected());
 				                progressPane.setVisible(true);
-								for(int i=0;i<brojKarataZaKupovinu;++i) {
+				                for(int i=0;i<brojKarataZaKupovinu;++i) {
 									int brojKarata = Karta.provjeriBrojKarata(karta, Date.valueOf(datum.getValue()));
-									//karta.setImeZaposlenog(PrijavaController.nalog.getIme());
-									karta.setPovratna(povratnaKartaCheckBox.isSelected());
-					            	karta.setDatumPolaska(Date.valueOf(datum.getValue()));
-									karta.setBrojSjedista(brojKarata+1);
-									karta.setPovratna(povratnaKartaCheckBox.isSelected());
-								Karta.kreirajKartu(karta, brojKarata+1, datum.getValue());
+								karta.setBrojSjedista(brojKarata+1);
+								Karta.kreirajKartu(karta, datum.getValue());
 								//karta.setIdKarte(idKarte);
 								karta.setSerijskiBroj(idKarte);
+								karta.setBrojSjedista(brojKarata+1);
+								karta.setRezervacija(true);
 								karta.stampajKartu();
-
+								Karta.kreirajRezervaciju(imeTextField.getText(), prezimeTextField.getText(), brojTelefonaTextField.getText(), idKarte);
 								}
-				                try {
-									Thread.sleep(2000);
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-				                return null;
+				               return null;
 				            }
 				            @Override
 				            protected void succeeded(){
 				                super.succeeded();
 				                progressPane.setVisible(false);
-								showUspjesnaKupovina();	
+						    	Util.getNotifications("Potvrda", "Karte napravljene.", "Confirmation").show();
 				            }
 				        };
 				        new Thread(task).start();
-						imeTextField.resetValidation();
-						
 					}
 				}
-			} 
+			}
+			
+			else {
+				// KUPOVINA KARATA
+				if(showPotvrda()) {
+					maskerSetUp();
+					Task<Void> task = new Task<Void>() {
+			            @Override
+			            protected Void call() /*throws Exception*/ {
+			                progressPane.setVisible(true);
+							for(int i=0;i<brojKarataZaKupovinu;++i) {
+								System.out.println("op" +i);
+								int brojKarata = Karta.provjeriBrojKarata(karta, Date.valueOf(datum.getValue()));
+								karta.setDatumPolaska(Date.valueOf(datum.getValue()));
+								karta.setBrojSjedista(brojKarata+1);
+								karta.setPovratna(povratnaKartaCheckBox.isSelected());
+								Karta.kreirajKartu(karta, datum.getValue());
+								karta.setSerijskiBroj(idKarte);
+								karta.stampajKartu();
+							}
+			                return null;
+			            }
+			            @Override
+			            protected void succeeded(){
+			                super.succeeded();
+			                progressPane.setVisible(false);
+					    	Util.getNotifications("Potvrda", "Karte napravljene.", "Confirmation").show();
+			            }
+			        };
+			        new Thread(task).start();
+					imeTextField.resetValidation();
+					
+				}
+			}
+		}
 	}
 	
 	public void showPogresanSerijskiBroj() {
@@ -505,8 +438,8 @@ public class ProdajaKarataController implements Initializable {
 	}
 
 	public void validationSetUp() {
-		polazisteTextField.getValidators().addAll(Util.requiredFieldValidator(polazisteTextField),Util.collectionValidator(polazisteTextField, relacijeSet, true, "Unesite polaziste"));
-		odredisteTextField.getValidators().addAll(Util.requiredFieldValidator(odredisteTextField),Util.collectionValidator(odredisteTextField, relacijeSet, true, "Unesite odrediste"));
+		polazisteTextField.getValidators().addAll(Util.requiredFieldValidator(polazisteTextField),Util.collectionValidator(polazisteTextField, InformacijeController.stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite polaziste"));
+		odredisteTextField.getValidators().addAll(Util.requiredFieldValidator(odredisteTextField),Util.collectionValidator(odredisteTextField, InformacijeController.stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite odrediste"));
 		imeTextField.getValidators().add(Util.requiredFieldValidator(imeTextField));
 		prezimeTextField.getValidators().add(Util.requiredFieldValidator(prezimeTextField));
 		brojTelefonaTextField.getValidators().addAll(Util.requiredFieldValidator(brojTelefonaTextField),Util.phoneValidator(brojTelefonaTextField));
@@ -796,7 +729,7 @@ public class ProdajaKarataController implements Initializable {
 			return (localTime.compareTo(vrijemePolaska.toLocalTime())<0);
 			}
 		else
-			return (daniUSedmici.contains(datum.getValue().getDayOfWeek().toString())) && daniUSedmici.contains(datum.getValue().getDayOfWeek().toString());
+			return (daniUSedmici.contains(String.valueOf(datum.getValue().getDayOfWeek().getValue())));
 	}
 
 

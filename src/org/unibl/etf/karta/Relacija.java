@@ -82,6 +82,17 @@ public class Relacija {
 		// TODO Auto-generated constructor stub
 	}
 
+	/*
+	 * konstruktor za produzavanje karte*/
+	public Relacija(Linija linija, Prevoznik prevoznik, Stajaliste polaziste, Stajaliste odrediste) {
+		// TODO Auto-generated constructor stub
+		this.linija = linija;
+		this.linija.setPrevoznik(prevoznik);
+		this.polaziste = polaziste;
+		this.odrediste = odrediste;
+	}
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
