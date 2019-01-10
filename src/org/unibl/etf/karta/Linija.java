@@ -94,6 +94,11 @@ public class Linija {
 	}
 
 
+	@Override
+	public String toString() {
+		return "Linija [idLinije=" + idLinije + ", nazivLinije=" + nazivLinije + ", peron=" + peron + ", prevoznik="
+				+ prevoznik + ", stanje=" + stanje + ", voznjaPraznikom=" + voznjaPraznikom + "]";
+	}
 	public static int dodajLiniju(Linija linija) {
 		String sql = "insert into linija value (default,?,?,?,?,default)";
 		Connection c = null;

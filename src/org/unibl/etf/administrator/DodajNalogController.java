@@ -146,14 +146,16 @@ public class DodajNalogController implements Initializable {
 		
 		//Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getPostalCodeList());
 		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());
-		Util.setAutocompleteList(jibStaniceTextField, AutobuskaStanica.getJibList());
+		//Util.setAutocompleteList(jibStaniceTextField, AutobuskaStanica.getJibList());
+		Util.setAutocompleteList(jibStaniceTextField, AutobuskaStanica.getActiveJibList());
 		
 
    		korisnickoImeTextField.getValidators().addAll(Util.requiredFieldValidator(korisnickoImeTextField), Util.collectionValidator(korisnickoImeTextField, Nalog.getUsernameList(), false, "Zauzeto"), Util.lengthValidator(korisnickoImeTextField, 30));
    		lozinkaTextField.getValidators().addAll(Util.requiredFieldValidator(lozinkaTextField), Util.passwordValidator(lozinkaTextField));
-   		jibStaniceTextField.getValidators().addAll(Util.requiredFieldValidator(jibStaniceTextField), Util.jibValidator(jibStaniceTextField), Util.collectionValidator(jibStaniceTextField, AutobuskaStanica.getJibList(), true, "Ne postoji"));
-   		imeTextField.getValidators().addAll(Util.requiredFieldValidator(imeTextField), Util.lengthValidator(imeTextField, 35));
-   		prezimeTextField.getValidators().addAll(Util.requiredFieldValidator(prezimeTextField), Util.lengthValidator(prezimeTextField, 35));
+   		//jibStaniceTextField.getValidators().addAll(Util.requiredFieldValidator(jibStaniceTextField), Util.jibValidator(jibStaniceTextField), Util.collectionValidator(jibStaniceTextField, AutobuskaStanica.getJibList(), true, "Ne postoji"));
+   		jibStaniceTextField.getValidators().addAll(Util.requiredFieldValidator(jibStaniceTextField), Util.jibValidator(jibStaniceTextField), Util.collectionValidator(jibStaniceTextField, AutobuskaStanica.getActiveJibList(), true, "Ne postoji"));
+   		imeTextField.getValidators().addAll(Util.requiredFieldValidator(imeTextField), Util.nameValidator(imeTextField), Util.lengthValidator(imeTextField, 35));
+   		prezimeTextField.getValidators().addAll(Util.requiredFieldValidator(prezimeTextField), Util.nameValidator(prezimeTextField), Util.lengthValidator(prezimeTextField, 35));
    		jmbgTextField.getValidators().addAll(Util.requiredFieldValidator(jmbgTextField), Util.jmbgValidator(jmbgTextField), Util.collectionValidator(jmbgTextField, Zaposleni.getJmbgList(), false, "Vec postoji"));
    		adresaTextField.getValidators().addAll(Util.requiredFieldValidator(adresaTextField), Util.lengthValidator(adresaTextField, 35));
    		//postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), true, "Nekorektan unos"));

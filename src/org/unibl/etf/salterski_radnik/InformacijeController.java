@@ -119,7 +119,7 @@ public class InformacijeController implements Initializable{
 		
 		// stajaliste = stajalistaList.stream().filter(s -> s.get()==)
 		
-		System.out.println("stajaliste stanice: " + PrijavaController.autobuskaStanica.getIdStajalista());
+		
 		clearImageView.setVisible(false);
 		
 		mjestoTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
@@ -175,8 +175,8 @@ public class InformacijeController implements Initializable{
 		
 		Util.setAutocompleteList(mjestoTextField, stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()));
 		//mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),Util.collectionValidator(mjestoTextField, mjestaSet, true, "Unesite mjesto"));
-		mjestoTextField.getValidators().add(Util.requiredFieldValidator(mjestoTextField));
-		mjestoTextField.getValidators().add(Util.collectionValidator(mjestoTextField, stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite mjesto"));
+		
+		System.out.println("Stajaliste stanice: " + PrijavaController.autobuskaStanica.getIdStajalista());
 		polasciDolasciComboBox.getItems().addAll("POLASCI", "DOLASCI");
 		polasciDolasciComboBox.getSelectionModel().selectFirst();
 		polasciDolasciComboBox.setStyle("-fx-font-weight: bold;");
@@ -198,19 +198,14 @@ public class InformacijeController implements Initializable{
 			//if(mjestoTextField.validate()){
 				karteObs.clear();
 				if(polasciRadioButton.isSelected()) {
-					Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(mjestoTextField.getText())).findFirst().get();
-					Stajaliste polaziste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
-						for(Karta karta : Karta.getKarteList(polaziste,odrediste)) {
+						for(Karta karta : Karta.getKarteList(stajaliste, new Stajaliste(mjestoTextField.getText()))) {
 							daniUSedmici = karta.getRelacija().getDani();
-							System.out.println("Dani" + daniUSedmici);
 							if(daniUSedmici.contains(String.valueOf(datum.getValue().getDayOfWeek().getValue())))
 								karteObs.add(karta);
 						}	
 				}
 				else {
-					Stajaliste polaziste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(mjestoTextField.getText())).findFirst().get();
-					Stajaliste odrediste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
-					for(Karta karta : Karta.getKarteList(polaziste, odrediste)) {
+					for(Karta karta : Karta.getKarteList(new Stajaliste(mjestoTextField.getText()),stajaliste)) {
 						daniUSedmici = karta.getRelacija().getDani();
 						karteObs.add(karta);
 					}
@@ -309,4 +304,25 @@ public class InformacijeController implements Initializable{
 		}
 	}*/
 
+	public String getNazivMjesta() {
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		String sql = "select mjesto.Naziv from mjesto join autobuska_stanica\n" + 
+				"on (mjesto.PostanskiBroj=autobuska_stanica.PostanskiBroj) \n" + 
+				"where (autobuska_stanica.JIBStanice=?)";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, PrijavaController.nalog.getIdStanice());
+			r = s.executeQuery();
+			if(r.next())
+				return r.getString(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			Util.close(r, s, c);
+		}
+		return null;
+	}
 }

@@ -116,6 +116,7 @@ public class AdministratorController implements Initializable {
             protected Void call() {
             	System.out.println(Thread.currentThread());
             	AutobuskaStanica.loadJibs();
+            	AutobuskaStanica.loadActiveJibs();
             	Nalog.loadUsernames();
             	Zaposleni.loadJmbgs();
                 return null;
@@ -124,6 +125,7 @@ public class AdministratorController implements Initializable {
             protected void succeeded() {
                 super.succeeded();
 System.out.println(AutobuskaStanica.getJibList());
+System.out.println(AutobuskaStanica.getActiveJibList());
 System.out.println(Nalog.getUsernameList());
 System.out.println(Zaposleni.getJmbgList());
             }
