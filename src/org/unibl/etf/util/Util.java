@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import org.controlsfx.control.MaskerPane;
 import org.controlsfx.control.Notifications;
 
 import com.jfoenix.controls.JFXAutoCompletePopup;
@@ -32,6 +33,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
 //klasa koja sadrzi sve pomocne alate
@@ -425,6 +428,22 @@ System.out.println(PROPERTY);
 		return dateValidator;
 	}
 	
+	public static ValidatorBase nameValidator(JFXTextField textField) {
+		ValidatorBase nameValidator = new ValidatorBase("Format: Xxx[-Xxx]") {
+			@Override
+			protected void eval() {
+				if(!textField.getText().isEmpty()
+	        			&& !textField.getText().matches("^(\\p{Lu}\\p{Ll}*(-\\p{Lu})?\\p{Ll}+)$")) {
+	        		hasErrors.set(true);
+		        } else {
+		        	 hasErrors.set(false);
+		        }
+			}
+		};
+		nameValidator.setIcon(new ImageView());
+		return nameValidator;
+	}
+	
 	public static ValidatorBase lengthValidator(JFXTextField textField, int length) {
 		ValidatorBase lengthValidator = new ValidatorBase("Predugačak unos") {
 			@Override
@@ -491,6 +510,18 @@ System.out.println(PROPERTY);
 		alert.getDialogPane().getStyleClass().addAll("alert", "alertBug");
 		
 		alert.showAndWait();
+	}
+	
+	public static MaskerPane getMaskerPane(Pane pane) {
+		MaskerPane progressPane = new MaskerPane();
+		progressPane.setText("Molimo sačekajte...");
+		progressPane.setVisible(false);
+		pane.getChildren().add(progressPane);
+		AnchorPane.setTopAnchor(progressPane,0.0);
+		AnchorPane.setBottomAnchor(progressPane,0.0);
+		AnchorPane.setLeftAnchor(progressPane,0.0);
+		AnchorPane.setRightAnchor(progressPane,0.0);
+		return progressPane;
 	}
 	
 	public static Notifications getNotifications(String title, String text, String type) {
