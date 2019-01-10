@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.unibl.etf.prijava.PrijavaController;
+import org.unibl.etf.salterski_radnik.InformacijeController;
 import org.unibl.etf.salterski_radnik.MjesecnaKartaController;
 import org.unibl.etf.salterski_radnik.ProdajaKarataController;
 import org.unibl.etf.util.Stajaliste;
@@ -71,6 +72,16 @@ public class MjesecnaKarta extends Karta {
 		this.slika = odabranaSlika;
 		this.relacija.getLinija().getPrevoznik().setNaziv(nazivPrevoznika);
 		this.tip = tip;
+	}
+
+	public MjesecnaKarta(Relacija relacija, int serijskiBroj, String tip, String ime, String prezime, String slikaPath) {
+		// TODO Auto-generated constructor stub
+		this.relacija = relacija;
+		this.serijskiBroj = serijskiBroj;
+		this.tip = TipKarte.valueOf(tip);
+		this.ime = ime;
+		this.prezime = prezime;
+		this.slika = new File(slikaPath);
 	}
 
 	public int getIdMjesecneKarte() {
@@ -190,7 +201,7 @@ public class MjesecnaKarta extends Karta {
 		sb.append(String.format("Biletar: %s%s%s", PrijavaController.nalog.getZaposleni().getIme(), System.lineSeparator(),System.lineSeparator()));
 		sb.append(String.format("%10sHvala na povjerenju!", " "));
 		System.out.println("Scrrenshot, id mjesecne: " + ProdajaKarataController.idMjesecneKarte);
-		File file = new File("src\\mjesecnekarte\\karta" + String.format("%013d", ProdajaKarataController.idMjesecneKarte) + ".txt");
+		File file = new File("karte\\karta" + String.format("%013d", ProdajaKarataController.idMjesecneKarte) + ".txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 		    writer.append(sb);
 		    
@@ -246,17 +257,21 @@ public class MjesecnaKarta extends Karta {
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
-		String sql = "select * from cijena_mjesecne_karte join (relacija,linija,prevoznik) on cijena_mjesecne_karte.IdRelacije=relacija.IdRelacije and prevoznik.Stanje='Aktivno' where relacija.Polaziste=? and relacija.Odrediste=?";
+		String sql = "select * from cijena_mjesecne_karte join (relacija,linija,prevoznik) on (cijena_mjesecne_karte.IdRelacije=relacija.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika) "
+				+ "where relacija.Polaziste=? and relacija.Odrediste=? group by prevoznik.JIBPrevoznika";
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, polaziste.getIdStajalista(), odrediste.getIdStajalista());
 			r = s.executeQuery();
 			while(r.next()) {
-	       		Prevoznik prevoznik = new Prevoznik(r.getString("JIBPrevoznika"), r.getString("prevoznik.NazivPrevoznika"), r.getString("prevoznik.Telefon"), r.getString("prevoznik.Email"));
+	       		Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"), r.getString("prevoznik.Email"), r.getString("prevoznik.Telefon"), r.getString("prevoznik.JIBPrevoznika"));
 	       		Linija linija = new Linija(r.getInt("linija.IdLinije"), r.getString("linija.NazivLinije"), r.getInt("linija.Peron"), prevoznik, r.getInt("linija.VoznjaPraznikom"));
 	       		Relacija relacija = new Relacija(r.getInt("relacija.IdRelacije"), linija, polaziste, odrediste, r.getTime("VrijemePolaska"), r.getTime("VrijemeDolaska"), r.getDouble("CijenaJednokratna"), r.getString("Dani"));
-	       		Karta karta = new Karta(relacija, r.getDouble("cijena_mjesecne_karte"));
+	       		Karta karta = new Karta(relacija, r.getDouble("cijena_mjesecne_karte.CijenaMjesecna"));
+	       		karteList.add(karta);
+	       		
 			}
+			return karteList;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -267,18 +282,28 @@ public class MjesecnaKarta extends Karta {
 	}
 	
 	
-	public static MjesecnaKarta pronadjiKartu(int serijskiBroj) {
+	public static MjesecnaKarta pronadjiKartu(int idMjesecneKarte) {
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
-		String sql = "select Datum,Polaziste,Odrediste,Ime,Prezime,NazivLinije,NazivPrevoznika,Tip,karta.SerijskiBroj,Slika,karta.Cijena from mjesecna_karta join (relacija,karta,linija,prevoznik) on (mjesecna_karta.SerijskiBroj=karta.SerijskiBroj and karta.IdRelacije=relacija.IdRelacije "
-				+ " and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where mjesecna_karta.IdMjesecneKarte=? and mjesecna_karta.Stanje='Aktivno'";
+		String sql = "select * from mjesecna_karta join (karta,relacija,prevoznik,linija) on (mjesecna_karta.SerijskiBroj=karta.SerijskiBroj "
+				+ "and karta.IdRelacije=relacija.IdRelacije and relacija.IdLinije=linija.IdLinije and "
+				+ "linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where mjesecna_karta.IdMjesecneKarte=?";
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false, serijskiBroj);
+			s = Util.prepareStatement(c, sql, false, idMjesecneKarte);
 			r = s.executeQuery();
 			if(r.next()) {
-
+				Prevoznik prevoznik = new Prevoznik(r.getString("prevoznik.NazivPrevoznika"));
+				int idPolazista = r.getInt("Polaziste");
+				int idOdredista = r.getInt("Odrediste");
+				Stajaliste polaziste = InformacijeController.stajalistaList.stream().filter(p -> p.getIdStajalista()==idPolazista).findFirst().get();
+				Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(o -> o.getIdStajalista()==idOdredista).findFirst().get();
+				Linija linija = new Linija(r.getInt("linija.IdLinije"), r.getString("linija.NazivLinije"), r.getInt("linija.Peron"), prevoznik, r.getInt("VoznjaPraznikom"));
+				Relacija relacija = new Relacija(linija,prevoznik,polaziste,odrediste);
+				MjesecnaKarta mjesecnaKarta = new MjesecnaKarta(relacija, r.getInt("karta.SerijskiBroj"), r.getString("Tip"), r.getString("Ime"), r.getString("Prezime"), r.getString("Slika"));
+				System.out.println(mjesecnaKarta);
+				return mjesecnaKarta;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -288,6 +313,12 @@ public class MjesecnaKarta extends Karta {
 			Util.close(r, s, c);
 		}
 		return null;
+	}
+
+	@Override
+	public String toString() {
+		return "MjesecnaKarta [idMjesecneKarte=" + idMjesecneKarte + ", ime=" + ime + ", prezime=" + prezime
+				+ ", slika=" + slika + ", tip=" + tip + "]" + super.toString();
 	}
 
 
