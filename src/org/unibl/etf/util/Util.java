@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import org.controlsfx.control.MaskerPane;
 import org.controlsfx.control.Notifications;
 
 import com.jfoenix.controls.JFXAutoCompletePopup;
@@ -32,6 +33,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
 //klasa koja sadrzi sve pomocne alate
@@ -507,6 +510,18 @@ System.out.println(PROPERTY);
 		alert.getDialogPane().getStyleClass().addAll("alert", "alertBug");
 		
 		alert.showAndWait();
+	}
+	
+	public static MaskerPane getMaskerPane(Pane pane) {
+		MaskerPane progressPane = new MaskerPane();
+		progressPane.setText("Molimo sačekajte...");
+		progressPane.setVisible(false);
+		pane.getChildren().add(progressPane);
+		AnchorPane.setTopAnchor(progressPane,0.0);
+		AnchorPane.setBottomAnchor(progressPane,0.0);
+		AnchorPane.setLeftAnchor(progressPane,0.0);
+		AnchorPane.setRightAnchor(progressPane,0.0);
+		return progressPane;
 	}
 	
 	public static Notifications getNotifications(String title, String text, String type) {

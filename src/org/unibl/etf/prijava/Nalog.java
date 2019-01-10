@@ -122,12 +122,13 @@ public class Nalog implements Serializable {
 				+ ", tip=" + tip + ", prijavljen=" + prijavljen + "]";
 	}
 	
-	public static String hash(String lozinka) {
+	public static String hash(String lozinka/*, String salt*/) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
-			byte[] hash = digest.digest(lozinka.getBytes(StandardCharsets.UTF_8));
+			byte[] hash = digest.digest(lozinka/* + salt)*/.getBytes(StandardCharsets.UTF_8));
 			//lozinka = Base64.getEncoder().encodeToString(hash);
 			StringBuilder sb = new StringBuilder();
+			//sb.append(salt + "#");
 		    for (byte b : hash) {
 		        sb.append(String.format("%02X", b));
 		    }
