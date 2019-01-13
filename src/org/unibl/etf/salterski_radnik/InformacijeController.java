@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.karta.Karta;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Praznik;
@@ -113,7 +114,6 @@ public class InformacijeController implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
 		
 		stajalistaList = Stajaliste.getStajalisteList();
 		

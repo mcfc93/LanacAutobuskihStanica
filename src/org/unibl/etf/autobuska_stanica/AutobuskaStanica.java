@@ -375,4 +375,29 @@ public class AutobuskaStanica {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 	}
+	
+private static List<String> stajalistaList = new ArrayList<>();
+	
+	public static List<String> getStajalistaList() {
+		return stajalistaList;
+	}
+	
+	public static void loadStajalista() {
+		getStajalistaList().clear();
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, "select IdStajalista from autobusko_stajaliste", false);
+			r = s.executeQuery();
+			while(r.next()) {
+				getStajalistaList().add(r.getString(1));
+			}
+		} catch (SQLException e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+	}
+	
+	
 }

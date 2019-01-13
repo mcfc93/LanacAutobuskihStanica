@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.unibl.etf.prijava.PrijavaController;
+import org.unibl.etf.salterski_radnik.InformacijeController;
 import org.unibl.etf.salterski_radnik.ProdajaKarataController;
 import org.unibl.etf.salterski_radnik.SalterskiRadnikController;
 import org.unibl.etf.util.Mjesto;
@@ -34,6 +35,9 @@ public class Karta {
 	private boolean povratna;
 	private boolean rezervacija;
 	
+	public String getNazivRelacije() {
+		return relacija.toString();
+	}
 	
 	public String getNazivLinije() {
 		return relacija.getLinija().getNazivLinije();
@@ -208,7 +212,7 @@ public class Karta {
 		sb.append(String.format("%20s %.2f KM%s", "Cijena:",  relacija.getCijenaJednokratna(), System.lineSeparator()));
 		sb.append(String.format("%20s %.2f KM%s", "Rezervacija:", rezervacija? ProdajaKarataController.REZERVACIJA: 0, System.lineSeparator()));
 		sb.append(String.format("%20s %.2f KM%s", "Stanicna usluga:", ProdajaKarataController.STANICNA_USLUGA, System.lineSeparator()));
-		sb.append(String.format("%20s %.2f KM%s", "Ukupna cijena:", (relacija.getCijenaJednokratna()+ (rezervacija? ProdajaKarataController.REZERVACIJA: 0)),System.lineSeparator()));
+		sb.append(String.format("%20s %.2f KM%s", "Ukupna cijena:", (relacija.getCijenaJednokratna()+ (rezervacija? ProdajaKarataController.REZERVACIJA: 0) + ProdajaKarataController.STANICNA_USLUGA),System.lineSeparator()));
 		sb.append(System.lineSeparator());
 		sb.append(String.format("Na zahtjev kontrolora pokazati kartu!%s", System.lineSeparator()));
 		sb.append(String.format("Biletar: %s%s%s", PrijavaController.nalog.getZaposleni().getIme(), System.lineSeparator(), System.lineSeparator()));
@@ -237,6 +241,7 @@ public class Karta {
 	       	while(r.next()) {
 	       		Prevoznik prevoznik = new Prevoznik(r.getString("JIBPrevoznika"), r.getString("prevoznik.NazivPrevoznika"), r.getString("prevoznik.Telefon"), r.getString("prevoznik.Email"));
 	       		Linija linija = new Linija(r.getInt("linija.IdLinije"), r.getString("linija.NazivLinije"), r.getInt("linija.Peron"), prevoznik, r.getInt("linija.VoznjaPraznikom"));
+	       		// -- PREPRAVITI
 	       		Relacija relacija = new Relacija(r.getInt("relacija.IdRelacije"), linija, polaziste, odrediste, r.getTime("VrijemePolaska"), r.getTime("VrijemeDolaska"), r.getDouble("CijenaJednokratna"), r.getString("Dani"));
 	       		Karta karta = new Karta(relacija);
 	       		karteList.add(karta);
@@ -301,13 +306,20 @@ public class Karta {
 			r = s.executeQuery();
 			if(r.next()) {
 				Linija linija = new Linija(r.getString("NazivLinije"));
-				Relacija relacija = new Relacija(r.getString("relacija.Polazite"), r.getString("relacija.Odrediste"));
+				int idPolazista = r.getInt("relacija.Polaziste");
+				int idOdredista = r.getInt("relacija.Odrediste");
+				Stajaliste polaziste = InformacijeController.stajalistaList.stream().filter(x -> x.getIdStajalista()==idPolazista).findFirst().get();
+				Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(x -> x.getIdStajalista()==idOdredista).findFirst().get();
+				Relacija relacija = new Relacija(polaziste, odrediste, r.getDouble("karta.Cijena"));
 				Karta karta = new Karta(serijskiBroj,linija,relacija,r.getDate("karta.DatumIzdavanja"));
+				return karta;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+		finally {
+			Util.close(r, s, c);
+		}
 		
 		return null;
 	}
@@ -338,7 +350,7 @@ public class Karta {
 					System.out.println(file.delete());
 				return true;
 			}
-			s2.close();
+			//s2.close();
 		//	s3.close();
 			return false;
 

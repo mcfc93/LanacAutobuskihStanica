@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.unibl.etf.karta.Relacija;
+import org.unibl.etf.salterski_radnik.InformacijeController;
 
 public class Stajaliste extends Mjesto {
 	String nazivStajalista;
@@ -81,6 +82,28 @@ public Stajaliste() {
 		this.nazivStajalista = nazivStajalista;		
 	}
 
+/*private static List<Stajaliste> stajalisteList = new ArrayList<>();
+	
+	public static List<Stajaliste> getStajalisteList() {
+		return stajalisteList;
+	}
+	
+	public static void loadStajalista() {
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, "select IdStajalista,autobusko_stajaliste.Naziv,autobusko_stajaliste.PostanskiBroj,mjesto.Naziv from autobusko_stajaliste join mjesto on mjesto.PostanskiBroj=autobusko_stajaliste.PostanskiBroj", false);
+			r = s.executeQuery();
+			while(r.next())
+				getStajalisteList().add(new Stajaliste(r.getInt("autobusko_stajaliste.IdStajalista"), r.getInt("autobusko_stajaliste.PostanskiBroj"), r.getString("mjesto.Naziv"), r.getString("autobusko_stajaliste.Naziv")));
+			
+		} catch (SQLException e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+	}*/
+	
 private static List<Stajaliste> stajalisteList = new ArrayList<>();
 	
 	public static List<Stajaliste> getStajalisteList() {
@@ -88,6 +111,8 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 	}
 	
 	public static void loadStajalista() {
+		getStajalisteList().clear();
+
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
@@ -129,7 +154,7 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 	public String toString() {
 		if(nazivStajalista.equals(naziv))
 			return nazivStajalista;
-		return naziv + "(" + nazivStajalista +")";
+		return naziv + " (" + nazivStajalista +")";
 
 	}
 	

@@ -32,6 +32,7 @@ import javafx.util.Duration;
 
 public class OtkazivanjeRezervacijeController implements Initializable {
 
+	private static Karta trazenaKarta;
 	@FXML
 	private JFXTextField serijskiBrojTextField = new JFXTextField();
 	@FXML
@@ -68,14 +69,14 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 		{
 			//otkazivanje jednokratne
 			if(jednokratnaKartaRadioButton.isSelected()) {
-				Karta trazenaKarta = Karta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
+				trazenaKarta = Karta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
 				if(trazenaKarta==null) {
-					showAlertPogresanSerijskiBroj();
+			    	Util.getNotifications("Greška", "Pogrešan serijski broj.", "Error").show();
 					return;
 				}
 				stornirajButton.setDisable(false);
 				cijenaTextField.setText(trazenaKarta.getCijena()  + "KM");
-				relacijaTextField.setText(trazenaKarta.getRelacija().getPolaziste() + " - " + trazenaKarta.getRelacija().getOdrediste());
+				relacijaTextField.setText(trazenaKarta.getRelacija().getPolaziste().getNazivStajalista() + " - " + trazenaKarta.getRelacija().getOdrediste().getNazivStajalista());
 				datumTextField.setText(trazenaKarta.getDatumIzdavanja().toString());
 				linijaTextField.setText(trazenaKarta.getRelacija().getLinija().getNazivLinije());		
 				// otkazivanje jednokratne
@@ -92,17 +93,17 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 			
 		}
 		else 
-			showAlertPogresanSerijskiBroj();	
+	    	Util.getNotifications("Greška", "Pogrešan serijski broj.", "Error").show();
 	
 	
 	}
 	
-	public void showAlertPogresanSerijskiBroj() {
+	/*public void showAlertPogresanSerijskiBroj() {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("GRESKA");
 			alert.setHeaderText("Pogresan serijski broj ili karta vec stornirana!");
 			alert.showAndWait();
-		}
+		}*/
 		
 	public boolean showPotvrda() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -117,14 +118,16 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 		// storniraj jednokratnu
 		if(jednokratnaKartaRadioButton.isSelected()) {
 			if(showPotvrda()) {
+				
 				if(Karta.stornirajKartu(Integer.parseInt(serijskiBrojTextField.getText())))
-						showCheckMark();
-				cijenaTextField.clear();
-				relacijaTextField.clear();
-				datumTextField.clear();
-				linijaTextField.clear();
-				serijskiBrojTextField.clear();
-				serijskiBrojTextField.resetValidation();
+			    System.out.println("aa");
+					Util.getNotifications("Uspjeh", "Uspješno stornirana karta.", "Confirmation").show();
+					cijenaTextField.clear();
+					relacijaTextField.clear();
+					datumTextField.clear();
+					linijaTextField.clear();
+					serijskiBrojTextField.clear();
+					serijskiBrojTextField.resetValidation();
 			}
 		}
 			//end storniraj jednokratnu
@@ -133,8 +136,8 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 				if(showPotvrda()) {
 
 					 MjesecnaKarta.storniraj(Integer.parseInt(serijskiBrojTextField.getText()));
-					 showCheckMark();
-					 cijenaTextField.clear();
+				    	Util.getNotifications("Greška", "Uspješno stornirana karta.", "Confirmation").show();
+				    	cijenaTextField.clear();
 						relacijaTextField.clear();
 						datumTextField.clear();
 						linijaTextField.clear();
@@ -160,7 +163,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 			e.printStackTrace();
 		}
 	}
-	public void showCheckMark() {
+	/*public void showCheckMark() {
 		// TODO Auto-generated method stub
 		checkMarkImageView.setVisible(true);
 		Timeline timeline = new Timeline();
@@ -173,5 +176,5 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 	        }
 	    }));
 		timeline.play();
-	}
+	}*/
 }

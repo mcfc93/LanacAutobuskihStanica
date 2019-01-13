@@ -93,6 +93,14 @@ public class Relacija {
 	}
 
 
+	public Relacija(Stajaliste polaziste, Stajaliste odrediste, double cijena) {
+		// TODO Auto-generated constructor stub
+		this.polaziste = polaziste;
+		this.odrediste = odrediste;
+		this.cijenaJednokratna = cijena;
+	}
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -119,10 +127,7 @@ public class Relacija {
 	
 	@Override
 	public String toString() {
-		return "Relacija [idLinije=" + linija + ", idRelacije=" + idRelacije + ", polaziste=" + polaziste
-				+ ", odrediste=" + odrediste + ", vrijemePolaska=" + vrijemePolaska + ", vrijemeDolaska="
-				+ vrijemeDolaska + ", cijenaJednokratna=" + cijenaJednokratna + ", cijenaMjesecna=" + cijenaMjesecna
-				+ ", dani=" + dani + "]";
+		return polaziste.getNazivStajalista() + " - " + odrediste.getNazivStajalista();
 	}
 
 	public Linija getLinija() {
