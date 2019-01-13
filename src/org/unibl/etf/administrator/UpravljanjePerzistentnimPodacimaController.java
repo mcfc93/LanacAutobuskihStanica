@@ -84,9 +84,9 @@ public class UpravljanjePerzistentnimPodacimaController implements Initializable
     	Util.setAutocompleteList(odaberiMjestoTextField, Mjesto.getCityPostalCodeList());
     	odaberiMjestoTextField.getValidators().addAll(Util.requiredFieldValidator(odaberiMjestoTextField), Util.collectionValidator(odaberiMjestoTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
      	ValidatorBase postalCodeValidator=Util.collectionValidator(postanskiBrojTextField, Mjesto.getPostalCodeList(), false, "Već postoji");
-    	ValidatorBase cityValdator=Util.collectionValidator(nazivMjestaTextField, Mjesto.getCityList(), false, "Već postoji");
+    	//ValidatorBase cityValdator=Util.collectionValidator(nazivMjestaTextField, Mjesto.getCityList(), false, "Već postoji");
     	postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.integerValidator(postanskiBrojTextField), postalCodeValidator, Util.lengthValidator(postanskiBrojTextField, 7));
-   		nazivMjestaTextField.getValidators().addAll(Util.requiredFieldValidator(nazivMjestaTextField), Util.lengthValidator(nazivMjestaTextField, 35), cityValdator);
+   		nazivMjestaTextField.getValidators().addAll(Util.requiredFieldValidator(nazivMjestaTextField), Util.lengthValidator(nazivMjestaTextField, 35)/*, cityValdator*/);
    		
    		mjestoToggleGroup.selectedToggleProperty().addListener(listener -> {
     		if(dodajMjestoRadioButton.isSelected()) {
@@ -95,7 +95,7 @@ public class UpravljanjePerzistentnimPodacimaController implements Initializable
     			postanskiBrojTextField.clear();
     			nazivMjestaTextField.clear();
     			postanskiBrojTextField.getValidators().add(postalCodeValidator);
-    	   		nazivMjestaTextField.getValidators().add(cityValdator);
+    	   		//nazivMjestaTextField.getValidators().add(cityValdator);
     	   		odaberiMjestoTextField.resetValidation();
     	   		postanskiBrojTextField.resetValidation();
     	   		nazivMjestaTextField.resetValidation();
@@ -105,7 +105,7 @@ public class UpravljanjePerzistentnimPodacimaController implements Initializable
     			postanskiBrojTextField.clear();
     			nazivMjestaTextField.clear();
     			postanskiBrojTextField.getValidators().removeAll(postalCodeValidator);
-    			nazivMjestaTextField.getValidators().removeAll(cityValdator);
+    			//nazivMjestaTextField.getValidators().removeAll(cityValdator);
     			odaberiMjestoTextField.resetValidation();
     			postanskiBrojTextField.resetValidation();
     	   		nazivMjestaTextField.resetValidation();

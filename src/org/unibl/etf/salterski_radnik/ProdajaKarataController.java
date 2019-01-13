@@ -85,7 +85,6 @@ public class ProdajaKarataController implements Initializable {
 	public static final double STANICNA_USLUGA = 0.5;
 	public static int idKarte;
 	public static int idMjesecneKarte;
-	//private static MaskerPane progressPane = new MaskerPane();
 	
 	@FXML
 	private AnchorPane tableAnchorPane;
@@ -360,7 +359,6 @@ public class ProdajaKarataController implements Initializable {
 				if(imeTextField.validate() & prezimeTextField.validate() & brojTelefonaTextField.validate()) {
 					if(showPotvrda()) {
 						karta.setRezervacija(true);
-						//maskerSetUp();
 						MaskerPane progressPane = Util.getMaskerPane(anchorPane);
 						Task<Void> task = new Task<Void>() {
 				            @Override
@@ -396,7 +394,6 @@ public class ProdajaKarataController implements Initializable {
 			else {
 				// KUPOVINA KARATA
 				if(showPotvrda()) {
-					//maskerSetUp();
 					MaskerPane progressPane = Util.getMaskerPane(anchorPane);
 					Task<Void> task = new Task<Void>() {
 			            @Override
@@ -436,18 +433,6 @@ public class ProdajaKarataController implements Initializable {
 		alert.setHeaderText("Ne postoji karta sa trazenim serijskim brojem!");
 		alert.showAndWait();
 	}
-
-
-	/*public void maskerSetUp() {
-		  	progressPane = new MaskerPane();
-			progressPane.setText("Molimo sacekajte...");
-			progressPane.setVisible(false);
-			anchorPane.getChildren().add(progressPane);
-			AnchorPane.setTopAnchor(progressPane,0.0);
-			AnchorPane.setBottomAnchor(progressPane,0.0);
-			AnchorPane.setLeftAnchor(progressPane,0.0);
-			AnchorPane.setRightAnchor(progressPane,0.0);
-	}*/
 
 	public void validationSetUp() {
 		polazisteTextField.getValidators().addAll(Util.requiredFieldValidator(polazisteTextField),Util.collectionValidator(polazisteTextField, InformacijeController.stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite polaziste"));

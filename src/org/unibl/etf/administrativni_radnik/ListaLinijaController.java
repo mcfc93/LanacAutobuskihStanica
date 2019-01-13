@@ -38,7 +38,6 @@ public class ListaLinijaController implements Initializable {
 
 	public static ObservableList<Linija> linijeObsList;
 	public static Linija odabranaLinija;
-	public static MaskerPane progressPane = new MaskerPane();
 	public static int idLinije;
 
 	@FXML
@@ -119,7 +118,7 @@ public class ListaLinijaController implements Initializable {
                      	button.setOnMouseClicked(
                      			event ->  {  
                      				if(showPotvrda()) {
-                     					maskerSetUp();
+                     					MaskerPane progressPane=Util.getMaskerPane(anchorPane);
             							Task<Void> task = new Task<Void>() {
             					            @Override
             					            protected Void call() /*throws Exception*/ {
@@ -161,18 +160,7 @@ public class ListaLinijaController implements Initializable {
          
         
 	}
-	public void maskerSetUp() {
-	  	progressPane = new MaskerPane();
-		progressPane.setText("Molimo sačekajte...");
-		progressPane.setVisible(false);
-		anchorPane.getChildren().add(progressPane);
-		AnchorPane.setTopAnchor(progressPane,0.0);
-		AnchorPane.setBottomAnchor(progressPane,0.0);
-		AnchorPane.setLeftAnchor(progressPane,0.0);
-		AnchorPane.setRightAnchor(progressPane,0.0);
-		
 	
-}
 	public boolean showPotvrda() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("");

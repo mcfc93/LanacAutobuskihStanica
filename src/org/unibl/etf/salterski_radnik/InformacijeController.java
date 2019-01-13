@@ -1,23 +1,16 @@
 package org.unibl.etf.salterski_radnik;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.MonthDay;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
+import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.karta.Karta;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Praznik;
@@ -32,6 +25,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -59,7 +53,10 @@ public class InformacijeController implements Initializable{
 	private static ObservableList<Karta> karteObs = FXCollections.observableArrayList();
 	public static Stajaliste stajaliste = new Stajaliste();
 	
-	
+	private MaskerPane progressPane;
+	private boolean kraj=false;
+	private volatile boolean pauza=false;
+	public static Object lock=new Object();
 	
 	@FXML
 	private JFXButton pretragaButton = new JFXButton();
@@ -122,11 +119,23 @@ public class InformacijeController implements Initializable{
 		System.out.println("stajaliste stanice: " + PrijavaController.autobuskaStanica.getIdStajalista());
 		clearImageView.setVisible(false);
 		
-		mjestoTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
-        	if(!newValue.isEmpty()) {
+		mjestoTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+        	//if(!newValue.isEmpty()) {
+			if(!mjestoTextField.getText().isEmpty()) {
         		clearImageView.setVisible(true);
+        		
+        		pauza=true;
+        		//System.out.println(pauza);
+        		
         	} else {
         		clearImageView.setVisible(false);
+
+        		pauza=false;
+        		synchronized(lock) {
+        			lock.notify();
+        		}
+        		//System.out.println(pauza);
+        		
         	}
 		});
 		
@@ -175,13 +184,65 @@ public class InformacijeController implements Initializable{
 		
 		Util.setAutocompleteList(mjestoTextField, stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()));
 		//mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),Util.collectionValidator(mjestoTextField, mjestaSet, true, "Unesite mjesto"));
-		mjestoTextField.getValidators().add(Util.requiredFieldValidator(mjestoTextField));
-		mjestoTextField.getValidators().add(Util.collectionValidator(mjestoTextField, stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite mjesto"));
+		//mjestoTextField.getValidators().add(Util.requiredFieldValidator(mjestoTextField));
+		//mjestoTextField.getValidators().add(Util.collectionValidator(mjestoTextField, stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite mjesto"));
 		polasciDolasciComboBox.getItems().addAll("POLASCI", "DOLASCI");
 		polasciDolasciComboBox.getSelectionModel().selectFirst();
 		polasciDolasciComboBox.setStyle("-fx-font-weight: bold;");
 		
 		
+		progressPane = Util.getMaskerPane(tableAnchorPane);
+		progressPane.setVisible(false);
+		//Thread koji azurira prve polaske sa stanice
+		Thread thread = new Thread() {
+        	@Override
+        	public void run() {
+    			System.out.println(Thread.currentThread());
+    			while(!kraj) {
+    				if(pauza) {
+    					System.out.println("PAUZA");
+    					synchronized(lock) {
+    						try {
+    							lock.wait();
+    						} catch(InterruptedException e) {
+    							Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+    						}
+    					}
+    				}
+    				
+    				
+    				Platform.runLater(() -> {
+    					progressPane.setVisible(true);
+    				});
+    				try {
+    					Thread.sleep(2000);
+    					Platform.runLater(() -> {
+    						progressPane.setVisible(false);
+    					});
+    					Thread.sleep(2000);
+    				}catch (InterruptedException e) {
+    					Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+    				}
+    			}
+        	}
+        };
+		
+		Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws InterruptedException {
+            	System.out.println(Thread.currentThread());
+                //progressPane.setVisible(true);
+                thread.start();
+                return null;
+            }
+            @Override
+            protected void succeeded(){
+                super.succeeded();
+                progressPane.setVisible(false);
+            }
+        };
+        new Thread(task).start();
+        
 	}
 	
 	@FXML
@@ -196,13 +257,16 @@ public class InformacijeController implements Initializable{
 				mjestoTextField.end();
 			});
 			//if(mjestoTextField.validate()){
+			
+			//try {
+			
 				karteObs.clear();
 				if(polasciRadioButton.isSelected()) {
 					Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(mjestoTextField.getText())).findFirst().get();
 					Stajaliste polaziste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
 						for(Karta karta : Karta.getKarteList(polaziste,odrediste)) {
 							daniUSedmici = karta.getRelacija().getDani();
-							System.out.println("Dani" + daniUSedmici);
+							System.out.println("Dani: " + daniUSedmici);
 							if(daniUSedmici.contains(String.valueOf(datum.getValue().getDayOfWeek().getValue())))
 								karteObs.add(karta);
 						}	
@@ -217,6 +281,10 @@ public class InformacijeController implements Initializable{
 				}
 				if(karteObs.isEmpty())
 					showPrazanSetAlert();
+				
+				
+			//} catch(NoSuchElementException e) {
+				
 			//}
 			
 		}

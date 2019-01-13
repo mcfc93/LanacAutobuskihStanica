@@ -201,7 +201,7 @@ public class ListaNalogaController implements Initializable {
         obrisiColumn.setSortable(false);
 		
 		
-		MaskerPane progressPane = new MaskerPane();
+		MaskerPane progressPane = Util.getMaskerPane(anchorPane);/*= new MaskerPane();
 		progressPane.setText("Molimo sačekajte...");
 		progressPane.setVisible(false);
 		anchorPane.getChildren().add(progressPane);
@@ -209,6 +209,7 @@ public class ListaNalogaController implements Initializable {
 		AnchorPane.setBottomAnchor(progressPane,0.0);
 		AnchorPane.setLeftAnchor(progressPane,0.0);
 		AnchorPane.setRightAnchor(progressPane,0.0);
+		*/
 		
 		System.out.println(Thread.currentThread());
 		

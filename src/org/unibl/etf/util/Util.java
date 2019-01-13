@@ -34,7 +34,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
 //klasa koja sadrzi sve pomocne alate
@@ -512,11 +511,11 @@ System.out.println(PROPERTY);
 		alert.showAndWait();
 	}
 	
-	public static MaskerPane getMaskerPane(Pane pane) {
+	public static MaskerPane getMaskerPane(AnchorPane anchorPane) {
 		MaskerPane progressPane = new MaskerPane();
 		progressPane.setText("Molimo sačekajte...");
 		progressPane.setVisible(false);
-		pane.getChildren().add(progressPane);
+		anchorPane.getChildren().add(progressPane);
 		AnchorPane.setTopAnchor(progressPane,0.0);
 		AnchorPane.setBottomAnchor(progressPane,0.0);
 		AnchorPane.setLeftAnchor(progressPane,0.0);
