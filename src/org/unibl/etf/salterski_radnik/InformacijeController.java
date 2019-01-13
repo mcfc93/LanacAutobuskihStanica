@@ -45,7 +45,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 public class InformacijeController implements Initializable{
 	
@@ -54,7 +56,7 @@ public class InformacijeController implements Initializable{
 	public static Stajaliste stajaliste = new Stajaliste();
 	
 	private MaskerPane progressPane;
-	private boolean kraj=false;
+	private static volatile boolean kraj=false;
 	private volatile boolean pauza=false;
 	public static Object lock=new Object();
 	
@@ -74,7 +76,8 @@ public class InformacijeController implements Initializable{
 	
 	
 	
-	
+	@FXML
+	private GridPane gridPane;
 	
 	@FXML
 	private AnchorPane tableAnchorPane;
@@ -191,14 +194,25 @@ public class InformacijeController implements Initializable{
 		polasciDolasciComboBox.setStyle("-fx-font-weight: bold;");
 		
 		
+		
+		Platform.runLater(() -> {
+			((Stage)gridPane.getScene().getWindow()).setOnHiding(event -> {
+				System.out.println("Closing Stage");
+				kraj=true;
+			});
+		});
+		kraj=false;
 		progressPane = Util.getMaskerPane(tableAnchorPane);
 		progressPane.setVisible(false);
-		//Thread koji azurira prve polaske sa stanice
-		Thread thread = new Thread() {
-        	@Override
-        	public void run() {
-    			System.out.println(Thread.currentThread());
-    			while(!kraj) {
+		
+		Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() {
+            	System.out.println(Thread.currentThread());
+                //progressPane.setVisible(true);
+                //thread.start();
+                
+                while(!kraj) {
     				if(pauza) {
     					System.out.println("PAUZA");
     					synchronized(lock) {
@@ -208,40 +222,54 @@ public class InformacijeController implements Initializable{
     							Util.LOGGER.log(Level.SEVERE, e.toString(), e);
     						}
     					}
+    					System.out.println("NASTAVAK");
     				}
     				
     				
     				Platform.runLater(() -> {
     					progressPane.setVisible(true);
     				});
+    				
+    				/**
+    				 * UCITAVANJE
+    				 */
+    				System.out.println("UCITAVANJE");
     				try {
-    					Thread.sleep(2000);
-    					Platform.runLater(() -> {
-    						progressPane.setVisible(false);
-    					});
+						Thread.sleep(2000);
+					}catch (InterruptedException e) {
+						Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+					}
+    				
+    				Platform.runLater(() -> {
+						progressPane.setVisible(false);
+					});
+    				
+    				try {
     					Thread.sleep(2000);
     				}catch (InterruptedException e) {
     					Util.LOGGER.log(Level.SEVERE, e.toString(), e);
     				}
     			}
-        	}
-        };
-		
-		Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() throws InterruptedException {
-            	System.out.println(Thread.currentThread());
-                //progressPane.setVisible(true);
-                thread.start();
+                
                 return null;
             }
             @Override
             protected void succeeded(){
                 super.succeeded();
                 progressPane.setVisible(false);
+                System.out.println("SUCCEEDED");
+            }
+            
+            @Override
+            protected void cancelled() {
+            	super.cancelled();
+            	progressPane.setVisible(false);
+                System.out.println("CANCELLED");
             }
         };
-        new Thread(task).start();
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
         
 	}
 	
