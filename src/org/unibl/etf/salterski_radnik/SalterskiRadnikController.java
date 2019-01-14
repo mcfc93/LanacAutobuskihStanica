@@ -8,6 +8,7 @@ import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
 
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -61,7 +62,20 @@ public class SalterskiRadnikController implements Initializable {
 		    if (newValue == null) {
 		        oldValue.setSelected(true);
 		    }
-		});	
+		});
+		
+		ObservableList<Toggle> toggleButtons=toggleGroup.getToggles();
+		for(Toggle t: toggleButtons) {
+			t.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+				if(newValue) {
+					((ToggleButton)t).setDisable(true);
+				} else {
+					((ToggleButton)t).setDisable(false);
+				}
+			});
+		}
+		
+		
 		informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " + PrijavaController.nalog.getZaposleni().getPrezime());
 		//DragAndDrop
 		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -88,12 +102,15 @@ public class SalterskiRadnikController implements Initializable {
 		anchorPane.setOnMouseReleased((event) -> {
 			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 			stage.setOpacity(1.0);
-		});		
+		});
+		
+		informacijeButton.setDisable(true);
 		info();
 	}
 	
 	@FXML
 	void info( ) {
+		//InformacijeController.startTask();
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/InformacijeView.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
@@ -109,6 +126,7 @@ public class SalterskiRadnikController implements Initializable {
 	
 	@FXML
 	public void otkazivanjeRezervacije(ActionEvent event) {
+		InformacijeController.endTask();
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/OtkazivanjeRezervacijeView.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
@@ -123,6 +141,7 @@ public class SalterskiRadnikController implements Initializable {
 	}
 	@FXML
 	public void odjava(ActionEvent event) {
+		InformacijeController.endTask();
 		if(PrijavaController.nalog.odjava()) {
 			PrijavaController.nalog=null;
 			try {
@@ -176,6 +195,7 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	
 	@FXML
 	void korisnickiNalog(ActionEvent event) {
+		InformacijeController.endTask();
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/prijava/UpravljanjeKorisnickimNalogom.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
@@ -191,8 +211,7 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	
 	@FXML
 	void prodajaKarata(ActionEvent event) {
-		prodajaKarataButton.getStyleClass().removeAll("buttonMenu");
-		prodajaKarataButton.getStyleClass().add("buttonPressed");
+		InformacijeController.endTask();
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/ProdajaKarataView.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);

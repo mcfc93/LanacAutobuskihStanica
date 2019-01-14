@@ -6,12 +6,14 @@ import java.time.LocalTime;
 import java.time.MonthDay;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.karta.Karta;
+import org.unibl.etf.karta.Relacija;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Praznik;
 import org.unibl.etf.util.Stajaliste;
@@ -54,11 +56,6 @@ public class InformacijeController implements Initializable{
 	public static List<Stajaliste> stajalistaList = new ArrayList<>();
 	private static ObservableList<Karta> karteObs = FXCollections.observableArrayList();
 	public static Stajaliste stajaliste = new Stajaliste();
-	
-	private MaskerPane progressPane;
-	private static volatile boolean kraj=false;
-	private volatile boolean pauza=false;
-	public static Object lock=new Object();
 	
 	@FXML
 	private JFXButton pretragaButton = new JFXButton();
@@ -111,6 +108,14 @@ public class InformacijeController implements Initializable{
     
     @FXML
     private JFXComboBox<String> polasciDolasciComboBox;
+    
+    
+    private static Thread thread;
+	private static MaskerPane progressPane;
+	private static volatile boolean kraj=false;
+	private static volatile boolean pauza=false;
+	public static Object lock=new Object();
+	
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -201,76 +206,95 @@ public class InformacijeController implements Initializable{
 				kraj=true;
 			});
 		});
+		
+		
 		kraj=false;
 		progressPane = Util.getMaskerPane(tableAnchorPane);
 		progressPane.setVisible(false);
-		
-		Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() {
-            	System.out.println(Thread.currentThread());
-                //progressPane.setVisible(true);
-                //thread.start();
-                
-                while(!kraj) {
-    				if(pauza) {
-    					System.out.println("PAUZA");
-    					synchronized(lock) {
-    						try {
-    							lock.wait();
-    						} catch(InterruptedException e) {
-    							Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-    						}
-    					}
-    					System.out.println("NASTAVAK");
-    				}
-    				
-    				
-    				Platform.runLater(() -> {
-    					progressPane.setVisible(true);
-    				});
-    				
-    				/**
-    				 * UCITAVANJE
-    				 */
-    				System.out.println("UCITAVANJE");
-    				try {
-						Thread.sleep(2000);
-					}catch (InterruptedException e) {
-						Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-					}
-    				
-    				Platform.runLater(() -> {
-						progressPane.setVisible(false);
-					});
-    				
-    				try {
-    					Thread.sleep(2000);
-    				}catch (InterruptedException e) {
-    					Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-    				}
-    			}
-                
-                return null;
-            }
-            @Override
-            protected void succeeded(){
-                super.succeeded();
-                progressPane.setVisible(false);
-                System.out.println("SUCCEEDED");
-            }
-            
-            @Override
-            protected void cancelled() {
-            	super.cancelled();
-            	progressPane.setVisible(false);
-                System.out.println("CANCELLED");
-            }
-        };
-        Thread thread = new Thread(task);
-        thread.setDaemon(true);
-        thread.start();
+		if(thread==null || !thread.isAlive()) {
+			System.out.println("START - " + (thread==null? "NULL": thread.getState()));
+			Task<Void> task = new Task<Void>() {
+	            @Override
+	            protected Void call() {
+	            	System.out.println(Thread.currentThread());
+	                //progressPane.setVisible(true);
+	                //thread.start();
+	                
+	                while(!kraj) {
+	    				if(pauza) {
+	    					System.out.println("PAUZA");
+	    					synchronized(lock) {
+	    						try {
+	    							lock.wait();
+	    						} catch(InterruptedException e) {
+	    							Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    						}
+	    					}
+	    					System.out.println("NASTAVAK");
+	    				}
+	    				
+	    				
+	    				Platform.runLater(() -> {
+	    					progressPane.setVisible(true);
+	    				});
+	    				
+	    				/**
+	    				 * UCITAVANJE
+	    				 */
+	    				System.out.println("UCITAVANJE");
+	    				try {
+							Thread.sleep(2000);
+						}catch (InterruptedException e) {
+							Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+						}
+	    				//karteObs.clear();
+	    				karteObs.add(new Karta(new Relacija(1, 1, "BL - GR", 5, 7, new Stajaliste("Banja Luka"), new Stajaliste("Gradiska"), 7.5, 135.0)));
+	    				
+	    				Platform.runLater(() -> {
+							progressPane.setVisible(false);
+						});
+	    				
+	    				try {
+	    					Thread.sleep(2000);
+	    				}catch (InterruptedException e) {
+	    					Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    				}
+	    			}
+	                
+	                return null;
+	            }
+	            @Override
+	            protected void succeeded(){
+	                super.succeeded();
+	                progressPane.setVisible(false);
+	                System.out.println("SUCCEEDED");
+	            }
+	            
+	            @Override
+	            protected void cancelled() {
+	            	super.cancelled();
+	            	progressPane.setVisible(false);
+	                System.out.println("CANCELLED");
+	            }
+	        };
+	        thread = new Thread(task);
+	        thread.setDaemon(true);
+	        thread.start();
+		}
         
+	}
+	
+	public static void endTask() {
+		kraj=true;
+		pauza=false;
+		synchronized(lock) {
+			lock.notify();
+		}
+	}
+	
+	public static void startTask() {
+		kraj=false;
+		pauza=false;
 	}
 	
 	@FXML
@@ -284,9 +308,8 @@ public class InformacijeController implements Initializable{
 			Platform.runLater(() -> {
 				mjestoTextField.end();
 			});
-			//if(mjestoTextField.validate()){
 			
-			//try {
+			try {
 			
 				karteObs.clear();
 				if(polasciRadioButton.isSelected()) {
@@ -311,9 +334,9 @@ public class InformacijeController implements Initializable{
 					showPrazanSetAlert();
 				
 				
-			//} catch(NoSuchElementException e) {
-				
-			//}
+			} catch(NoSuchElementException e) {
+				Util.getNotifications("Greška", "Nepoznato stajalište!", "ERROR").show();
+			}
 			
 		}
     }

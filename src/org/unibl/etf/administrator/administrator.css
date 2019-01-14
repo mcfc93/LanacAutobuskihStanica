@@ -81,6 +81,15 @@
 	-fx-cursor: normal;
 }
 
+.toggle-button:disabled {
+	/*-fx-background-color: #ff0095;*/
+	-fx-background-color: BLACK;
+	-fx-border-color: hotpink;
+	-fx-border-width: 0px 4px 0px 0px;
+	-fx-cursor: normal;
+	-fx-opacity: 1;
+}
+
 /* * * * * * *
  * 
  * SystemButtons

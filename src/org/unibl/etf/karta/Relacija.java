@@ -40,6 +40,24 @@ public class Relacija {
 	}
 	
 	
+	/**
+	 * 
+	 * TEMP
+	 * 
+	 */
+	
+	public Relacija(int idRelacije, int idLinije, String nazivLinije, int peron, int voznjaPraznikom, Stajaliste polaziste, Stajaliste odrediste, double cijenaJednokratna, double cijenaMjesecna) {
+		this.idRelacije = idRelacije;
+		this.linija = new Linija(idLinije, nazivLinije, peron, new Prevoznik("Pavlovic"), voznjaPraznikom);
+		this.polaziste = polaziste;
+		this.odrediste = odrediste;
+		this.cijenaJednokratna = cijenaJednokratna;
+		this.cijenaMjesecna = cijenaMjesecna;
+	}
+	
+	
+	
+	
 	/*
 	 * konstruktor za kartu
 	 */
