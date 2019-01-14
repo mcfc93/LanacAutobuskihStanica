@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="250.0" prefWidth="400.0" stylesheets="@../administrator/administrator.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.salterski_radnik.MjesecnaKartaController">
+   <children>
+      <AnchorPane fx:id="menuLine" layoutX="2.0" layoutY="-1.0" prefHeight="25.0" prefWidth="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="close" layoutX="612.0" layoutY="6.0" onMouseClicked="#close" prefHeight="20.0" prefWidth="20.0" styleClass="close" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+               <graphic>
+                  <ImageView fx:id="exitImageView" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/close.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+         </children>
+      </AnchorPane>
+      <JFXButton fx:id="stampajButton" layoutX="181.0" layoutY="161.0" onAction="#stampaj" prefHeight="25.0" prefWidth="100.0" text="Štampaj" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="120.0" />
+      <JFXButton fx:id="nazadButton" layoutX="288.0" layoutY="161.0" onAction="#nazad" onMouseClicked="#close" prefHeight="25.0" prefWidth="100.0" text="Nazad" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+      <AnchorPane fx:id="mjesecnaAnchorPane" layoutX="14.0" layoutY="44.0" prefHeight="161.0" prefWidth="377.0" styleClass="mjesecnaAnchor" stylesheets="@../administrator/administrator.css" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="42.0">
+         <children>
+            <ImageView fx:id="slika" fitHeight="100.0" fitWidth="100.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true">
+               <image>
+                  <Image url="@img/user.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="prevoznikLabel" layoutX="120.0" layoutY="17.0" prefHeight="40.0" prefWidth="125.0" text="PREVOZNIK PREVOZNIK" textFill="WHITE" wrapText="true" AnchorPane.bottomAnchor="112.0">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Label fx:id="relacijaLabel" layoutX="120.0" layoutY="55.0" prefHeight="60.0" prefWidth="125.0" style="-fx-alignment: top-left;" text="RELACIJA RELACIJA RELACIJA RELACIJA RELACIJA RELACIJA" textFill="WHITE" wrapText="true" AnchorPane.bottomAnchor="40.0">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Label fx:id="linijaLabel" layoutX="120.0" layoutY="43.0" prefHeight="40.0" prefWidth="125.0" text="LINIJA LINIJA LINIJA LINIJA" textFill="WHITE" visible="false" wrapText="true" AnchorPane.bottomAnchor="70.0">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Label fx:id="tipLabel" layoutX="265.0" layoutY="53.0" prefHeight="25.0" prefWidth="101.0" text="Vrsta mjesecne" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Label fx:id="mjesecVazenjaLabel" layoutX="265.0" layoutY="10.0" prefHeight="30.0" prefWidth="101.0" text="12-2018" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="imePrezimeLabel" layoutX="10.0" layoutY="125.0" prefHeight="20.0" prefWidth="175.0" text="IME PREZIME IME PREZIME" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <AnchorPane layoutX="265.0" layoutY="90.0" maxHeight="59.0" maxWidth="101.0" minHeight="59.0" minWidth="101.0" prefHeight="59.0" prefWidth="101.0" style="-fx-background-color: white;">
+               <children>
+                  <ImageView fx:id="barcodeImageView" fitHeight="40.0" fitWidth="95.0" layoutX="8.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="3.0">
+                     <image>
+                        <Image url="@img/barcode-example.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="barcodeLabel" layoutX="5.0" layoutY="43.0" prefHeight="16.0" prefWidth="95.0" style="-fx-alignment: center; -fx-background-color: white;" text="1234567890123" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="43.0">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

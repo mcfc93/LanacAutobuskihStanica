@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.administrativni_radnik.ListaLinijaController">
+   <children>
+      <TableView fx:id="linijeTableView" layoutX="-7.0" prefHeight="470.0" prefWidth="600.0" stylesheets="@../administrator/administrator.css" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+        <columns>
+          <TableColumn fx:id="nazivLinijeColumn" prefWidth="143.0" text="Naziv linije" />
+            <TableColumn fx:id="nazivPrevoznikaColumn" prefWidth="125.0" text="Naziv prevoznika" />
+            <TableColumn fx:id="daniUSedmiciColumn" prefWidth="124.0" text="Dani" />
+          <TableColumn fx:id="idLinijeLinijeColumn" prefWidth="50.0" text="ID linije" />
+            <TableColumn fx:id="peronLinijeColumn" minWidth="6.0" prefWidth="50.0" text="Peron" />
+            <TableColumn fx:id="izmijeniColumn" prefWidth="43.0" />
+            <TableColumn fx:id="izbrisiColumn" prefWidth="53.0" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

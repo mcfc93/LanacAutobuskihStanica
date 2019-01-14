@@ -1,0 +1,159 @@
+/* * * * * * *
+ * 
+ * Alert 
+ * 
+ * * * * * * */
+/*
+.alert {
+	-fx-border-color:black;
+  	-fx-border-width:2.0px;
+}
+*/
+
+/**Costumization of The Bar where the buttons are located**/
+.alert > .button-bar > .container {
+  -fx-background-color:black;
+}
+
+.alert > .content.label {
+   /*-fx-padding: 0.5em 0.5em 0.5em 0.5em;*/
+   -fx-background-color: black;
+   -fx-text-fill:white;
+   -fx-font-size:13.0px;
+   -fx-font-weight:bold;
+}
+
+/**Costumization of DialogPane Header**/
+.alert:header .header-panel {
+  -fx-background-color: black;
+}
+
+.alert:header .header-panel .label{
+  	-fx-background-color: black;
+	-fx-background-radius:5px;
+  	-fx-text-fill:#ff0095;
+  	-fx-font-size:15.0px;
+  	-fx-font-weight:bold;
+  	/*-fx-padding: 25px;*/
+}
+
+.alert:no-header .graphic-container {
+-fx-background-color: black;
+    -fx-padding: 0.833em 0 0 0.833em; /* 10px 0px 0px 10px */
+}
+
+/**Costumization of Buttons**/
+
+.alert .button{
+   -fx-background-color:#ff0095;
+   -fx-text-fill:white;
+   -fx-wrap-text: true;
+   /*-fx-effect: dropshadow(three-pass-box, white, 10.0, 0.0, 0.0, 0.0);*/
+   -fx-cursor:hand;
+   -fx-border-radius: 0px;
+	-fx-background-radius: 0px;
+ }
+
+.alert .button:hover{     
+  -fx-background-color:white;
+  -fx-text-fill:#ff0095;
+  -fx-font-weight:bold; 
+ }
+ 
+ .alert .button:default {
+    -fx-effect: dropshadow(three-pass-box, white, 10.0, 0.0, 0.0, 0.0);
+}
+
+ 
+ 
+ 
+.alert.confirmation.dialog-pane,
+.text-input-dialog.dialog-pane,
+.choice-dialog.dialog-pane {
+    -fx-graphic: url('file:src/org/unibl/etf/img/alert-confirmation.png');
+}
+
+.alert.information.dialog-pane {
+    -fx-graphic: url('file:src/org/unibl/etf/img/alert-information.png');
+}
+
+.alert.error.dialog-pane {
+    -fx-graphic: url('file:src/org/unibl/etf/img/alert-error.png');
+}
+
+.alert.warning.dialog-pane {
+    -fx-graphic: url('file:src/org/unibl/etf/img/alert-denied.png');
+}
+
+.alertDelete.confirmation.dialog-pane {
+    -fx-graphic: url('file:src/org/unibl/etf/img/alert-delete.png');
+}
+
+.alertBug.error.dialog-pane {
+    -fx-graphic: url('file:src/org/unibl/etf/img/alert-bug.png');
+}
+
+/* * * * * * *
+ * 
+ * Notifications
+ * 
+ * * * * * * */
+.notification-bar > .pane {
+    /*-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;*/
+    -fx-background-color: white;
+    -fx-padding: 7 7 7 7;
+    /*-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 11, 0.0, 0, 3);*/
+    -fx-effect: dropshadow(three-pass-box, black, 10.0, 0.0, 0.0, 0.0);
+    -fx-background-insets: 0, 1, 2;
+}
+
+.notification-bar > .pane .label {
+    -fx-font-size: 1.166667em; /*15px;*/
+    -fx-text-fill: #292929;
+    -fx-alignment: top-left;
+}
+
+.notification-bar > .pane .title {
+    -fx-font-size: 1.166667em; /*15px;*/
+    -fx-text-fill: #ff0095;
+    -fx-font-weight: bold;
+}
+
+ .notification-bar > .pane .close-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 2;
+    -fx-padding: 0 0 0 0;
+    -fx-alignment: center;
+}
+
+.notification-bar > .pane .close-button:hover {
+    /*-fx-background-color: linear-gradient(#a3a3a3, #8b8b8b 34%, #777777 36%, #777777 63%, #8b8b8b 65%, #adadad);*/
+    -fx-background-color: red;
+}
+
+.notification-bar > .pane .close-button:pressed {
+    /*-fx-background-color: linear-gradient(#a3a3a3, #8b8b8b 34%, #777777 36%, #777777 63%, #8b8b8b 65%, #adadad);*/
+    -fx-background-color: red;
+}
+
+.notification-bar > .pane .close-button > .graphic {
+    /*-fx-background-color: #949494;*/
+    -fx-background-color: red;
+    -fx-scale-shape: false;
+    -fx-padding: 4.5 4.5 4.5 4.5; /* Graphic is 9x9 px */
+}
+
+.notification-bar > .pane .close-button:hover > .graphic {
+    /*-fx-background-color: #fefeff;*/
+    -fx-background-color: white;
+}
+
+.notification-bar > .pane .close-button:pressed > .graphic {
+    /*-fx-background-color: #cfcfcf;*/
+    -fx-background-color: #5CBFEB;
+}
+
+.notification-bar > .pane .close-button > .graphic {
+    -fx-shape: "M395.992,296.758l1.794-1.794l7.292,7.292l-1.795,1.794 L395.992,296.758z M403.256,294.992l1.794,1.794l-7.292,7.292l-1.794-1.795 L403.256,294.992z";
+}
