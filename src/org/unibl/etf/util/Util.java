@@ -1,5 +1,6 @@
 package org.unibl.etf.util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -48,6 +49,14 @@ public class Util {
 		//postavljanje Logger-a
 		//FileHandler fileHandler=null;
 	    try {
+	    	File f=new File("logs");
+			if(!f.exists()) {
+				f.mkdirs();
+			}
+			f=new File("karte/slike");
+			if(!f.exists()) {
+				f.mkdirs();
+			}
 	    	//FileHandler fileHandler = new FileHandler(System.getProperty("user.home") + File.separator + "error.log", true);
 	    	fileHandler = new FileHandler("logs/error.log", true);	//append
 	        LOGGER.addHandler(fileHandler);
