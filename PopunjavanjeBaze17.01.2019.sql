@@ -152,7 +152,7 @@ INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona
 
 /*------------Nalog-------------------------------------------------------------*/
 INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `Stanje`) VALUES ('mknezic', '1506988192664', '264C8C381BF16C982A4E59B0DD4C6F7808C51A05F64C35DB42CC78A2A72875BB', 'Administrator', 'Aktivno');
-INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `Stanje`) VALUES ('mcfc93', '2506994256987', '264C8C381BF16C982A4E59B0DD4C6F7808C51A05F64C35DB42CC78A2A72875BB', 'Administrator', 'Aktivno');
+INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `Stanje`) VALUES ('mcfc93', '1210993256987', '264C8C381BF16C982A4E59B0DD4C6F7808C51A05F64C35DB42CC78A2A72875BB', 'Administrator', 'Aktivno');
 INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `Stanje`) VALUES ('vculum', '1304993125942', '264C8C381BF16C982A4E59B0DD4C6F7808C51A05F64C35DB42CC78A2A72875BB', 'Administrator', 'Aktivno');
 INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `JIBStanice`, `Stanje`) VALUES ('alujic', '1408991685365', '264C8C381BF16C982A4E59B0DD4C6F7808C51A05F64C35DB42CC78A2A72875BB', 'Administrativni radnik', '1111111111111', 'Aktivno');
 INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `JIBStanice`, `Stanje`) VALUES ('canela', '2902990369852', '264C8C381BF16C982A4E59B0DD4C6F7808C51A05F64C35DB42CC78A2A72875BB', 'Šalterski radnik', '1111111111111', 'Aktivno');
