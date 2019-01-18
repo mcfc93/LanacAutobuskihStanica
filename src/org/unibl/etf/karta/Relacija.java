@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,9 @@ import org.unibl.etf.administrativni_radnik.ListaLinijaController;
 import org.unibl.etf.salterski_radnik.InformacijeController;
 import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
+
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 
 public class Relacija {
 	
@@ -21,9 +25,10 @@ public class Relacija {
 	private Stajaliste odrediste;
 	private Time vrijemePolaska;
 	private Time vrijemeDolaska;
-	private double cijenaJednokratna;
-	private double cijenaMjesecna;
+	private Double cijenaJednokratna;
+	private Double cijenaMjesecna;
 	private String dani;
+	private LocalTime duzinaPuta;
 	
 	/*
 	 * 
@@ -31,6 +36,9 @@ public class Relacija {
 	 */
 	//relacijeList.add(new Relacija(r.getInt("IdRelacije"), r.getInt("IdLinije"), polaziste, odrediste, r.getDouble("CijenaJednokratna"), r.getDouble("CijenaMjesecna")));
 	
+	
+
+
 	public Relacija(int idRelacije, int idLinije, Stajaliste polaziste, Stajaliste odrediste, double cijenaJednokratna, double cijenaMjesecna) {
 		this.idRelacije = idRelacije;
 		this.linija = new Linija(idLinije);
@@ -38,7 +46,8 @@ public class Relacija {
 		this.odrediste = odrediste;
 		this.cijenaJednokratna = cijenaJednokratna;
 		this.cijenaMjesecna = cijenaMjesecna;
-				
+		
+		
 	}
 	
 	
@@ -53,6 +62,8 @@ public class Relacija {
 		this.linija = new Linija(idLinije, nazivLinije, peron, new Prevoznik("Pavlovic"), voznjaPraznikom);
 		this.polaziste = polaziste;
 		this.odrediste = odrediste;
+		this.cijenaJednokratna = cijenaJednokratna;
+		this.cijenaMjesecna = cijenaMjesecna;
 		this.cijenaJednokratna = cijenaJednokratna;
 		this.cijenaMjesecna = cijenaMjesecna;
 	}
@@ -73,6 +84,7 @@ public class Relacija {
 		this.vrijemePolaska = vrijemePolaska;
 		this.vrijemeDolaska = vrijemeDolaska;
 		this.cijenaJednokratna = cijenaJednokratna;
+		this.cijenaJednokratna = cijenaJednokratna;
 		this.dani = dani;
 	}
 	
@@ -86,7 +98,8 @@ public class Relacija {
 		this.polaziste = polaziste;
 		this.odrediste = odrediste;
 		this.cijenaMjesecna = cijenaMjesecna;
-	}
+		this.cijenaMjesecna = cijenaMjesecna;	
+		}
 	
 	
 	/*
@@ -119,9 +132,33 @@ public class Relacija {
 		this.polaziste = polaziste;
 		this.odrediste = odrediste;
 		this.cijenaJednokratna = cijena;
+		
 	}
 
+/*
+ * konstruktor za kreiranje linije*/
+	public Relacija(Stajaliste polaziste, Stajaliste odrediste, LocalTime duzinaPuta) {
+		// TODO Auto-generated constructor stub
+		this.polaziste = polaziste;
+		this.odrediste = odrediste;
+		this.duzinaPuta = duzinaPuta;
+	}
 
+	public LocalTime getDuzinaPuta() {
+		return duzinaPuta;
+	}
+
+	public String getNazivPolazista() {
+		return polaziste.getNazivStajalista();
+	}
+	public String getNazivOdredista() {
+		return odrediste.getNazivStajalista();
+	}
+	
+
+	public void setDuzinaPuta(LocalTime duzinaPuta) {
+		this.duzinaPuta = duzinaPuta;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -187,18 +224,7 @@ public class Relacija {
 	public void setVrijemeDolaska(Time vrijemeDolaska) {
 		this.vrijemeDolaska = vrijemeDolaska;
 	}
-	public double getCijenaJednokratna() {
-		return cijenaJednokratna;
-	}
-	public void setCijenaJednokratna(double cijenaJednokratna) {
-		this.cijenaJednokratna = cijenaJednokratna;
-	}
-	public double getCijenaMjesecna() {
-		return cijenaMjesecna;
-	}
-	public void setCijenaMjesecna(double cijenaMjesecna) {
-		this.cijenaMjesecna = cijenaMjesecna;
-	}
+	
 	public String getDani() {
 		return dani;
 	}
@@ -293,7 +319,21 @@ public class Relacija {
 		}
 		return null;
 	}
-	
+
+
+
+	public Double getCijenaJednokratna() {
+		return cijenaJednokratna;
+	}
+	public void setCijenaJednokratna(double cijenaJednokratna) {
+		this.cijenaJednokratna = cijenaJednokratna;
+	}
+	public Double getCijenaMjesecna() {
+		return cijenaMjesecna;
+	}
+	public void setCijenaMjesecna(double cijenaMjesecna) {
+		this.cijenaMjesecna = cijenaMjesecna;
+	}
 
 	
 	

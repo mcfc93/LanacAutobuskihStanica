@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 import org.unibl.etf.util.Mjesto;
+import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 
 import com.jfoenix.controls.JFXButton;
@@ -84,6 +85,14 @@ public class DodavanjeStajalistaController implements Initializable {
     void potvrdi(ActionEvent event) {
     	if(nazivStajalistaTextField.validate()
     			& postanskiBrojTextField.validate()) {
+    		
+    		int postanskiBrojInt = Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim());
+    		
+    		Stajaliste novoStajaliste = new Stajaliste(0, postanskiBrojInt, null, nazivStajalistaTextField.getText());
+    		novoStajaliste.setIdStajalista(Stajaliste.dodajStajaliste(novoStajaliste));
+    		String nazivMjesta = ListaLinijaController.stajalistaList.stream().filter(s -> s.getPostanskiBroj()==novoStajaliste.getPostanskiBroj()).findFirst().get().getNaziv();
+    		novoStajaliste.setNaziv(nazivMjesta);
+    		ListaLinijaController.stajalistaList.add(novoStajaliste);
     		Platform.runLater(() -> {
     			Util.getNotifications("Obavještenje.", "Stajalište dodano.", "Information").show();
     		});

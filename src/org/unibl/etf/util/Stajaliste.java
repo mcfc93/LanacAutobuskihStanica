@@ -148,6 +148,34 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 		}
 		return null;
 	}
+	
+	public static List<Stajaliste> getStajalistaStanicaList() {
+		List<Stajaliste> stajalistaStanicaList = new ArrayList<>();
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		String sql = "select autobuska_stanica.IdStajalista,autobusko_stajaliste.Naziv,mjesto.PostanskiBroj,mjesto.Naziv from autobuska_stanica join "
+				+ "(autobusko_stajaliste,mjesto) on "
+				+ "(autobuska_stanica.IdStajalista=autobusko_stajaliste.IdStajalista and autobusko_stajaliste.PostanskiBroj=mjesto.PostanskiBroj)";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false);
+			r = s.executeQuery();
+			while(r.next()) {
+				Stajaliste stajaliste = new Stajaliste(r.getString("mjesto.Naziv"), r.getInt("mjesto.PostanskiBroj"), r.getString("autobusko_stajaliste.Naziv"), r.getInt("autobuska_stanica.IdStajalista"));
+				System.out.println("ID:" +stajaliste.getIdStajalista());
+				System.out.println("Postanski broj: " + stajaliste.getPostanskiBroj());
+				System.out.println("naziv mjesta: " + stajaliste.getNaziv());
+				System.out.println("naziv stajalista: " + stajaliste.getNazivStajalista());
+				stajalistaStanicaList.add(stajaliste);
+			}
+			return stajalistaStanicaList;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 
 	@Override
@@ -158,5 +186,47 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 
 	}
 	
+	public static int dodajStajaliste(Stajaliste stajaliste) {
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		String sql = "insert into autobusko_stajaliste value (default,?,?)";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, true, stajaliste.getNazivStajalista(), stajaliste.getPostanskiBroj());
+			s.executeUpdate();
+			r = s.getGeneratedKeys();
+			if(r.next())
+				return r.getInt(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + idStajalista;
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Stajaliste other = (Stajaliste) obj;
+		if (idStajalista != other.idStajalista)
+			return false;
+		return true;
+	}
 	
 }

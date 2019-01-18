@@ -137,7 +137,7 @@ public class ListaLinijaController implements Initializable {
             					            protected void succeeded(){
             					                super.succeeded();
             					                progressPane.setVisible(false);
-            									showUspjesnoUklonjenaLinija();
+        								        Util.getNotifications("Obavještenje", "Linija obrisana.", "Information").show();
             					            }
             					        };
             					        new Thread(task).start();
@@ -199,12 +199,12 @@ public class ListaLinijaController implements Initializable {
 		}
 	}
 
-	private void showUspjesnoUklonjenaLinija() {
+	/*private void showUspjesnoUklonjenaLinija() {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Uspjeh");
 		alert.setHeaderText("Uspjesno uklonjena linija");
 		alert.showAndWait();
-	}
+	}*/
 	
 	
 

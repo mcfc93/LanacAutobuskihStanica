@@ -70,21 +70,21 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
          <columns>
-            <TableColumn prefWidth="75.0" text="Column 1" />
-            <TableColumn prefWidth="75.0" text="Column 2" />
-            <TableColumn prefWidth="75.0" text="Column 3" />
-            <TableColumn prefWidth="75.0" text="Column 4" />
-            <TableColumn prefWidth="75.0" text="Column 5" />
-            <TableColumn prefWidth="75.0" text="Column 6" />
-            <TableColumn prefWidth="75.0" text="Column 7" />
-            <TableColumn prefWidth="75.0" text="Column 8" />
+            <TableColumn fx:id="polazisteColumn" prefWidth="75.0" text="Polaziste" />
+            <TableColumn fx:id="odredisteColumn" prefWidth="75.0" text="Odrediste" />
+            <TableColumn fx:id="vrijemePolaskaColumn" prefWidth="75.0" text="Vrijeme polaska" />
+            <TableColumn fx:id="vrijemeDolaskaColumn" prefWidth="75.0" text="Vrijeme dolaska" />
+            <TableColumn fx:id="vrijemePolaskaPovratakColumn" prefWidth="75.0" text="Vrijeme polaska (povratno)" />
+            <TableColumn fx:id="vrijemeDolaskaPovratakColumn" prefWidth="75.0" text="Vrijeme dolaska (povratno)" />
+            <TableColumn fx:id="cijenaJednokratnaColumn" prefWidth="75.0" text="Cijena" />
+            <TableColumn fx:id="cijenaMjesecnaColumn" prefWidth="75.0" text="Cijena (mjesecna)" />
          </columns>
       </TableView>
       <JFXTimePicker fx:id="vrijemePolaska2TimePicker" maxWidth="140.0" minWidth="140.0" promptText="Vrijeme polaska" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="8" />
       <JFXTimePicker fx:id="vrijemeDolaska2TimePicker" maxWidth="140.0" minWidth="140.0" promptText="Vrijeme dolaska" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
       <JFXTextField fx:id="cijenaObicneKarteTextField" promptText="Cjena obične karte" GridPane.columnIndex="5" GridPane.rowIndex="7" />
       <JFXTextField fx:id="cijenaMjesecneKarteTextField" promptText="Cijena mjesečne karte" GridPane.columnIndex="5" GridPane.rowIndex="8" />
-      <JFXComboBox fx:id="zadrzavanjeComboBox" prefWidth="105.0" promptText="Zadržavanje" GridPane.columnIndex="5" GridPane.rowIndex="6" />
+      <JFXComboBox fx:id="zadrzavanjeComboBox" prefWidth="105.0" promptText="Zadržavanje (min)" GridPane.columnIndex="5" GridPane.rowIndex="6" />
       <Label minWidth="65.0" prefHeight="16.0" prefWidth="65.0" style="-fx-rotate: 90;" text="POLAZAK" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
          <font>
             <Font name="System Bold" size="11.0" />

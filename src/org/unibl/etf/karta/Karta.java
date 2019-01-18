@@ -227,7 +227,7 @@ public class Karta {
 		}
 	}
 	
-	public static List<Karta> getKarteList(Stajaliste polaziste,Stajaliste odrediste) {
+	/*public static List<Karta> getKarteList(Stajaliste polaziste,Stajaliste odrediste) {
 		List<Karta> karteList = new ArrayList<>();
 		Connection c = null;
 		PreparedStatement s = null;
@@ -256,8 +256,37 @@ public class Karta {
 			Util.close(r, s, c);
 		}
 		return null;
-	}
+	}*/
 	
+	public static List<Karta> getKarteList(Stajaliste polaziste,Stajaliste odrediste) {
+		List<Karta> karteList = new ArrayList<>();
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		//String sql = "select * from linija join (relacija,prevoznik) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno')";
+		String sql = "select * from linija join (relacija,prevoznik,popust_prevoznika) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika)"
+				+ "and (prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno')";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, polaziste.getIdStajalista(), odrediste.getIdStajalista());
+			r = s.executeQuery();		
+	       	while(r.next()) {
+	       		Prevoznik prevoznik = new Prevoznik(r.getString("JIBPrevoznika"), r.getString("prevoznik.NazivPrevoznika"), r.getString("prevoznik.Telefon"), r.getString("prevoznik.Email"), r.getDouble("DjackiPopust"));
+	       		Linija linija = new Linija(r.getInt("linija.IdLinije"), r.getString("linija.NazivLinije"), r.getInt("linija.Peron"), prevoznik, r.getInt("linija.VoznjaPraznikom"));
+	       		// -- PREPRAVITI
+	       		Relacija relacija = new Relacija(r.getInt("relacija.IdRelacije"), linija, polaziste, odrediste, r.getTime("VrijemePolaska"), r.getTime("VrijemeDolaska"), r.getDouble("CijenaJednokratna"), r.getString("Dani"));
+	       		Karta karta = new Karta(relacija);
+	       		karteList.add(karta);
+	       	}
+	       	return karteList;
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			Util.close(r, s, c);
+		}
+		return null;}
 	public static int kreirajKartu(Karta karta,LocalDate datum) {
 		String sql = "insert into karta value (DEFAULT,?,?,?,?,?,?,DEFAULT)";
 		Connection c = null;
