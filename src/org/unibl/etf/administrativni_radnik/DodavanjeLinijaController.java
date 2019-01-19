@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
+import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.karta.Linija;
 import org.unibl.etf.karta.Prevoznik;
@@ -37,6 +38,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -52,6 +54,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -69,19 +72,21 @@ public class DodavanjeLinijaController implements Initializable {
 	private ObservableList<Relacija> relacijeObsList = FXCollections.observableArrayList();
 	public static Linija linija;
 	public static int idLinije;
+	
+	@FXML
+	private AnchorPane anchorPane;
 	@FXML
     private GridPane gridPane;
-	
 	@FXML
 	private TableView<Relacija> relacijeTableView;
 	@FXML
 	private TableColumn<Relacija, String> polazisteColumn;
 	@FXML
-	private TableColumn<Relacija,String> odredisteColumn;
+	private TableColumn<Relacija, String> odredisteColumn;
 	@FXML
-	private TableColumn<Relacija,Double> cijenaJednokratnaColumn;
+	private TableColumn<Relacija, Double> cijenaJednokratnaColumn;
 	@FXML
-	private TableColumn<Relacija,Double> cijenaMjesecnaColumn;
+	private TableColumn<Relacija, Double> cijenaMjesecnaColumn;
 	@FXML
 	private TableColumn<Relacija, Time> vrijemePolaskaColumn;
 	@FXML
@@ -108,7 +113,10 @@ public class DodavanjeLinijaController implements Initializable {
     private JFXButton dodajLinijuButton;
     
     @FXML
-    private JFXButton sledeciPolazakButton;
+    private JFXButton sljedeciPolazakButton;
+    @FXML
+    private JFXButton sacuvajButton;
+    
 
     @FXML
     private JFXButton krajUnosaButton;
@@ -141,60 +149,38 @@ public class DodavanjeLinijaController implements Initializable {
     private JFXTimePicker vrijemePolaska1TimePicker;
 
     @FXML
-    private JFXTimePicker vrijemeDolaska1TimePicker;
-    
-    @FXML
     private JFXTimePicker vrijemePolaska2TimePicker;
 
-    @FXML
-    private JFXTimePicker vrijemeDolaska2TimePicker;
-    
     @FXML
     private JFXComboBox<Integer> zadrzavanjeComboBox;
     
     @FXML
-    private JFXTextField cijenaObicneKarteTextField;
+    private JFXTextField cijenaJednokratnaTextField;
 
     @FXML
-    private JFXTextField cijenaMjesecneKarteTextField;
+    private JFXTextField cijenaMjesecnaTextField;
     
     @Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-    	
+    	UnosRelacijaController.relacijeList.clear();
+    	disableRelacija(true);
+    	sljedeciPolazakButton.setVisible(false);
     	List<Stajaliste> stajalistaStanicaList = Stajaliste.getStajalistaStanicaList();
-    	
+        relacijeTableView.setItems(relacijeObsList);
     	zadrzavanjeComboBox.getItems().addAll(0,3,5,10,15,20,25,30);
     	zadrzavanjeComboBox.getSelectionModel().select(2);
-    	zadrzavanjeComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Integer>() {
-    		
-			@Override
-			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-				// TODO Auto-generated method stub
-				System.out.println("old:" + oldValue + ", new: " + newValue);
-				//UnosRelacijaController.relacijeList.stream().filter(r -> stajalistaStanicaList.contains(r.getPolaziste())).forEach(r -> r.setDuzinaPuta(LocalTime.of(r.getDuzinaPuta().getHour(), r.getDuzinaPuta().plusMinutes((long)newValue).getMinute())));
-				
-				relacijeTableView.refresh();
-				UnosRelacijaController.relacijeList.forEach(r -> System.out.println(r.getPolaziste() + " - " + r.getOdrediste() + "=" + r.getDuzinaPuta()));
-			}
-		});
-    	
-    	krajUnosaButton.setDisable(true);
 		vrijemePolaska1TimePicker.setIs24HourView(true);
 		vrijemePolaska1TimePicker.converterProperty().set(new LocalTimeStringConverter(FormatStyle.SHORT, Locale.UK));
-		vrijemeDolaska1TimePicker.setIs24HourView(true);
-		vrijemeDolaska1TimePicker.converterProperty().set(new LocalTimeStringConverter(FormatStyle.SHORT, Locale.UK));
 		vrijemePolaska2TimePicker.setIs24HourView(true);
 		vrijemePolaska2TimePicker.converterProperty().set(new LocalTimeStringConverter(FormatStyle.SHORT, Locale.UK));
-		vrijemeDolaska2TimePicker.setIs24HourView(true);
-		vrijemeDolaska2TimePicker.converterProperty().set(new LocalTimeStringConverter(FormatStyle.SHORT, Locale.UK));
 		
 		nazivLinijeTextField.getValidators().add(Util.requiredFieldValidator(nazivLinijeTextField));
 		prevoznikComboBox.getValidators().add(Util.requiredFieldValidator(prevoznikComboBox));
 		peronComboBox.getValidators().add(Util.requiredFieldValidator(peronComboBox));
+		cijenaJednokratnaTextField.getValidators().addAll(Util.requiredFieldValidator(cijenaJednokratnaTextField),Util.doubleValidator(cijenaJednokratnaTextField));
+		cijenaMjesecnaTextField.getValidators().add(Util.doubleValidator(cijenaMjesecnaTextField));
 		vrijemePolaska1TimePicker.getValidators().add(Util.timeValidator(vrijemePolaska1TimePicker));
-		vrijemeDolaska1TimePicker.getValidators().add(Util.timeValidator(vrijemeDolaska1TimePicker));
 		vrijemePolaska2TimePicker.getValidators().add(Util.timeValidator(vrijemePolaska2TimePicker));
-		vrijemeDolaska2TimePicker.getValidators().add(Util.timeValidator(vrijemeDolaska2TimePicker));
 		
 		//popunjavanje ComboBox
 		int brojPerona = AutobuskaStanica.getBrojPeronaStanice();
@@ -208,18 +194,144 @@ public class DodavanjeLinijaController implements Initializable {
 		odredisteColumn.setCellValueFactory(new PropertyValueFactory<>("nazivOdredista"));
 		cijenaJednokratnaColumn.setCellValueFactory(new PropertyValueFactory<>("cijenaJednokratna"));
 		cijenaMjesecnaColumn.setCellValueFactory(new PropertyValueFactory<>("cijenaMjesecna"));
+		vrijemePolaskaColumn.setCellValueFactory(new PropertyValueFactory<>("vrijemePolaska"));
+		vrijemePolaskaPovratakColumn.setCellValueFactory(new PropertyValueFactory<>("vrijemePolaskaPovratna"));
+		vrijemeDolaskaColumn.setCellValueFactory(new PropertyValueFactory<>("vrijemeDolaska"));
+		vrijemeDolaskaPovratakColumn.setCellValueFactory(new PropertyValueFactory<>("vrijemeDolaskaPovratna"));
 		
-		relacijeTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-		    if (newSelection != null) {
-		        System.out.println("nova: " + newSelection);
-		        System.out.println("jednokratna: " + newSelection.getCijenaJednokratna());
-		        System.out.println("mjesecna:" + newSelection.getCijenaMjesecna());
-		    }
-		    else
-		    	System.out.println("null");
+    	zadrzavanjeComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Integer>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
+				// TODO Auto-generated method stub
+				/*
+				 * stanicno zadrzavanje u oba smjera na svim relacijama (osim prve) koja za polaziste imaju autobusku stanicu*/
+
+			/*	for(int i=1; i<UnosRelacijaController.brojRelacija; ++i) {
+					if(!UnosRelacijaController.relacijeList.get(i).getPolaziste().equals(UnosRelacijaController.relacijeList.get(0).getPolaziste()) // nema zadrzavanja na prvoj stanici
+							&& stajalistaStanicaList.contains(UnosRelacijaController.relacijeList.get(i).getPolaziste())) {
+						LocalTime vrijemePolaskaPlusPauza = UnosRelacijaController.relacijeList.get(i).getVrijemePolaska().toLocalTime().plusMinutes(zadrzavanjeComboBox.getValue());
+						LocalTime vrijemePolaskaPovratnaPlusPauza = UnosRelacijaController.relacijeList.get(i).getVrijemePolaskaPovratna().toLocalTime().plusMinutes(zadrzavanjeComboBox.getValue());
+						UnosRelacijaController.relacijeList.get(i).setVrijemePolaska(Time.valueOf(vrijemePolaskaPlusPauza));
+						UnosRelacijaController.relacijeList.get(i).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaskaPovratnaPlusPauza));
+						
+					}
+				}	
+				relacijeTableView.refresh();*/
+				//UnosRelacijaController.relacijeList.forEach(r -> System.out.println(r.getPolaziste() + " - " + r.getOdrediste() + "=" + r.getDuzinaPuta()));
+			}
+		});
+    	
+		relacijeTableView.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				// TODO Auto-generated method stub
+				Relacija odabranaRelacija = UnosRelacijaController.relacijeList.get((int) newValue);
+				if(odabranaRelacija.getCijenaJednokratna()==null)
+					cijenaJednokratnaTextField.clear();
+				else
+					cijenaJednokratnaTextField.setText(Double.toString(odabranaRelacija.getCijenaJednokratna()));
+				if(odabranaRelacija.getCijenaMjesecna()==null)
+					cijenaMjesecnaTextField.clear();
+				else
+					cijenaMjesecnaTextField.setText(Double.toString(odabranaRelacija.getCijenaMjesecna()));
+				
+			}
+		});
+		
+		vrijemePolaska1TimePicker.valueProperty().addListener(new ChangeListener<LocalTime>() {
+
+			@Override
+			public void changed(ObservableValue<? extends LocalTime> observable, LocalTime oldValue,
+					LocalTime newValue) {
+				/*
+				 * unos vremena polazaka i dolazaka za lancane relacije*/
+				
+				UnosRelacijaController.relacijeList.get(0).setVrijemePolaska(Time.valueOf(vrijemePolaska1TimePicker.getValue()));
+				LocalTime vrijemeDolaskaPlusHours = UnosRelacijaController.relacijeList.get(0).getVrijemePolaska().toLocalTime().plusHours(UnosRelacijaController.relacijeList.get(0).getDuzinaPuta().getHour());
+				LocalTime vrijemeDolaskaPlusMinutes = vrijemeDolaskaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(0).getDuzinaPuta().getMinute());
+				UnosRelacijaController.relacijeList.get(0).setVrijemeDolaska(Time.valueOf(vrijemeDolaskaPlusMinutes));
+				for(int i=1; i< UnosRelacijaController.brojRelacija; ++i) {
+					final int x = i;
+					LocalTime vrijemePolaska = UnosRelacijaController.relacijeList.stream().filter(r -> r.getOdrediste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaska().toLocalTime();
+					UnosRelacijaController.relacijeList.get(x).setVrijemePolaska(Time.valueOf(vrijemePolaska));
+					LocalTime vrijemePolaskaPlusHours = vrijemePolaska.plusHours(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getHour());
+					LocalTime vrijemePolaskaPlusMinutes = vrijemePolaskaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
+					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaska(Time.valueOf(vrijemePolaskaPlusMinutes));
+				}
+				/*
+				 * unos vremena za medjurelacije*/
+				for(int i=UnosRelacijaController.brojRelacija;i<UnosRelacijaController.relacijeList.size();++i) {
+					final int x = i;
+					LocalTime vrijemePolaska = UnosRelacijaController.relacijeList.stream().filter(r -> r.getPolaziste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemePolaska().toLocalTime();
+					UnosRelacijaController.relacijeList.get(x).setVrijemePolaska(Time.valueOf(vrijemePolaska));
+					LocalTime vrijemePolaskaPlusHours = vrijemePolaska.plusHours(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getHour());
+					LocalTime vrijemePolaskaPlusMinutes = vrijemePolaskaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
+					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaska(Time.valueOf(vrijemePolaskaPlusMinutes));
+				}
+				relacijeTableView.refresh();					
+			}
+		});
+		
+		vrijemePolaska2TimePicker.valueProperty().addListener(new ChangeListener<LocalTime>() {
+
+			@Override
+			public void changed(ObservableValue<? extends LocalTime> observable, LocalTime oldValue,
+					LocalTime newValue) {
+				/* povratni smjer
+				 * unos vremena polazaka i dolazaka za lancane relacije*/
+				UnosRelacijaController.relacijeList.get(0).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaska2TimePicker.getValue()));
+				LocalTime vrijemeDolaskaPovratnaPlusHours = UnosRelacijaController.relacijeList.get(0).getVrijemePolaskaPovratna().toLocalTime().plusHours(UnosRelacijaController.relacijeList.get(0).getDuzinaPuta().getHour());
+				LocalTime vrijemeDolaskaPovratnaPlusMinutes = vrijemeDolaskaPovratnaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(0).getDuzinaPuta().getMinute());
+				UnosRelacijaController.relacijeList.get(0).setVrijemeDolaskaPovratna(Time.valueOf(vrijemeDolaskaPovratnaPlusMinutes));
+				for(int i=1; i< UnosRelacijaController.brojRelacija; ++i) {
+					final int x = i;
+					LocalTime vrijemePolaskaPovratna = UnosRelacijaController.relacijeList.stream().filter(r -> r.getOdrediste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaskaPovratna().toLocalTime();
+					UnosRelacijaController.relacijeList.get(x).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaskaPovratna));
+					LocalTime vrijemePolaskaPovratnaPlusHours = vrijemePolaskaPovratna.plusHours(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getHour());
+					LocalTime vrijemePolaskaPovratnaPlusMinutes = vrijemePolaskaPovratnaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
+					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPovratnaPlusMinutes));
+				}
+				/*
+				 * unos vremena za medjurelacije*/
+				for(int i=UnosRelacijaController.brojRelacija;i<UnosRelacijaController.relacijeList.size();++i) {
+					final int x = i;
+					LocalTime vrijemePolaskaPovratna = UnosRelacijaController.relacijeList.stream().filter(r -> r.getPolaziste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemePolaskaPovratna().toLocalTime();
+					UnosRelacijaController.relacijeList.get(x).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaskaPovratna));
+					LocalTime vrijemePolaskaPovratnaPlusHours = vrijemePolaskaPovratna.plusHours(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getHour());
+					LocalTime vrijemePolaskaPovratnaPlusMinutes = vrijemePolaskaPovratnaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
+					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPovratnaPlusMinutes));
+				}
+				relacijeTableView.refresh();					
+			}
 		});
 	}
     
+
+	public void disableRelacija(boolean b) {
+		// TODO Auto-generated method stub
+		vrijemePolaska1TimePicker.setDisable(b);
+		vrijemePolaska2TimePicker.setDisable(b);
+		sljedeciPolazakButton.setDisable(b);
+		krajUnosaButton.setDisable(b);
+		sacuvajButton.setDisable(b);
+		cijenaJednokratnaTextField.setDisable(b);
+		cijenaMjesecnaTextField.setDisable(b);
+		zadrzavanjeComboBox.setDisable(b);
+		disableCB(b);
+	}
+
+	public void disableCB(boolean b) {
+		ponedeljakCheckBox.setDisable(b);
+		utorakCheckBox.setDisable(b);
+		srijedaCheckBox.setDisable(b);
+		cetvrtakCheckBox.setDisable(b);
+		petakCheckBox.setDisable(b);
+		subotaCheckBox.setDisable(b);
+		nedeljaCheckBox.setDisable(b);
+		odaberiSveCheckBox.setDisable(b);
+	}
 
 	@FXML
     void odaberiSveCheckBox(MouseEvent event) {
@@ -268,15 +380,20 @@ public class DodavanjeLinijaController implements Initializable {
 		return false;
 	}
 	
+	public boolean anyCheckBoxSelected() {
+		if(ponedeljakCheckBox.isSelected() || utorakCheckBox.isSelected() || srijedaCheckBox.isSelected() 
+				|| cetvrtakCheckBox.isSelected() || petakCheckBox.isSelected() || subotaCheckBox.isSelected() || nedeljaCheckBox.isSelected())
+			return true;
+		else 
+			Util.getNotifications("Greška", "Odaberite bar jedan dan.", "Error").show();
+		return false;
+	}
 	@FXML
     void dodajLiniju(ActionEvent event) {
 		if(nazivLinijeTextField.validate()
 				& prevoznikComboBox.validate()
 					& peronComboBox.validate()) {
-			linija = new Linija(0, nazivLinijeTextField.getText(), (int)peronComboBox.getValue(), prevoznikComboBox.getValue(), prazniciComboBox.getSelectionModel().getSelectedIndex());
-			idLinije = Linija.dodajLiniju(linija);
-			linija.setIdLinije(idLinije);
-			System.out.println("Id kreirane linije: " +linija.getIdLinije());
+			linija = new Linija(0, nazivLinijeTextField.getText(), (int)peronComboBox.getValue(), prevoznikComboBox.getValue(), prazniciComboBox.getSelectionModel().getSelectedIndex()+1);
 			Util.getNotifications("Obavještenje", "Linija dodana.", "Information").show();
 			try {
 				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/unibl/etf/administrativni_radnik/UnosRelacija.fxml"));
@@ -288,12 +405,14 @@ public class DodavanjeLinijaController implements Initializable {
 	            stage.setTitle(linija.getNazivLinije());
 	            stage.setScene(new Scene(root1));  
 	            stage.showAndWait();
-	            relacijeObsList.setAll(UnosRelacijaController.relacijeList);
-	            relacijeTableView.setItems(relacijeObsList);
-	            relacijeTableView.getItems().get(1).setCijenaJednokratna(25.5);
-	            relacijeTableView.getItems().get(1).setCijenaMjesecna(70);
-	            relacijeTableView.getSelectionModel().select(1);
-	          	           
+	            relacijeObsList.setAll(UnosRelacijaController.relacijeList); 
+	            relacijeTableView.getSelectionModel().selectFirst();
+	            disableRelacija(false);
+	            krajUnosaButton.setDisable(true);
+				Util.getNotifications("Obavještenje", "Unesite cijene relacija.", "Information").show();
+	            relacijeTableView.refresh();
+	            vrijemePolaska1TimePicker.setDisable(true);
+	            vrijemePolaska2TimePicker.setDisable(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -302,17 +421,120 @@ public class DodavanjeLinijaController implements Initializable {
 	
 	@FXML
     void sledeciPolazak(ActionEvent event) {
-		if(vrijemePolaska1TimePicker.validate()
-				& vrijemeDolaska1TimePicker.validate()
-					&vrijemePolaska1TimePicker.validate()
-						& vrijemeDolaska1TimePicker.validate()) {
-			relacijeTableView.getSelectionModel().select(0);
-			relacijeTableView.getSelectionModel().getSelectedItem().setCijenaJednokratna(3.5);
-			
-			relacijeTableView.refresh();
+		if(anyCheckBoxSelected()
+				& vrijemePolaska1TimePicker.validate()
+					& vrijemePolaska2TimePicker.validate()) 
+		{
+			if(showDaLiSteSigurni()) {
+				linija.setIdLinije(Linija.dodajLiniju(linija));
+				UnosRelacijaController.relacijeList.forEach(r -> r.setLinija(linija));
+				String dani = mapiranjeDana();
+				String dani2 = dani.substring(0, dani.length()-1);
+				UnosRelacijaController.relacijeList.forEach(r -> r.setDani(dani2));
+				MaskerPane progressPane = Util.getMaskerPane(anchorPane);
+				Task<Void> task = new Task<Void>() {
+		            @Override
+		            protected Void call() /*throws Exception*/ {
+		                progressPane.setVisible(true);
+		                for (Relacija r : UnosRelacijaController.relacijeList) {
+							System.out.println(Relacija.dodajRelaciju(r));
+						}
+		                return null;
+		            }
+		            @Override
+		            protected void succeeded(){
+		                super.succeeded();
+		                progressPane.setVisible(false);
+				        Util.getNotifications("Obavještenje", "Relacije dodate.", "Information").show();
+		            }
+		        };
+		        new Thread(task).start();
+				krajUnosaButton.setDisable(false);
+			}
 		}
 	}
 	
+	
+	public String mapiranjeDana() {
+		String dani = "";
+		if(ponedeljakCheckBox.isSelected())
+			dani += "1,";
+		if(utorakCheckBox.isSelected())
+			dani += "2,";
+		if(srijedaCheckBox.isSelected())
+			dani += "3,";
+		if(cetvrtakCheckBox.isSelected())
+			dani += "4,";
+		if(petakCheckBox.isSelected())
+			dani += "5,";
+		if(subotaCheckBox.isSelected())
+			dani += "6,";
+		if(nedeljaCheckBox.isSelected())
+			dani += "7,";
+		return dani;
+	}
+
+	@FXML
+	public void sacuvaj(ActionEvent event) {
+		if( (cijenaMjesecnaTextField.getText().isEmpty()? true : cijenaMjesecnaTextField.validate())
+					& cijenaJednokratnaTextField.validate()) {
+			
+			UnosRelacijaController.relacijeList.get(relacijeTableView.getSelectionModel().getSelectedIndex()).setCijenaJednokratna(Double.parseDouble(cijenaJednokratnaTextField.getText()));
+			if(!cijenaMjesecnaTextField.getText().isEmpty())
+				UnosRelacijaController.relacijeList.get(relacijeTableView.getSelectionModel().getSelectedIndex()).setCijenaMjesecna(Double.parseDouble(cijenaMjesecnaTextField.getText()));
+			cijenaJednokratnaTextField.resetValidation();
+			cijenaMjesecnaTextField.resetValidation();
+			relacijeTableView.refresh();
+			for(int i=0; i<relacijeTableView.getSelectionModel().getSelectedIndex(); ++i)
+				if(UnosRelacijaController.relacijeList.get(i).getCijenaJednokratna()==null) { 
+					Util.getNotifications("Obavještenje", "Relacije iznad odabrane nemaju cijene.", "Error").show();
+					return;
+				}
+			
+			if(UnosRelacijaController.relacijeList.stream().allMatch(r -> r.getCijenaJednokratna()!=null)) {
+				if(showPotvrdaKrajaUnosaCijena()) {
+					vrijemePolaska1TimePicker.setDisable(false);
+					vrijemePolaska2TimePicker.setDisable(false);
+					sljedeciPolazakButton.setVisible(true);
+					cijenaJednokratnaTextField.setEditable(false);
+					cijenaMjesecnaTextField.setEditable(false);
+					sacuvajButton.setVisible(false);
+					return;
+				}
+			}
+			
+			if(relacijeTableView.getSelectionModel().getSelectedIndex()+1==UnosRelacijaController.relacijeList.size()) {
+				if(showPotvrdaKrajaUnosaCijena()) {
+					vrijemePolaska1TimePicker.setDisable(false);
+					vrijemePolaska2TimePicker.setDisable(false);
+					sljedeciPolazakButton.setVisible(true);
+					cijenaJednokratnaTextField.setEditable(false);
+					cijenaMjesecnaTextField.setEditable(false);
+					sacuvajButton.setVisible(false);
+
+				}
+			}
+			else {
+				relacijeTableView.getSelectionModel().selectNext();
+			}
+	}
+	}
+
+	public boolean showPotvrdaKrajaUnosaCijena() {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("");
+		alert.setHeaderText("Da li ste završili sa unosom cijena?");
+		Optional<ButtonType> action = alert.showAndWait();
+		return action.get().equals(ButtonType.OK);
+	}
+
+	public boolean showDaLiSteSigurni() {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("");
+		alert.setHeaderText("Da li ste sigurni?");
+		Optional<ButtonType> action = alert.showAndWait();
+		return action.get().equals(ButtonType.OK);
+	}
 	@FXML
 	void krajUnosa(ActionEvent event) {
 		

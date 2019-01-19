@@ -44,7 +44,6 @@ import javafx.util.converter.LocalTimeStringConverter;
 public class UnosRelacijaController implements Initializable {
 	
 	public static List<Relacija> relacijeList = new ArrayList<>();
-	private static ObservableList<Relacija> relacijeObsList = FXCollections.observableArrayList();
 	
 	@FXML
 	private ImageView exitImageView;
@@ -65,6 +64,8 @@ public class UnosRelacijaController implements Initializable {
 
     private double xOffset=0;
     private double yOffset=0;
+
+	public static int brojRelacija;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -125,15 +126,16 @@ public class UnosRelacijaController implements Initializable {
     	polazisteTextField.setText(odrediste.toString());
     	odredisteTextField.clear();
     	odredisteTextField.requestFocus();
+    	odredisteTextField.resetValidation();
     	}
     }
     
     @FXML
     public void gotovUnos(ActionEvent event) {
-    	int broj = relacijeList.size();
+    	brojRelacija = relacijeList.size();
     	// dvostruka petlja kreiranja medjurelacija
-    	for(int i=0;i<broj-1;++i) {
-    		for(int j=i+1;j<broj;++j) {
+    	for(int i=0;i<brojRelacija-1;++i) {
+    		for(int j=i+1;j<brojRelacija;++j) {
     			Relacija novaMedjuRelacija = new Relacija(relacijeList.get(i).getPolaziste(), relacijeList.get(j).getOdrediste(), null);
     			//novaMedjuRelacija.setDuzinaPuta(LocalTime.of(0, 0));
 				LocalTime newTime = LocalTime.of(0, 0);
@@ -148,6 +150,7 @@ public class UnosRelacijaController implements Initializable {
     			relacijeList.add(novaMedjuRelacija);
     		}
     	}
+    	relacijeList.forEach(r -> System.out.println(r + ", " + r.getDuzinaPuta()));
     	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
 
     }

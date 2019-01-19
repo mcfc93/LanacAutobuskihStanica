@@ -25,6 +25,8 @@ public class Relacija {
 	private Stajaliste odrediste;
 	private Time vrijemePolaska;
 	private Time vrijemeDolaska;
+	private Time vrijemePolaskaPovratna;
+	private Time vrijemeDolaskaPovratna;
 	private Double cijenaJednokratna;
 	private Double cijenaMjesecna;
 	private String dani;
@@ -169,6 +171,36 @@ public class Relacija {
 
 	
 
+	public Time getVrijemePolaskaPovratna() {
+		return vrijemePolaskaPovratna;
+	}
+
+
+	public void setVrijemePolaskaPovratna(Time vrijemePolaskaPovratna) {
+		this.vrijemePolaskaPovratna = vrijemePolaskaPovratna;
+	}
+
+
+	public Time getVrijemeDolaskaPovratna() {
+		return vrijemeDolaskaPovratna;
+	}
+
+
+	public void setVrijemeDolaskaPovratna(Time vrijemeDolaskaPovratna) {
+		this.vrijemeDolaskaPovratna = vrijemeDolaskaPovratna;
+	}
+
+
+	public void setCijenaJednokratna(Double cijenaJednokratna) {
+		this.cijenaJednokratna = cijenaJednokratna;
+	}
+
+
+	public void setCijenaMjesecna(Double cijenaMjesecna) {
+		this.cijenaMjesecna = cijenaMjesecna;
+	}
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -237,18 +269,18 @@ public class Relacija {
 		Connection c = null;
 		ResultSet r =null;
 		PreparedStatement s = null;
-		String sql = "insert into relacija value (default,?,?,?,?,?,?,?)";
+		String sql = "insert into relacija value (default,?,?,?,?,?,?,?,?,?)";
 		String sqlCijenaMjesecna = "insert into cijena_mjesecne_karte value (default,?,?)";
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, true, relacija.getLinija().getIdLinije(), relacija.getPolaziste().getIdStajalista(), relacija.getOdrediste().getIdStajalista(), relacija.getVrijemePolaska(),relacija.getVrijemeDolaska(),relacija.getCijenaJednokratna(), relacija.getDani());
+			s = Util.prepareStatement(c, sql, true, relacija.getLinija().getIdLinije(), relacija.getPolaziste().getIdStajalista(), relacija.getOdrediste().getIdStajalista(), relacija.getVrijemePolaska(),relacija.getVrijemeDolaska(), relacija.getVrijemePolaskaPovratna(),relacija.getVrijemeDolaskaPovratna(), relacija.getCijenaJednokratna(), relacija.getDani());
 			System.out.println(s.executeUpdate());
 			r = s.getGeneratedKeys();
 			if(r.next()) {
-				if(relacija.getCijenaMjesecna()==0)
+				if(relacija.getCijenaMjesecna()==null)
 					return r.getInt(1);
-				s = Util.prepareStatement(c, sqlCijenaMjesecna, false, relacija.getIdRelacije(), relacija.getCijenaMjesecna());
-				s.executeUpdate();
+				s = Util.prepareStatement(c, sqlCijenaMjesecna, false, r.getInt(1), relacija.getCijenaMjesecna());
+				System.out.println("Mjesecne:" + s.executeUpdate());
 				return r.getInt(1);
 			}
 		} catch (SQLException e) {

@@ -105,7 +105,7 @@ public class Karta {
 	}
 
 
-	public double getCijena() {
+	public Double getCijena() {
 		return ProdajaKarataController.kupovinaMjesecne? relacija.getCijenaMjesecna(): relacija.getCijenaJednokratna();
 	}
 	public void setCijena(double cijena) {
@@ -288,13 +288,13 @@ public class Karta {
 		}
 		return null;}
 	public static int kreirajKartu(Karta karta,LocalDate datum) {
+		karta.setJIBStanice(PrijavaController.autobuskaStanica.getJib());
 		String sql = "insert into karta value (DEFAULT,?,?,?,?,?,?,DEFAULT)";
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
 		try {
 			c = Util.getConnection();
-			System.out.println("ID relacije: " + karta.getRelacija().getIdRelacije());
 			s = Util.prepareStatement(c, sql, true, karta.getRelacija().getIdRelacije(), Date.valueOf(datum), Date.valueOf(LocalDate.now()),karta.getBrojSjedista(), karta.getJIBStanice(),karta.getCijena());
 			System.out.println(s.executeUpdate());
 			r = s.getGeneratedKeys();

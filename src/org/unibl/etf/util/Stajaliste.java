@@ -163,10 +163,6 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 			r = s.executeQuery();
 			while(r.next()) {
 				Stajaliste stajaliste = new Stajaliste(r.getString("mjesto.Naziv"), r.getInt("mjesto.PostanskiBroj"), r.getString("autobusko_stajaliste.Naziv"), r.getInt("autobuska_stanica.IdStajalista"));
-				System.out.println("ID:" +stajaliste.getIdStajalista());
-				System.out.println("Postanski broj: " + stajaliste.getPostanskiBroj());
-				System.out.println("naziv mjesta: " + stajaliste.getNaziv());
-				System.out.println("naziv stajalista: " + stajaliste.getNazivStajalista());
 				stajalistaStanicaList.add(stajaliste);
 			}
 			return stajalistaStanicaList;

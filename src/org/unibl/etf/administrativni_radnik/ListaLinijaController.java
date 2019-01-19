@@ -13,6 +13,8 @@ import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -164,7 +166,15 @@ public class ListaLinijaController implements Initializable {
          izmijeniColumn.setMinWidth(35);
          izmijeniColumn.setMaxWidth(35);
          
-        
+        linijeTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Linija>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Linija> observable, Linija oldValue, Linija newValue) {
+				// TODO Auto-generated method stub
+				System.out.println("new: " + newValue);
+				System.out.println("old: " + oldValue);
+			}
+		});
 	}
 	
 	public boolean showPotvrda() {

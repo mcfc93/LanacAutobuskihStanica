@@ -308,7 +308,7 @@ public class MjesecnaKarta extends Karta {
 		return null;
 	}
 	
-	public double getCijena() {
+	public Double getCijena() {
 		return relacija.getCijenaMjesecna();
 	}
 	
