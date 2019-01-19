@@ -11,9 +11,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-import org.unibl.etf.administrator.ListaStanicaController;
 import org.unibl.etf.karta.Relacija;
-import org.unibl.etf.salterski_radnik.InformacijeController;
 import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 
@@ -21,19 +19,16 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -44,6 +39,9 @@ import javafx.util.converter.LocalTimeStringConverter;
 public class UnosRelacijaController implements Initializable {
 	
 	public static List<Relacija> relacijeList = new ArrayList<>();
+	
+	@FXML
+	private AnchorPane menuLine;
 	
 	@FXML
 	private ImageView exitImageView;
@@ -69,21 +67,20 @@ public class UnosRelacijaController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
 		timePicker.setIs24HourView(true);
 		timePicker.converterProperty().set(new LocalTimeStringConverter(FormatStyle.SHORT, Locale.UK));
 		
-		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
+		//DragAndDrop
+		menuLine.setOnMousePressed(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
 				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 				xOffset = stage.getX() - event.getScreenX();
 				yOffset = stage.getY() - event.getScreenY();
 			}
 		});
-		anchorPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
+						
+		menuLine.setOnMouseDragged(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
 			   	Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 			    if(!stage.isMaximized()) {
 			    	stage.setX(event.getScreenX() + xOffset);
@@ -92,9 +89,12 @@ public class UnosRelacijaController implements Initializable {
 			    }
 			}
 		});
-		anchorPane.setOnMouseReleased((event) -> {
-			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-			stage.setOpacity(1.0);
+						
+		menuLine.setOnMouseReleased(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
+				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+				stage.setOpacity(1.0);
+			}
 		});
 		
 		timePicker.getValidators().add(Util.timeValidator(timePicker));
@@ -105,11 +105,13 @@ public class UnosRelacijaController implements Initializable {
 		
 	}
 	
-	 @FXML
+	@FXML
 	void close(MouseEvent event) {
-		 	relacijeList.clear();
-	    	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+		if(event.getButton().equals(MouseButton.PRIMARY)) {
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+        }
 	}
+	
     @FXML
     public void dalje(ActionEvent e) {
     	if(timePicker.validate()
@@ -125,8 +127,11 @@ public class UnosRelacijaController implements Initializable {
     	relacijeList.add(new Relacija(polaziste,odrediste,timePicker.getValue()));
     	polazisteTextField.setText(odrediste.toString());
     	odredisteTextField.clear();
-    	odredisteTextField.requestFocus();
+    	polazisteTextField.resetValidation();
     	odredisteTextField.resetValidation();
+    	Platform.runLater(() -> {
+    		odredisteTextField.requestFocus();
+    	});
     	}
     }
     

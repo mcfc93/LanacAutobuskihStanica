@@ -95,16 +95,70 @@
  * SystemButtons
  * 
  * * * * * * */
-.close:hover {
-	-fx-background-color: #E61123;
+.closeButton {
+    -fx-background-image: url('img/close.png');
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 20,20;
+    -fx-min-height: 20px;
+    -fx-min-width: 20px;
+    -fx-max-height: 20px;
+    -fx-max-width: 20px;
+    -fx-background-color: transparent;
+    -fx-border: none;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-focus-traversable: false;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
 }
 
-.maximize:hover {
-	-fx-background-color: #2800ae;
+.closeButton:hover {
+    -fx-background-color: red;
 }
 
-.minimize:hover {
-	-fx-background-color: #2800ae;
+.maximizeButton {
+    -fx-background-image: url('img/maximize.png');
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 20,20;
+    -fx-min-height: 20px;
+    -fx-min-width: 20px;
+    -fx-max-height: 20px;
+    -fx-max-width: 20px;
+    -fx-background-color: transparent;
+    -fx-border: none;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-focus-traversable: false;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.maximizeButton:hover {
+    -fx-background-color: #2800ae;
+}
+
+.minimizeButton {
+    -fx-background-image: url('img/minimize.png');
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 20,20;
+    -fx-min-height: 20px;
+    -fx-min-width: 20px;
+    -fx-max-height: 20px;
+    -fx-max-width: 20px;
+    -fx-background-color: transparent;
+    -fx-border: none;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-focus-traversable: false;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.minimizeButton:hover {
+    -fx-background-color: #2800ae;
 }
 
 /* * * * * * *

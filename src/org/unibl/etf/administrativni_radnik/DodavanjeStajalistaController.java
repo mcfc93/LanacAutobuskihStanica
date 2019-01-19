@@ -21,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -31,6 +32,9 @@ public class DodavanjeStajalistaController implements Initializable {
 	
 	@FXML
 	private AnchorPane anchorPane;
+	
+	@FXML
+	private AnchorPane menuLine;
 
     @FXML
     private JFXTextField nazivStajalistaTextField;
@@ -46,17 +50,17 @@ public class DodavanjeStajalistaController implements Initializable {
     
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
-    	anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
+    	//DragAndDrop
+		menuLine.setOnMousePressed(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
 				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 				xOffset = stage.getX() - event.getScreenX();
 				yOffset = stage.getY() - event.getScreenY();
 			}
 		});
-		anchorPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
+						
+		menuLine.setOnMouseDragged(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
 			   	Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 			    if(!stage.isMaximized()) {
 			    	stage.setX(event.getScreenX() + xOffset);
@@ -65,9 +69,12 @@ public class DodavanjeStajalistaController implements Initializable {
 			    }
 			}
 		});
-		anchorPane.setOnMouseReleased((event) -> {
-			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-			stage.setOpacity(1.0);
+						
+		menuLine.setOnMouseReleased(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
+				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+				stage.setOpacity(1.0);
+			}
 		});
 		
 		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());	
@@ -77,9 +84,11 @@ public class DodavanjeStajalistaController implements Initializable {
 	}
 
     @FXML
-    void close(MouseEvent event) {
-    	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
-    }
+	void close(MouseEvent event) {
+		if(event.getButton().equals(MouseButton.PRIMARY)) {
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+        }
+	}
 
     @FXML
     void potvrdi(ActionEvent event) {

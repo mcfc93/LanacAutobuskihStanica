@@ -8,7 +8,9 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 import org.controlsfx.control.MaskerPane;
+import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.karta.Linija;
+import org.unibl.etf.karta.Prevoznik;
 import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 
@@ -61,15 +63,16 @@ public class ListaLinijaController implements Initializable {
 	@FXML
 	private TableColumn<Linija,String> daniUSedmiciColumn = new TableColumn<Linija, String>();
 	@FXML
-	private TableColumn<Linija,Linija> izmijeniColumn = new TableColumn<Linija,Linija>();
+	private TableColumn<Linija,Linija> blokirajColumn = new TableColumn<Linija,Linija>();
 	@FXML
-	private TableColumn<Linija,Linija> izbrisiColumn = new TableColumn<Linija,Linija>();
+	private TableColumn<Linija,Linija> izmjeniColumn = new TableColumn<Linija,Linija>();
+	@FXML
+	private TableColumn<Linija,Linija> obrisiColumn = new TableColumn<Linija,Linija>();
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		stajalistaList = Stajaliste.getStajalisteList();
 		
 		linijeObsList = FXCollections.observableArrayList();
-		linijeObsList.setAll(Linija.getLinije());
 		linijeTableView.setItems(linijeObsList);
 		linijeTableView.setPlaceholder(new Label("Nema linija u tabeli."));
     	nazivLinijeColumn.setCellValueFactory(new PropertyValueFactory<>("nazivLinije"));
@@ -77,11 +80,72 @@ public class ListaLinijaController implements Initializable {
     	nazivPrevoznikaColumn.setCellValueFactory(new PropertyValueFactory<>("nazivPrevoznika"));
     	peronLinijeColumn.setCellValueFactory(new PropertyValueFactory<>("peron"));
     	//daniUSedmiciColumn.setCellValueFactory(new PropertyValueFactory<>("daniUSedmici"));
-    	izmijeniColumn.setCellValueFactory(
+    	
+    	blokirajColumn.setCellValueFactory(
+                param -> new ReadOnlyObjectWrapper<>(param.getValue())
+            );
+        
+        blokirajColumn.setCellFactory(tableCell -> {
+            TableCell<Linija, Linija> cell = new TableCell<Linija, Linija>() {
+                private Button button = new Button("");
+            	//postaviti dimenzije
+                @Override
+                protected void updateItem(Linija item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (!empty) {
+                    	//System.out.println(item);
+                    	if("Blokirano".equals(item.getStanje())) {
+                    		button.getStyleClass().addAll("buttonTable", "buttonTableUnblock");
+                    		button.setTooltip(new Tooltip("Odblokiraj?"));
+                    	} else {
+                    		button.getStyleClass().addAll("buttonTable", "buttonTableBlock");
+                    		button.setTooltip(new Tooltip("Blokiraj?"));
+                    	}
+                    	button.getTooltip().setAutoHide(false);
+                    	button.getTooltip().setShowDelay(Duration.seconds(0.5));
+                    	setGraphic(button);
+                    	button.setOnMouseClicked(
+                    			event -> {
+                    				if("Blokirano".equals(item.getStanje())) {
+                    					if(Linija.blokiranjeLinije(item.getIdLinije(), "Aktivno")) {
+                    						item.setStanje("Aktivno");
+                    						button.getStyleClass().remove("buttonTableUnblock");
+                    						button.getStyleClass().add("buttonTableBlock");
+                    						button.getTooltip().setText("Blokiraj?");
+                    						
+                    						Util.getNotifications("Obavještenje", "Linija odblokirana.", "Information").show();
+                    					} else {
+                    						//NASTALA GRESKA
+                    						Util.showBugAlert();
+                    					}
+                    				} else {
+                    					if(Linija.blokiranjeLinije(item.getIdLinije(), "Blokirano")) {
+	                    					item.setStanje("Blokirano");
+	                    					button.getStyleClass().remove("buttonTableBlock");
+	                    					button.getStyleClass().add("buttonTableUnblock");
+	                    					button.getTooltip().setText("Odblokiraj?");
+	                    					
+	                    					Util.getNotifications("Obavještenje", "Linija blokirana.", "Information").show();
+                    					} else {
+                    						//NASTALA GRESKA
+                    						Util.showBugAlert();
+                    					}
+                    				}
+                    			}
+                    	);
+                    } else {
+                    	setGraphic(null);
+                    }
+                }
+            };
+            return cell;
+        });
+    	
+    	izmjeniColumn.setCellValueFactory(
                 param -> new ReadOnlyObjectWrapper<>(param.getValue())
             );
     	linijeTableView.setFocusTraversable(false);
-    	izmijeniColumn.setCellFactory(tableCell -> {
+    	izmjeniColumn.setCellFactory(tableCell -> {
             TableCell<Linija, Linija> cell = new TableCell<Linija, Linija>() {
                 private Button button = new Button("");
                 @Override
@@ -104,11 +168,11 @@ public class ListaLinijaController implements Initializable {
             };
             return cell;
         });
-    	 izbrisiColumn.setCellValueFactory(
+    	 obrisiColumn.setCellValueFactory(
          		param -> new ReadOnlyObjectWrapper<>(param.getValue())
          	);
          
-         izbrisiColumn.setCellFactory(tableCell -> {
+         obrisiColumn.setCellFactory(tableCell -> {
              TableCell<Linija, Linija> cell = new TableCell<Linija, Linija>() {
                  private Button button = new Button("");
                  @Override
@@ -161,16 +225,44 @@ public class ListaLinijaController implements Initializable {
          idLinijeLinijeColumn.setMaxWidth(70);
          peronLinijeColumn.setMinWidth(50);
          peronLinijeColumn.setMaxWidth(70);
-         izbrisiColumn.setMinWidth(35);
-         izbrisiColumn.setMaxWidth(35);
-         izmijeniColumn.setMinWidth(35);
-         izmijeniColumn.setMaxWidth(35);
+         
+         blokirajColumn.setText("");
+         blokirajColumn.setMinWidth(35);
+         blokirajColumn.setMaxWidth(35);
+         blokirajColumn.setResizable(false);
+         blokirajColumn.setSortable(false);
+         izmjeniColumn.setText("");
+         izmjeniColumn.setMinWidth(35);
+         izmjeniColumn.setMaxWidth(35);
+         izmjeniColumn.setResizable(false);
+         izmjeniColumn.setSortable(false);
+         obrisiColumn.setText("");
+         obrisiColumn.setMinWidth(35);
+         obrisiColumn.setMaxWidth(35);
+         obrisiColumn.setResizable(false);
+         obrisiColumn.setSortable(false);
+         
+         MaskerPane progressPane = Util.getMaskerPane(anchorPane);
+         Task<Void> task = new Task<Void>() {
+             @Override
+             protected Void call() /*throws Exception*/ {
+             	System.out.println(Thread.currentThread());
+                 progressPane.setVisible(true);
+                 linijeObsList.addAll(Linija.getLinije());
+                 return null;
+             }
+             @Override
+             protected void succeeded(){
+                 super.succeeded();
+                 progressPane.setVisible(false);
+             }
+         };
+         new Thread(task).start();
          
         linijeTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Linija>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Linija> observable, Linija oldValue, Linija newValue) {
-				// TODO Auto-generated method stub
 				System.out.println("new: " + newValue);
 				System.out.println("old: " + oldValue);
 			}

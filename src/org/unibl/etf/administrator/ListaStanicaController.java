@@ -114,6 +114,7 @@ public class ListaStanicaController implements Initializable {
                     						item.setStanje("Aktivno");
                     						button.getStyleClass().remove("buttonTableUnblock");
                     						button.getStyleClass().add("buttonTableBlock");
+                    						button.getTooltip().setText("Blokiraj?");
                     						
                     						Util.getNotifications("Obavještenje", "Autobuska stanica odblokirana.", "Information").show();
                     					} else {
@@ -125,6 +126,7 @@ public class ListaStanicaController implements Initializable {
 	                    					item.setStanje("Blokirano");
 	                    					button.getStyleClass().remove("buttonTableBlock");
 	                    					button.getStyleClass().add("buttonTableUnblock");
+	                    					button.getTooltip().setText("Odblokiraj?");
 	                    					
 	                    					Util.getNotifications("Obavještenje", "Autobuska stanica blokirana.", "Information").show();
                     					} else {

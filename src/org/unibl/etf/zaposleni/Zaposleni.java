@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.logging.Level;
 import org.unibl.etf.util.Util;
 
-import javafx.concurrent.Task;
-
 public abstract class Zaposleni implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String ime;

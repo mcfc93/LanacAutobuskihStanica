@@ -61,9 +61,6 @@ public class DodavanjePrevoznikaController implements Initializable {
 	
 	@FXML
 	public void dodajPrevoznika() {
-		int djackiPopust = Integer.parseInt(djackiPopustTextField.getText());
-		int radnickiPopust = Integer.parseInt(radnickiPopustTextField.getText());
-		int penzionerskiPopust = Integer.parseInt(penzionerskiPopustTextField.getText());
 		if(jibTextField.validate() &
 				nazivTextField.validate() &
 					telefonTextField.validate() &
@@ -75,6 +72,9 @@ public class DodavanjePrevoznikaController implements Initializable {
 											djackiPopustTextField.validate() &
 												penzionerskiPopustTextField.validate() &
 													radnickiPopustTextField.validate()) {
+			int djackiPopust = Integer.parseInt(djackiPopustTextField.getText());
+			int radnickiPopust = Integer.parseInt(radnickiPopustTextField.getText());
+			int penzionerskiPopust = Integer.parseInt(penzionerskiPopustTextField.getText());
 			if(Prevoznik.dodajPrevoznika(jibTextField.getText(),nazivTextField.getText(),telefonTextField.getText(),emailTextField.getText(),
 					webAdresaTextField.getText(),tekuciRacunTextField.getText(),adresaTextField.getText(),Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()),
 						djackiPopust, radnickiPopust, penzionerskiPopust)) {

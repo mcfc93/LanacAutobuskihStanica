@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import org.unibl.etf.karta.Relacija;
-import org.unibl.etf.salterski_radnik.InformacijeController;
-
 public class Stajaliste extends Mjesto {
 	String nazivStajalista;
 	int idStajalista;
@@ -26,7 +23,6 @@ public class Stajaliste extends Mjesto {
 	
 	public Stajaliste(String naziv, int postanskiBroj, String nazivStajalista, int idStajalista) {
 		super(naziv, postanskiBroj);
-		// TODO Auto-generated constructor stub
 		this.nazivStajalista = nazivStajalista;
 		this.idStajalista = idStajalista;
 	}
@@ -64,21 +60,18 @@ public String getNazivStajalista() {
 		Stajaliste.stajalisteList = stajalisteList;
 	}
 
-public Stajaliste() {
+	public Stajaliste() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Stajaliste(int idStajalista, int postanskiBroj, String nazivMjesta, String nazivStajalista) {
 		super(nazivMjesta,postanskiBroj);
-		// TODO Auto-generated constructor stub
 		this.nazivStajalista = nazivStajalista;
 		this.idStajalista = idStajalista;
 	}
 
 	public Stajaliste(String nazivMjesta, String nazivStajalista) {
 		super(nazivMjesta);
-		// TODO Auto-generated constructor stub
 		this.nazivStajalista = nazivStajalista;		
 	}
 
@@ -129,7 +122,6 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 	}
 
 	public static Stajaliste getStajaliste(int idStajalista) {
-		// TODO Auto-generated method stub
 		Connection c = null;
 		ResultSet r = null;
 		PreparedStatement s = null;
@@ -143,7 +135,6 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 				return new Stajaliste(r.getInt("IdStajalista"), r.getString("NazivStajalista"));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -167,7 +158,6 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 			}
 			return stajalistaStanicaList;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -195,7 +185,6 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 			if(r.next())
 				return r.getInt(1);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 0;

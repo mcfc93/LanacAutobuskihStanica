@@ -13,7 +13,6 @@ import org.unibl.etf.zaposleni.Zaposleni;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,14 +23,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class AdministratorController implements Initializable {
+
 	@FXML
-	private AnchorPane anchorPane;
+    private GridPane gridPane;
+	
+	@FXML
+    private AnchorPane menuLine;
 	
 	@FXML
 	private AnchorPane dataAnchorPane;
@@ -74,18 +79,16 @@ public class AdministratorController implements Initializable {
 		informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " + PrijavaController.nalog.getZaposleni().getPrezime());
 		
 		//DragAndDrop
-		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
+		menuLine.setOnMousePressed(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
 				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 				xOffset = stage.getX() - event.getScreenX();
 				yOffset = stage.getY() - event.getScreenY();
 			}
 		});
 						
-		anchorPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
+		menuLine.setOnMouseDragged(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
 			   	Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 			    if(!stage.isMaximized()) {
 			    	stage.setX(event.getScreenX() + xOffset);
@@ -95,9 +98,11 @@ public class AdministratorController implements Initializable {
 			}
 		});
 						
-		anchorPane.setOnMouseReleased((event) -> {
-			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-			stage.setOpacity(1.0);
+		menuLine.setOnMouseReleased(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
+				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+				stage.setOpacity(1.0);
+			}
 		});
 		
 		//toggleGroup
@@ -154,7 +159,7 @@ System.out.println(Zaposleni.getJmbgList());
 			}
 		
 			//((Stage)((Node)event.getSource()).getScene().getWindow()).show();
-			((Stage)anchorPane.getScene().getWindow()).close();
+			((Stage)gridPane.getScene().getWindow()).close();
 		} else {
 System.out.println("GRESKA! - Odjava nije uspjesnja.");
 		}
@@ -162,69 +167,41 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	
 	@FXML
 	void close(MouseEvent event) {
-		//System.exit(0);
-		Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-		stage.close();
+		if(event.getButton().equals(MouseButton.PRIMARY)) {
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+        }
 	}
 	
 	@FXML
 	void minimize(MouseEvent event) {
-		Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-		stage.setIconified(true);
+		if(event.getButton().equals(MouseButton.PRIMARY)) {
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).setIconified(true);
+        }
 	}
 	
 	@FXML
 	void maximize(MouseEvent event) {
-		Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-		if(!stage.isMaximized()) {
-			stage.setMaximized(true);
-		} else {
-			stage.setMaximized(false);
-		}
+		if(event.getButton().equals(MouseButton.PRIMARY)) {
+            Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+            if(!stage.isMaximized()) {
+                stage.setMaximized(true);
+            } else {
+                stage.setMaximized(false);
+            }
+        }
 	}
 	
 	@FXML
 	void doubleClickMaximize(MouseEvent event) {
-		//System.out.println("Broj klikova: " + event.getClickCount());
-		if(event.getClickCount() > 1) {
-			maximize(event);
-		}
+		if(event.getButton().equals(MouseButton.PRIMARY)) {
+            if(event.getClickCount() > 1) {
+                maximize(event);
+            }
+        }
 	}
-	/*
-	private void resetButtons() {
-		//System.out.println("ODJAVA:" + odjavaButton.getStyleClass());
-		//System.out.println("DODAJ:" + dodajNalogButton.getStyleClass());
-		//System.out.println("LISTA:" + listaNalogaButton.getStyleClass());
-		
-		odjavaButton.getStyleClass().clear();
-		listaStanicaButton.getStyleClass().clear();
-		dodajStanicuButton.getStyleClass().clear();
-		listaNalogaButton.getStyleClass().clear();
-		dodajNalogButton.getStyleClass().clear();
 
-		odjavaButton.getStyleClass().addAll("buttonMenu", "buttonRightBorder");
-		listaStanicaButton.getStyleClass().addAll("buttonMenu", "buttonRightBorder");
-		dodajStanicuButton.getStyleClass().addAll("buttonMenu", "buttonRightBorder");
-		listaNalogaButton.getStyleClass().addAll("buttonMenu", "buttonRightBorder");
-		dodajNalogButton.getStyleClass().addAll("buttonMenu", "buttonRightBorder");
-	}
-	
-	private void setCss(Button button) {
-		button.getStyleClass().removeAll("buttonMenu");
-		button.getStyleClass().add("buttonPressed");
-	}
-	*/
 	@FXML
 	void listaAutobuskihStanica(ActionEvent event) {
-		//resetButtons();
-		//setCss((Button)event.getSource());
-		//listaStanicaButton.getStyleClass().removeAll("buttonMenu");
-		//listaStanicaButton.getStyleClass().add("buttonPressed");
-		
-		AutobuskaStanica.listaStanica();
-		
-		
-		
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/ListaStanica.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
@@ -240,12 +217,6 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	
 	@FXML
 	void dodavanjeAutobuskeStanice(ActionEvent event) {
-		//resetButtons();
-		//setCss((Button)event.getSource());
-		//dodajStanicuButton.getStyleClass().removeAll("buttonMenu");
-		//dodajStanicuButton.getStyleClass().add("buttonPressed");
-		
-		
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/DodajStanicu.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
@@ -261,12 +232,6 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	
 	@FXML
 	void dodavanjeKorisnickogNaloga(ActionEvent event) {
-		//resetButtons();
-		//setCss((Button)event.getSource());
-		//dodajNalogButton.getStyleClass().removeAll("buttonMenu");
-		//dodajNalogButton.getStyleClass().add("buttonPressed");
-		
-		
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/DodajNalog.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);
@@ -282,11 +247,6 @@ System.out.println("GRESKA! - Odjava nije uspjesnja.");
 	
 	@FXML
 	void brisanjeKorisnickogNaloga(ActionEvent event) {
-		//resetButtons();
-		//setCss((Button)event.getSource());
-		//listaNalogaButton.getStyleClass().removeAll("buttonMenu");
-		//listaNalogaButton.getStyleClass().add("buttonPressed");
-		
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/ListaNaloga.fxml"));
 			AnchorPane.setTopAnchor(root,0.0);

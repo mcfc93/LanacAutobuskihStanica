@@ -177,6 +177,7 @@ public class DodavanjeLinijaController implements Initializable {
 		nazivLinijeTextField.getValidators().add(Util.requiredFieldValidator(nazivLinijeTextField));
 		prevoznikComboBox.getValidators().add(Util.requiredFieldValidator(prevoznikComboBox));
 		peronComboBox.getValidators().add(Util.requiredFieldValidator(peronComboBox));
+		prazniciComboBox.getValidators().add(Util.requiredFieldValidator(prazniciComboBox));
 		cijenaJednokratnaTextField.getValidators().addAll(Util.requiredFieldValidator(cijenaJednokratnaTextField),Util.doubleValidator(cijenaJednokratnaTextField));
 		cijenaMjesecnaTextField.getValidators().add(Util.doubleValidator(cijenaMjesecnaTextField));
 		vrijemePolaska1TimePicker.getValidators().add(Util.timeValidator(vrijemePolaska1TimePicker));
@@ -203,7 +204,6 @@ public class DodavanjeLinijaController implements Initializable {
 
 			@Override
 			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-				// TODO Auto-generated method stub
 				/*
 				 * stanicno zadrzavanje u oba smjera na svim relacijama (osim prve) koja za polaziste imaju autobusku stanicu*/
 
@@ -226,7 +226,6 @@ public class DodavanjeLinijaController implements Initializable {
 
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				// TODO Auto-generated method stub
 				Relacija odabranaRelacija = UnosRelacijaController.relacijeList.get((int) newValue);
 				if(odabranaRelacija.getCijenaJednokratna()==null)
 					cijenaJednokratnaTextField.clear();
@@ -310,7 +309,6 @@ public class DodavanjeLinijaController implements Initializable {
     
 
 	public void disableRelacija(boolean b) {
-		// TODO Auto-generated method stub
 		vrijemePolaska1TimePicker.setDisable(b);
 		vrijemePolaska2TimePicker.setDisable(b);
 		sljedeciPolazakButton.setDisable(b);
@@ -392,7 +390,8 @@ public class DodavanjeLinijaController implements Initializable {
     void dodajLiniju(ActionEvent event) {
 		if(nazivLinijeTextField.validate()
 				& prevoznikComboBox.validate()
-					& peronComboBox.validate()) {
+					& peronComboBox.validate()
+						& prazniciComboBox.validate()) {
 			linija = new Linija(0, nazivLinijeTextField.getText(), (int)peronComboBox.getValue(), prevoznikComboBox.getValue(), prazniciComboBox.getSelectionModel().getSelectedIndex()+1);
 			Util.getNotifications("Obavještenje", "Linija dodana.", "Information").show();
 			try {
@@ -496,8 +495,8 @@ public class DodavanjeLinijaController implements Initializable {
 					vrijemePolaska1TimePicker.setDisable(false);
 					vrijemePolaska2TimePicker.setDisable(false);
 					sljedeciPolazakButton.setVisible(true);
-					cijenaJednokratnaTextField.setEditable(false);
-					cijenaMjesecnaTextField.setEditable(false);
+					cijenaJednokratnaTextField.setVisible(false);
+					cijenaMjesecnaTextField.setVisible(false);
 					sacuvajButton.setVisible(false);
 					return;
 				}
@@ -508,8 +507,8 @@ public class DodavanjeLinijaController implements Initializable {
 					vrijemePolaska1TimePicker.setDisable(false);
 					vrijemePolaska2TimePicker.setDisable(false);
 					sljedeciPolazakButton.setVisible(true);
-					cijenaJednokratnaTextField.setEditable(false);
-					cijenaMjesecnaTextField.setEditable(false);
+					cijenaJednokratnaTextField.setVisible(false);
+					cijenaMjesecnaTextField.setVisible(false);
 					sacuvajButton.setVisible(false);
 
 				}

@@ -1,11 +1,14 @@
 package org.unibl.etf.karta;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+
 import org.unibl.etf.util.Util;
 
 public class Linija {
@@ -24,7 +27,6 @@ public class Linija {
 	/*
 	 * konstruktor za storniranje karte*/
 	public Linija(String nazivLinije) {
-		// TODO Auto-generated constructor stub
 		this.nazivLinije = nazivLinije;
 	}
 
@@ -41,6 +43,16 @@ public class Linija {
 		this.prevoznik = prevoznik;
 		this.voznjaPraznikom = voznjaPraznikom;
 		this.stanje = "Aktivno";
+	}
+	
+	public Linija(int idLinije, String nazivLinije, int peron, Prevoznik prevoznik, int voznjaPraznikom, String stanje) {
+		super();
+		this.idLinije = idLinije;
+		this.nazivLinije = nazivLinije;
+		this.peron = peron;
+		this.prevoznik = prevoznik;
+		this.voznjaPraznikom = voznjaPraznikom;
+		this.stanje = stanje;
 	}
 	
 
@@ -139,7 +151,6 @@ public class Linija {
 				return r.getInt(1);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 0;
@@ -199,7 +210,6 @@ public class Linija {
 	}
 
 	public static List<Linija> getLinije() {
-		// TODO Auto-generated method stub
 		String sqlQuery = "select IdLinije,NazivLinije,Peron,NazivPrevoznika,linija.Stanje,VoznjaPraznikom from linija join prevoznik on (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where linija.Stanje!='Izbrisano'";
     	Connection c = null;
     	ResultSet r = null;
@@ -211,7 +221,7 @@ public class Linija {
 			r = s.executeQuery();
 			while(r.next()) {
 				Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
-				linijeList.add(new Linija(r.getInt("IdLinije"), r.getString("NazivLinije"), r.getInt("Peron"),prevoznik, r.getInt("VoznjaPraznikom")));	
+				linijeList.add(new Linija(r.getInt("IdLinije"), r.getString("NazivLinije"), r.getInt("Peron"),prevoznik, r.getInt("VoznjaPraznikom"), r.getString("Stanje")));	
 			}
 			return linijeList;
 		} catch (SQLException e) {
@@ -224,7 +234,22 @@ public class Linija {
 		return null;
 	}
 	
-	
+	public static boolean blokiranjeLinije(int idLinije, String stanje) {
+		String sql = "update linija set Stanje=? where IdLinije=?;";
+		Connection c = null;
+		PreparedStatement s = null;
+	    try {
+	       	c=Util.getConnection();
+	       	s = Util.prepareStatement(c, sql, false, stanje, idLinije);
+	       	s.execute();
+	       	return true;
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(s,c);
+	    }
+	    return false;
+	}
 	
 	
 }

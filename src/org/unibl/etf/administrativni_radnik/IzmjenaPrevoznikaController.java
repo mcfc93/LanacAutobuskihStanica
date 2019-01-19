@@ -7,15 +7,13 @@ import org.unibl.etf.util.Mjesto;
 import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.validation.base.ValidatorBase;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -24,6 +22,8 @@ public class IzmjenaPrevoznikaController implements Initializable{
 	
 	@FXML
 	private AnchorPane anchorPane;
+	@FXML
+	private AnchorPane menuLine;
 	@FXML
 	private JFXTextField nazivTextField = new JFXTextField();
 	@FXML
@@ -56,17 +56,17 @@ public class IzmjenaPrevoznikaController implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
+		//DragAndDrop
+		menuLine.setOnMousePressed(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
 				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 				xOffset = stage.getX() - event.getScreenX();
 				yOffset = stage.getY() - event.getScreenY();
 			}
 		});
-		anchorPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
+						
+		menuLine.setOnMouseDragged(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
 			   	Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 			    if(!stage.isMaximized()) {
 			    	stage.setX(event.getScreenX() + xOffset);
@@ -75,9 +75,12 @@ public class IzmjenaPrevoznikaController implements Initializable{
 			    }
 			}
 		});
-		anchorPane.setOnMouseReleased((event) -> {
-			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-			stage.setOpacity(1.0);
+						
+		menuLine.setOnMouseReleased(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
+				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+				stage.setOpacity(1.0);
+			}
 		});
 		
 		
@@ -122,15 +125,14 @@ public class IzmjenaPrevoznikaController implements Initializable{
 	}
 
 	@FXML
-    void close(MouseEvent event) {
-    	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
-    }
+	void close(MouseEvent event) {
+		if(event.getButton().equals(MouseButton.PRIMARY)) {
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+        }
+	}
 	
 	@FXML
 	public void izmjeniPrevoznika(ActionEvent event) {
-		int djackiPopust = Integer.parseInt(djackiPopustTextField.getText());
-		int penzionerskiPopust = Integer.parseInt(penzionerskiPopustTextField.getText());
-		int radnickiPopust = Integer.parseInt(radnickiPopustTextField.getText());
 		if(jibTextField.validate()
 				& nazivTextField.validate()
 					& adresaTextField.validate()
@@ -143,6 +145,9 @@ public class IzmjenaPrevoznikaController implements Initializable{
 												& radnickiPopustTextField.validate()
 													& penzionerskiPopustTextField.validate()
 													) {
+			int djackiPopust = Integer.parseInt(djackiPopustTextField.getText());
+			int penzionerskiPopust = Integer.parseInt(penzionerskiPopustTextField.getText());
+			int radnickiPopust = Integer.parseInt(radnickiPopustTextField.getText());
 			if(Prevoznik.izmjeniPrevoznika(nazivTextField.getText(), telefonTextField.getText(), emailTextField.getText(), webAdresaTextField.getText(), 
 										tekuciRacunTextField.getText(), adresaTextField.getText(),postanskiBrojTextField.getText().split("-")[0].trim(), 
 										ListaPrevoznikaController.odabraniPrevoznik.getJIBPrevoznika(),djackiPopust,penzionerskiPopust,radnickiPopust)) {

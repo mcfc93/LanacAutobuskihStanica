@@ -11,11 +11,11 @@ import com.jfoenix.controls.JFXTextField;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -70,31 +70,31 @@ public class IzmjeniStanicuController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		//DragAndDrop
-		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-				xOffset = stage.getX() - event.getScreenX();
-				yOffset = stage.getY() - event.getScreenY();
-			}
-		});
-						
-		anchorPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-			   	Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-			    if(!stage.isMaximized()) {
-			    	stage.setX(event.getScreenX() + xOffset);
-			    	stage.setY(event.getScreenY() + yOffset);
-			    	stage.setOpacity(0.8);
-			    }
-			}
-		});
-						
-		anchorPane.setOnMouseReleased((event) -> {
-			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-			stage.setOpacity(1.0);
-		});
+				menuLine.setOnMousePressed(event -> {
+					if(event.getButton().equals(MouseButton.PRIMARY)) {
+						Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+						xOffset = stage.getX() - event.getScreenX();
+						yOffset = stage.getY() - event.getScreenY();
+					}
+				});
+								
+				menuLine.setOnMouseDragged(event -> {
+					if(event.getButton().equals(MouseButton.PRIMARY)) {
+					   	Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+					    if(!stage.isMaximized()) {
+					    	stage.setX(event.getScreenX() + xOffset);
+					    	stage.setY(event.getScreenY() + yOffset);
+					    	stage.setOpacity(0.8);
+					    }
+					}
+				});
+								
+				menuLine.setOnMouseReleased(event -> {
+					if(event.getButton().equals(MouseButton.PRIMARY)) {
+						Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+						stage.setOpacity(1.0);
+					}
+				});
 		
 		/*
 		Platform.runLater(() -> {
@@ -125,11 +125,12 @@ public class IzmjeniStanicuController implements Initializable {
 		emailTextField.setText(autobuskaStanica.getEmail());
 	}
 	
-    @FXML
-    void close(MouseEvent event) {
-    	Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-		stage.close();
-    }
+	@FXML
+	void close(MouseEvent event) {
+		if(event.getButton().equals(MouseButton.PRIMARY)) {
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+        }
+	}
 
     @FXML
     void potvrdi(ActionEvent event) {

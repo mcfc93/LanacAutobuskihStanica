@@ -23,7 +23,6 @@ import com.jfoenix.controls.JFXCheckBox;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -37,6 +36,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -108,29 +108,30 @@ System.out.println("nalog.ser");
 		}
 		
 		//DragAndDrop
-		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-				xOffset = stage.getX() - event.getScreenX();
-		        yOffset = stage.getY() - event.getScreenY();
-			}
-		});
-				
-		anchorPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
-	       @Override
-		   public void handle(MouseEvent event) {
-	    	   Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-		       stage.setX(event.getScreenX() + xOffset);
-		       stage.setY(event.getScreenY() + yOffset);
-		       stage.setOpacity(0.8);
-		   }
-		});
-				
-		anchorPane.setOnMouseReleased((event) -> {
-			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-		    stage.setOpacity(1.0);
-		});
+        anchorPane.setOnMousePressed(event -> {
+            if(event.getButton().equals(MouseButton.PRIMARY)) {
+                Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+                xOffset = stage.getX() - event.getScreenX();
+                yOffset = stage.getY() - event.getScreenY();
+            }
+        });
+
+        anchorPane.setOnMouseDragged(event -> {
+            if(event.getButton().equals(MouseButton.PRIMARY)) {
+                Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+                stage.setX(event.getScreenX() + xOffset);
+                stage.setY(event.getScreenY() + yOffset);
+                stage.setOpacity(0.8);
+            }
+        });
+
+        anchorPane.setOnMouseReleased(event -> {
+            if(event.getButton().equals(MouseButton.PRIMARY)) {
+                Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+                stage.setOpacity(1.0);
+            }
+        });
+
 		
 		
 		/*
@@ -160,10 +161,9 @@ System.out.println("nalog.ser");
 	    korisnickoImeTextField.textProperty().addListener(changeListener);
 	    lozinkaTextField.textProperty().addListener(changeListener);
 	    */
-		prijavaButton.disableProperty().bind(
-	    		korisnickoImeTextField.textProperty().isEmpty()
-	    			.or(lozinkaTextField.textProperty().isEmpty())
-	    		);
+        prijavaButton.disableProperty().bind(
+        	korisnickoImeTextField.textProperty().isEmpty().or(lozinkaTextField.textProperty().isEmpty())
+        );
 	}
 	
 	@FXML
@@ -282,7 +282,7 @@ System.out.println(autobuskaStanica);
 				if(nalog.getZaposleni() instanceof Administrator) {
 					//administrator
 	    			try {
-	    				Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/AdministratorView.fxml"));
+	    				Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrator/AdministratorView.fxml"));
 	    				Scene scene = new Scene(root);
 	    				scene.getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
 	    				Stage stage=new Stage();
@@ -298,7 +298,7 @@ System.out.println(autobuskaStanica);
 				} else if(nalog.getZaposleni() instanceof AdministrativniRadnik) {
 					//administrativni radnik
 	    			try {
-	    				Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/AdministrativniRadnikView.fxml"));
+	    				Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/AdministrativniRadnikView.fxml"));
 	    				Scene scene = new Scene(root);
 	    				scene.getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
 	    				Stage stage=new Stage();
@@ -315,7 +315,7 @@ System.out.println(autobuskaStanica);
 					//if("SalterskiRadnik".equals(r.getString("Tip"))) {
 	        		//salterski radnik
 	               	try {
-	            		Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/SalterskiRadnikView.fxml"));
+	            		Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/SalterskiRadnikView.fxml"));
 	           			Scene scene = new Scene(root);
 	           			scene.getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
 	           			Stage stage=new Stage();
@@ -367,15 +367,16 @@ System.out.println(autobuskaStanica);
 	}
 	
 	@FXML
-	void close(MouseEvent event) {
-		//System.exit(0);
-		Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-		stage.close();
-	}
-	
-	@FXML
-	void minimize(MouseEvent event) {
-		Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-		stage.setIconified(true);
-	}
+    void close(MouseEvent event) {
+        if(event.getButton().equals(MouseButton.PRIMARY)) {
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+        }
+    }
+
+    @FXML
+    void minimize(MouseEvent event) {
+        if(event.getButton().equals(MouseButton.PRIMARY)) {
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).setIconified(true);
+        }
+    }
 }
