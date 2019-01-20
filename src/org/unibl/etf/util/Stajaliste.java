@@ -163,6 +163,28 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 		return null;
 	}
 
+	public static List<Stajaliste> getStajalistaBezStanicaList() {
+		List<Stajaliste> stajalistaBezStanicaList = new ArrayList<>();
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		String sql = "select autobuska_stanica.IdStajalista,autobusko_stajaliste.Naziv,mjesto.PostanskiBroj,mjesto.Naziv from autobuska_stanica join "
+				+ "(autobusko_stajaliste,mjesto) on "
+				+ "(autobuska_stanica.IdStajalista=autobusko_stajaliste.IdStajalista and autobusko_stajaliste.PostanskiBroj=mjesto.PostanskiBroj)";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false);
+			r = s.executeQuery();
+			while(r.next()) {
+				Stajaliste stajaliste = new Stajaliste(r.getString("mjesto.Naziv"), r.getInt("mjesto.PostanskiBroj"), r.getString("autobusko_stajaliste.Naziv"), r.getInt("autobuska_stanica.IdStajalista"));
+				stajalistaBezStanicaList.add(stajaliste);
+			}
+			return stajalistaBezStanicaList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	@Override
 	public String toString() {

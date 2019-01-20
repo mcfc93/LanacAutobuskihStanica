@@ -201,16 +201,18 @@ public class MjesecnaKarta extends Karta {
 		sb.append(System.lineSeparator());
 		sb.append(String.format("Prodajno mjesto: %s%s", PrijavaController.autobuskaStanica.getGrad(), System.lineSeparator()));
 		sb.append(String.format("Serijski broj: %013d%s", ProdajaKarataController.idMjesecneKarte, System.lineSeparator()));
-		sb.append(String.format("Relacija: %s - %s%s", karta.getRelacija().getPolaziste(), karta.getRelacija().getOdrediste(), System.lineSeparator()));
+		sb.append(String.format("Relacija: %s - %s%s", karta.getRelacija().getPolaziste().getNazivStajalista(), karta.getRelacija().getOdrediste().getNazivStajalista(), System.lineSeparator()));
 		sb.append(String.format("Peron: %d%s", karta.getRelacija().getLinija().getPeron(), System.lineSeparator()));
 		sb.append("Izdata: " + LocalDate.now() + " " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")) + System.lineSeparator());
 		sb.append(String.format("Mjesec vazenja: %02d/%d%s", mjesecVazenja, localDate.getYear(), System.lineSeparator()));
 		sb.append(String.format("Tip: %s%s", tip.toString(),System.lineSeparator())); 
 		switch(tip) {
-		case DJACKA:
+		case ĐAČKA:
 			sb.append(String.format("Popust: %f%%%s", karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust(), System.lineSeparator()));
+			break;
 		case PENZIONERSKA:
 			sb.append(String.format("Popust: %f%%%s", karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust(), System.lineSeparator()));
+			break;
 		default:
 			break;
 			

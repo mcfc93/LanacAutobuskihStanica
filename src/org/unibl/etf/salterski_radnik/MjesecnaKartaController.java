@@ -176,7 +176,7 @@ public class MjesecnaKartaController implements Initializable {
     	
     	//linijaLabel.setText(karta.getNazivLinije());
     	linijaLabel.setText(karta.getRelacija().getLinija().getNazivLinije());
-    	relacijaLabel.setText(karta.getRelacija().getPolaziste() + " - " + karta.getRelacija().getOdrediste());
+    	relacijaLabel.setText(karta.getRelacija().getPolaziste().getNazivStajalista() + " - " + karta.getRelacija().getOdrediste().getNazivStajalista());
     	mjesecVazenjaLabel.setText(mjesecVazenjaString);
     	tipLabel.setText(karta.getTip().toString().toUpperCase());
     	imePrezimeLabel.setText(karta.getIme() + " " + karta.getPrezime());

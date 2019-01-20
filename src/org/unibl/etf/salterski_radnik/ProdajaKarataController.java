@@ -176,7 +176,7 @@ public class ProdajaKarataController implements Initializable {
 		povratnaKartaSetUp();
 		toggleSetUp();
 		tipKarteComboBox.setItems(FXCollections.observableArrayList(TipKarte.values()));
-		tipKarteComboBox.setValue(TipKarte.OBICNA);
+		tipKarteComboBox.setValue(TipKarte.OBIČNA);
 		radioButtonObicna.setSelected(true);
 		//radioButtonMjesecna.setToggleGroup(toggleGroup);
 		//radioButtonObicna.setToggleGroup(toggleGroup);
@@ -202,8 +202,8 @@ public class ProdajaKarataController implements Initializable {
 	        }
 	    });
 		*/
-		Util.setAutocompleteList(odredisteTextField, InformacijeController.stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()));
-		Util.setAutocompleteList(polazisteTextField, InformacijeController.stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()));
+		Util.setAutocompleteList(odredisteTextField, InformacijeController.stajalistaBezStanica.stream().map(Stajaliste::toString).collect(Collectors.toList()));
+		Util.setAutocompleteList(polazisteTextField, InformacijeController.stajalistaBezStanica.stream().map(Stajaliste::toString).collect(Collectors.toList()));
 		//autoComplete();    
 		validationSetUp();
 		
@@ -228,16 +228,14 @@ public class ProdajaKarataController implements Initializable {
 
 	@FXML
 	public void pretragaRelacija() {
-		Stajaliste polaziste = InformacijeController.stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
+		//Stajaliste polaziste = InformacijeController.stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
 		if(radioButtonObicna.isSelected()) {
 			if(odredisteTextField.validate()) {
 				Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(odredisteTextField.getText())).findFirst().get();
 
 				kupovinaButton.setDisable(false);
 				karteObs.clear();
-				Praznik.getHolidayList().stream().forEach(p -> System.out.println("Dan:" +p.getDan() +", mjesec:" + p.getMjesec()));
-
-				for (Karta karta : Karta.getKarteList(polaziste, odrediste)) {
+				for (Karta karta : Karta.getKarteList(InformacijeController.pocetnoStajaliste, odrediste)) {
 					daniUSedmici = karta.getRelacija().getDani();
 					if(Praznik.getHolidayList().stream().noneMatch(p -> p.getDan()==datum.getValue().getDayOfMonth() & p.getMjesec()==datum.getValue().getMonthValue())) 
 					{	
@@ -259,17 +257,17 @@ public class ProdajaKarataController implements Initializable {
 
 					karteObs.clear();
 					if(kupovinaMjesecne) {
-						for (Karta karta : MjesecnaKarta.getMjesecneKarteList(polaziste, odrediste)) {
+						for (Karta karta : MjesecnaKarta.getMjesecneKarteList(InformacijeController.pocetnoStajaliste, odrediste)) {
 							//daniUSedmici = karta.getLinija().getDaniUSedmici();
 								switch(tipKarteComboBox.getValue()) {
-								case DJACKA:
+								case ĐAČKA:
 									//karta.getRelacija().setCijenaMjesecna(POPUST_DJACKA * karta.getRelacija().getCijenaMjesecna());
 									karta.setCijena(karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust());
 									break;
 								case PENZIONERSKA:
 									karta.setCijena(karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust());
 									break;
-								case OBICNA:
+								case OBIČNA:
 									break;
 								}
 								karteObs.add(karta);
@@ -284,7 +282,7 @@ public class ProdajaKarataController implements Initializable {
 							kupovinaButton.setDisable(false);
 					}
 					else {
-						for (Karta karta : Karta.getKarteList(InformacijeController.stajaliste, new Stajaliste(odredisteTextField.getText()))) {
+						for (Karta karta : Karta.getKarteList(InformacijeController.pocetnoStajaliste, new Stajaliste(odredisteTextField.getText()))) {
 							daniUSedmici = karta.getRelacija().getDani();
 							if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
 								if(povratnaKartaCheckBox.isSelected())
@@ -449,8 +447,8 @@ public class ProdajaKarataController implements Initializable {
 	}
 
 	public void validationSetUp() {
-		polazisteTextField.getValidators().addAll(Util.requiredFieldValidator(polazisteTextField),Util.collectionValidator(polazisteTextField, InformacijeController.stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite polaziste"));
-		odredisteTextField.getValidators().addAll(Util.requiredFieldValidator(odredisteTextField),Util.collectionValidator(odredisteTextField, InformacijeController.stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite odrediste"));
+		polazisteTextField.getValidators().addAll(Util.requiredFieldValidator(polazisteTextField),Util.collectionValidator(polazisteTextField, InformacijeController.stajalistaBezStanica.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite polaziste"));
+		odredisteTextField.getValidators().addAll(Util.requiredFieldValidator(odredisteTextField),Util.collectionValidator(odredisteTextField, InformacijeController.stajalistaBezStanica.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite odrediste"));
 		imeTextField.getValidators().add(Util.requiredFieldValidator(imeTextField));
 		prezimeTextField.getValidators().add(Util.requiredFieldValidator(prezimeTextField));
 		brojTelefonaTextField.getValidators().addAll(Util.requiredFieldValidator(brojTelefonaTextField),Util.phoneValidator(brojTelefonaTextField));
@@ -549,7 +547,7 @@ public class ProdajaKarataController implements Initializable {
 		    		imeTextField.clear();
 		    		prezimeTextField.clear();
 		    		brojTelefonaTextField.clear();
-		    		tipKarteComboBox.setValue(TipKarte.OBICNA);
+		    		tipKarteComboBox.setValue(TipKarte.OBIČNA);
 		    		tipKarteComboBox.setDisable(true);
 		    		//rezervacijaCheckBox.setDisable(false);
 		    		rezervacijaCheckBox.setVisible(true);
@@ -668,9 +666,9 @@ public class ProdajaKarataController implements Initializable {
 			@Override
 			public void changed(ObservableValue<? extends TipKarte> observable, TipKarte oldValue, TipKarte newValue) {
 				// TODO Auto-generated method stub
-				if(oldValue==TipKarte.OBICNA) {
+				if(oldValue==TipKarte.OBIČNA) {
 					
-					if(newValue==TipKarte.DJACKA)  {
+					if(newValue==TipKarte.ĐAČKA)  {
 						for (Karta karta : karteObs) 
 							karta.setCijena( karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust());
 
@@ -684,9 +682,9 @@ public class ProdajaKarataController implements Initializable {
 					karteTable.refresh();
 				}
 				else	
-					if(oldValue==TipKarte.DJACKA) {
+					if(oldValue==TipKarte.ĐAČKA) {
 					
-						if(newValue==TipKarte.OBICNA)
+						if(newValue==TipKarte.OBIČNA)
 							for (Karta karta : karteObs) {
 								karta.getRelacija().setCijenaMjesecna( karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust());
 							}
@@ -699,12 +697,12 @@ public class ProdajaKarataController implements Initializable {
 					else
 						if(oldValue==TipKarte.PENZIONERSKA) {
 							
-							if(newValue==TipKarte.DJACKA)
+							if(newValue==TipKarte.ĐAČKA)
 								for (Karta karta : karteObs) {
 									karta.setCijena( karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust() * karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust());
 								}
 							else
-								if(newValue==TipKarte.OBICNA)
+								if(newValue==TipKarte.OBIČNA)
 									for (Karta karta : karteObs) {
 										karta.setCijena( karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust());
 									}

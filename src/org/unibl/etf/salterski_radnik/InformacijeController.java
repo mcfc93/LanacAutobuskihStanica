@@ -54,9 +54,12 @@ import javafx.stage.Stage;
 public class InformacijeController implements Initializable{
 	
 	public static List<Stajaliste> stajalistaList = new ArrayList<>();
-	private static ObservableList<Karta> karteObs = FXCollections.observableArrayList();
-	public static Stajaliste stajaliste = new Stajaliste();
+	public static List<Stajaliste> stajalistaBezStanica;
+	public static List<Stajaliste> stajalistaStanica;
+	public static Stajaliste pocetnoStajaliste;
+
 	
+	private static ObservableList<Karta> karteObs = FXCollections.observableArrayList();
 	@FXML
 	private JFXButton pretragaButton = new JFXButton();
 	@FXML
@@ -119,9 +122,18 @@ public class InformacijeController implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
+		stajalistaStanica = Stajaliste.getStajalistaStanicaList();
 		stajalistaList = Stajaliste.getStajalisteList();
+		stajalistaList.forEach(s -> System.out.println(s));
+		stajalistaBezStanica = Stajaliste.getStajalisteList();
 		
+		pocetnoStajaliste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
+		System.out.println(pocetnoStajaliste);
+		//stajalistaBezStanica.removeIf(s -> stajalistaStanica.contains(s));
+		for (Stajaliste s : stajalistaStanica) {
+			if(stajalistaBezStanica.contains(s))
+				stajalistaBezStanica.remove(s);
+		}
 		// stajaliste = stajalistaList.stream().filter(s -> s.get()==)
 		
 		System.out.println("stajaliste stanice: " + PrijavaController.autobuskaStanica.getIdStajalista());
@@ -190,7 +202,7 @@ public class InformacijeController implements Initializable{
 		cijenaColumn.setCellValueFactory(new PropertyValueFactory<>("cijena"));
 		peronColumn.setCellValueFactory(new PropertyValueFactory<>("peron"));
 		
-		Util.setAutocompleteList(mjestoTextField, stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()));
+		Util.setAutocompleteList(mjestoTextField, stajalistaBezStanica.stream().map(Stajaliste::toString).collect(Collectors.toList()));
 		//mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),Util.collectionValidator(mjestoTextField, mjestaSet, true, "Unesite mjesto"));
 		//mjestoTextField.getValidators().add(Util.requiredFieldValidator(mjestoTextField));
 		//mjestoTextField.getValidators().add(Util.collectionValidator(mjestoTextField, stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite mjesto"));
@@ -247,8 +259,9 @@ public class InformacijeController implements Initializable{
 						}catch (InterruptedException e) {
 							Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 						}
-	    				//karteObs.clear();
-	    				karteObs.add(new Karta(new Relacija(1, 1, "BL - GR", 5, 7, new Stajaliste("Banja Luka"), new Stajaliste("Gradiska"), 7.5, 135.0)));
+	    				
+	    				karteObs.clear();
+	    			//	karteObs.addAll(Karta.getInfoList(polasciDolasciComboBox.getValue()));
 	    				
 	    				Platform.runLater(() -> {
 							progressPane.setVisible(false);
@@ -313,7 +326,7 @@ public class InformacijeController implements Initializable{
 			
 				karteObs.clear();
 				if(polasciRadioButton.isSelected()) {
-					Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(mjestoTextField.getText())).findFirst().get();
+					Stajaliste odrediste = stajalistaList.stream().filter(s -> s.toString().equals(mjestoTextField.getText())).findFirst().get();
 					Stajaliste polaziste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
 						for(Karta karta : Karta.getKarteList(polaziste,odrediste)) {
 							daniUSedmici = karta.getRelacija().getDani();
@@ -323,7 +336,7 @@ public class InformacijeController implements Initializable{
 						}	
 				}
 				else {
-					Stajaliste polaziste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(mjestoTextField.getText())).findFirst().get();
+					Stajaliste polaziste = stajalistaList.stream().filter(s -> s.toString().equals(mjestoTextField.getText())).findFirst().get();
 					Stajaliste odrediste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
 					for(Karta karta : Karta.getKarteList(polaziste, odrediste)) {
 						daniUSedmici = karta.getRelacija().getDani();
