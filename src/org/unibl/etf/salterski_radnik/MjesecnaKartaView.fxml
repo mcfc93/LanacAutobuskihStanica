@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -9,17 +10,9 @@
 
 <AnchorPane fx:id="anchorPane" prefHeight="250.0" prefWidth="400.0" stylesheets="@../administrator/administrator.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.salterski_radnik.MjesecnaKartaController">
    <children>
-      <AnchorPane fx:id="menuLine" layoutX="2.0" layoutY="-1.0" prefHeight="25.0" prefWidth="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="menuLine" layoutX="2.0" layoutY="-1.0" prefHeight="30.0" prefWidth="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="close" layoutX="612.0" layoutY="6.0" onMouseClicked="#close" prefHeight="20.0" prefWidth="20.0" styleClass="close" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-               <graphic>
-                  <ImageView fx:id="exitImageView" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@img/close.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Label>
+            <Button fx:id="closeButton" mnemonicParsing="false" onMouseClicked="#close" styleClass="closeButton" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
          </children>
       </AnchorPane>
       <JFXButton fx:id="stampajButton" layoutX="181.0" layoutY="161.0" onAction="#stampaj" prefHeight="25.0" prefWidth="100.0" text="Štampaj" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="120.0" />

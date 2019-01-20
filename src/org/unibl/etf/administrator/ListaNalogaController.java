@@ -132,7 +132,7 @@ public class ListaNalogaController implements Initializable {
             							Alert alertWarning=new Alert(AlertType.WARNING);
             				    		alertWarning.setTitle("Greška");
             				    		alertWarning.setHeaderText(null);
-            				    		alertWarning.setContentText("Nije moguće obrisati Administratorski nalog.");
+            				    		alertWarning.setContentText("Nije moguće obrisati Administratorski nalog!");
             				    		/*
             				    		DialogPane dialogPaneWarning = alertWarning.getDialogPane();
             							dialogPaneWarning.getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());

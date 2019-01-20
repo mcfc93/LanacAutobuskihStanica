@@ -1,6 +1,5 @@
 package org.unibl.etf.karta;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -128,7 +127,7 @@ public class Linija {
 					return 0;
 			}
 		} catch (SQLException e) {
-		e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		finally {
 			Util.close(r,s, c);
@@ -151,7 +150,7 @@ public class Linija {
 				return r.getInt(1);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		return 0;
 	
@@ -168,7 +167,7 @@ public class Linija {
 			if(s.executeUpdate()==1)
 				return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		finally {
 			Util.close(s, c);
@@ -189,7 +188,7 @@ public class Linija {
 			System.out.println(s.execute());
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		return false;
 	}
@@ -204,7 +203,7 @@ public class Linija {
 			System.out.println(s.execute());
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		return false;
 	}
@@ -225,7 +224,7 @@ public class Linija {
 			}
 			return linijeList;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
     	finally {
 			Util.close(r, s, c);

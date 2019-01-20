@@ -2,11 +2,7 @@ package org.unibl.etf.salterski_radnik;
 
 import java.io.File;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,6 +11,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.controlsfx.control.MaskerPane;
@@ -32,23 +29,21 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -247,7 +242,7 @@ public class ProdajaKarataController implements Initializable {
 					}
 				}
 				if(karteObs.isEmpty())
-			    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan.", "Error").show();
+			    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
 			}
 		}
 		else {
@@ -277,7 +272,7 @@ public class ProdajaKarataController implements Initializable {
 						
 						
 						if(karteObs.isEmpty())
-					    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan.", "Error").show();
+					    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
 						else
 							kupovinaButton.setDisable(false);
 					}
@@ -292,7 +287,7 @@ public class ProdajaKarataController implements Initializable {
 						}
 						
 						if(karteObs.isEmpty())
-					    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan.", "Error").show();
+					    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
 					}
 			}
 		}
@@ -310,7 +305,7 @@ public class ProdajaKarataController implements Initializable {
 					MjesecnaKartaController.karta = MjesecnaKarta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
 
 					if(MjesecnaKartaController.karta==null) {
-				    	Util.getNotifications("Greška", "Pogrešan serijski broj.", "Error").show();
+				    	Util.getNotifications("Greška", "Pogrešan serijski broj!", "Error").show();
 						return;
 					}
 					MjesecnaKartaController.karta.setJIBStanice(PrijavaController.autobuskaStanica.getJib());
@@ -324,17 +319,17 @@ public class ProdajaKarataController implements Initializable {
 			// KUPOVINA MJESECNE KARTE
 			else {
 				if(karteTable.getSelectionModel().getSelectedItem()==null) {
-			    	Util.getNotifications("Greška", "Odaberite liniju iz tabele.", "Warning").show();
+			    	Util.getNotifications("Greška", "Odaberite liniju iz tabele!", "Warning").show();
 					return;
 				}
 				if(odabranaSlika==null) {
-			    	Util.getNotifications("Greška", "Odaberite sliku.", "Warning").show();
+			    	Util.getNotifications("Greška", "Odaberite sliku!", "Warning").show();
 					return;
 				}
 				brojKarataZaKupovinu = brojKarataComboBox.getValue();
 				karta.setJIBStanice(PrijavaController.autobuskaStanica.getJib());
 				if(50-Karta.provjeriBrojKarata(karta, Date.valueOf(datum.getValue()))<brojKarataZaKupovinu) {
-			    	Util.getNotifications("Greška", "Nedovoljno slobodnih mjesta u autobusu.", "Warning").show();
+			    	Util.getNotifications("Greška", "Nedovoljno slobodnih mjesta u autobusu!", "Warning").show();
 					return;
 				}
 				
@@ -346,7 +341,7 @@ public class ProdajaKarataController implements Initializable {
 					//MjesecnaKartaController.datum = datum.getValue();
 					MjesecnaKartaController.datum = LocalDate.now();
 					if(showPotvrda()) {
-						Util.getNotifications("Potvrda", "Karte napravljene.", "Confirmation").show();
+						Util.getNotifications("Obavještenje", "Karte napravljene.", "Information").show();
 						imeTextField.resetValidation();		
 						return;
 					}
@@ -360,7 +355,7 @@ public class ProdajaKarataController implements Initializable {
 		// KUPOVINA OBICNIH KARATA
 		else {
 			if(karta==null) {
-		    	Util.getNotifications("Greška", "Odaberite liniju iz tabele.", "Warning").show();
+		    	Util.getNotifications("Greška", "Odaberite liniju iz tabele!", "Warning").show();
 		    	return;
 			}
 			karta.setDatumPolaska(Date.valueOf(datum.getValue()));
@@ -395,7 +390,7 @@ public class ProdajaKarataController implements Initializable {
 				            protected void succeeded(){
 				                super.succeeded();
 				                progressPane.setVisible(false);
-						    	Util.getNotifications("Potvrda", "Karte napravljene.", "Confirmation").show();
+						    	Util.getNotifications("Obavještenje", "Karte napravljene.", "Information").show();
 				            }
 				        };
 				        new Thread(task).start();
@@ -427,7 +422,7 @@ public class ProdajaKarataController implements Initializable {
 			            protected void succeeded(){
 			                super.succeeded();
 			                progressPane.setVisible(false);
-					    	Util.getNotifications("Potvrda", "Karte napravljene.", "Confirmation").show();
+					    	Util.getNotifications("Obavještenje", "Karte napravljene.", "Information").show();
 			            }
 			        };
 			        new Thread(task).start();
@@ -437,15 +432,14 @@ public class ProdajaKarataController implements Initializable {
 			}
 		}
 	}
-	
+/*
 	public void showPogresanSerijskiBroj() {
-		// TODO Auto-generated method stub
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("GRESKA");
 		alert.setHeaderText("Ne postoji karta sa trazenim serijskim brojem!");
 		alert.showAndWait();
 	}
-
+*/
 	public void validationSetUp() {
 		polazisteTextField.getValidators().addAll(Util.requiredFieldValidator(polazisteTextField),Util.collectionValidator(polazisteTextField, InformacijeController.stajalistaBezStanica.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite polaziste"));
 		odredisteTextField.getValidators().addAll(Util.requiredFieldValidator(odredisteTextField),Util.collectionValidator(odredisteTextField, InformacijeController.stajalistaBezStanica.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite odrediste"));
@@ -458,7 +452,6 @@ public class ProdajaKarataController implements Initializable {
 
 
 	public void toggleSetUp() {
-		// TODO Auto-generated method stub
 		toggleGroupMjesecna.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
 		    if (newValue == null) {
 		        //oldValue.setSelected(true);
@@ -651,7 +644,6 @@ public class ProdajaKarataController implements Initializable {
 
 
 	public void resetValidation() {
-		// TODO Auto-generated method stub
 		polazisteTextField.resetValidation();
 		odredisteTextField.resetValidation();
 		imeTextField.resetValidation();
@@ -661,11 +653,9 @@ public class ProdajaKarataController implements Initializable {
 	}
 
 	public void tipKarteSetUp() {
-		// TODO Auto-generated method stub
 		tipKarteComboBox.valueProperty().addListener(new ChangeListener<TipKarte>() {
 			@Override
 			public void changed(ObservableValue<? extends TipKarte> observable, TipKarte oldValue, TipKarte newValue) {
-				// TODO Auto-generated method stub
 				if(oldValue==TipKarte.OBIČNA) {
 					
 					if(newValue==TipKarte.ĐAČKA)  {
@@ -715,7 +705,6 @@ public class ProdajaKarataController implements Initializable {
 
 
 	/*public void ucitajRelacije() {
-		// TODO Auto-generated method stub
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
@@ -729,21 +718,11 @@ public class ProdajaKarataController implements Initializable {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		finally {
 			Util.close(r, s, c);
 		}
-	}*/
-
-	
-	/*public void showPrazanSetAlert() {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Obavjestenje");
-		alert.setHeaderText("Nema linija");
-		alert.setContentText("Za odabrani datum i destinaciju (ili relacije) nema linija.");
-		alert.showAndWait();
 	}*/
 
 	public boolean zadovoljavaDatumVrijeme(String daniUSedmici,Time vrijemePolaska) {
@@ -754,44 +733,27 @@ public class ProdajaKarataController implements Initializable {
 		else
 			return (daniUSedmici.contains(String.valueOf(datum.getValue().getDayOfWeek().getValue())));
 	}
-
-
-
-	
-	
-	/*public void showUspjesnaKupovina() {
-		// TODO Auto-generated method stub
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("USPJEH");
-		alert.setHeaderText("Karte napravljene.");
-		alert.showAndWait();
-	}*/
-
-	/*public void showOdaberiteLinijuAlert() {
-		// TODO Auto-generated method stub
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("GRESKA");
-		alert.setHeaderText("Odaberite liniju iz tabele");
-		alert.showAndWait();
-	}*/
-
-	/*public void showOdaberiteSliku() {
-		// TODO Auto-generated method stub
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("GRESKA");
-		alert.setHeaderText("Odaberite sliku");
-		alert.showAndWait();
-	}*/
-
-	
 	
 	public boolean showPotvrda() {
 		if(/*toggleGroup*/tipKarteToggleGroup.getSelectedToggle().equals(radioButtonObicna)) {
-			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setTitle("Kupovina");
-			alert.setHeaderText("Da li ste sigurni?");
+			Alert alert=new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Prodaja karte");
+			alert.setHeaderText(null);
+			alert.setContentText("Da li ste sigurni?");
+			alert.getButtonTypes().clear();
+		    alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+			Button yesButton=(Button)alert.getDialogPane().lookupButton(ButtonType.YES);
+			yesButton.setText("Da");
+			yesButton.setDefaultButton(false);
+			Button noButton=(Button)alert.getDialogPane().lookupButton(ButtonType.NO);
+			noButton.setText("Ne");
+			noButton.setDefaultButton(true);
+			
+			alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+			alert.getDialogPane().getStyleClass().addAll("alert", "alertDelete");
+			
 			Optional<ButtonType> action = alert.showAndWait();
-			return action.get().equals(ButtonType.OK);
+			return action.get().equals(ButtonType.YES);
 		}
 		else {
 			try {
@@ -806,14 +768,13 @@ public class ProdajaKarataController implements Initializable {
 				return potvrda;
 				
 	        } catch(Exception e) {
-				e.printStackTrace();
+	        	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 			}
 		}
 		return false;	
 	}
 
 	public void showMjesecnaPreview() {
-		// TODO Auto-generated method stub
 		try {
 	        Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/salterski_radnik/MjesecnaKartaView.fxml"));
 			Scene scene = new Scene(root);
@@ -824,17 +785,9 @@ public class ProdajaKarataController implements Initializable {
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.showAndWait();
         } catch(Exception e) {
-			e.printStackTrace();
+        	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 	}
-
-
-	/*public void showNedovoljnoMjesta() {
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("GRESKA");
-		alert.setHeaderText("Nedovoljno mjesta u autobusu");
-		alert.showAndWait();
-	}*/
 	
 	@FXML
 	public void odaberiSliku() {
@@ -845,8 +798,7 @@ public class ProdajaKarataController implements Initializable {
 			try {
 				slikaImageView.setImage(new Image(odabranaSlika.toURI().toString()));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 			}
 		}
 	}

@@ -135,7 +135,7 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 				return new Stajaliste(r.getInt("IdStajalista"), r.getString("NazivStajalista"));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		return null;
 	}
@@ -158,7 +158,7 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 			}
 			return stajalistaStanicaList;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		return null;
 	}
@@ -181,7 +181,7 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 			}
 			return stajalistaBezStanicaList;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		return null;
 	}
@@ -207,7 +207,7 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 			if(r.next())
 				return r.getInt(1);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		return 0;
 	}

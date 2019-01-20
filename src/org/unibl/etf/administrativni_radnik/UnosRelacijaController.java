@@ -121,7 +121,7 @@ public class UnosRelacijaController implements Initializable {
     	Stajaliste polaziste = ListaLinijaController.stajalistaList.stream().filter(s -> s.toString().equals(polazisteTextField.getText())).findFirst().get();
     	Stajaliste odrediste = ListaLinijaController.stajalistaList.stream().filter(s -> s.toString().equals(odredisteTextField.getText())).findFirst().get();
     	if(polaziste.equals(odrediste)) {
-    		Util.getNotifications("Greska", "Stajalista ne smiju biti ista.", "Error");
+    		Util.getNotifications("Greška", "Stajališta ne mogu biti ista!", "Error");
     		return;
     	}
     	relacijeList.add(new Relacija(polaziste,odrediste,timePicker.getValue()));

@@ -2,12 +2,9 @@ package org.unibl.etf.karta;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
-import java.nio.charset.spi.CharsetProvider;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -24,8 +21,6 @@ import java.util.logging.Level;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.salterski_radnik.InformacijeController;
 import org.unibl.etf.salterski_radnik.ProdajaKarataController;
-import org.unibl.etf.salterski_radnik.SalterskiRadnikController;
-import org.unibl.etf.util.Mjesto;
 import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 
@@ -84,7 +79,6 @@ public class Karta {
 	
 
 	public Karta(int serijskiBroj, Linija linija, Relacija relacija, Date datumIzdavanja) {
-		// TODO Auto-generated constructor stub
 		this.serijskiBroj = serijskiBroj;
 		this.setRelacija(relacija);
 		this.getRelacija().setLinija(linija);
@@ -102,7 +96,6 @@ public class Karta {
 	 */
 	
 	public Karta(Relacija relacija, double cijenaMjesecna) {
-		// TODO Auto-generated constructor stub
 		super();
 		this.relacija = relacija;
 		this.relacija.setCijenaMjesecna(cijenaMjesecna);
@@ -229,15 +222,13 @@ public class Karta {
 		/*try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
 			writer.append(value);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}*/
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 		    writer.append(value);
 		    
 		} catch (IOException e) {
-			// TODO Auto-generated catch blocks
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 	}
 	
@@ -264,7 +255,7 @@ public class Karta {
 	       	return karteList;
 		}
 		catch(SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		finally {
 			Util.close(r, s, c);
@@ -317,7 +308,7 @@ public class Karta {
 				return karteList;
 		}
 		catch(SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		finally {
 			Util.close(r, s, c);
@@ -338,10 +329,9 @@ public class Karta {
 				ProdajaKarataController.idKarte = r.getInt(1);
 				return r.getInt(1);
 			}
-			} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		finally {
+		} catch (SQLException e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		} finally {
 			Util.close(r, s, c);
 		}
 		return 0;
@@ -355,9 +345,8 @@ public class Karta {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, Date.valueOf(LocalDate.now()), ime + " " +prezime, brojTelefona, idKarte);
 			s.executeUpdate();
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 	}
 	
@@ -382,9 +371,8 @@ public class Karta {
 				return karta;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		finally {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		} finally {
 			Util.close(r, s, c);
 		}
 		
@@ -407,9 +395,8 @@ public class Karta {
 				file.delete();
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		finally {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		} finally {
 			Util.close(s1, c);
 		}
 		return false;
@@ -429,24 +416,21 @@ public class Karta {
 			if(r.next())
 				return r.getInt(1);
 		} catch (SQLException e) {
-			// TODO: handle exception
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 			return 0;
-		}
-		finally {
+		} finally {
 			Util.close(r, s, c);
 		}
 		return 0;
 	}
 
 	public static List<Karta> getInfoList(String polazakDolazak) {
-		// TODO Auto-generated method stub
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
 		String sqlPolazak = "select NazivLinije,VrijemePolaska,prevoznik.NazivPrevoznika,Peron from linija join (relacija,prevoznik,popust_prevoznika) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) and (prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where (Polaziste=?) and (linija.Stanje='Aktivno') group by NazivLinije order by VrijemePolaska";
 		String sqlDolazak = "select NazivLinije,VrijemePolaska,prevoznik.NazivPrevoznika,Peron from linija join (relacija,prevoznik,popust_prevoznika) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) and (prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where (Odrediste=?) and (linija.Stanje='Aktivno') group by NazivLinije order by VrijemeDolaska";
-		List<Karta> karteList = new ArrayList<>();
+		//List<Karta> karteList = new ArrayList<>();
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, polazakDolazak.equals("POLASCI")? sqlPolazak:sqlDolazak, false, PrijavaController.autobuskaStanica.getIdStajalista());
@@ -458,8 +442,7 @@ public class Karta {
 				relacija.setLinija(linija);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		
 		return null;

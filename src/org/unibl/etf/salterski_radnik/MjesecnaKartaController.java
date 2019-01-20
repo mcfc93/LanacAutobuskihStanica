@@ -28,15 +28,10 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import com.itextpdf.text.pdf.Barcode;
 import com.itextpdf.text.pdf.BarcodeEAN;
-import javafx.embed.swing.SwingFXUtils;
 
 public class MjesecnaKartaController implements Initializable {
 	
@@ -136,15 +131,14 @@ public class MjesecnaKartaController implements Initializable {
     		try {
     			slika.setImage(new Image(ProdajaKarataController.odabranaSlika.toURI().toString()));
     		} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Util.LOGGER.log(Level.SEVERE, e.toString(), e);
     		}
     	}
     	else {
     		try {
     			slika.setImage(new Image(karta.getSlika().toURI().toString()));
     		} catch (Exception e) {
-    			e.printStackTrace();
+    			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
     		}
     		linijaLabel.setText(karta.getRelacija().getLinija().getNazivLinije());
     		barcodeLabel.setVisible(true);
@@ -164,7 +158,7 @@ public class MjesecnaKartaController implements Initializable {
     		try {
     			ImageIO.write(bufferedImage, "png", new File("src\\barcode.png"));
     		} catch (IOException e) {
-    			e.printStackTrace();
+    			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
     		}
     		*/
         	barcodeImageView.setImage(SwingFXUtils.toFXImage(bufferedImage, null));
@@ -297,7 +291,7 @@ public class MjesecnaKartaController implements Initializable {
     		//try {
     		//	ImageIO.write(bufferedImage, "png", new File("src\\barcode.png"));
     		//} catch (IOException e) {
-    		//	e.printStackTrace();
+    		//	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
     		//}
    		
         	barcodeImageView.setImage(SwingFXUtils.toFXImage(bufferedImage, null));

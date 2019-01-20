@@ -9,16 +9,15 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.salterski_radnik.InformacijeController;
-import org.unibl.etf.salterski_radnik.MjesecnaKartaController;
 import org.unibl.etf.salterski_radnik.ProdajaKarataController;
 import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
@@ -50,7 +49,6 @@ public class MjesecnaKarta extends Karta {
 	
 	public MjesecnaKarta(Relacija relacija, String ime, String prezime, File slika, TipKarte tip) {
 		super(relacija);
-		// TODO Auto-generated constructor stub
 		this.ime = ime;
 		this.prezime = prezime;
 		this.slika = slika;
@@ -65,7 +63,6 @@ public class MjesecnaKarta extends Karta {
 	
 	public MjesecnaKarta(Relacija relacija, String ime, String prezime, File odabranaSlika, String nazivPrevoznika,
 			TipKarte tip) {
-		// TODO Auto-generated constructor stub
 		this.relacija = relacija;
 		this.ime = ime;
 		this.prezime = prezime;
@@ -79,7 +76,6 @@ public class MjesecnaKarta extends Karta {
 		relacija.setCijenaMjesecna(cijenaMjesecna);
 	}
 	public MjesecnaKarta(double cijenaMjesecna,Date datumIzdavanja,int idMjesecneKarte,Relacija relacija, int serijskiBroj, String tip, String ime, String prezime, String slikaPath) {
-		// TODO Auto-generated constructor stub
 		this.setCijena(cijenaMjesecna);
 		System.out.println("cijena mjese iz konst" + cijenaMjesecna);
 		this.datumIzdavanja = datumIzdavanja;
@@ -152,7 +148,7 @@ public class MjesecnaKarta extends Karta {
 				return r.getInt(1);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		} finally {
 			Util.close(r, s, c);
 		}
@@ -174,8 +170,7 @@ public class MjesecnaKarta extends Karta {
 			
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		
 		return 0;
@@ -183,7 +178,6 @@ public class MjesecnaKarta extends Karta {
 	}
 
 	public static void stampajKartu(Karta karta, int i, LocalDate value, String naziv, TipKarte tip) {
-		// TODO Auto-generated method stub
 		LocalDate localDate = LocalDate.now();
 		int mjesecVazenja = (localDate.getDayOfMonth()>25) ? localDate.getMonthValue()+1: localDate.getMonthValue();
 		StringBuilder sb = new StringBuilder();
@@ -230,8 +224,7 @@ public class MjesecnaKarta extends Karta {
 		    writer.append(sb);
 		    
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 	}
 	
@@ -251,8 +244,7 @@ public class MjesecnaKarta extends Karta {
 			if(file.exists())
 				System.out.println(file.delete());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		finally {
 			Util.close(s, c);
@@ -273,8 +265,7 @@ public class MjesecnaKarta extends Karta {
 			if(r.next())
 				return r.getInt(1);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		return 0;
 	}
@@ -302,8 +293,7 @@ public class MjesecnaKarta extends Karta {
 			}
 			return karteList;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		
 		
@@ -340,8 +330,7 @@ public class MjesecnaKarta extends Karta {
 				return mjesecnaKarta;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		finally {
 			Util.close(r, s, c);

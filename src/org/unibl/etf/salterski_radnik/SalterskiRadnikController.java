@@ -10,7 +10,6 @@ import org.unibl.etf.util.Util;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,8 +20,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -33,12 +34,13 @@ public class SalterskiRadnikController implements Initializable {
 	private double xOffset=0;
     private double yOffset=0;
     
+    @FXML
+    private GridPane gridPane;
+	
 	@FXML
-	private AnchorPane anchorPane;
+    private AnchorPane menuLine;
 	@FXML
 	private AnchorPane dataAnchorPane;
-	@FXML
-	private AnchorPane menuAnchorPane;
 	@FXML
 	private AnchorPane infoAnchorPane;
 	@FXML
@@ -77,31 +79,32 @@ public class SalterskiRadnikController implements Initializable {
 		
 		
 		informacijeLabel.setText(PrijavaController.nalog.getZaposleni().getIme() + " " + PrijavaController.nalog.getZaposleni().getPrezime());
+
 		//DragAndDrop
-		anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
+		menuLine.setOnMousePressed(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
 				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
 				xOffset = stage.getX() - event.getScreenX();
 				yOffset = stage.getY() - event.getScreenY();
 			}
 		});
-
-		anchorPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-				if(!stage.isMaximized()) {
-					stage.setX(event.getScreenX() + xOffset);
-					stage.setY(event.getScreenY() + yOffset);
-					stage.setOpacity(0.8);
-				}
+						
+		menuLine.setOnMouseDragged(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
+			   	Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+			    if(!stage.isMaximized()) {
+			    	stage.setX(event.getScreenX() + xOffset);
+			    	stage.setY(event.getScreenY() + yOffset);
+			    	stage.setOpacity(0.8);
+			    }
 			}
 		});
-
-		anchorPane.setOnMouseReleased((event) -> {
-			Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-			stage.setOpacity(1.0);
+						
+		menuLine.setOnMouseReleased(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY)) {
+				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+				stage.setOpacity(1.0);
+			}
 		});
 		
 		informacijeButton.setDisable(true);
@@ -158,39 +161,45 @@ public class SalterskiRadnikController implements Initializable {
 			}
 		
 			//((Stage)((Node)event.getSource()).getScene().getWindow()).show();
-			((Stage)anchorPane.getScene().getWindow()).close();
+			((Stage)gridPane.getScene().getWindow()).close();
 		} else {
 System.out.println("GRESKA! - Odjava nije uspjesnja.");
 		}
 	}
+
 	@FXML
 	void close(MouseEvent event) {
-		//System.exit(0);
-		Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-		stage.close();
+		if(event.getButton().equals(MouseButton.PRIMARY)) {
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+        }
 	}
 	
 	@FXML
 	void minimize(MouseEvent event) {
-		Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-		stage.setIconified(true);
+		if(event.getButton().equals(MouseButton.PRIMARY)) {
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).setIconified(true);
+        }
 	}
 	
 	@FXML
 	void maximize(MouseEvent event) {
-		Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-		if(!stage.isMaximized()) {
-			stage.setMaximized(true);
-		} else {
-			stage.setMaximized(false);
-		}
+		if(event.getButton().equals(MouseButton.PRIMARY)) {
+            Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+            if(!stage.isMaximized()) {
+                stage.setMaximized(true);
+            } else {
+                stage.setMaximized(false);
+            }
+        }
 	}
 	
 	@FXML
 	void doubleClick(MouseEvent event) {
-		if(event.getClickCount() > 1) {
-			maximize(event);
-		}
+		if(event.getButton().equals(MouseButton.PRIMARY)) {
+            if(event.getClickCount() > 1) {
+                maximize(event);
+            }
+        }
 	}
 	
 	@FXML

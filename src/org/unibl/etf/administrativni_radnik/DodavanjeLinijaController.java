@@ -1,16 +1,9 @@
 package org.unibl.etf.administrativni_radnik;
 
-import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.Time;
-import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.FormatStyle;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -21,26 +14,18 @@ import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.karta.Linija;
 import org.unibl.etf.karta.Prevoznik;
 import org.unibl.etf.karta.Relacija;
-import org.unibl.etf.prijava.PrijavaController;
-import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
-import com.jfoenix.validation.base.ValidatorBase;
-
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -48,21 +33,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
-import javafx.util.StringConverter;
 import javafx.util.converter.LocalTimeStringConverter;
-import javafx.util.converter.NumberStringConverter;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -165,7 +144,6 @@ public class DodavanjeLinijaController implements Initializable {
     	UnosRelacijaController.relacijeList.clear();
     	disableRelacija(true);
     	sljedeciPolazakButton.setVisible(false);
-    	List<Stajaliste> stajalistaStanicaList = Stajaliste.getStajalistaStanicaList();
         relacijeTableView.setItems(relacijeObsList);
     	zadrzavanjeComboBox.getItems().addAll(0,3,5,10,15,20,25,30);
     	zadrzavanjeComboBox.getSelectionModel().select(2);
@@ -383,7 +361,7 @@ public class DodavanjeLinijaController implements Initializable {
 				|| cetvrtakCheckBox.isSelected() || petakCheckBox.isSelected() || subotaCheckBox.isSelected() || nedeljaCheckBox.isSelected())
 			return true;
 		else 
-			Util.getNotifications("Greška", "Odaberite bar jedan dan.", "Error").show();
+			Util.getNotifications("Greška", "Odaberite bar jedan dan!", "Warning").show();
 		return false;
 	}
 	@FXML
@@ -408,12 +386,12 @@ public class DodavanjeLinijaController implements Initializable {
 	            relacijeTableView.getSelectionModel().selectFirst();
 	            disableRelacija(false);
 	            krajUnosaButton.setDisable(true);
-				Util.getNotifications("Obavještenje", "Unesite cijene relacija.", "Information").show();
+				Util.getNotifications("Greška", "Unesite cijene relacija!", "Warning").show();
 	            relacijeTableView.refresh();
 	            vrijemePolaska1TimePicker.setDisable(true);
 	            vrijemePolaska2TimePicker.setDisable(true);
 			} catch (Exception e) {
-				e.printStackTrace();
+				Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 			}
 		}
 	}
@@ -444,7 +422,7 @@ public class DodavanjeLinijaController implements Initializable {
 		            protected void succeeded(){
 		                super.succeeded();
 		                progressPane.setVisible(false);
-				        Util.getNotifications("Obavještenje", "Relacije dodate.", "Information").show();
+				        Util.getNotifications("Obavještenje", "Relacije dodane.", "Information").show();
 		            }
 		        };
 		        new Thread(task).start();
@@ -486,7 +464,7 @@ public class DodavanjeLinijaController implements Initializable {
 			relacijeTableView.refresh();
 			for(int i=0; i<relacijeTableView.getSelectionModel().getSelectedIndex(); ++i)
 				if(UnosRelacijaController.relacijeList.get(i).getCijenaJednokratna()==null) { 
-					Util.getNotifications("Obavještenje", "Relacije iznad odabrane nemaju cijene.", "Error").show();
+					Util.getNotifications("Greška", "Relacije iznad trenutno odabrane nemaju unesene cijene!", "Warning").show();
 					return;
 				}
 			

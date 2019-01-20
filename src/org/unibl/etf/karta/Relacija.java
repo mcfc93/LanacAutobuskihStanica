@@ -8,14 +8,11 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.unibl.etf.administrativni_radnik.ListaLinijaController;
-import org.unibl.etf.salterski_radnik.InformacijeController;
 import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
-
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 
 public class Relacija {
 	
@@ -114,13 +111,11 @@ public class Relacija {
 	
 	public Relacija() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/*
 	 * konstruktor za produzavanje karte*/
 	public Relacija(int idRelacije,Linija linija, Prevoznik prevoznik, Stajaliste polaziste, Stajaliste odrediste) {
-		// TODO Auto-generated constructor stub
 		this.idRelacije = idRelacije;
 		this.linija = linija;
 		this.linija.setPrevoznik(prevoznik);
@@ -130,7 +125,6 @@ public class Relacija {
 
 
 	public Relacija(Stajaliste polaziste, Stajaliste odrediste, double cijena) {
-		// TODO Auto-generated constructor stub
 		this.polaziste = polaziste;
 		this.odrediste = odrediste;
 		this.cijenaJednokratna = cijena;
@@ -140,7 +134,6 @@ public class Relacija {
 /*
  * konstruktor za kreiranje linije*/
 	public Relacija(Stajaliste polaziste, Stajaliste odrediste, LocalTime duzinaPuta) {
-		// TODO Auto-generated constructor stub
 		this.polaziste = polaziste;
 		this.odrediste = odrediste;
 		this.duzinaPuta = duzinaPuta;
@@ -284,8 +277,7 @@ public class Relacija {
 				return r.getInt(1);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		return 0;
 	}
@@ -311,8 +303,7 @@ public class Relacija {
 			s.executeUpdate();
 			return true;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		finally {
 			Util.close(r, s, c);
@@ -346,8 +337,7 @@ public class Relacija {
 			}
 			return relacijeList;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		return null;
 	}

@@ -3,6 +3,7 @@ package org.unibl.etf.salterski_radnik;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 
 import org.unibl.etf.karta.Karta;
 import org.unibl.etf.karta.MjesecnaKarta;
@@ -10,25 +11,15 @@ import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Duration;
 
 public class OtkazivanjeRezervacijeController implements Initializable {
 
@@ -72,7 +63,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 			if(jednokratnaKartaRadioButton.isSelected()) {
 				jednokratnaKarta = Karta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
 				if(jednokratnaKarta==null) {
-			    	Util.getNotifications("Greška", "Pogrešan serijski broj ili karta već stornirana.", "Error").show();
+			    	Util.getNotifications("Greška", "Pogrešan serijski broj ili je karta već stornirana!", "Error").show();
 					return;
 				}
 				stornirajButton.setDisable(false);
@@ -86,7 +77,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 				System.out.println("Storniranje mjesecne");
 				mjesecnaKarta = MjesecnaKarta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
 				if(mjesecnaKarta==null) {
-			    	Util.getNotifications("Greška", "Pogrešan serijski broj ili karta već stornirana.", "Error").show();
+			    	Util.getNotifications("Greška", "Pogrešan serijski broj ili je karta već stornirana!", "Error").show();
 			    	return;
 				}
 				System.out.println("Mjesecna cijena: " + mjesecnaKarta.getCijena());
@@ -102,24 +93,30 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 			
 		}
 		else 
-	    	Util.getNotifications("Greška", "Pogrešan serijski broj.", "Error").show();
+	    	Util.getNotifications("Greška", "Pogrešan serijski broj!", "Error").show();
 	
 	
 	}
-	
-	/*public void showAlertPogresanSerijskiBroj() {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("GRESKA");
-			alert.setHeaderText("Pogresan serijski broj ili karta vec stornirana!");
-			alert.showAndWait();
-		}*/
 		
 	public boolean showPotvrda() {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Kupovina");
-		alert.setHeaderText("Da li ste sigurni?");
+		Alert alert=new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Prodaja karte");
+		alert.setHeaderText(null);
+		alert.setContentText("Da li ste sigurni?");
+		alert.getButtonTypes().clear();
+	    alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+		Button yesButton=(Button)alert.getDialogPane().lookupButton(ButtonType.YES);
+		yesButton.setText("Da");
+		yesButton.setDefaultButton(false);
+		Button noButton=(Button)alert.getDialogPane().lookupButton(ButtonType.NO);
+		noButton.setText("Ne");
+		noButton.setDefaultButton(true);
+		
+		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+		alert.getDialogPane().getStyleClass().addAll("alert", "alertDelete");
+		
 		Optional<ButtonType> action = alert.showAndWait();
-		return action.get().equals(ButtonType.OK);
+		return action.get().equals(ButtonType.YES);
 	}
 
 	@FXML
@@ -129,7 +126,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 			if(showPotvrda()) {
 				
 				if(Karta.stornirajKartu(jednokratnaKarta.getSerijskiBroj()))
-					Util.getNotifications("Uspjeh", "Uspješno stornirana karta.", "Confirmation").show();
+					Util.getNotifications("Obavještenje", "Karta spješno stornirana.", "Information").show();
 					cijenaTextField.clear();
 					relacijaTextField.clear();
 					datumTextField.clear();
@@ -143,7 +140,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 				System.out.println("Storniraj mjesecnu...");
 				if(showPotvrda()) {
 						MjesecnaKarta.storniraj(mjesecnaKarta);
-				    	Util.getNotifications("Uspjeh", "Uspješno stornirana mjesečna karta.", "Confirmation").show();
+				    	Util.getNotifications("Obavještenje", "Karta spješno stornirana.", "Information").show();
 				    	cijenaTextField.clear();
 						relacijaTextField.clear();
 						datumTextField.clear();
@@ -167,7 +164,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.showAndWait();
         } catch(Exception e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 	}*/
 	/*public void showCheckMark() {

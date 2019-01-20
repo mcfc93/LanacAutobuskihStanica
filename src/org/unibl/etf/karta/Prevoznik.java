@@ -1,6 +1,5 @@
 package org.unibl.etf.karta;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -137,7 +136,7 @@ public class Prevoznik {
 			}
 			return prevoznikList;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		finally {
 			Util.close(r, s, c);
@@ -225,7 +224,7 @@ public class Prevoznik {
 			s.executeUpdate();
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		} 
 		finally {
 			Util.close(s, c);
@@ -267,7 +266,7 @@ public class Prevoznik {
 			}
 			return false;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		finally {
 			Util.close(s, c);
@@ -291,7 +290,7 @@ public class Prevoznik {
 			System.out.println(s.executeUpdate());
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		return false;
 	}

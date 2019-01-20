@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.karta.Karta;
-import org.unibl.etf.karta.Relacija;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Praznik;
 import org.unibl.etf.util.Stajaliste;
@@ -30,7 +29,6 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -40,7 +38,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -53,7 +50,7 @@ import javafx.stage.Stage;
 
 public class InformacijeController implements Initializable{
 	
-	public static List<Stajaliste> stajalistaList = new ArrayList<>();
+	public static List<Stajaliste> stajalistaList;
 	public static List<Stajaliste> stajalistaBezStanica;
 	public static List<Stajaliste> stajalistaStanica;
 	public static Stajaliste pocetnoStajaliste;
@@ -124,16 +121,24 @@ public class InformacijeController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		stajalistaStanica = Stajaliste.getStajalistaStanicaList();
 		stajalistaList = Stajaliste.getStajalisteList();
+		System.out.println("STAJALISTA:");
 		stajalistaList.forEach(s -> System.out.println(s));
-		stajalistaBezStanica = Stajaliste.getStajalisteList();
+		
+		//stajalistaBezStanica = Stajaliste.getStajalisteList();
+		stajalistaBezStanica = new ArrayList<>();
+		stajalistaBezStanica.addAll(stajalistaList);
 		
 		pocetnoStajaliste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
-		System.out.println(pocetnoStajaliste);
-		//stajalistaBezStanica.removeIf(s -> stajalistaStanica.contains(s));
+		System.out.println("POCETNO STAJALISTE: " + pocetnoStajaliste);
+		stajalistaBezStanica.removeIf(s -> stajalistaStanica.contains(s));
+		System.out.println("STAJALISTA BEZ STANICA:");
+		stajalistaBezStanica.forEach(s -> System.out.println(s));
+		/*
 		for (Stajaliste s : stajalistaStanica) {
 			if(stajalistaBezStanica.contains(s))
 				stajalistaBezStanica.remove(s);
 		}
+		*/
 		// stajaliste = stajalistaList.stream().filter(s -> s.get()==)
 		
 		System.out.println("stajaliste stanice: " + PrijavaController.autobuskaStanica.getIdStajalista());
@@ -343,8 +348,9 @@ public class InformacijeController implements Initializable{
 						karteObs.add(karta);
 					}
 				}
-				if(karteObs.isEmpty())
-					showPrazanSetAlert();
+				if(karteObs.isEmpty()) {
+					Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
+				}
 				
 				
 			} catch(NoSuchElementException e) {
@@ -412,14 +418,6 @@ public class InformacijeController implements Initializable{
 		}
 	}
 	*/
-	public void showPrazanSetAlert() {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Obavjestenje");
-		alert.setHeaderText("Nema linija");
-		alert.setContentText("Za odabranu relaciju i datum nema linija ili su vec otisle.");
-		alert.showAndWait();
-	
-	}
 	/*public void ucitajMjesta() {
 		Connection c = null;
 		PreparedStatement s = null;
@@ -434,7 +432,7 @@ public class InformacijeController implements Initializable{
 			}
 	
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 		finally {
 			Util.close(r, s, c);

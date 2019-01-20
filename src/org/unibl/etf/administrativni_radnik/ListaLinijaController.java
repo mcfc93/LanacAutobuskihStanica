@@ -8,12 +8,11 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 import org.controlsfx.control.MaskerPane;
-import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.karta.Linija;
-import org.unibl.etf.karta.Prevoznik;
 import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -189,22 +188,49 @@ public class ListaLinijaController implements Initializable {
                      	setGraphic(button);
                      	button.setOnMouseClicked(
                      			event ->  {  
-                     				if(showPotvrda()) {
+                     				Alert alert=new Alert(AlertType.CONFIRMATION);
+                					alert.setTitle("Brisanje autobuske stanice");
+                					alert.setHeaderText(null);
+                					alert.setContentText("Obriši?");
+                					alert.getButtonTypes().clear();
+                				    alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+                					Button yesButton=(Button)alert.getDialogPane().lookupButton(ButtonType.YES);
+                					yesButton.setText("Da");
+                					yesButton.setDefaultButton(false);
+                					Button noButton=(Button)alert.getDialogPane().lookupButton(ButtonType.NO);
+                					noButton.setText("Ne");
+                					noButton.setDefaultButton(true);
+                					
+                					alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+                					alert.getDialogPane().getStyleClass().addAll("alert", "alertDelete");
+                					            					
+                					Optional<ButtonType> rezultat = alert.showAndWait();
+
+                					if (rezultat.get() == ButtonType.YES) {
                      					MaskerPane progressPane=Util.getMaskerPane(anchorPane);
             							Task<Void> task = new Task<Void>() {
             					            @Override
             					            protected Void call() /*throws Exception*/ {
             					                progressPane.setVisible(true);
-                             					Linija.izbrisiLiniju(item);
-                             					linijeObsList.remove(item);
+                             					if(Linija.izbrisiLiniju(item)) {
+                             						//linijeObsList.remove(item);
+                             						getTableView().getItems().remove(item);
+            		                				System.out.println("Obrisano: " + item);
+            		                				Platform.runLater(() -> {
+            		                					Util.getNotifications("Obavještenje", "Linija obrisana.", "Information").show();
+            		                				});
+            		                				progressPane.setVisible(false);
+            		                			} else {
+            	                    				//NASTALA GRESKA
+            	                    				Util.showBugAlert();
+            	                    			}
                              					return null;
             					            }
             					            @Override
             					            protected void succeeded(){
             					                super.succeeded();
             					                progressPane.setVisible(false);
-        								        Util.getNotifications("Obavještenje", "Linija obrisana.", "Information").show();
-            					            }
+        								    }
             					        };
             					        new Thread(task).start();
                      				}
@@ -269,17 +295,6 @@ public class ListaLinijaController implements Initializable {
 		});
 	}
 	
-	public boolean showPotvrda() {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("");
-		alert.setHeaderText("Da li ste sigurni?");
-		Optional<ButtonType> action = alert.showAndWait();
-		return action.get().equals(ButtonType.OK);
-	}
-	
-	
-
-	
 	public void showIzmjenaLinije(Linija linija) {
 		try {
 			odabranaLinija = linija;
@@ -300,14 +315,5 @@ public class ListaLinijaController implements Initializable {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
 	}
-
-	/*private void showUspjesnoUklonjenaLinija() {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Uspjeh");
-		alert.setHeaderText("Uspjesno uklonjena linija");
-		alert.showAndWait();
-	}*/
-	
-	
 
 }
