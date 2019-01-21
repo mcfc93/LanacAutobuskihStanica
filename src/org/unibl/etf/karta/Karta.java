@@ -188,41 +188,48 @@ public class Karta {
 		setDatumIzdavanja(Date.valueOf(LocalDate.now()));
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append(String.format("%s%s", PrijavaController.autobuskaStanica.getGrad(), System.lineSeparator()));
-		sb.append(String.format("%s%s", PrijavaController.autobuskaStanica.getNaziv(), System.lineSeparator()));
-		sb.append(String.format("Informacije: %s%s", PrijavaController.autobuskaStanica.getBrojTelefona(), System.lineSeparator()));
-		sb.append(String.format("WEB stranica: %s%s", PrijavaController.autobuskaStanica.getWebStranica(), System.lineSeparator()));
-		sb.append(String.format("========================================%s%s", System.lineSeparator(),System.lineSeparator()));
-		sb.append(String.format("Prevoznik: %s%s", relacija.getLinija().getPrevoznik().getNaziv(), System.lineSeparator()));
-		sb.append(String.format("Naziv linije: %s%s", relacija.getLinija().getNazivLinije(), System.lineSeparator()));
-		sb.append(System.lineSeparator());
-		sb.append(String.format("%12s %s %s", " ", "AUTOBUSKA KARTA", System.lineSeparator()));
+		sb.append(PrijavaController.autobuskaStanica.getGrad() + System.lineSeparator());
+		sb.append(PrijavaController.autobuskaStanica.getNaziv() + System.lineSeparator());
+		sb.append("Informacije: " + PrijavaController.autobuskaStanica.getBrojTelefona() + System.lineSeparator());
+		sb.append("Web adresa: " + PrijavaController.autobuskaStanica.getWebStranica() + System.lineSeparator());
+		sb.append("========================================" + System.lineSeparator() + System.lineSeparator());
+		
+		sb.append("Prevoznik: " + relacija.getLinija().getPrevoznik().getNaziv() + System.lineSeparator());
+		sb.append("Linija: " + relacija.getLinija().getNazivLinije() + System.lineSeparator() + System.lineSeparator());
+		sb.append("            AUTOBUSKA  KARTA" + System.lineSeparator());
+		/*
 		String temp = povratna? "(povratna)":"(jednosmjerna)";
 		String temp2 = "%"+( (int)(40-temp.length())/2)+"s%s%s";
 		System.out.println(temp2);
 		sb.append(String.format(temp2," ", temp, System.lineSeparator()));
 		sb.append(System.lineSeparator());
-		sb.append(String.format("Prodajno mjesto: %s%s", PrijavaController.autobuskaStanica.getGrad(), System.lineSeparator()));
-		sb.append(String.format("Serijski broj: %013d%s", serijskiBroj, System.lineSeparator()));
-		sb.append(String.format("Peron: %d%s", relacija.getLinija().getPeron() , System.lineSeparator()));
-		sb.append(String.format("Sjediste: %d%s", brojSjedista, System.lineSeparator()));
-		if(relacija.toString().length()>30) {
-			sb.append("Relacija: " + relacija.getPolaziste().getNazivStajalista() + " -" + System.lineSeparator() + "          " +relacija.getOdrediste().getNazivStajalista() + System.lineSeparator());
-		}
-		else
-			sb.append("Relacija: " +relacija.toString() + System.lineSeparator());
+		*/
+		sb.append((povratna? "               (povratna)":"             (jednosmjerna)") + System.lineSeparator() + System.lineSeparator());
 		
-		sb.append(String.format("Izdata: %s %s %s", LocalDate.now().toString(), LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")).toString(), System.lineSeparator()));
-		sb.append(String.format("Polazak: %s %s%s", datumPolaska.toString(), relacija.getVrijemePolaska().toString(), System.lineSeparator()));
-		sb.append(String.format("Dolazak: %s %s%s", (relacija.getVrijemeDolaska().toLocalTime().isBefore(relacija.getVrijemePolaska().toLocalTime()) ? datumPolaska.toLocalDate().plusDays(1).toString() : datumPolaska.toLocalDate().toString()),  relacija.getVrijemeDolaska().toString(), System.lineSeparator()));
+		sb.append("Prodajno mjesto: " + PrijavaController.autobuskaStanica.getNaziv() + System.lineSeparator());
+		sb.append("Serijski broj: " + String.format("%013d", serijskiBroj) + System.lineSeparator());
+		sb.append("Peron:    " + relacija.getLinija().getPeron() + System.lineSeparator());
+		sb.append("Sjedište: " + brojSjedista + System.lineSeparator());
+		
+		sb.append("Relacija: " + relacija.getPolaziste().getNazivStajalista() + " -");
+		if(relacija.toString().length()>30) {
+			sb.append(System.lineSeparator());
+		}
+		sb.append("          " + relacija.getOdrediste().getNazivStajalista() + System.lineSeparator());
+
+		sb.append("Izdata:   " + LocalDate.now().toString() + " " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")).toString() + System.lineSeparator());
+		sb.append("Polazak:  " + datumPolaska.toString() + " " + relacija.getVrijemePolaska().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")).toString() + System.lineSeparator());
+		sb.append("Dolazak:  " + (relacija.getVrijemeDolaska().toLocalTime().isBefore(relacija.getVrijemePolaska().toLocalTime()) ? datumPolaska.toLocalDate().plusDays(1).toString() : datumPolaska.toLocalDate().toString()) + " "  + relacija.getVrijemeDolaska().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")).toString() + System.lineSeparator());
+		
 		sb.append(String.format("%40s%s", ("Cijena: " + String.format("%.2f", relacija.getCijenaJednokratna()) + " KM"), System.lineSeparator()));
 		sb.append(String.format("%40s%s", ("Rezervacija: " + String.format("%.2f", rezervacija? ProdajaKarataController.REZERVACIJA: 0) + " KM"), System.lineSeparator()));
-		sb.append(String.format("%40s%s", ("Stanicna usluga: " + String.format("%.2f", ProdajaKarataController.STANICNA_USLUGA) + " KM"), System.lineSeparator()));
-		sb.append(String.format("%40s%s", ("Ukupna cijena:" + String.format("%.2f", (relacija.getCijenaJednokratna()+ (rezervacija? ProdajaKarataController.REZERVACIJA: 0) + ProdajaKarataController.STANICNA_USLUGA)) + " KM"), System.lineSeparator()));
+		sb.append(String.format("%40s%s", ("Stanična usluga: " + String.format("%.2f", ProdajaKarataController.STANICNA_USLUGA) + " KM"), System.lineSeparator()));
+		sb.append(String.format("%40s%s", ("Ukupna cijena :" + String.format("%.2f", (relacija.getCijenaJednokratna()+ (rezervacija? ProdajaKarataController.REZERVACIJA: 0) + ProdajaKarataController.STANICNA_USLUGA)) + " KM"), System.lineSeparator()));
 		sb.append(System.lineSeparator());
-		sb.append(String.format("Na zahtjev kontrolora pokazati kartu!%s", System.lineSeparator()));
-		sb.append(String.format("Biletar: %s%s%s", PrijavaController.nalog.getZaposleni().getIme(), System.lineSeparator(), System.lineSeparator()));
-		sb.append(String.format("%10sHvala na povjerenju!%s%s", " ", " ", System.lineSeparator()));
+		sb.append("========================================" + System.lineSeparator());
+		sb.append("Na zahtjev kontrolora pokazati kartu!" + System.lineSeparator());
+		sb.append("Biletar: " + PrijavaController.nalog.getZaposleni().getIme() + System.lineSeparator() + System.lineSeparator());
+		sb.append(String.format("%40s%s", "Hvala na povjerenju!", System.lineSeparator()));
 		//System.out.println(sb.toString());
 		String value = new String(sb.toString().getBytes(Charset.forName("UTF-8")));
 		System.out.println(value);

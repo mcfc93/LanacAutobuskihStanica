@@ -181,46 +181,57 @@ public class MjesecnaKarta extends Karta {
 		LocalDate localDate = LocalDate.now();
 		int mjesecVazenja = (localDate.getDayOfMonth()>25) ? localDate.getMonthValue()+1: localDate.getMonthValue();
 		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("%s%s", PrijavaController.autobuskaStanica.getGrad(), System.lineSeparator()));
-		sb.append(String.format("%s%s", PrijavaController.autobuskaStanica.getNaziv(), System.lineSeparator()));
-		sb.append(String.format("Informacije: %s%s", PrijavaController.autobuskaStanica.getBrojTelefona(), System.lineSeparator()));
-		sb.append(String.format("WEB stranica: %s%s", PrijavaController.autobuskaStanica.getWebStranica(), System.lineSeparator()));
-		sb.append(String.format("========================================%s", System.lineSeparator()));
-		sb.append(System.lineSeparator());
-		sb.append(String.format("Prevoznik: %s%s", karta.getRelacija().getLinija().getPrevoznik().getNaziv(),System.lineSeparator()));
-		sb.append(String.format("Naziv linije: %s%s", karta.getRelacija().getLinija().getNazivLinije(), System.lineSeparator()));
-		sb.append(System.lineSeparator());
+		
+		sb.append(PrijavaController.autobuskaStanica.getGrad() + System.lineSeparator());
+		sb.append(PrijavaController.autobuskaStanica.getNaziv() + System.lineSeparator());
+		sb.append("Informacije: " + PrijavaController.autobuskaStanica.getBrojTelefona() + System.lineSeparator());
+		sb.append("Web adresa: " + PrijavaController.autobuskaStanica.getWebStranica() + System.lineSeparator());
+		sb.append("========================================" + System.lineSeparator() + System.lineSeparator());
+		
+		sb.append("Prevoznik: " + karta.getRelacija().getLinija().getPrevoznik().getNaziv() + System.lineSeparator());
+		sb.append("Linija: " + karta.getRelacija().getLinija().getNazivLinije() + System.lineSeparator() + System.lineSeparator());
 
-		sb.append(String.format("%12s %s %s", " ", "AUTOBUSKA KARTA", System.lineSeparator()));
-		sb.append("               (mjesecna)" + System.lineSeparator());
-		sb.append(System.lineSeparator());
-		sb.append(String.format("Prodajno mjesto: %s%s", PrijavaController.autobuskaStanica.getGrad(), System.lineSeparator()));
-		sb.append(String.format("Serijski broj: %013d%s", ProdajaKarataController.idMjesecneKarte, System.lineSeparator()));
-		sb.append(String.format("Relacija: %s - %s%s", karta.getRelacija().getPolaziste().getNazivStajalista(), karta.getRelacija().getOdrediste().getNazivStajalista(), System.lineSeparator()));
-		sb.append(String.format("Peron: %d%s", karta.getRelacija().getLinija().getPeron(), System.lineSeparator()));
+		sb.append("            AUTOBUSKA  KARTA" + System.lineSeparator());
+		sb.append("               (mjesecna)" + System.lineSeparator() + System.lineSeparator());
+		
+		sb.append("Prodajno mjesto: " + PrijavaController.autobuskaStanica.getNaziv() + System.lineSeparator());
+		sb.append("Serijski broj: " + String.format("%013d", ProdajaKarataController.idMjesecneKarte) + System.lineSeparator());
+		sb.append("Peron:    " + karta.getRelacija().getLinija().getPeron() + System.lineSeparator());
+		
+		sb.append("Relacija: " + karta.getRelacija().getPolaziste().getNazivStajalista() + " -");
+		if(karta.getRelacija().toString().length()>30) {
+			sb.append(System.lineSeparator());
+		}
+		sb.append("          " + karta.getRelacija().getOdrediste().getNazivStajalista() + System.lineSeparator());
+		
 		sb.append("Izdata: " + LocalDate.now() + " " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")) + System.lineSeparator());
-		sb.append(String.format("Mjesec vazenja: %02d/%d%s", mjesecVazenja, localDate.getYear(), System.lineSeparator()));
-		sb.append(String.format("Tip: %s%s", tip.toString(),System.lineSeparator())); 
+		
+		String mjesecVazenjaString =
+	    		(localDate.getDayOfMonth() >= 25?
+	    			(((localDate.getMonthValue()+1)%12) + "-" + (localDate.getMonthValue()==1?localDate.getYear()+1:localDate.getYear())):
+	    				(localDate.getMonthValue() + "-" + localDate.getYear()));
+		sb.append("Mjesec važenja: " + mjesecVazenjaString + System.lineSeparator());
+		//sb.append(String.format("Mjesec važenja: %02d/%d%s", mjesecVazenja, localDate.getYear(), System.lineSeparator()));
+		sb.append("Tip:    " + tip.toString() + System.lineSeparator()); 
 		switch(tip) {
 		case ĐAČKA:
-			sb.append(String.format("%40s%s", ("Popust:" + String.format("%.2f", ( 1- karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust())*karta.getRelacija().getCijenaMjesecna())), System.lineSeparator()));
+			sb.append(String.format("%40s%s", ("Popust: " + String.format("%.2f KM", ((karta.getRelacija().getCijenaMjesecna() / karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust()) - karta.getRelacija().getCijenaMjesecna()))), System.lineSeparator()));
 			break;
 		case PENZIONERSKA:
-			sb.append(String.format("%40s%s", ("Popust:" + String.format("%.2f", ( 1- karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust())*karta.getRelacija().getCijenaMjesecna())), System.lineSeparator()));
+			sb.append(String.format("%40s%s", ("Popust: " + String.format("%.2f KM", ((karta.getRelacija().getCijenaMjesecna() / karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust()) - karta.getRelacija().getCijenaMjesecna()))), System.lineSeparator()));
 			break;
 		default:
 			sb.append(String.format("%40s%s", "Popust: 0.00 KM",  System.lineSeparator()));
 			break;
 			
 		};
-		sb.append(String.format("%40s%s", ("Cijena:" + String.format("%.2f", karta.getRelacija().getCijenaMjesecna())), System.lineSeparator()));
-		sb.append(String.format("Na zahtjev kontrolora pokazati kartu!%s", System.lineSeparator()));
-		sb.append(String.format("Biletar: %s%s%s", PrijavaController.nalog.getZaposleni().getIme(), System.lineSeparator(),System.lineSeparator()));
-		sb.append(String.format("%10sHvala na povjerenju!", " "));
-		String mjesecVazenjaString =
-	    		(localDate.getDayOfMonth() >= 25?
-	    			(((localDate.getMonthValue()+1)%12) + "-" + (localDate.getMonthValue()==1?localDate.getYear()+1:localDate.getYear())):
-	    				(localDate.getMonthValue() + "-" + localDate.getYear()));
+		sb.append(String.format("%40s%s", ("Cijena: " + String.format("%.2f KM", karta.getRelacija().getCijenaMjesecna())), System.lineSeparator()));
+		
+		sb.append("========================================" + System.lineSeparator());
+		sb.append("Na zahtjev kontrolora pokazati kartu!" + System.lineSeparator());
+		sb.append("Biletar: " + PrijavaController.nalog.getZaposleni().getIme() + System.lineSeparator() + System.lineSeparator());
+		sb.append(String.format("%40s%s", "Hvala na povjerenju!", System.lineSeparator()));
+		
 		File file = new File("karte\\mjesecna_" + String.format("%013d", ProdajaKarataController.idMjesecneKarte) + "-" + mjesecVazenjaString + ".txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 		    writer.append(sb);
