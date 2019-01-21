@@ -266,7 +266,7 @@ public class InformacijeController implements Initializable{
 						}
 	    				
 	    				karteObs.clear();
-	    			//	karteObs.addAll(Karta.getInfoList(polasciDolasciComboBox.getValue()));
+	    				karteObs.addAll(Karta.getInfoList(polasciDolasciComboBox.getValue()));
 	    				
 	    				Platform.runLater(() -> {
 							progressPane.setVisible(false);

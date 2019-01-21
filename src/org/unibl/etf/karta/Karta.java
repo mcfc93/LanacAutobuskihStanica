@@ -192,25 +192,33 @@ public class Karta {
 		sb.append(String.format("%s%s", PrijavaController.autobuskaStanica.getNaziv(), System.lineSeparator()));
 		sb.append(String.format("Informacije: %s%s", PrijavaController.autobuskaStanica.getBrojTelefona(), System.lineSeparator()));
 		sb.append(String.format("WEB stranica: %s%s", PrijavaController.autobuskaStanica.getWebStranica(), System.lineSeparator()));
-		sb.append(String.format("======================================%s%s", System.lineSeparator(),System.lineSeparator()));
+		sb.append(String.format("========================================%s%s", System.lineSeparator(),System.lineSeparator()));
 		sb.append(String.format("Prevoznik: %s%s", relacija.getLinija().getPrevoznik().getNaziv(), System.lineSeparator()));
 		sb.append(String.format("Naziv linije: %s%s", relacija.getLinija().getNazivLinije(), System.lineSeparator()));
 		sb.append(System.lineSeparator());
-		sb.append(String.format("%10s %s %10s%s", " ", "AUTOBUSKA KARTA", " ", System.lineSeparator()));
-		sb.append(String.format("%10s (%s) %10s%s", " ", povratna? "povratna":"jednosmjerna" , " ", System.lineSeparator()));
+		sb.append(String.format("%12s %s %s", " ", "AUTOBUSKA KARTA", System.lineSeparator()));
+		String temp = povratna? "(povratna)":"(jednosmjerna)";
+		String temp2 = "%"+( (int)(40-temp.length())/2)+"s%s%s";
+		System.out.println(temp2);
+		sb.append(String.format(temp2," ", temp, System.lineSeparator()));
 		sb.append(System.lineSeparator());
 		sb.append(String.format("Prodajno mjesto: %s%s", PrijavaController.autobuskaStanica.getGrad(), System.lineSeparator()));
 		sb.append(String.format("Serijski broj: %013d%s", serijskiBroj, System.lineSeparator()));
 		sb.append(String.format("Peron: %d%s", relacija.getLinija().getPeron() , System.lineSeparator()));
 		sb.append(String.format("Sjediste: %d%s", brojSjedista, System.lineSeparator()));
-		sb.append(String.format("Relacija: %s - %s%s" , relacija.getPolaziste().getNazivStajalista(), relacija.getOdrediste().getNazivStajalista(), System.lineSeparator()));
+		if(relacija.toString().length()>30) {
+			sb.append("Relacija: " + relacija.getPolaziste().getNazivStajalista() + " -" + System.lineSeparator() + "          " +relacija.getOdrediste().getNazivStajalista() + System.lineSeparator());
+		}
+		else
+			sb.append("Relacija: " +relacija.toString() + System.lineSeparator());
+		
 		sb.append(String.format("Izdata: %s %s %s", LocalDate.now().toString(), LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")).toString(), System.lineSeparator()));
 		sb.append(String.format("Polazak: %s %s%s", datumPolaska.toString(), relacija.getVrijemePolaska().toString(), System.lineSeparator()));
 		sb.append(String.format("Dolazak: %s %s%s", (relacija.getVrijemeDolaska().toLocalTime().isBefore(relacija.getVrijemePolaska().toLocalTime()) ? datumPolaska.toLocalDate().plusDays(1).toString() : datumPolaska.toLocalDate().toString()),  relacija.getVrijemeDolaska().toString(), System.lineSeparator()));
-		sb.append(String.format("%20s %.2f KM%s", "Cijena:",  relacija.getCijenaJednokratna(), System.lineSeparator()));
-		sb.append(String.format("%20s %.2f KM%s", "Rezervacija:", rezervacija? ProdajaKarataController.REZERVACIJA: 0, System.lineSeparator()));
-		sb.append(String.format("%20s %.2f KM%s", "Stanicna usluga:", ProdajaKarataController.STANICNA_USLUGA, System.lineSeparator()));
-		sb.append(String.format("%20s %.2f KM%s", "Ukupna cijena:", (relacija.getCijenaJednokratna()+ (rezervacija? ProdajaKarataController.REZERVACIJA: 0) + ProdajaKarataController.STANICNA_USLUGA),System.lineSeparator()));
+		sb.append(String.format("%40s%s", ("Cijena: " + String.format("%.2f", relacija.getCijenaJednokratna()) + " KM"), System.lineSeparator()));
+		sb.append(String.format("%40s%s", ("Rezervacija: " + String.format("%.2f", rezervacija? ProdajaKarataController.REZERVACIJA: 0) + " KM"), System.lineSeparator()));
+		sb.append(String.format("%40s%s", ("Stanicna usluga: " + String.format("%.2f", ProdajaKarataController.STANICNA_USLUGA) + " KM"), System.lineSeparator()));
+		sb.append(String.format("%40s%s", ("Ukupna cijena:" + String.format("%.2f", (relacija.getCijenaJednokratna()+ (rezervacija? ProdajaKarataController.REZERVACIJA: 0) + ProdajaKarataController.STANICNA_USLUGA)) + " KM"), System.lineSeparator()));
 		sb.append(System.lineSeparator());
 		sb.append(String.format("Na zahtjev kontrolora pokazati kartu!%s", System.lineSeparator()));
 		sb.append(String.format("Biletar: %s%s%s", PrijavaController.nalog.getZaposleni().getIme(), System.lineSeparator(), System.lineSeparator()));
@@ -218,7 +226,7 @@ public class Karta {
 		//System.out.println(sb.toString());
 		String value = new String(sb.toString().getBytes(Charset.forName("UTF-8")));
 		System.out.println(value);
-		File file = new File("karte\\karta" + String.format("%013d", serijskiBroj)+".txt");
+		File file = new File("karte\\karta_" + String.format("%013d", serijskiBroj)+".txt");
 		/*try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
 			writer.append(value);
 		} catch (IOException e) {
@@ -390,9 +398,9 @@ public class Karta {
 			s1.executeUpdate();
 			s1 = Util.prepareStatement(c, sqlRezervacija, false, serijskiBroj);
 			s1.executeUpdate();
-			File file = new File("karte\\karta" + String.format("%013d", serijskiBroj)+".txt");
+			File file = new File("karte\\karta_" + String.format("%013d", serijskiBroj)+".txt");
 			if(file.exists())
-				file.delete();
+				file.renameTo(new File("karte\\karta_" + String.format("%013d", serijskiBroj) + "_STORNIRANO.txt"));
 			return true;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
@@ -428,9 +436,9 @@ public class Karta {
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
-		String sqlPolazak = "select NazivLinije,VrijemePolaska,prevoznik.NazivPrevoznika,Peron from linija join (relacija,prevoznik,popust_prevoznika) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) and (prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where (Polaziste=?) and (linija.Stanje='Aktivno') group by NazivLinije order by VrijemePolaska";
-		String sqlDolazak = "select NazivLinije,VrijemePolaska,prevoznik.NazivPrevoznika,Peron from linija join (relacija,prevoznik,popust_prevoznika) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) and (prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where (Odrediste=?) and (linija.Stanje='Aktivno') group by NazivLinije order by VrijemeDolaska";
-		//List<Karta> karteList = new ArrayList<>();
+		String sqlPolazak = "select NazivLinije,VrijemePolaska,prevoznik.NazivPrevoznika,Peron from linija join (relacija,prevoznik) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika)  where (Polaziste=?) and (linija.Stanje='Aktivno') group by NazivLinije order by VrijemePolaska";
+		String sqlDolazak = "select NazivLinije,VrijemePolaska,prevoznik.NazivPrevoznika,Peron from linija join (relacija,prevoznik) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika)  where (Odrediste=?) and (linija.Stanje='Aktivno') group by NazivLinije order by VrijemeDolaska";
+		List<Karta> karteList = new ArrayList<>();
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, polazakDolazak.equals("POLASCI")? sqlPolazak:sqlDolazak, false, PrijavaController.autobuskaStanica.getIdStajalista());
@@ -439,12 +447,25 @@ public class Karta {
 				Linija linija = new Linija(0);
 				linija.setNazivLinije(r.getString("NazivLinije"));
 				Relacija relacija = new Relacija();
+				if(polazakDolazak.equals("POLASCI"))
+					relacija.setVrijemePolaska(r.getTime("VrijemePolaska"));
+				else
+					relacija.setVrijemeDolaska(r.getTime("VrijemeDolaska"));
+				Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
+				linija.setPrevoznik(prevoznik);
+				linija.setPeron(r.getInt("Peron"));
+				Karta karta = new Karta();
 				relacija.setLinija(linija);
+				karta.setRelacija(relacija);
+				karteList.add(karta);
 			}
+			return karteList;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
-		
+		finally {
+			Util.close(r, s, c);
+		}
 		return null;
 	}
 	

@@ -185,13 +185,14 @@ public class MjesecnaKarta extends Karta {
 		sb.append(String.format("%s%s", PrijavaController.autobuskaStanica.getNaziv(), System.lineSeparator()));
 		sb.append(String.format("Informacije: %s%s", PrijavaController.autobuskaStanica.getBrojTelefona(), System.lineSeparator()));
 		sb.append(String.format("WEB stranica: %s%s", PrijavaController.autobuskaStanica.getWebStranica(), System.lineSeparator()));
-		sb.append(String.format("======================================%s", System.lineSeparator()));
+		sb.append(String.format("========================================%s", System.lineSeparator()));
 		sb.append(System.lineSeparator());
 		sb.append(String.format("Prevoznik: %s%s", karta.getRelacija().getLinija().getPrevoznik().getNaziv(),System.lineSeparator()));
 		sb.append(String.format("Naziv linije: %s%s", karta.getRelacija().getLinija().getNazivLinije(), System.lineSeparator()));
 		sb.append(System.lineSeparator());
-		sb.append(String.format("%10s %s %10s%s", " ", "AUTOBUSKA KARTA", " ", System.lineSeparator()));
-		sb.append(String.format("%10s (%s) %10s%s", " ", "mjesecna" , " ", System.lineSeparator()));
+
+		sb.append(String.format("%12s %s %s", " ", "AUTOBUSKA KARTA", System.lineSeparator()));
+		sb.append("               (mjesecna)" + System.lineSeparator());
 		sb.append(System.lineSeparator());
 		sb.append(String.format("Prodajno mjesto: %s%s", PrijavaController.autobuskaStanica.getGrad(), System.lineSeparator()));
 		sb.append(String.format("Serijski broj: %013d%s", ProdajaKarataController.idMjesecneKarte, System.lineSeparator()));
@@ -202,16 +203,17 @@ public class MjesecnaKarta extends Karta {
 		sb.append(String.format("Tip: %s%s", tip.toString(),System.lineSeparator())); 
 		switch(tip) {
 		case ĐAČKA:
-			sb.append(String.format("Popust: %f%%%s", karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust(), System.lineSeparator()));
+			sb.append(String.format("%40s%s", ("Popust:" + String.format("%.2f", ( 1- karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust())*karta.getRelacija().getCijenaMjesecna())), System.lineSeparator()));
 			break;
 		case PENZIONERSKA:
-			sb.append(String.format("Popust: %f%%%s", karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust(), System.lineSeparator()));
+			sb.append(String.format("%40s%s", ("Popust:" + String.format("%.2f", ( 1- karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust())*karta.getRelacija().getCijenaMjesecna())), System.lineSeparator()));
 			break;
 		default:
+			sb.append(String.format("%40s%s", "Popust: 0.00 KM",  System.lineSeparator()));
 			break;
 			
 		};
-		sb.append(String.format("%20s %.2f KM%s%s", "Cijena:", karta.getRelacija().getCijenaMjesecna(), System.lineSeparator(),System.lineSeparator()));
+		sb.append(String.format("%40s%s", ("Cijena:" + String.format("%.2f", karta.getRelacija().getCijenaMjesecna())), System.lineSeparator()));
 		sb.append(String.format("Na zahtjev kontrolora pokazati kartu!%s", System.lineSeparator()));
 		sb.append(String.format("Biletar: %s%s%s", PrijavaController.nalog.getZaposleni().getIme(), System.lineSeparator(),System.lineSeparator()));
 		sb.append(String.format("%10sHvala na povjerenju!", " "));
@@ -240,9 +242,16 @@ public class MjesecnaKarta extends Karta {
 			s.close();
 			s = Util.prepareStatement(c, sqlMjesecna, false, mjesecnaKarta.getIdMjesecneKarte());
 			 s.executeUpdate();
-			File file = new File("karte\\karta" + String.format("%013d", mjesecnaKarta.getIdMjesecneKarte())+".txt");
+			LocalDate localDate = mjesecnaKarta.getDatumIzdavanja().toLocalDate();
+			String mjesecVazenjaString =
+		    		(localDate.getDayOfMonth() >= 25?
+		    			(((localDate.getMonthValue()+1)%12) + "-" + (localDate.getMonthValue()==12?localDate.getYear()+1:localDate.getYear())):
+		    				(localDate.getMonthValue() + "-" + localDate.getYear()));
+			System.out.println(mjesecVazenjaString);
+			File file = new File("karte\\mjesecna_" + String.format("%013d", mjesecnaKarta.getIdMjesecneKarte()) + "-" + mjesecVazenjaString +".txt");
+			System.out.println(file.exists());
 			if(file.exists())
-				System.out.println(file.delete());
+				file.renameTo(new File("karte\\mjesecna_" + String.format("%013d", mjesecnaKarta.getIdMjesecneKarte()) + "-" + mjesecVazenjaString + "_STORNIRANO.txt"));
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}

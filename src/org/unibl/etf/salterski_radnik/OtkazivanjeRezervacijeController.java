@@ -66,7 +66,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 					return;
 				}
 				stornirajButton.setDisable(false);
-				cijenaTextField.setText(jednokratnaKarta.getCijena()  + "KM");
+				cijenaTextField.setText(jednokratnaKarta.getRelacija().getCijenaJednokratna() + "KM");
 				relacijaTextField.setText(jednokratnaKarta.getRelacija().getPolaziste().getNazivStajalista() + " - " + jednokratnaKarta.getRelacija().getOdrediste().getNazivStajalista());
 				datumTextField.setText(jednokratnaKarta.getDatumIzdavanja().toString());
 				linijaTextField.setText(jednokratnaKarta.getRelacija().getLinija().getNazivLinije());		

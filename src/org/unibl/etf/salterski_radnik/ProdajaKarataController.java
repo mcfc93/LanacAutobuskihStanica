@@ -237,7 +237,7 @@ public class ProdajaKarataController implements Initializable {
 					{	
 						if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
 							if(povratnaKartaCheckBox.isSelected())
-								karta.getRelacija().setCijenaJednokratna(2*karta.getRelacija().getCijenaJednokratna()*0.8);
+								karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format("%.2f", 2*karta.getRelacija().getCijenaJednokratna()*0.8)));
 							karteObs.add(karta);
 						}
 					}
@@ -258,10 +258,10 @@ public class ProdajaKarataController implements Initializable {
 								switch(tipKarteComboBox.getValue()) {
 								case ĐAČKA:
 									//karta.getRelacija().setCijenaMjesecna(POPUST_DJACKA * karta.getRelacija().getCijenaMjesecna());
-									karta.setCijena(karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust());
+									karta.setCijena(Double.valueOf(String.format("%.2f", karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust())));
 									break;
 								case PENZIONERSKA:
-									karta.setCijena(karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust());
+									karta.setCijena( Double.valueOf(String.format("%.2f", karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust())));
 									break;
 								case OBIČNA:
 									break;
@@ -282,7 +282,7 @@ public class ProdajaKarataController implements Initializable {
 							daniUSedmici = karta.getRelacija().getDani();
 							if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
 								if(povratnaKartaCheckBox.isSelected())
-									karta.getRelacija().setCijenaJednokratna(2*karta.getRelacija().getCijenaJednokratna()*0.8);
+									karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format("%.2f", 2*karta.getRelacija().getCijenaJednokratna()*0.8)));
 								karteObs.add(karta);
 							}
 						}
@@ -371,13 +371,14 @@ public class ProdajaKarataController implements Initializable {
 						Task<Void> task = new Task<Void>() {
 				            @Override
 				            protected Void call() /*throws Exception*/ {
-				            	karta.setDatumPolaska(Date.valueOf(datum.getValue()));
 								karta.setPovratna(povratnaKartaCheckBox.isSelected());
 				                progressPane.setVisible(true);
 				                for(int i=0;i<brojKarataZaKupovinu;++i) {
 									int brojKarata = Karta.provjeriBrojKarata(karta, Date.valueOf(datum.getValue()));
 								karta.setBrojSjedista(brojKarata+1);
+				            	karta.setDatumPolaska(Date.valueOf(datum.getValue()));
 								Karta.kreirajKartu(karta, datum.getValue());
+								
 								//karta.setIdKarte(idKarte);
 								karta.setSerijskiBroj(idKarte);
 								karta.setBrojSjedista(brojKarata+1);
@@ -408,7 +409,6 @@ public class ProdajaKarataController implements Initializable {
 			            protected Void call() /*throws Exception*/ {
 			                progressPane.setVisible(true);
 							for(int i=0;i<brojKarataZaKupovinu;++i) {
-								System.out.println("op" +i);
 								int brojKarata = Karta.provjeriBrojKarata(karta, Date.valueOf(datum.getValue()));
 								karta.setDatumPolaska(Date.valueOf(datum.getValue()));
 								karta.setBrojSjedista(brojKarata+1);
@@ -608,13 +608,13 @@ public class ProdajaKarataController implements Initializable {
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		    	if(newValue) {
 		    		for (Karta karta : karteObs) {
-						karta.getRelacija().setCijenaJednokratna( 2* (karta.getRelacija().getCijenaJednokratna() * POPUST_POVRATNA));
+						karta.getRelacija().setCijenaJednokratna( Double.valueOf(String.format("%.2f", 2* (karta.getRelacija().getCijenaJednokratna() * POPUST_POVRATNA))));
 		    		}
 		    		karteTable.refresh();
 		    	}
 		    	else
 		    		for (Karta karta : karteObs) {
-						karta.getRelacija().setCijenaJednokratna(( karta.getRelacija().getCijenaJednokratna() / POPUST_POVRATNA)/2);
+						karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format("%.2f", ( karta.getRelacija().getCijenaJednokratna() / POPUST_POVRATNA)/2)));
 					}
 		    	karteTable.refresh();
 		    }
@@ -667,13 +667,13 @@ public class ProdajaKarataController implements Initializable {
 					
 					if(newValue==TipKarte.ĐAČKA)  {
 						for (Karta karta : karteObs) 
-							karta.setCijena( karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust());
+							karta.setCijena(Double.valueOf(String.format("%.2f",  karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust())));
 
 					}
 					else
 						if(newValue==TipKarte.PENZIONERSKA) {
 							for (Karta karta : karteObs)
-								karta.setCijena( karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust());
+								karta.setCijena(Double.valueOf(String.format("%.2f",  karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust())));
 
 					}
 					karteTable.refresh();
@@ -683,12 +683,12 @@ public class ProdajaKarataController implements Initializable {
 					
 						if(newValue==TipKarte.OBIČNA)
 							for (Karta karta : karteObs) {
-								karta.getRelacija().setCijenaMjesecna( karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust());
+								karta.getRelacija().setCijenaMjesecna(Double.valueOf(String.format("%.2f",  karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust())));
 							}
 						else
 							if(newValue==TipKarte.PENZIONERSKA)
 								for (Karta karta : karteObs) {
-									karta.setCijena( karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust() * karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust());
+									karta.setCijena(Double.valueOf(String.format("%.2f",  karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust() * karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust())));
 								}
 					}
 					else
@@ -696,12 +696,12 @@ public class ProdajaKarataController implements Initializable {
 							
 							if(newValue==TipKarte.ĐAČKA)
 								for (Karta karta : karteObs) {
-									karta.setCijena( karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust() * karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust());
+									karta.setCijena(Double.valueOf(String.format("%.2f",  karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust() * karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust())));
 								}
 							else
 								if(newValue==TipKarte.OBIČNA)
 									for (Karta karta : karteObs) {
-										karta.setCijena( karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust());
+										karta.setCijena(Double.valueOf(String.format("%.2f",  karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust())));
 									}
 						}
 				karteTable.refresh();	
