@@ -3,7 +3,6 @@ package org.unibl.etf.salterski_radnik;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 
 import org.unibl.etf.karta.Karta;
 import org.unibl.etf.karta.MjesecnaKarta;
@@ -50,7 +49,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		serijskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(serijskiBrojTextField),Util.integerValidator(serijskiBrojTextField));
+		serijskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(serijskiBrojTextField),Util.serialValidator(serijskiBrojTextField));
 		checkMarkImageView.setVisible(false);
 		stornirajButton.setDisable(true);
 	}

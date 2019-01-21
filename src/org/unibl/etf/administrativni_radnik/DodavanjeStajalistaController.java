@@ -86,19 +86,22 @@ public class DodavanjeStajalistaController implements Initializable {
     void potvrdi(ActionEvent event) {
     	if(nazivStajalistaTextField.validate()
     			& postanskiBrojTextField.validate()) {
-    		
-    		int postanskiBrojInt = Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim());
-    		
-    		Stajaliste novoStajaliste = new Stajaliste(0, postanskiBrojInt, null, nazivStajalistaTextField.getText());
-    		novoStajaliste.setIdStajalista(Stajaliste.dodajStajaliste(novoStajaliste));
-    		String nazivMjesta = ListaLinijaController.stajalistaList.stream().filter(s -> s.getPostanskiBroj()==novoStajaliste.getPostanskiBroj()).findFirst().get().getNaziv();
-    		novoStajaliste.setNaziv(nazivMjesta);
-    		ListaLinijaController.stajalistaList.add(novoStajaliste);
-    		Platform.runLater(() -> {
-    			Util.getNotifications("Obavje�tenje.", "Stajali�te dodano.", "Information").show();
-    		});
-    		
-    		((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+    		if(ListaLinijaController.stajalistaList.stream().anyMatch(s -> s.getNazivStajalista().equalsIgnoreCase(nazivStajalistaTextField.getText()) && s.getPostanskiBroj()==Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()))) {
+    			Util.getNotifications("Greška", "Stajalište već postoji!", "Error").show();
+    		} else {
+				int postanskiBrojInt = Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim());
+				
+				Stajaliste novoStajaliste = new Stajaliste(0, postanskiBrojInt, null, nazivStajalistaTextField.getText());
+				novoStajaliste.setIdStajalista(Stajaliste.dodajStajaliste(novoStajaliste));
+				String nazivMjesta = ListaLinijaController.stajalistaList.stream().filter(s -> s.getPostanskiBroj()==novoStajaliste.getPostanskiBroj()).findFirst().get().getNaziv();
+				novoStajaliste.setNaziv(nazivMjesta);
+				ListaLinijaController.stajalistaList.add(novoStajaliste);
+				Platform.runLater(() -> {
+					Util.getNotifications("Obavještenje.", "Stajalište dodano.", "Information").show();
+				});
+				
+				((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+    		}
     	}
     }
 

@@ -217,19 +217,30 @@ System.out.println(PROPERTY);
 	        	textField.validate();
 	        }
 	    });
-	    /*
-	    textField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
-	        	textField.validate();
-	    });
-	    */
 	    return integerValidator;
 	}
+	
+	public static ValidatorBase naturalNumberValidator(JFXTextField textField) {
+		ValidatorBase naturalNumberValidator = new ValidatorBase("Nije prirodan broj") {
+			@Override
+			protected void eval() {
+				if(!textField.getText().isEmpty()
+						&& !textField.getText().matches("[1-9][0-9]*")) {
+	        		hasErrors.set(true);
+		        } else {
+		        	hasErrors.set(false);
+		        }
+			}
+		};
+		naturalNumberValidator.setIcon(new ImageView());
+		return naturalNumberValidator;
+	}
+	
 	public static ValidatorBase popustValidator(JFXTextField textField) {
 		ValidatorBase popustValidator = new ValidatorBase("Unos ne pripada 0-100") {
 			
 			@Override
 			protected void eval() {
-				// TODO Auto-generated method stub
 				if(!textField.getText().isEmpty() && !textField.getText().matches("^([1-9][0-9]?|100)$"))
 					hasErrors.set(true);
 				else
@@ -240,6 +251,7 @@ System.out.println(PROPERTY);
 		popustValidator.setIcon(new ImageView());
 		return popustValidator;
 	}
+
 	public static ValidatorBase doubleValidator(JFXTextField textField) {
 		ValidatorBase doubleValidator = new DoubleValidator();
 		doubleValidator.setMessage("Nije broj");
@@ -249,12 +261,51 @@ System.out.println(PROPERTY);
 	        	textField.validate();
 	        }
 	    });
-	    /*
-	    textField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+	    return doubleValidator;
+	}
+	
+	public static ValidatorBase naturalDoubleValidator(JFXTextField textField) {
+		ValidatorBase naturalNumberValidator = new ValidatorBase("Nije pozitivan broj") {
+			@Override
+			protected void eval() {
+				if(!textField.getText().isEmpty()
+						&& !textField.getText().matches("((^[1-9][0-9]*([\\.,][0-9]+)?)|(^0[\\.,][1-9][0-9]*))")) {
+	        		hasErrors.set(true);
+		        } else {
+		        	hasErrors.set(false);
+		        }
+			}
+		};
+		naturalNumberValidator.setIcon(new ImageView());
+		return naturalNumberValidator;
+	}
+	
+	public static ValidatorBase notRequiredDoubleValidator(JFXTextField textField) {
+		ValidatorBase doubleValidator = new ValidatorBase("Nije broj") {
+			@Override
+			protected void eval() {
+				if(!textField.getText().isEmpty()
+						&& textField.getText().matches("((^[1-9][0-9]*([\\.,][0-9]+)?)|(^0[\\.,][1-9][0-9]*))")) {
+	        		hasErrors.set(false);
+		        } else {
+		        	if(textField.getText().isEmpty()) {
+		        		hasErrors.set(false);
+		        	} else {
+		        		hasErrors.set(true);
+		        	}
+		        }
+			}
+		};
+		doubleValidator.setIcon(new ImageView());
+		textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)-> {
+	        if(!newValue) {
+	        	textField.validate();
+	        }
+	    });
+	    textField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)-> {
 	        	textField.validate();
 	    });
-	    */
-	    return doubleValidator;
+		return doubleValidator;
 	}
 	
 	public static ValidatorBase jmbgValidator(JFXTextField textField) {
@@ -435,6 +486,22 @@ System.out.println(PROPERTY);
 		return iinValidator;
 	}
 	
+	public static ValidatorBase serialValidator(JFXTextField textField) {
+		ValidatorBase serialValidator = new ValidatorBase("Nekorektan unos") {
+			@Override
+			protected void eval() {
+				if(!textField.getText().isEmpty()
+	        			&& !textField.getText().matches("^[0-9]{1,13}$")) {
+	        		hasErrors.set(true);
+		        } else {
+		        	 hasErrors.set(false);
+		        }
+			}
+		};
+		serialValidator.setIcon(new ImageView());
+		return serialValidator;
+	}
+	
 	public static ValidatorBase dateValidator(JFXTextField textField) {
 		ValidatorBase dateValidator = new ValidatorBase("Format: dan/mjesec") {
 			@Override
@@ -504,6 +571,7 @@ System.out.println(PROPERTY);
 	
 	public static void setAutocompleteList(JFXTextField textField, Collection<String> collection) {
 		JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
+		autoCompletePopup.getSuggestions().clear();
 	    autoCompletePopup.getSuggestions().addAll(collection);
 	    //autoCompletePopup.setCellLimit(3);
 	    autoCompletePopup.setPrefWidth(150);
@@ -513,12 +581,17 @@ System.out.println(PROPERTY);
 	        textField.setText(event.getObject());
 	    });
 	    
-	    textField.textProperty().addListener(observable -> {
+	    
+	    textField.textProperty().addListener((observable, oldValue, newValue)  -> {
 	        autoCompletePopup.filter(string -> string.toLowerCase().contains(textField.getText().toLowerCase()));
 	        if (autoCompletePopup.getFilteredSuggestions().isEmpty() || textField.getText().isEmpty()) {
 	            autoCompletePopup.hide();
 	        } else {
-	            autoCompletePopup.show(textField);
+	        	if(collection.contains(textField.getText())) {
+	    	    	autoCompletePopup.hide();
+	    	    } else {
+	    	    	autoCompletePopup.show(textField);
+	    	    }
 	        }
 	    });
 	}
@@ -563,4 +636,5 @@ System.out.println(PROPERTY);
              .position(Pos.BOTTOM_RIGHT);
 		return notificationBuilder;
 	}
+	
 }

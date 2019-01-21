@@ -20,6 +20,7 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -32,7 +33,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
@@ -51,6 +54,8 @@ public class DodavanjeLinijaController implements Initializable {
 	private ObservableList<Relacija> relacijeObsList = FXCollections.observableArrayList();
 	public static Linija linija;
 	public static int idLinije;
+	
+	public static boolean dodaj=false;
 	
 	@FXML
 	private AnchorPane anchorPane;
@@ -156,8 +161,8 @@ public class DodavanjeLinijaController implements Initializable {
 		prevoznikComboBox.getValidators().add(Util.requiredFieldValidator(prevoznikComboBox));
 		peronComboBox.getValidators().add(Util.requiredFieldValidator(peronComboBox));
 		prazniciComboBox.getValidators().add(Util.requiredFieldValidator(prazniciComboBox));
-		cijenaJednokratnaTextField.getValidators().addAll(Util.requiredFieldValidator(cijenaJednokratnaTextField),Util.doubleValidator(cijenaJednokratnaTextField));
-		cijenaMjesecnaTextField.getValidators().add(Util.doubleValidator(cijenaMjesecnaTextField));
+		cijenaJednokratnaTextField.getValidators().addAll(Util.requiredFieldValidator(cijenaJednokratnaTextField),Util.naturalDoubleValidator(cijenaJednokratnaTextField));
+		cijenaMjesecnaTextField.getValidators().add(/*Util.doubleValidator(cijenaMjesecnaTextField)*/Util.notRequiredDoubleValidator(cijenaMjesecnaTextField));
 		vrijemePolaska1TimePicker.getValidators().add(Util.timeValidator(vrijemePolaska1TimePicker));
 		vrijemePolaska2TimePicker.getValidators().add(Util.timeValidator(vrijemePolaska2TimePicker));
 		
@@ -200,20 +205,25 @@ public class DodavanjeLinijaController implements Initializable {
 			}
 		});
     	
+    	relacijeTableView.setPlaceholder(new Label("Prvo dodajte liniju."));
+    	
 		relacijeTableView.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				Relacija odabranaRelacija = UnosRelacijaController.relacijeList.get((int) newValue);
-				if(odabranaRelacija.getCijenaJednokratna()==null)
-					cijenaJednokratnaTextField.clear();
-				else
-					cijenaJednokratnaTextField.setText(Double.toString(odabranaRelacija.getCijenaJednokratna()));
-				if(odabranaRelacija.getCijenaMjesecna()==null)
-					cijenaMjesecnaTextField.clear();
-				else
-					cijenaMjesecnaTextField.setText(Double.toString(odabranaRelacija.getCijenaMjesecna()));
-				
+				if(!relacijeTableView.getItems().isEmpty()) {
+					Relacija odabranaRelacija = UnosRelacijaController.relacijeList.get((int) newValue);
+					if(odabranaRelacija.getCijenaJednokratna()==null)
+						cijenaJednokratnaTextField.clear();
+					else
+						cijenaJednokratnaTextField.setText(Double.toString(odabranaRelacija.getCijenaJednokratna()));
+					if(odabranaRelacija.getCijenaMjesecna()==null)
+						cijenaMjesecnaTextField.clear();
+					else
+						cijenaMjesecnaTextField.setText(Double.toString(odabranaRelacija.getCijenaMjesecna()));
+					cijenaJednokratnaTextField.resetValidation();
+					cijenaMjesecnaTextField.resetValidation();
+				}
 			}
 		});
 		
@@ -224,7 +234,7 @@ public class DodavanjeLinijaController implements Initializable {
 					LocalTime newValue) {
 				/*
 				 * unos vremena polazaka i dolazaka za lancane relacije*/
-				
+				if(newValue != null) {
 				UnosRelacijaController.relacijeList.get(0).setVrijemePolaska(Time.valueOf(vrijemePolaska1TimePicker.getValue()));
 				LocalTime vrijemeDolaskaPlusHours = UnosRelacijaController.relacijeList.get(0).getVrijemePolaska().toLocalTime().plusHours(UnosRelacijaController.relacijeList.get(0).getDuzinaPuta().getHour());
 				LocalTime vrijemeDolaskaPlusMinutes = vrijemeDolaskaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(0).getDuzinaPuta().getMinute());
@@ -247,7 +257,8 @@ public class DodavanjeLinijaController implements Initializable {
 					LocalTime vrijemePolaskaPlusMinutes = vrijemePolaskaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
 					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaska(Time.valueOf(vrijemePolaskaPlusMinutes));
 				}
-				relacijeTableView.refresh();					
+				relacijeTableView.refresh();
+				}
 			}
 		});
 		
@@ -258,6 +269,7 @@ public class DodavanjeLinijaController implements Initializable {
 					LocalTime newValue) {
 				/* povratni smjer
 				 * unos vremena polazaka i dolazaka za lancane relacije*/
+				if(newValue != null) {
 				UnosRelacijaController.relacijeList.get(0).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaska2TimePicker.getValue()));
 				LocalTime vrijemeDolaskaPovratnaPlusHours = UnosRelacijaController.relacijeList.get(0).getVrijemePolaskaPovratna().toLocalTime().plusHours(UnosRelacijaController.relacijeList.get(0).getDuzinaPuta().getHour());
 				LocalTime vrijemeDolaskaPovratnaPlusMinutes = vrijemeDolaskaPovratnaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(0).getDuzinaPuta().getMinute());
@@ -280,11 +292,29 @@ public class DodavanjeLinijaController implements Initializable {
 					LocalTime vrijemePolaskaPovratnaPlusMinutes = vrijemePolaskaPovratnaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
 					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPovratnaPlusMinutes));
 				}
-				relacijeTableView.refresh();					
+				relacijeTableView.refresh();	
+				}
 			}
 		});
 	}
     
+    
+    
+    public void disableLinija(boolean b) {
+    	nazivLinijeTextField.setDisable(b);
+        prevoznikComboBox.setDisable(b);
+        peronComboBox.setDisable(b);
+        prazniciComboBox.setDisable(b);
+        dodajLinijuButton.setDisable(b);
+    }
+    
+    public void disableCijena(boolean b) {
+		sljedeciPolazakButton.setDisable(b);
+		krajUnosaButton.setDisable(b);
+		sacuvajButton.setDisable(b);
+		cijenaJednokratnaTextField.setDisable(b);
+		cijenaMjesecnaTextField.setDisable(b);
+    }
 
 	public void disableRelacija(boolean b) {
 		vrijemePolaska1TimePicker.setDisable(b);
@@ -361,7 +391,7 @@ public class DodavanjeLinijaController implements Initializable {
 				|| cetvrtakCheckBox.isSelected() || petakCheckBox.isSelected() || subotaCheckBox.isSelected() || nedeljaCheckBox.isSelected())
 			return true;
 		else 
-			Util.getNotifications("Greška", "Odaberite bar jedan dan!", "Warning").show();
+			Util.getNotifications("GreÅ¡ka", "Odaberite bar jedan dan!", "Warning").show();
 		return false;
 	}
 	@FXML
@@ -371,7 +401,6 @@ public class DodavanjeLinijaController implements Initializable {
 					& peronComboBox.validate()
 						& prazniciComboBox.validate()) {
 			linija = new Linija(0, nazivLinijeTextField.getText(), (int)peronComboBox.getValue(), prevoznikComboBox.getValue(), prazniciComboBox.getSelectionModel().getSelectedIndex()+1);
-			Util.getNotifications("Obavještenje", "Linija dodana.", "Information").show();
 			try {
 				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/unibl/etf/administrativni_radnik/UnosRelacija.fxml"));
 	            Parent root1 = (Parent) fxmlLoader.load();
@@ -380,16 +409,22 @@ public class DodavanjeLinijaController implements Initializable {
 				stage.initStyle(StageStyle.UNDECORATED);
 				stage.initModality(Modality.APPLICATION_MODAL);
 	            stage.setTitle(linija.getNazivLinije());
-	            stage.setScene(new Scene(root1));  
+	            Scene scene=new Scene(root1);
+	            scene.getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+				stage.setScene(scene);
 	            stage.showAndWait();
-	            relacijeObsList.setAll(UnosRelacijaController.relacijeList); 
-	            relacijeTableView.getSelectionModel().selectFirst();
-	            disableRelacija(false);
-	            krajUnosaButton.setDisable(true);
-				Util.getNotifications("Greška", "Unesite cijene relacija!", "Warning").show();
-	            relacijeTableView.refresh();
-	            vrijemePolaska1TimePicker.setDisable(true);
-	            vrijemePolaska2TimePicker.setDisable(true);
+	            if(/*!UnosRelacijaController.relacijeList.isEmpty() && */dodaj) {
+		            relacijeObsList.setAll(UnosRelacijaController.relacijeList); 
+		            relacijeTableView.getSelectionModel().selectFirst();
+		            disableCijena(false);
+		            krajUnosaButton.setDisable(true);
+					Util.getNotifications("ObavjeÅ¡tenje", "Unesite cijene relacija.", "Information").show();
+		            relacijeTableView.refresh();
+		            vrijemePolaska1TimePicker.setDisable(true);
+		            vrijemePolaska2TimePicker.setDisable(true);
+		            disableLinija(true);
+		            Util.getNotifications("ObavjeÅ¡tenje", "Linija kreirana.", "Information").show();
+	            }
 			} catch (Exception e) {
 				Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 			}
@@ -422,7 +457,7 @@ public class DodavanjeLinijaController implements Initializable {
 		            protected void succeeded(){
 		                super.succeeded();
 		                progressPane.setVisible(false);
-				        Util.getNotifications("Obavještenje", "Relacije dodane.", "Information").show();
+				        Util.getNotifications("ObavjeÅ¡tenje", "Relacije dodane.", "Information").show();
 		            }
 		        };
 		        new Thread(task).start();
@@ -453,7 +488,7 @@ public class DodavanjeLinijaController implements Initializable {
 
 	@FXML
 	public void sacuvaj(ActionEvent event) {
-		if( (cijenaMjesecnaTextField.getText().isEmpty()? true : cijenaMjesecnaTextField.validate())
+		if(cijenaMjesecnaTextField.validate()
 					& cijenaJednokratnaTextField.validate()) {
 			
 			UnosRelacijaController.relacijeList.get(relacijeTableView.getSelectionModel().getSelectedIndex()).setCijenaJednokratna(Double.parseDouble(cijenaJednokratnaTextField.getText()));
@@ -464,14 +499,16 @@ public class DodavanjeLinijaController implements Initializable {
 			relacijeTableView.refresh();
 			for(int i=0; i<relacijeTableView.getSelectionModel().getSelectedIndex(); ++i)
 				if(UnosRelacijaController.relacijeList.get(i).getCijenaJednokratna()==null) { 
-					Util.getNotifications("Greška", "Relacije iznad trenutno odabrane nemaju unesene cijene!", "Warning").show();
+					Util.getNotifications("GreÅ¡ka", "Relacije iznad trenutno odabrane nemaju unesene cijene!", "Warning").show();
 					return;
 				}
 			
 			if(UnosRelacijaController.relacijeList.stream().allMatch(r -> r.getCijenaJednokratna()!=null)) {
 				if(showPotvrdaKrajaUnosaCijena()) {
+					disableCB(false);
 					vrijemePolaska1TimePicker.setDisable(false);
 					vrijemePolaska2TimePicker.setDisable(false);
+					zadrzavanjeComboBox.setDisable(false);
 					sljedeciPolazakButton.setVisible(true);
 					cijenaJednokratnaTextField.setVisible(false);
 					cijenaMjesecnaTextField.setVisible(false);
@@ -480,10 +517,12 @@ public class DodavanjeLinijaController implements Initializable {
 				}
 			}
 			
-			if(relacijeTableView.getSelectionModel().getSelectedIndex()+1==UnosRelacijaController.relacijeList.size()) {
+			else if(relacijeTableView.getSelectionModel().getSelectedIndex()+1==UnosRelacijaController.relacijeList.size()) {
 				if(showPotvrdaKrajaUnosaCijena()) {
+					disableCB(false);
 					vrijemePolaska1TimePicker.setDisable(false);
 					vrijemePolaska2TimePicker.setDisable(false);
+					zadrzavanjeComboBox.setDisable(false);
 					sljedeciPolazakButton.setVisible(true);
 					cijenaJednokratnaTextField.setVisible(false);
 					cijenaMjesecnaTextField.setVisible(false);
@@ -498,23 +537,81 @@ public class DodavanjeLinijaController implements Initializable {
 	}
 
 	public boolean showPotvrdaKrajaUnosaCijena() {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("");
-		alert.setHeaderText("Da li ste završili sa unosom cijena?");
+		Alert alert=new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Unos cijena relacija");
+		alert.setHeaderText(null);
+		alert.setContentText("Kraj unosa cijena?");
+		alert.getButtonTypes().clear();
+		alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+		Button yesButton=(Button)alert.getDialogPane().lookupButton(ButtonType.YES);
+		yesButton.setText("Da");
+		yesButton.setDefaultButton(false);
+		Button noButton=(Button)alert.getDialogPane().lookupButton(ButtonType.NO);
+		noButton.setText("Ne");
+		noButton.setDefaultButton(true);
+		
+		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+		//alert.getDialogPane().getStyleClass().addAll("alert", "alertConfirmation");
+		
 		Optional<ButtonType> action = alert.showAndWait();
-		return action.get().equals(ButtonType.OK);
+		return action.get().equals(ButtonType.YES);
 	}
 
 	public boolean showDaLiSteSigurni() {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("");
-		alert.setHeaderText("Da li ste sigurni?");
+		Alert alert=new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Unos vremena relacija");
+		alert.setHeaderText(null);
+		alert.setContentText("Potvrdi unos?");
+		alert.getButtonTypes().clear();
+		alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+		Button yesButton=(Button)alert.getDialogPane().lookupButton(ButtonType.YES);
+		yesButton.setText("Da");
+		yesButton.setDefaultButton(false);
+		Button noButton=(Button)alert.getDialogPane().lookupButton(ButtonType.NO);
+		noButton.setText("Ne");
+		noButton.setDefaultButton(true);
+		
+		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+		//alert.getDialogPane().getStyleClass().addAll("alert", "alertConfirmation");
+		
 		Optional<ButtonType> action = alert.showAndWait();
-		return action.get().equals(ButtonType.OK);
+		return action.get().equals(ButtonType.YES);
 	}
 	@FXML
 	void krajUnosa(ActionEvent event) {
-		
+		disableRelacija(true);
+		disableLinija(false);
+		ponedeljakCheckBox.setSelected(false);
+		utorakCheckBox.setSelected(false);
+		srijedaCheckBox.setSelected(false);
+		cetvrtakCheckBox.setSelected(false);
+		petakCheckBox.setSelected(false);
+		subotaCheckBox.setSelected(false);
+		nedeljaCheckBox.setSelected(false);
+		odaberiSveCheckBox.setSelected(false);
+		nazivLinijeTextField.clear();
+		nazivLinijeTextField.resetValidation();
+		prevoznikComboBox.getSelectionModel().clearSelection();
+		prevoznikComboBox.resetValidation();
+		prazniciComboBox.getSelectionModel().clearSelection();
+		prazniciComboBox.resetValidation();
+		peronComboBox.getSelectionModel().clearSelection();
+		peronComboBox.resetValidation();
+		vrijemePolaska1TimePicker.setValue(null);
+		vrijemePolaska1TimePicker.resetValidation();
+		vrijemePolaska2TimePicker.setValue(null);
+		vrijemePolaska2TimePicker.resetValidation();
+		UnosRelacijaController.relacijeList.clear();
+		relacijeObsList.clear();
+		relacijeTableView.refresh();
+		cijenaJednokratnaTextField.clear();
+		cijenaMjesecnaTextField.clear();
+		cijenaJednokratnaTextField.setVisible(true);
+		cijenaJednokratnaTextField.resetValidation();
+		cijenaMjesecnaTextField.setVisible(true);
+		cijenaMjesecnaTextField.resetValidation();
+		sacuvajButton.setVisible(true);
+		sljedeciPolazakButton.setVisible(false);
 	}
 
 }

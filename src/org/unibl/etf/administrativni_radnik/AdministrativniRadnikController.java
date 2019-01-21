@@ -8,6 +8,7 @@ import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
 
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -98,6 +99,21 @@ public class AdministrativniRadnikController implements Initializable {
 		
 
 		radSaLinijama();
+		/*
+		//Ucitavanje podataka iz Baze za Autocomplete
+		Task<Void> task = new Task<Void>() {
+			@Override
+            protected Void call() {
+            	System.out.println(Thread.currentThread());
+            	
+                return null;
+            }
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+            }
+        };
+        */
 	}
 	@FXML
 	public void radSaPrevoznicima() {

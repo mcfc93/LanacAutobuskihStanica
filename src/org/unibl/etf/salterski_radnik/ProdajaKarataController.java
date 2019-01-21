@@ -150,6 +150,7 @@ public class ProdajaKarataController implements Initializable {
 	private JFXTextField serijskiBrojTextField;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		karteObs.clear();
 		datum.setValue(LocalDate.now());
 		slikaImageView.setVisible(false);
 		kupovinaButton.setDisable(true);
@@ -272,7 +273,7 @@ public class ProdajaKarataController implements Initializable {
 						
 						
 						if(karteObs.isEmpty())
-					    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
+					    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju!", "Error").show();
 						else
 							kupovinaButton.setDisable(false);
 					}
@@ -443,10 +444,10 @@ public class ProdajaKarataController implements Initializable {
 	public void validationSetUp() {
 		polazisteTextField.getValidators().addAll(Util.requiredFieldValidator(polazisteTextField),Util.collectionValidator(polazisteTextField, InformacijeController.stajalistaBezStanica.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite polaziste"));
 		odredisteTextField.getValidators().addAll(Util.requiredFieldValidator(odredisteTextField),Util.collectionValidator(odredisteTextField, InformacijeController.stajalistaBezStanica.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite odrediste"));
-		imeTextField.getValidators().add(Util.requiredFieldValidator(imeTextField));
-		prezimeTextField.getValidators().add(Util.requiredFieldValidator(prezimeTextField));
+		imeTextField.getValidators().addAll(Util.requiredFieldValidator(imeTextField), Util.nameValidator(imeTextField), Util.lengthValidator(imeTextField, 35));
+		prezimeTextField.getValidators().addAll(Util.requiredFieldValidator(prezimeTextField), Util.nameValidator(prezimeTextField), Util.lengthValidator(prezimeTextField, 35));
 		brojTelefonaTextField.getValidators().addAll(Util.requiredFieldValidator(brojTelefonaTextField),Util.phoneValidator(brojTelefonaTextField));
-		serijskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(serijskiBrojTextField),Util.integerValidator(serijskiBrojTextField));
+		serijskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(serijskiBrojTextField), Util.serialValidator(serijskiBrojTextField));
 	}
 	
 
@@ -508,6 +509,10 @@ public class ProdajaKarataController implements Initializable {
 		    		prezimeTextField.setVisible(true);
 		    		tipKarteComboBox.setVisible(true);
 		    		kupovinaButton.setDisable(true);
+		    		polazisteTextField.clear();
+		    		odredisteTextField.clear();
+		    		polazisteTextField.resetValidation();
+		    		odredisteTextField.resetValidation();
 		    	}
 		});	
 		    	
@@ -644,6 +649,8 @@ public class ProdajaKarataController implements Initializable {
 
 
 	public void resetValidation() {
+		polazisteTextField.clear();
+		odredisteTextField.clear();
 		polazisteTextField.resetValidation();
 		odredisteTextField.resetValidation();
 		imeTextField.resetValidation();

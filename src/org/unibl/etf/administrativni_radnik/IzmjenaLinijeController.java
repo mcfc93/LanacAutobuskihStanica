@@ -161,8 +161,8 @@ public class IzmjenaLinijeController implements Initializable {
 	
 
 	public void validateSetup() {
-		cijenaJednokratnaTextField.getValidators().addAll(Util.requiredFieldValidator(cijenaJednokratnaTextField),Util.doubleValidator(cijenaJednokratnaTextField));
-		cijenaMjesecnaTextField.getValidators().add(Util.doubleValidator(cijenaMjesecnaTextField));
+		cijenaJednokratnaTextField.getValidators().addAll(Util.requiredFieldValidator(cijenaJednokratnaTextField),Util.naturalDoubleValidator(cijenaJednokratnaTextField));
+		cijenaMjesecnaTextField.getValidators().add(Util.notRequiredDoubleValidator(cijenaMjesecnaTextField));
 	}
 
 	@FXML
@@ -310,7 +310,8 @@ public class IzmjenaLinijeController implements Initializable {
 			showVrijemeNijeValidno();
 			return;
 		}
-		if(cijenaJednokratnaTextField.validate() & (  (cijenaMjesecnaTextField.getText().isEmpty()) ? true:cijenaMjesecnaTextField.validate() ) )
+		if(cijenaJednokratnaTextField.validate()
+				& cijenaMjesecnaTextField.validate())
 		{
 			if(showPotvrda()) {
 				relacijeComboBox.getValue().setCijenaJednokratna(Double.parseDouble(cijenaJednokratnaTextField.getText()));

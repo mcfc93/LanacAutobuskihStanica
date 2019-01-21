@@ -163,6 +163,10 @@ public class Mjesto {
 	       	c=Util.getConnection();
 	    	s = Util.prepareStatement(c, sql, false, postanskiBroj, naziv);
 	       	s.execute();
+       		s.close();
+	       	sql="insert into autobusko_stajaliste set Naziv=?, PostanskiBroj=?;";
+	        s = Util.prepareStatement(c, sql, false, naziv, postanskiBroj);
+	       	s.execute();
 	       	return true;
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
@@ -172,13 +176,17 @@ public class Mjesto {
 	    return false;
 	}
 	
-	public static boolean izmjenaMjesta(int postanskiBroj, String naziv, int oldPostanskiBroj) {
+	public static boolean izmjenaMjesta(int postanskiBroj, String naziv, int oldPostanskiBroj, String oldNaziv) {
 		String sql="update mjesto set PostanskiBroj=?, Naziv=? where PostanskiBroj=?;";
 		Connection c = null;
 		PreparedStatement s = null;
 	    try {
 	       	c=Util.getConnection();
 	    	s = Util.prepareStatement(c, sql, false, postanskiBroj, naziv, oldPostanskiBroj);
+	       	s.execute();
+	       	sql="update autobusko_stajaliste set Naziv=? where PostanskiBroj=? and Naziv=?;";
+	       	s.close();
+	       	s = Util.prepareStatement(c, sql, false, naziv, postanskiBroj, oldNaziv);
 	       	s.execute();
 	       	return true;
 	    } catch(SQLException e) {

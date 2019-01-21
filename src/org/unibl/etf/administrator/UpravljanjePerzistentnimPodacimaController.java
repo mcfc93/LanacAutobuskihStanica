@@ -211,7 +211,7 @@ System.out.println(Mjesto.getCityList());
 							&& (odaberiMjestoTextField.validate()
 									& postanskiBrojTextField.validate()
 										& nazivMjestaTextField.validate())) {
-    		if(Mjesto.izmjenaMjesta(Integer.parseInt(postanskiBrojTextField.getText()), nazivMjestaTextField.getText().trim(), Integer.parseInt(odaberiMjestoTextField.getText().split("-")[0].trim()))) {
+    		if(Mjesto.izmjenaMjesta(Integer.parseInt(postanskiBrojTextField.getText()), nazivMjestaTextField.getText().trim(), Integer.parseInt(odaberiMjestoTextField.getText().split("-")[0].trim()), odaberiMjestoTextField.getText().split("-")[1].trim())) {
     			Mjesto.loadPlaces();
 System.out.println(Mjesto.getPlaceList());
 System.out.println(Mjesto.getCityPostalCodeList());
