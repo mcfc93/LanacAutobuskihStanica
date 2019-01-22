@@ -177,7 +177,10 @@ INSERT INTO `bus`.`prevoznik` (`JIBPrevoznika`, `NazivPrevoznika`, `Telefon`, `E
 INSERT INTO `bus`.`prevoznik` (`JIBPrevoznika`, `NazivPrevoznika`, `Telefon`, `Email`, `WebAdresa`, `TekuciRacun`, `Adresa`, `PostanskiBroj`, `Stanje`) VALUES ('2000000000002', 'AD Autoprevoz', '+387 51 222 456', 'adautoprevoz@gmail.com', 'www.autoprevozbl.com', '120000056569993145', 'Miloša Obilića 10', '78000', 'Aktivno');
 INSERT INTO `bus`.`prevoznik` (`JIBPrevoznika`, `NazivPrevoznika`, `Telefon`, `Email`, `WebAdresa`, `TekuciRacun`, `Adresa`, `PostanskiBroj`, `Stanje`) VALUES ('3000000000003', 'Golubić ', '+387 51 114 433', 'golubic@yahoo.com', 'www.golubic.com', '343400000988574124', 'Vuka Karadžića 55', '78000', 'Aktivno');
 
-
+/*----------Popust prevoznika--------------------------------------------------*/
+INSERT INTO `bus`.`popust_prevoznika` (`IdPopust`, `DjackiPopust`, `PenzionerskiPopust`, `RadnickiPopust`, `JIBPrevoznika`) VALUES ('2', '1', '1', '1', '1000000000001');
+INSERT INTO `bus`.`popust_prevoznika` (`IdPopust`, `DjackiPopust`, `PenzionerskiPopust`, `RadnickiPopust`, `JIBPrevoznika`) VALUES ('2', '1', '1', '1', '2000000000002');
+INSERT INTO `bus`.`popust_prevoznika` (`IdPopust`, `DjackiPopust`, `PenzionerskiPopust`, `RadnickiPopust`, `JIBPrevoznika`) VALUES ('3', '1', '1', '1', '3000000000003');
 /*--------Dani-----------------------------------------------------------------*/
 INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('1', 'Pondeljak');
 INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('2', 'Utorak');
