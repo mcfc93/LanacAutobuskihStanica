@@ -143,6 +143,7 @@ public class DodavanjeLinijaController implements Initializable {
 
     @FXML
     private JFXTextField cijenaMjesecnaTextField;
+	private boolean linijaDodata;
     
     @Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -438,7 +439,9 @@ public class DodavanjeLinijaController implements Initializable {
 					& vrijemePolaska2TimePicker.validate()) 
 		{
 			if(showDaLiSteSigurni()) {
-				linija.setIdLinije(Linija.dodajLiniju(linija));
+				if(!linijaDodata)
+					linija.setIdLinije(Linija.dodajLiniju(linija));
+				linijaDodata = true;
 				UnosRelacijaController.relacijeList.forEach(r -> r.setLinija(linija));
 				String dani = mapiranjeDana();
 				String dani2 = dani.substring(0, dani.length()-1);
