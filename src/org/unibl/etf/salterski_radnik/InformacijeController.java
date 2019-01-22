@@ -114,6 +114,7 @@ public class InformacijeController implements Initializable{
 	private static MaskerPane progressPane;
 	private static volatile boolean kraj=false;
 	private static volatile boolean pauza=false;
+	private static volatile boolean cekaj=false;
 	public static Object lock=new Object();
 	
 
@@ -249,7 +250,7 @@ public class InformacijeController implements Initializable{
 	    					}
 	    					System.out.println("NASTAVAK");
 	    				}
-	    				
+	    				cekaj=true;
 	    				
 	    				Platform.runLater(() -> {
 	    					progressPane.setVisible(true);
@@ -258,19 +259,26 @@ public class InformacijeController implements Initializable{
 	    				/**
 	    				 * UCITAVANJE
 	    				 */
-	    				System.out.println("UCITAVANJE");
-	    				try {
-							Thread.sleep(2000);
-						}catch (InterruptedException e) {
-							Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-						}
 	    				
-	    				karteObs.clear();
-	    				karteObs.addAll(Karta.getInfoList(polasciDolasciComboBox.getValue()));
-	    				
-	    				Platform.runLater(() -> {
-							progressPane.setVisible(false);
-						});
+	    				synchronized(karteObs) {
+		    				System.out.println("UCITAVANJE");
+		    				try {
+								Thread.sleep(5000);
+							}catch (InterruptedException e) {
+								Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+							}
+		    				
+		    				Platform.runLater(() -> {
+		    					karteObs.clear();
+			    				karteObs.addAll(Karta.getInfoList(polasciDolasciComboBox.getValue()));
+			    				karteTable.refresh();
+								progressPane.setVisible(false);
+							});
+	    				}
+	    				synchronized(lock) {
+	    					cekaj=false;
+	    					lock.notify();
+	    				}
 	    				
 	    				try {
 	    					Thread.sleep(2000);
@@ -328,31 +336,51 @@ public class InformacijeController implements Initializable{
 			});
 			
 			try {
-			
-				karteObs.clear();
-				if(polasciRadioButton.isSelected()) {
-					Stajaliste odrediste = stajalistaList.stream().filter(s -> s.toString().equals(mjestoTextField.getText())).findFirst().get();
-					Stajaliste polaziste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
-						for(Karta karta : Karta.getKarteList(polaziste,odrediste)) {
-							daniUSedmici = karta.getRelacija().getDani();
-							System.out.println("Dani: " + daniUSedmici);
-							if(daniUSedmici.contains(String.valueOf(datum.getValue().getDayOfWeek().getValue())))
-								karteObs.add(karta);
-						}	
-				}
-				else {
-					Stajaliste polaziste = stajalistaList.stream().filter(s -> s.toString().equals(mjestoTextField.getText())).findFirst().get();
-					Stajaliste odrediste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
-					for(Karta karta : Karta.getKarteList(polaziste, odrediste)) {
-						daniUSedmici = karta.getRelacija().getDani();
-						karteObs.add(karta);
+				new Thread() {
+					@Override
+					public void run() {
+						synchronized(karteObs) {
+							System.out.println("UCITAVANJE: " + Thread.currentThread());
+							List<Karta> tmp = new ArrayList<>();
+							if(polasciRadioButton.isSelected()) {
+								Stajaliste odrediste = stajalistaList.stream().filter(s -> s.toString().equals(mjestoTextField.getText())).findFirst().get();
+								Stajaliste polaziste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
+								for(Karta karta : Karta.getKarteList(polaziste,odrediste)) {
+									daniUSedmici = karta.getRelacija().getDani();
+									System.out.println("Dani: " + daniUSedmici);
+									if(daniUSedmici.contains(String.valueOf(datum.getValue().getDayOfWeek().getValue()))) {
+										tmp.add(karta);
+									}
+								}
+							} else {
+								Stajaliste polaziste = stajalistaList.stream().filter(s -> s.toString().equals(mjestoTextField.getText())).findFirst().get();
+								Stajaliste odrediste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
+								for(Karta karta : Karta.getKarteList(polaziste, odrediste)) {
+									daniUSedmici = karta.getRelacija().getDani();
+									tmp.add(karta);
+								}
+							}	
+							if(cekaj) {
+		    					System.out.println("CEKANJE");
+		    					synchronized(lock) {
+		    						try {
+		    							lock.wait();
+		    						} catch(InterruptedException e) {
+		    							Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		    						}
+		    					}
+		    					System.out.println("NASTAVAK");
+							}
+							Platform.runLater(() -> {
+								karteObs.clear();
+								karteObs.addAll(tmp);
+								if(karteObs.isEmpty()) {
+									Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
+								}
+							});
+						}
 					}
-				}
-				if(karteObs.isEmpty()) {
-					Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
-				}
-				
-				
+				}.start();
 			} catch(NoSuchElementException e) {
 				Util.getNotifications("Greška", "Nepoznato stajalište!", "ERROR").show();
 			}
