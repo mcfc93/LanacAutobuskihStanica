@@ -170,6 +170,7 @@ public class Mjesto {
 	       	return true;
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    	//Util.showBugAlert();
 	    } finally {
 	    	Util.close(s,c);
 	    }

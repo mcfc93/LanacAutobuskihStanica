@@ -261,12 +261,12 @@ System.out.println("nalog.ser");
 			        protected void succeeded(){
 			        super.succeeded();
 			        	progressPane.setVisible(false);
-System.out.println(Mjesto.getPostalCodeList());
-System.out.println(Mjesto.getCityList());
-System.out.println(Mjesto.getPlaceList());
-System.out.println(Mjesto.getCityPostalCodeList());
-System.out.println(Praznik.getHolidayList());
-System.out.println(Stajaliste.getStajalisteList());
+//System.out.println(Mjesto.getPostalCodeList());
+//System.out.println(Mjesto.getCityList());
+//System.out.println(Mjesto.getPlaceList());
+//System.out.println(Mjesto.getCityPostalCodeList());
+//System.out.println(Praznik.getHolidayList());
+//System.out.println(Stajaliste.getStajalisteList());
 
 						autobuskaStanica=AutobuskaStanica.getAutobuskaStanica(nalog.getIdStanice());
 System.out.println(autobuskaStanica);

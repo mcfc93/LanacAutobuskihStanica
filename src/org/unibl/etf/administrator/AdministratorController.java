@@ -129,10 +129,10 @@ public class AdministratorController implements Initializable {
             @Override
             protected void succeeded() {
                 super.succeeded();
-System.out.println(AutobuskaStanica.getJibList());
-System.out.println(AutobuskaStanica.getActiveJibList());
-System.out.println(Nalog.getUsernameList());
-System.out.println(Zaposleni.getJmbgList());
+//System.out.println(AutobuskaStanica.getJibList());
+//System.out.println(AutobuskaStanica.getActiveJibList());
+//System.out.println(Nalog.getUsernameList());
+//System.out.println(Zaposleni.getJmbgList());
             }
         };
         new Thread(task).start();
