@@ -154,6 +154,37 @@ public class ProdajaKarataController implements Initializable {
 	private JFXTextField serijskiBrojTextField;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		/*povratnaKartaCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+		    	if(newValue) {
+		    		for (Karta karta : karteObs) {
+						karta.getRelacija().setCijenaJednokratna( Double.valueOf(String.format("%.2f", karta.getRelacija().getCijenaJednokratna()*karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust())));
+		    		}
+		    		karteTable.refresh();
+		    	}
+		    	else
+		    		for (Karta karta : karteObs) {
+						karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format("%.2f", ( karta.getRelacija().getCijenaJednokratna() / POPUST_POVRATNA)/2)));
+					}
+		    	karteTable.refresh();
+		    }
+		});	*/
+		
+		studentskaCheckBox.selectedProperty().addListener( (observable,oldValue,newValue) ->
+		{
+			if(newValue && !karteObs.isEmpty() ) {
+					karteObs.forEach(k -> k.setCijena(Double.valueOf(String.format("%.2f", k.getRelacija().getCijenaJednokratna()*k.getRelacija().getLinija().getPrevoznik().getDjackiPopust()))));
+			}
+			else {
+				karteObs.forEach(k -> k.setCijena(Double.valueOf(String.format("%.2f", (k.getRelacija().getCijenaJednokratna()/k.getRelacija().getLinija().getPrevoznik().getDjackiPopust())))));
+			}
+			karteTable.refresh();
+		});
+		//karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format(".2f", karta.getRelacija().getCijenaJednokratna()*karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust())));
+
+		
 		karteObs.clear();
 		datum.setValue(LocalDate.now());
 		slikaImageView.setVisible(false);
@@ -242,13 +273,15 @@ public class ProdajaKarataController implements Initializable {
 	
 					kupovinaButton.setDisable(false);
 					karteObs.clear();
-					for (Karta karta : Karta.getKarteList(InformacijeController.pocetnoStajaliste, odrediste)) {
+					for (Karta karta : Karta.getKarteList(InformacijeController.pocetnoStajaliste, odrediste,"POLASCI")) {
 						daniUSedmici = karta.getRelacija().getDani();
 						if(Praznik.getHolidayList().stream().noneMatch(p -> p.getDan()==datum.getValue().getDayOfMonth() & p.getMjesec()==datum.getValue().getMonthValue())) 
 						{	
 							if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
 								if(povratnaKartaCheckBox.isSelected())
 									karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format("%.2f", 2*karta.getRelacija().getCijenaJednokratna()*0.8)));
+								if(studentskaCheckBox.isSelected())
+									karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format("%.2f", karta.getRelacija().getCijenaJednokratna()*karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust())));
 								karteObs.add(karta);
 							}
 						}
@@ -261,9 +294,10 @@ public class ProdajaKarataController implements Initializable {
 				if(odredisteTextField.validate() & polazisteTextField.validate())
 				{
 					Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(odredisteTextField.getText())).findFirst().get();
-	
+//					Stajaliste polaziste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().eq);
 						karteObs.clear();
 						if(kupovinaMjesecne) {
+							
 							for (Karta karta : MjesecnaKarta.getMjesecneKarteList(InformacijeController.pocetnoStajaliste, odrediste)) {
 								//daniUSedmici = karta.getLinija().getDaniUSedmici();
 									switch(tipKarteComboBox.getValue()) {
@@ -288,7 +322,7 @@ public class ProdajaKarataController implements Initializable {
 							else
 								kupovinaButton.setDisable(false);
 						}
-						else {
+						/*else {
 							for (Karta karta : Karta.getKarteList(InformacijeController.pocetnoStajaliste, new Stajaliste(odredisteTextField.getText()))) {
 								daniUSedmici = karta.getRelacija().getDani();
 								if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
@@ -300,7 +334,7 @@ public class ProdajaKarataController implements Initializable {
 							
 							if(karteObs.isEmpty())
 						    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
-						}
+						}*/
 				}
 			}
 		}

@@ -128,6 +128,7 @@ public class Linija {
 			}
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		finally {
 			Util.close(r,s, c);
@@ -168,6 +169,7 @@ public class Linija {
 				return true;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		finally {
 			Util.close(s, c);
@@ -189,6 +191,7 @@ public class Linija {
 			return true;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		return false;
 	}
@@ -204,6 +207,7 @@ public class Linija {
 			return true;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		return false;
 	}
@@ -225,6 +229,7 @@ public class Linija {
 			return linijeList;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
     	finally {
 			Util.close(r, s, c);
@@ -244,6 +249,7 @@ public class Linija {
 	       	return true;
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    	Util.showBugAlert();
 	    } finally {
 	    	Util.close(s,c);
 	    }

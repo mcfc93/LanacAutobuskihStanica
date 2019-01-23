@@ -118,6 +118,7 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 			
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 	}
 
@@ -136,6 +137,7 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 			}
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		return null;
 	}
@@ -159,6 +161,7 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 			return stajalistaStanicaList;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		return null;
 	}
@@ -182,6 +185,7 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 			return stajalistaBezStanicaList;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		return null;
 	}
@@ -190,7 +194,7 @@ private static List<Stajaliste> stajalisteList = new ArrayList<>();
 	public String toString() {
 		if(nazivStajalista.equals(naziv))
 			return nazivStajalista;
-		return naziv + " (" + nazivStajalista +")";
+		return nazivStajalista + " ("+ naziv+")";
 
 	}
 	

@@ -278,6 +278,7 @@ public class Relacija {
 			}
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		return 0;
 	}
@@ -304,6 +305,7 @@ public class Relacija {
 			return true;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		finally {
 			Util.close(r, s, c);
@@ -338,6 +340,7 @@ public class Relacija {
 			return relacijeList;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		return null;
 	}

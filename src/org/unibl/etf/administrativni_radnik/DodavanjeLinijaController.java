@@ -148,6 +148,18 @@ public class DodavanjeLinijaController implements Initializable {
     @Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
     	UnosRelacijaController.relacijeList.clear();
+   
+    	dodajLinijuButton.setDefaultButton(true);
+    	dodajLinijuButton.disabledProperty().addListener((observable, oldValue, newValue) -> {
+    		if(newValue) {
+    			System.out.println("disa");
+    			sacuvajButton.setDefaultButton(true);
+    		}
+    		else
+    			dodajLinijuButton.setDefaultButton(true);
+    			
+		});
+    	
     	disableRelacija(true);
     	sljedeciPolazakButton.setVisible(false);
         relacijeTableView.setItems(relacijeObsList);
@@ -158,12 +170,12 @@ public class DodavanjeLinijaController implements Initializable {
 		vrijemePolaska2TimePicker.setIs24HourView(true);
 		vrijemePolaska2TimePicker.converterProperty().set(new LocalTimeStringConverter(FormatStyle.SHORT, Locale.UK));
 		
-		nazivLinijeTextField.getValidators().add(Util.requiredFieldValidator(nazivLinijeTextField));
+		nazivLinijeTextField.getValidators().addAll(Util.requiredFieldValidator(nazivLinijeTextField),Util.lengthValidator(nazivLinijeTextField, 45));
 		prevoznikComboBox.getValidators().add(Util.requiredFieldValidator(prevoznikComboBox));
 		peronComboBox.getValidators().add(Util.requiredFieldValidator(peronComboBox));
 		prazniciComboBox.getValidators().add(Util.requiredFieldValidator(prazniciComboBox));
-		cijenaJednokratnaTextField.getValidators().addAll(Util.requiredFieldValidator(cijenaJednokratnaTextField),Util.naturalDoubleValidator(cijenaJednokratnaTextField));
-		cijenaMjesecnaTextField.getValidators().add(/*Util.doubleValidator(cijenaMjesecnaTextField)*/Util.notRequiredDoubleValidator(cijenaMjesecnaTextField));
+		cijenaJednokratnaTextField.getValidators().addAll(Util.requiredFieldValidator(cijenaJednokratnaTextField),Util.naturalDoubleValidator(cijenaJednokratnaTextField),Util.lengthValidator(cijenaJednokratnaTextField, 10));
+		cijenaMjesecnaTextField.getValidators().addAll(/*Util.doubleValidator(cijenaMjesecnaTextField)*/Util.notRequiredDoubleValidator(cijenaMjesecnaTextField),Util.lengthValidator(cijenaMjesecnaTextField, 10));
 		vrijemePolaska1TimePicker.getValidators().add(Util.timeValidator(vrijemePolaska1TimePicker));
 		vrijemePolaska2TimePicker.getValidators().add(Util.timeValidator(vrijemePolaska2TimePicker));
 		
@@ -214,6 +226,7 @@ public class DodavanjeLinijaController implements Initializable {
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				if(!relacijeTableView.getItems().isEmpty()) {
 					Relacija odabranaRelacija = UnosRelacijaController.relacijeList.get((int) newValue);
+					relacijeTableView.scrollTo((int)newValue);
 					if(odabranaRelacija.getCijenaJednokratna()==null)
 						cijenaJednokratnaTextField.clear();
 					else
@@ -415,16 +428,20 @@ public class DodavanjeLinijaController implements Initializable {
 				stage.setScene(scene);
 	            stage.showAndWait();
 	            if(/*!UnosRelacijaController.relacijeList.isEmpty() && */dodaj) {
+
 		            relacijeObsList.setAll(UnosRelacijaController.relacijeList); 
 		            relacijeTableView.getSelectionModel().selectFirst();
+
 		            disableCijena(false);
 		            krajUnosaButton.setDisable(true);
 					Util.getNotifications("Obavještenje", "Unesite cijene relacija.", "Information").show();
 		            relacijeTableView.refresh();
 		            vrijemePolaska1TimePicker.setDisable(true);
 		            vrijemePolaska2TimePicker.setDisable(true);
-		            disableLinija(true);
 		            Util.getNotifications("Obavještenje", "Linija kreirana.", "Information").show();
+					cijenaJednokratnaTextField.requestFocus();
+		            disableLinija(true);
+
 	            }
 			} catch (Exception e) {
 				Util.LOGGER.log(Level.SEVERE, e.toString(), e);

@@ -137,6 +137,7 @@ public class Prevoznik {
 			return prevoznikList;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		finally {
 			Util.close(r, s, c);
@@ -225,6 +226,7 @@ public class Prevoznik {
 			return true;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		} 
 		finally {
 			Util.close(s, c);
@@ -267,6 +269,7 @@ public class Prevoznik {
 			return false;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		finally {
 			Util.close(s, c);
@@ -291,6 +294,7 @@ public class Prevoznik {
 			return true;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		return false;
 	}

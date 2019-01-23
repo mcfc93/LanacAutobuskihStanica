@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.salterski_radnik.InformacijeController;
 import org.unibl.etf.salterski_radnik.ProdajaKarataController;
@@ -224,7 +226,7 @@ public class Karta {
 		sb.append(String.format("%40s%s", ("Cijena: " + String.format("%.2f", relacija.getCijenaJednokratna()) + " KM"), System.lineSeparator()));
 		sb.append(String.format("%40s%s", ("Rezervacija: " + String.format("%.2f", rezervacija? ProdajaKarataController.REZERVACIJA: 0) + " KM"), System.lineSeparator()));
 		sb.append(String.format("%40s%s", ("Stanična usluga: " + String.format("%.2f", ProdajaKarataController.STANICNA_USLUGA) + " KM"), System.lineSeparator()));
-		sb.append(String.format("%40s%s", ("Ukupna cijena :" + String.format("%.2f", (relacija.getCijenaJednokratna()+ (rezervacija? ProdajaKarataController.REZERVACIJA: 0) + ProdajaKarataController.STANICNA_USLUGA)) + " KM"), System.lineSeparator()));
+		sb.append(String.format("%40s%s", ("Ukupna cijena: " + String.format("%.2f", (relacija.getCijenaJednokratna()+ (rezervacija? ProdajaKarataController.REZERVACIJA: 0) + ProdajaKarataController.STANICNA_USLUGA)) + " KM"), System.lineSeparator()));
 		sb.append(System.lineSeparator());
 		sb.append("========================================" + System.lineSeparator());
 		sb.append("Na zahtjev kontrolora pokazati kartu!" + System.lineSeparator());
@@ -278,34 +280,35 @@ public class Karta {
 		return null;
 	}*/
 	
-	public static List<Karta> getKarteList(Stajaliste polaziste,Stajaliste odrediste) {
+	public static List<Karta> getKarteList(Stajaliste polaziste,Stajaliste odrediste, String polasciDolasci) {
 		List<Karta> karteList = new ArrayList<>();
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
 		//String sql = "select * from linija join (relacija,prevoznik) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno')";
 		String sqlPolasci = "select * from linija join (relacija,prevoznik,popust_prevoznika) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika)"
-				+ "and (prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno') order by VrijemePolaska";
+				+ "and (prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno') ";
 		
-		String sqlDolasci = "select * from linija join (relacija,prevoznik,popust_prevoznika) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika)"
-				+ "and (prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno') order by VrijemeDolaskaPovratna";
+		sqlPolasci += "POLASCI".equals(polasciDolasci)? " order by VrijemePolaska " : " order by VrijemeDolaskaPovratna";
+		
+		/*String sqlDolasci = "select * from linija join (relacija,prevoznik,popust_prevoznika) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika)"
+				+ "and (prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno') order by VrijemeDolaskaPovratna";*/
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sqlPolasci, false, polaziste.getIdStajalista(), odrediste.getIdStajalista());
+			s = Util.prepareStatement(c, sqlPolasci, false, "POLASCI".equals(polasciDolasci)? polaziste.getIdStajalista(): odrediste.getIdStajalista(), "POLASCI".equals(polasciDolasci)? odrediste.getIdStajalista(): polaziste.getIdStajalista() );
 			r = s.executeQuery();		
 			while(r.next()) {
 	       		Prevoznik prevoznik = new Prevoznik(r.getString("prevoznik.NazivPrevoznika"), r.getString("prevoznik.Email"), r.getString("prevoznik.Telefon"),  r.getString("JIBPrevoznika"), r.getDouble("DjackiPopust"));
 	       		Linija linija = new Linija(r.getInt("linija.IdLinije"), r.getString("linija.NazivLinije"), r.getInt("linija.Peron"), prevoznik, r.getInt("linija.VoznjaPraznikom"));
-	       		// -- PREPRAVITI
 	       		Relacija relacija = new Relacija(r.getInt("relacija.IdRelacije"), linija, polaziste, odrediste, r.getTime("VrijemePolaska"), r.getTime("VrijemeDolaska"), r.getDouble("CijenaJednokratna"), r.getString("Dani"));
 	       		Karta karta = new Karta(relacija);
-	       		
 	       		karteList.add(karta);
 	       	}
+			
 			if(odrediste.getNazivStajalista().equals(odrediste.getNaziv())) {
        			for(Stajaliste stajaliste : InformacijeController.stajalistaStanica) {
        				if(stajaliste.getPostanskiBroj()==odrediste.getPostanskiBroj()) {
-       					s = Util.prepareStatement(c, sqlDolasci, false, polaziste.getIdStajalista(), stajaliste.getIdStajalista());
+       					s = Util.prepareStatement(c, sqlPolasci, false,"POLASCI".equals(polasciDolasci)? polaziste.getIdStajalista(): stajaliste.getIdStajalista(), "POLASCI".equals(polasciDolasci)? stajaliste.getIdStajalista(): polaziste.getIdStajalista() );
        					r = s.executeQuery();
        					while(r.next()) {
        			       		Prevoznik prevoznik = new Prevoznik(r.getString("prevoznik.NazivPrevoznika"), r.getString("prevoznik.Email"), r.getString("prevoznik.Telefon"),  r.getString("JIBPrevoznika"), r.getDouble("DjackiPopust"));
@@ -327,6 +330,7 @@ public class Karta {
 		}
 		catch(SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		finally {
 			Util.close(r, s, c);
@@ -349,6 +353,7 @@ public class Karta {
 			}
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		} finally {
 			Util.close(r, s, c);
 		}
@@ -365,6 +370,7 @@ public class Karta {
 			s.executeUpdate();
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 	}
 	
@@ -390,6 +396,7 @@ public class Karta {
 			}
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		} finally {
 			Util.close(r, s, c);
 		}
@@ -414,6 +421,7 @@ public class Karta {
 			return true;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		} finally {
 			Util.close(s1, c);
 		}
@@ -435,6 +443,7 @@ public class Karta {
 				return r.getInt(1);
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 			return 0;
 		} finally {
 			Util.close(r, s, c);
@@ -442,12 +451,16 @@ public class Karta {
 		return 0;
 	}
 
-	public static List<Karta> getInfoList(String polazakDolazak) {
+	/*public static List<Karta> getInfoList(String polazakDolazak) {
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
-		String sqlPolazak = "select linija.NazivLinije,VrijemePolaska,Dani,NazivPrevoznika,Peron,VoznjaPraznikom from relacija join (linija,prevoznik) on (relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where Polaziste=? group by VrijemePolaska order by VrijemePolaska";
-		String sqlDolazak = "select linija.NazivLinije,VrijemeDolaska,Dani,NazivPrevoznika,Peron,VoznjaPraznikom from relacija join (linija,prevoznik) on (relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where Odrediste=? group by VrijemeDolaska order by VrijemeDolaska";
+		String sqlPolazak = "select linija.NazivLinije,VrijemePolaska,Dani,NazivPrevoznika,Peron,VoznjaPraznikom from relacija join (linija,prevoznik) on (relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno') where Polaziste=? group by VrijemePolaska,linija.IdLinije order by VrijemePolaska";
+		String sqlPolazakPovratna = "select linija.NazivLinije,VrijemePolaska,Dani,NazivPrevoznika,Peron,VoznjaPraznikom from relacija join (linija,prevoznik) on (relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno') where Odrediste=? group by VrijemePolaskaPovratna,linija.IdLinije order by VrijemePolaskaPovratna";
+		
+		String sqlDolazak = "select linija.NazivLinije,VrijemeDolaska,Dani,NazivPrevoznika,Peron,VoznjaPraznikom from relacija join (linija,prevoznik) on (relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno') where Odrediste=? group by VrijemeDolaska,linija.IdLinije order by VrijemeDolaska";
+		String sqlDolazakPovratna = "select linija.NazivLinije,VrijemeDolaska,Dani,NazivPrevoznika,Peron,VoznjaPraznikom from relacija join (linija,prevoznik) on (relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno') where Polaziste=? group by VrijemeDolaskaPovratna,linija.IdLinije order by VrijemeDolaskaPovratna";
+		
 		List<Karta> karteList = new ArrayList<>();
 		try {
 			c = Util.getConnection();
@@ -480,6 +493,75 @@ public class Karta {
 			Util.close(r, s, c);
 		}
 		return null;
+	}*/
+	public static List<Karta> getInfoList(String polazakDolazak) {
+		Connection c = null;
+		ResultSet r = null;
+		List<Karta> karteList = new ArrayList<>();
+		CallableStatement s = null;
+		try {
+	       	c=Util.getConnection();
+	    	s = c.prepareCall("{call getInfoList(?,?)}");
+	       	s.setInt(1, "POLASCI".equals(polazakDolazak)? 1:0);
+	    	s.setInt(2, PrijavaController.autobuskaStanica.getIdStajalista());
+	       	r = s.executeQuery();
+	        while(r.next()) {
+	        	/*
+	        	System.out.println("vrijeme polaska: " + r.getTime("VrijemePolaska"));
+	        	System.out.println("vrijeme polaska povratno: " + r.getTime("VrijemePolaskaPovratna"));
+	        	System.out.println("vrijeme dolaska: " + r.getTime("VrijemeDolaska"));
+	        	System.out.println("vrijeme dolaska povratno: " + r.getTime("VrijemeDolaskaPovratna"));
+	        	*/
+	        	Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
+				Linija linija = new Linija(0, r.getString("NazivLinije"), r.getInt("Peron"), prevoznik, r.getInt("VoznjaPraznikom"));
+				Relacija relacija = new Relacija(0, linija, prevoznik, null, null);
+				Relacija relacijaP = new Relacija(0, linija, prevoznik, null, null);
+				
+				Karta karta = new Karta(relacija);
+				Karta kartaP = new Karta(relacijaP);
+				
+				karta.getRelacija().setDani(r.getString("Dani"));
+				/*
+				 * polasci*/
+				if(polazakDolazak.equals("POLASCI")) {
+					System.out.println("vrijeme polaska: " + r.getTime("VrijemePolaska"));
+		        	System.out.println("vrijeme polaska povratno: " + r.getTime("VrijemePolaskaPovratna"));
+					karta.getRelacija().setVrijemePolaska(r.getTime("VrijemePolaska")); 
+					if(karta.getRelacija().getDani().contains(String.valueOf(LocalDate.now().getDayOfWeek().getValue()))) {
+						if(karta.getRelacija().getVrijemePolaska().toLocalTime().isAfter(LocalTime.now())) {
+							karteList.add(karta);			
+						}
+						kartaP.getRelacija().setVrijemePolaska(r.getTime("VrijemePolaskaPovratna"));
+						if(kartaP.getRelacija().getVrijemePolaska().toLocalTime().isAfter(LocalTime.now())) {
+							karteList.add(kartaP);
+						}	
+					}
+				}
+				/*
+				 * dolasci*/
+				else {
+					System.out.println("vrijeme dolaska: " + r.getTime("VrijemeDolaska"));
+		        	System.out.println("vrijeme dolaska povratno: " + r.getTime("VrijemeDolaskaPovratna"));
+					karta.getRelacija().setVrijemeDolaska(r.getTime("VrijemeDolaska"));
+					if(karta.getRelacija().getDani().contains(String.valueOf(LocalDate.now().getDayOfWeek().getValue()))) {
+						if(karta.getRelacija().getVrijemeDolaska().toLocalTime().isAfter(LocalTime.now())) {
+							karteList.add(karta);			
+						}
+						kartaP.getRelacija().setVrijemeDolaska(r.getTime("VrijemeDolaskaPovratna"));
+						if(kartaP.getRelacija().getVrijemeDolaska().toLocalTime().isAfter(LocalTime.now())) {
+							karteList.add(kartaP);
+						}
+					}
+				}
+				
+	        }
+	       // return karteList;
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    	Util.showBugAlert();
+	    } finally {
+	    	Util.close(r,s,c);
+	    }
+		return karteList;
 	}
-	
 	}

@@ -171,6 +171,8 @@ public class MjesecnaKarta extends Karta {
 			
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
+			
 		}
 		
 		return 0;
@@ -265,6 +267,7 @@ public class MjesecnaKarta extends Karta {
 				file.renameTo(new File("karte\\mjesecna_" + String.format("%013d", mjesecnaKarta.getIdMjesecneKarte()) + "-" + mjesecVazenjaString + "_STORNIRANO.txt"));
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		finally {
 			Util.close(s, c);
@@ -286,6 +289,7 @@ public class MjesecnaKarta extends Karta {
 				return r.getInt(1);
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		return 0;
 	}
@@ -311,9 +315,11 @@ public class MjesecnaKarta extends Karta {
 	       		karteList.add(karta);
 	       		
 			}
+			
 			return karteList;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		
 		
@@ -351,6 +357,7 @@ public class MjesecnaKarta extends Karta {
 			}
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
 		}
 		finally {
 			Util.close(r, s, c);

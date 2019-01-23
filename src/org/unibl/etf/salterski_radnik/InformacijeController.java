@@ -60,7 +60,6 @@ public class InformacijeController implements Initializable{
 	private DatePicker datum = new DatePicker();
 	@FXML
 	private JFXTextField mjestoTextField = new JFXTextField();
-	private static String daniUSedmici;
 
 	@FXML
 	private GridPane gridPane;
@@ -111,18 +110,12 @@ public class InformacijeController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		stajalistaStanica = Stajaliste.getStajalistaStanicaList();
 		stajalistaList = Stajaliste.getStajalisteList();
-		System.out.println("STAJALISTA:");
-		stajalistaList.forEach(s -> System.out.println(s));
-		
 		//stajalistaBezStanica = Stajaliste.getStajalisteList();
 		stajalistaBezStanica = new ArrayList<>();
 		stajalistaBezStanica.addAll(stajalistaList);
 		
 		pocetnoStajaliste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
-		System.out.println("POCETNO STAJALISTE: " + pocetnoStajaliste);
 		stajalistaBezStanica.removeIf(s -> stajalistaStanica.contains(s));
-		System.out.println("STAJALISTA BEZ STANICA:");
-		stajalistaBezStanica.forEach(s -> System.out.println(s));
 		/*
 		for (Stajaliste s : stajalistaStanica) {
 			if(stajalistaBezStanica.contains(s))
@@ -254,7 +247,7 @@ public class InformacijeController implements Initializable{
 	    				 */
 	    				
 	    				synchronized(karteObs) {
-		    				System.out.println("UCITAVANJE");
+		    				System.out.println("UCITAVANJE: " +polasciDolasciComboBox.getValue());
 		    				try {
 								Thread.sleep(5000);
 							}catch (InterruptedException e) {
@@ -264,6 +257,7 @@ public class InformacijeController implements Initializable{
 		    				
 		    				Platform.runLater(() -> {
 		    					karteObs.clear();
+		    					
 			    				karteObs.addAll(Karta.getInfoList(polasciDolasciComboBox.getValue()));
 			    				karteTable.refresh();
 								progressPane.setVisible(false);
@@ -341,13 +335,13 @@ public class InformacijeController implements Initializable{
 								System.out.println("UCITAVANJE: " + Thread.currentThread());
 								List<Karta> tmp = new ArrayList<>();
 								if(polasciDolasciComboBox.getSelectionModel().isSelected(0)) {
-									for(Karta karta : Karta.getKarteList(polaziste,odrediste)) {
+									for(Karta karta : Karta.getKarteList(polaziste,odrediste,polasciDolasciComboBox.getValue())) {
 										if(karta.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue()))) {
 											tmp.add(karta);
 										}
 									}
 								} else {
-									for(Karta karta : Karta.getKarteList(odrediste, polaziste)) {
+									for(Karta karta : Karta.getKarteList(odrediste, polaziste, polasciDolasciComboBox.getValue())) {
 										if(karta.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue()))) {
 											tmp.add(karta);
 										}
