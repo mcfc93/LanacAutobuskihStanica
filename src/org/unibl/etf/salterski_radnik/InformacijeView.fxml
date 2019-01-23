@@ -2,7 +2,6 @@
 
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
-<?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -61,8 +60,6 @@
          </font>
       </Label>
       <JFXComboBox fx:id="polasciDolasciComboBox" maxWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-      <JFXRadioButton fx:id="polasciRadioButton" text="Polasci" GridPane.columnIndex="1" />
-      <JFXRadioButton fx:id="dolasciRadioButton" text="Dolasci" GridPane.columnIndex="2" />
       <ImageView fx:id="clearImageView" fitHeight="20.0" fitWidth="15.0" onMouseClicked="#clear" pickOnBounds="true" preserveRatio="true" styleClass="clearImageView" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
          <GridPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

@@ -19,7 +19,6 @@ import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
 import javafx.application.Platform;
@@ -35,8 +34,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
@@ -62,17 +59,9 @@ public class InformacijeController implements Initializable{
 	@FXML
 	private DatePicker datum = new DatePicker();
 	@FXML
-	private ToggleGroup toggleGroup = new ToggleGroup();
-	@FXML
-	private JFXRadioButton polasciRadioButton;
-	@FXML
-	private JFXRadioButton dolasciRadioButton;
-	@FXML
 	private JFXTextField mjestoTextField = new JFXTextField();
 	private static String daniUSedmici;
-	
-	
-	
+
 	@FXML
 	private GridPane gridPane;
 	
@@ -151,7 +140,6 @@ public class InformacijeController implements Initializable{
         		clearImageView.setVisible(true);
         		
         		pauza=true;
-        		//System.out.println(pauza);
         		
         	} else {
         		clearImageView.setVisible(false);
@@ -160,7 +148,6 @@ public class InformacijeController implements Initializable{
         		synchronized(lock) {
         			lock.notify();
         		}
-        		//System.out.println(pauza);
         		
         	}
 		});
@@ -194,13 +181,8 @@ public class InformacijeController implements Initializable{
 		//nazivMjesta = getNazivMjesta();
 	//	ucitajMjesta();
 		karteTable.setPlaceholder(new Label("Odaberite relaciju i datum"));
-		polasciRadioButton.setSelected(true);
 		mjestoTextField.setPromptText("Destinacija");
 		
-		
-		toggleSetUp();
-		polasciRadioButton.setToggleGroup(toggleGroup);
-		dolasciRadioButton.setToggleGroup(toggleGroup);
 		nazivLinijeColumn.setCellValueFactory(new PropertyValueFactory<>("nazivLinije"));
 		vrijemePolaskaColumn.setCellValueFactory(new PropertyValueFactory<>("vrijemePolaska"));
 		vrijemeDolaskaColumn.setCellValueFactory(new PropertyValueFactory<>("vrijemeDolaska"));
@@ -215,6 +197,16 @@ public class InformacijeController implements Initializable{
 		polasciDolasciComboBox.getItems().addAll("POLASCI", "DOLASCI");
 		polasciDolasciComboBox.getSelectionModel().selectFirst();
 		polasciDolasciComboBox.setStyle("-fx-font-weight: bold;");
+		
+		polasciDolasciComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+//			if(newValue == null) {
+//				polasciDolasciComboBox.getSelectionModel().selectFirst();
+//			} else {
+				mjestoTextField.clear();
+				thread.interrupt();
+				System.out.println("INTERRUPT");
+//			}
+		});
 		
 		
 		
@@ -245,7 +237,8 @@ public class InformacijeController implements Initializable{
 	    						try {
 	    							lock.wait();
 	    						} catch(InterruptedException e) {
-	    							Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    							//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    							System.out.println("WAIT - CONTINUE");
 	    						}
 	    					}
 	    					System.out.println("NASTAVAK");
@@ -265,7 +258,8 @@ public class InformacijeController implements Initializable{
 		    				try {
 								Thread.sleep(5000);
 							}catch (InterruptedException e) {
-								Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+								//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+								System.out.println("SLEEP_5 - CONTINUE");
 							}
 		    				
 		    				Platform.runLater(() -> {
@@ -283,7 +277,8 @@ public class InformacijeController implements Initializable{
 	    				try {
 	    					Thread.sleep(2000);
 	    				}catch (InterruptedException e) {
-	    					Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    					//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    					System.out.println("SLEEP_2 - CONTINUE");
 	    				}
 	    			}
 	                
@@ -334,64 +329,62 @@ public class InformacijeController implements Initializable{
 			Platform.runLater(() -> {
 				mjestoTextField.end();
 			});
-			
-			try {
-				new Thread() {
-					@Override
-					public void run() {
-						synchronized(karteObs) {
-							System.out.println("UCITAVANJE: " + Thread.currentThread());
-							List<Karta> tmp = new ArrayList<>();
-							if(polasciRadioButton.isSelected()) {
-								Stajaliste odrediste = stajalistaList.stream().filter(s -> s.toString().equals(mjestoTextField.getText())).findFirst().get();
-								Stajaliste polaziste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
-								for(Karta karta : Karta.getKarteList(polaziste,odrediste)) {
-									daniUSedmici = karta.getRelacija().getDani();
-									System.out.println("Dani: " + daniUSedmici);
-									if(daniUSedmici.contains(String.valueOf(datum.getValue().getDayOfWeek().getValue()))) {
-										tmp.add(karta);
+			if(!mjestoTextField.getText().isEmpty()) {
+				try {
+					Stajaliste odrediste = stajalistaList.stream().filter(s -> s.toString().equals(mjestoTextField.getText())).findFirst().get();
+					Stajaliste polaziste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
+					
+					new Thread() {
+						@Override
+						public void run() {
+							synchronized(karteObs) {
+								System.out.println("UCITAVANJE: " + Thread.currentThread());
+								List<Karta> tmp = new ArrayList<>();
+								if(polasciDolasciComboBox.getSelectionModel().isSelected(0)) {
+									for(Karta karta : Karta.getKarteList(polaziste,odrediste)) {
+										if(karta.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue()))) {
+											tmp.add(karta);
+										}
+									}
+								} else {
+									for(Karta karta : Karta.getKarteList(odrediste, polaziste)) {
+										if(karta.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue()))) {
+											tmp.add(karta);
+										}
 									}
 								}
-							} else {
-								Stajaliste polaziste = stajalistaList.stream().filter(s -> s.toString().equals(mjestoTextField.getText())).findFirst().get();
-								Stajaliste odrediste = stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
-								for(Karta karta : Karta.getKarteList(polaziste, odrediste)) {
-									daniUSedmici = karta.getRelacija().getDani();
-									tmp.add(karta);
+								if(cekaj) {
+			    					System.out.println("CEKANJE");
+			    					synchronized(lock) {
+			    						try {
+			    							lock.wait();
+			    						} catch(InterruptedException e) {
+			    							Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			    						}
+			    					}
+			    					System.out.println("NASTAVAK");
 								}
-							}	
-							if(cekaj) {
-		    					System.out.println("CEKANJE");
-		    					synchronized(lock) {
-		    						try {
-		    							lock.wait();
-		    						} catch(InterruptedException e) {
-		    							Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-		    						}
-		    					}
-		    					System.out.println("NASTAVAK");
+								Platform.runLater(() -> {
+									karteObs.clear();
+									karteObs.addAll(tmp);
+									if(karteObs.isEmpty()) {
+										Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
+									}
+								});
 							}
-							Platform.runLater(() -> {
-								karteObs.clear();
-								karteObs.addAll(tmp);
-								if(karteObs.isEmpty()) {
-									Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
-								}
-							});
 						}
-					}
-				}.start();
-			} catch(NoSuchElementException e) {
-				Util.getNotifications("Greška", "Nepoznato stajalište!", "ERROR").show();
+					}.start();
+				} catch(NoSuchElementException e) {
+					Util.getNotifications("Greška", "Nepoznato stajalište!", "ERROR").show();
+				}
 			}
-			
 		}
     }
 	
 	
 	
 	
-	
+	/*
 	public void toggleSetUp() {
 		toggleGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
 		    if (newValue == null) {
@@ -413,6 +406,7 @@ public class InformacijeController implements Initializable{
 		    	}
 		});	
 	}
+	*/
 	
 	/*
 	public boolean zadovoljavaDatumVrijeme(String daniUSedmici,Time vrijemePolaska) {

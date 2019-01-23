@@ -284,11 +284,14 @@ public class Karta {
 		PreparedStatement s = null;
 		ResultSet r = null;
 		//String sql = "select * from linija join (relacija,prevoznik) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno')";
-		String sql = "select * from linija join (relacija,prevoznik,popust_prevoznika) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika)"
-				+ "and (prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno')";
+		String sqlPolasci = "select * from linija join (relacija,prevoznik,popust_prevoznika) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika)"
+				+ "and (prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno') order by VrijemePolaska";
+		
+		String sqlDolasci = "select * from linija join (relacija,prevoznik,popust_prevoznika) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika)"
+				+ "and (prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno') order by VrijemeDolaskaPovratna";
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false, polaziste.getIdStajalista(), odrediste.getIdStajalista());
+			s = Util.prepareStatement(c, sqlPolasci, false, polaziste.getIdStajalista(), odrediste.getIdStajalista());
 			r = s.executeQuery();		
 			while(r.next()) {
 	       		Prevoznik prevoznik = new Prevoznik(r.getString("prevoznik.NazivPrevoznika"), r.getString("prevoznik.Email"), r.getString("prevoznik.Telefon"),  r.getString("JIBPrevoznika"), r.getDouble("DjackiPopust"));
@@ -302,7 +305,7 @@ public class Karta {
 			if(odrediste.getNazivStajalista().equals(odrediste.getNaziv())) {
        			for(Stajaliste stajaliste : InformacijeController.stajalistaStanica) {
        				if(stajaliste.getPostanskiBroj()==odrediste.getPostanskiBroj()) {
-       					s = Util.prepareStatement(c, sql, false, polaziste.getIdStajalista(), stajaliste.getIdStajalista());
+       					s = Util.prepareStatement(c, sqlDolasci, false, polaziste.getIdStajalista(), stajaliste.getIdStajalista());
        					r = s.executeQuery();
        					while(r.next()) {
        			       		Prevoznik prevoznik = new Prevoznik(r.getString("prevoznik.NazivPrevoznika"), r.getString("prevoznik.Email"), r.getString("prevoznik.Telefon"),  r.getString("JIBPrevoznika"), r.getDouble("DjackiPopust"));

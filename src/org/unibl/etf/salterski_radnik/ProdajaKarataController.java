@@ -234,75 +234,85 @@ public class ProdajaKarataController implements Initializable {
 						&& ((KeyEvent)event).getCode().equals(KeyCode.ENTER)))
 			&& (!event.getSource().equals(polazisteTextField)
 					|| (event.getSource().equals(polazisteTextField)
-							&& ((KeyEvent)event).getCode().equals(KeyCode.ENTER)))){
-		//Stajaliste polaziste = InformacijeController.stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
-		if(radioButtonObicna.isSelected()) {
-			if(odredisteTextField.validate()) {
-				Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(odredisteTextField.getText())).findFirst().get();
-
-				kupovinaButton.setDisable(false);
-				karteObs.clear();
-				for (Karta karta : Karta.getKarteList(InformacijeController.pocetnoStajaliste, odrediste)) {
-					daniUSedmici = karta.getRelacija().getDani();
-					if(Praznik.getHolidayList().stream().noneMatch(p -> p.getDan()==datum.getValue().getDayOfMonth() & p.getMjesec()==datum.getValue().getMonthValue())) 
-					{	
-						if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
-							if(povratnaKartaCheckBox.isSelected())
-								karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format("%.2f", 2*karta.getRelacija().getCijenaJednokratna()*0.8)));
-							karteObs.add(karta);
-						}
-					}
-				}
-				if(karteObs.isEmpty())
-			    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
-			}
-		}
-		else {
-			if(odredisteTextField.validate() & polazisteTextField.validate())
-			{
-				Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(odredisteTextField.getText())).findFirst().get();
-
+							&& ((KeyEvent)event).getCode().equals(KeyCode.ENTER)))) {
+			//Stajaliste polaziste = InformacijeController.stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
+			if(radioButtonObicna.isSelected()) {
+				if(odredisteTextField.validate()) {
+					Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(odredisteTextField.getText())).findFirst().get();
+	
+					kupovinaButton.setDisable(false);
 					karteObs.clear();
-					if(kupovinaMjesecne) {
-						for (Karta karta : MjesecnaKarta.getMjesecneKarteList(InformacijeController.pocetnoStajaliste, odrediste)) {
-							//daniUSedmici = karta.getLinija().getDaniUSedmici();
-								switch(tipKarteComboBox.getValue()) {
-								case ĐAČKA:
-									//karta.getRelacija().setCijenaMjesecna(POPUST_DJACKA * karta.getRelacija().getCijenaMjesecna());
-									karta.setCijena(Double.valueOf(String.format("%.2f", karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust())));
-									break;
-								case PENZIONERSKA:
-									karta.setCijena( Double.valueOf(String.format("%.2f", karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust())));
-									break;
-								case OBIČNA:
-									break;
-								}
-								karteObs.add(karta);
-						}
-						// set vrijeme polaska na null ako je kupovina mjesecne karte
-						karteObs.stream().forEach(k -> { k.setVrijemeDolaska(null); k.setVrijemePolaska(null);});
-						
-						
-						if(karteObs.isEmpty())
-					    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju!", "Error").show();
-						else
-							kupovinaButton.setDisable(false);
-					}
-					else {
-						for (Karta karta : Karta.getKarteList(InformacijeController.pocetnoStajaliste, new Stajaliste(odredisteTextField.getText()))) {
-							daniUSedmici = karta.getRelacija().getDani();
+					for (Karta karta : Karta.getKarteList(InformacijeController.pocetnoStajaliste, odrediste)) {
+						daniUSedmici = karta.getRelacija().getDani();
+						if(Praznik.getHolidayList().stream().noneMatch(p -> p.getDan()==datum.getValue().getDayOfMonth() & p.getMjesec()==datum.getValue().getMonthValue())) 
+						{	
 							if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
 								if(povratnaKartaCheckBox.isSelected())
 									karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format("%.2f", 2*karta.getRelacija().getCijenaJednokratna()*0.8)));
 								karteObs.add(karta);
 							}
 						}
-						
-						if(karteObs.isEmpty())
-					    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
 					}
+					if(karteObs.isEmpty())
+				    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
+				}
+			}
+			else {
+				if(odredisteTextField.validate() & polazisteTextField.validate())
+				{
+					Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(odredisteTextField.getText())).findFirst().get();
+	
+						karteObs.clear();
+						if(kupovinaMjesecne) {
+							for (Karta karta : MjesecnaKarta.getMjesecneKarteList(InformacijeController.pocetnoStajaliste, odrediste)) {
+								//daniUSedmici = karta.getLinija().getDaniUSedmici();
+									switch(tipKarteComboBox.getValue()) {
+									case ĐAČKA:
+										//karta.getRelacija().setCijenaMjesecna(POPUST_DJACKA * karta.getRelacija().getCijenaMjesecna());
+										karta.setCijena(Double.valueOf(String.format("%.2f", karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust())));
+										break;
+									case PENZIONERSKA:
+										karta.setCijena( Double.valueOf(String.format("%.2f", karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust())));
+										break;
+									case OBIČNA:
+										break;
+									}
+									karteObs.add(karta);
+							}
+							// set vrijeme polaska na null ako je kupovina mjesecne karte
+							karteObs.stream().forEach(k -> { k.setVrijemeDolaska(null); k.setVrijemePolaska(null);});
+							
+							
+							if(karteObs.isEmpty())
+						    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju!", "Error").show();
+							else
+								kupovinaButton.setDisable(false);
+						}
+						else {
+							for (Karta karta : Karta.getKarteList(InformacijeController.pocetnoStajaliste, new Stajaliste(odredisteTextField.getText()))) {
+								daniUSedmici = karta.getRelacija().getDani();
+								if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
+									if(povratnaKartaCheckBox.isSelected())
+										karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format("%.2f", 2*karta.getRelacija().getCijenaJednokratna()*0.8)));
+									karteObs.add(karta);
+								}
+							}
+							
+							if(karteObs.isEmpty())
+						    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
+						}
+				}
 			}
 		}
+		if(event.getSource().equals(odredisteTextField)
+				&& ((KeyEvent)event).getCode().equals(KeyCode.ENTER)
+					&& polazisteTextField.getText().isEmpty()) {
+			polazisteTextField.resetValidation();
+		}
+		if(event.getSource().equals(polazisteTextField)
+				&& ((KeyEvent)event).getCode().equals(KeyCode.ENTER)
+					&& odredisteTextField.getText().isEmpty()) {
+			odredisteTextField.resetValidation();
 		}
 	}
 	
@@ -496,6 +506,8 @@ public class ProdajaKarataController implements Initializable {
 		    		prezimeTextField.setVisible(false);
 		    		tipKarteComboBox.setVisible(false);
 		    		kupovinaButton.setDisable(false);
+		    		karteTable.getItems().clear();
+		    		karteTable.setVisible(false);
 		    	}
 		    	else { // KUPOVINA MJESECNE KARTE
 		    		/*
@@ -525,6 +537,7 @@ public class ProdajaKarataController implements Initializable {
 		    		odredisteTextField.clear();
 		    		polazisteTextField.resetValidation();
 		    		odredisteTextField.resetValidation();
+		    		karteTable.setVisible(true);
 		    	}
 		});	
 		    	
@@ -570,6 +583,7 @@ public class ProdajaKarataController implements Initializable {
 		    		brojKarataComboBox.getSelectionModel().selectFirst();
 		    		kupovinaMjesecne=false;
 		    		karteObs.clear();
+		    		karteTable.setVisible(true);
 		    	}
 		    	else { // KUPOVINA MJESECNE KARTE
 		    		studentskaCheckBox.setVisible(false);
@@ -609,6 +623,7 @@ public class ProdajaKarataController implements Initializable {
 		    		kupovinaMjesecne=true;
 		    		brojKarataComboBox.setVisible(false);
 		    		karteObs.clear();
+		    		karteTable.setVisible(true);
 		    	}
 		});	
 	}
