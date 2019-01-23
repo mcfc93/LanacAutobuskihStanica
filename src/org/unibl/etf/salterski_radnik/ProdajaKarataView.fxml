@@ -30,7 +30,7 @@
          </columnConstraints>
          <rowConstraints>
             <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="200.0" minHeight="200.0" prefHeight="150.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="225.0" minHeight="200.0" prefHeight="215.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="150.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="75.0" minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
@@ -46,19 +46,19 @@
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="15.0" minHeight="5.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="15.0" minHeight="5.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="15.0" minHeight="5.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="15.0" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <JFXTextField fx:id="odredisteTextField" labelFloat="true" promptText="Odaberite odredište" GridPane.columnIndex="2" />
-                  <JFXTextField fx:id="polazisteTextField" labelFloat="true" promptText="Odaberite polazište" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <JFXButton fx:id="pretragaButton" onAction="#pretragaRelacija" prefHeight="25.0" prefWidth="100.0" text="Pretraga" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  <ImageView fx:id="slikaImageView" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.rowSpan="4" GridPane.valignment="CENTER">
+                  <JFXTextField fx:id="odredisteTextField" labelFloat="true" onKeyReleased="#pretragaRelacija" promptText="Odaberite odredište" GridPane.columnIndex="2" />
+                  <JFXTextField fx:id="polazisteTextField" labelFloat="true" onKeyReleased="#pretragaRelacija" promptText="Odaberite polazište" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <JFXButton fx:id="pretragaButton" onAction="#pretragaRelacija" prefHeight="25.0" prefWidth="100.0" text="Pretraga" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+                  <ImageView fx:id="slikaImageView" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#odaberiSliku" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.rowSpan="4" GridPane.valignment="CENTER">
                      <image>
                         <Image url="@img/choose-image.jpg" />
                      </image>
@@ -67,7 +67,7 @@
                      </GridPane.margin>
                   </ImageView>
                   <JFXCheckBox fx:id="povratnaKartaCheckBox" checkedColor="#1fdbf8" text="Povratna" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <JFXCheckBox fx:id="rezervacijaCheckBox" checkedColor="#1fdbf8" text="Rezervacija" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                  <JFXCheckBox fx:id="rezervacijaCheckBox" checkedColor="#1fdbf8" text="Rezervacija" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                   <JFXButton fx:id="odaberiSlikuButton" onAction="#odaberiSliku" prefHeight="25.0" prefWidth="100.0" text="Odaberi sliku" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="TOP">
                      <GridPane.margin>
                         <Insets top="25.0" />
@@ -119,12 +119,12 @@
                         </JFXRadioButton>
                      </children>
                   </GridPane>
-                  <JFXComboBox fx:id="brojKarataComboBox" labelFloat="true" prefHeight="25.0" prefWidth="75.0" promptText="Broj karata" unFocusColor="WHITE" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
                   <JFXDatePicker fx:id="datum" GridPane.rowIndex="4">
                      <GridPane.margin>
                         <Insets top="30.0" />
                      </GridPane.margin>
                   </JFXDatePicker>
+                  <JFXCheckBox fx:id="studentskaCheckBox" text="Studentska" GridPane.columnIndex="4" GridPane.rowIndex="2" />
                </children>
             </GridPane>
             <AnchorPane fx:id="tableAnchorPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2">
@@ -144,8 +144,12 @@
                   </TableView>
                </children>
             </AnchorPane>
-            <JFXButton fx:id="kupovinaButton" onAction="#kupovina" prefHeight="25.0" prefWidth="100.0" text="Potvrdi" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM" />
-            <JFXCheckBox fx:id="studentskaCheckBox" text="Studentska" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3">
+               <children>
+                  <JFXComboBox fx:id="brojKarataComboBox" labelFloat="true" prefHeight="25.0" prefWidth="75.0" promptText="Broj karata" unFocusColor="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="150.0" />
+                  <JFXButton fx:id="kupovinaButton" onAction="#kupovina" prefHeight="25.0" prefWidth="100.0" text="Potvrdi" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+               </children>
+            </AnchorPane>
          </children>
       </GridPane>
    </children>

@@ -34,6 +34,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -53,6 +55,8 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -223,7 +227,14 @@ public class ProdajaKarataController implements Initializable {
 	
 
 	@FXML
-	public void pretragaRelacija() {
+	public void pretragaRelacija(Event event) {
+		karteObs.clear();
+		if((!event.getSource().equals(odredisteTextField)
+				|| (event.getSource().equals(odredisteTextField)
+						&& ((KeyEvent)event).getCode().equals(KeyCode.ENTER)))
+			&& (!event.getSource().equals(polazisteTextField)
+					|| (event.getSource().equals(polazisteTextField)
+							&& ((KeyEvent)event).getCode().equals(KeyCode.ENTER)))){
 		//Stajaliste polaziste = InformacijeController.stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
 		if(radioButtonObicna.isSelected()) {
 			if(odredisteTextField.validate()) {
@@ -291,6 +302,7 @@ public class ProdajaKarataController implements Initializable {
 					    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
 					}
 			}
+		}
 		}
 	}
 	

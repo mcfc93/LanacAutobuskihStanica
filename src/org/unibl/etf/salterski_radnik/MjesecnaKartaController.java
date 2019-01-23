@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import org.unibl.etf.karta.Karta;
 import org.unibl.etf.karta.MjesecnaKarta;
+import org.unibl.etf.karta.TipKarte;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
@@ -95,10 +96,10 @@ public class MjesecnaKartaController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
     	stampajButton.setDefaultButton(true);
     	nazadButton.setCancelButton(true);    	
-    	if("DJACKA".equals(karta.getTip().toString())) {
+    	if(TipKarte.ĐAČKA.equals(karta.getTip())) {
         	//mjesecnaAnchorPane.getStylesheets().add(getClass().getResource("/org/unibl/etf/administrator/administrator.css").toExternalForm());
         	mjesecnaAnchorPane.getStyleClass().add("mjesecnaDjacka");
-        } else if("PENZIONERSKA".equals(karta.getTip().toString())) {
+        } else if(TipKarte.PENZIONERSKA.equals(karta.getTip())) {
         	mjesecnaAnchorPane.getStyleClass().add("mjesecnaPenzionerska");
         } else {
         	mjesecnaAnchorPane.getStyleClass().add("mjesecnaRadnicka");

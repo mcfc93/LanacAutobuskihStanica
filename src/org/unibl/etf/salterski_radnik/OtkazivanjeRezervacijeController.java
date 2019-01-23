@@ -52,6 +52,27 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 		serijskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(serijskiBrojTextField),Util.serialValidator(serijskiBrojTextField));
 		checkMarkImageView.setVisible(false);
 		stornirajButton.setDisable(true);
+		
+		toggleGroup.selectedToggleProperty().addListener(((obs, oldValue, newValue) -> {
+			if(newValue==null) {
+				jednokratnaKartaRadioButton.setSelected(true);
+			} else {
+				if(newValue.equals(jednokratnaKartaRadioButton)) {
+					//OBICNA KARTA
+					ocistiPodatke();
+				} else {
+					//MJESECNA KARTA
+					ocistiPodatke();
+				}
+			}
+		}));
+	}
+	
+	private void ocistiPodatke() {
+		linijaTextField.clear();
+		relacijaTextField.clear();
+		datumTextField.clear();
+		cijenaTextField.clear();
 	}
 	
 	@FXML
