@@ -200,9 +200,9 @@ public class MjesecnaKarta extends Karta {
 		
 		sb.append("Relacija: " + karta.getRelacija().getPolaziste().getNazivStajalista() + " -");
 		if(karta.getRelacija().toString().length()>30) {
-			sb.append(System.lineSeparator());
+			sb.append(System.lineSeparator() + "          ");
 		}
-		sb.append("          " + karta.getRelacija().getOdrediste().getNazivStajalista() + System.lineSeparator());
+		sb.append(karta.getRelacija().getOdrediste().getNazivStajalista() + System.lineSeparator());
 		
 		sb.append("Izdata: " + LocalDate.now() + " " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")) + System.lineSeparator());
 		

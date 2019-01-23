@@ -213,9 +213,9 @@ public class Karta {
 		
 		sb.append("Relacija: " + relacija.getPolaziste().getNazivStajalista() + " -");
 		if(relacija.toString().length()>30) {
-			sb.append(System.lineSeparator());
+			sb.append(System.lineSeparator() + "          ");
 		}
-		sb.append("          " + relacija.getOdrediste().getNazivStajalista() + System.lineSeparator());
+		sb.append(relacija.getOdrediste().getNazivStajalista() + System.lineSeparator());
 
 		sb.append("Izdata:   " + LocalDate.now().toString() + " " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")).toString() + System.lineSeparator());
 		sb.append("Polazak:  " + datumPolaska.toString() + " " + relacija.getVrijemePolaska().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")).toString() + System.lineSeparator());
