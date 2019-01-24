@@ -1,4 +1,4 @@
-/*------------------------- Mjesta ---------------------*/
+/* -- -- -- mjesto -- -- -- */
 INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Banja Luka');
 INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('75290', 'Banovići');
 INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('88363', 'Berkovići');
@@ -112,16 +112,16 @@ INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('73240', 'Višegra
 INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('72250', 'Vitez');
 INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('71320', 'Vogošća');
 INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('72227', 'Vozuća');
-INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('78211', 'Vrbanja');
 INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('74470', 'Vukosavlje');
-INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('78214', 'Zalužani');
 INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('72220', 'Zavidovići');
 INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('72101', 'Zenica');
 INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('75400', 'Zvornik');
 INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('72230', 'Žepče');
 INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('75270', 'Živinice');
 
-/*----------------autobuska stajalista---------------------------------------------*/
+
+
+/* -- -- -- autobusko_stajaliste -- -- -- */
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Banja Luka');
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('75290', 'Banovići');
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('88363', 'Berkovići');
@@ -241,6 +241,108 @@ INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('721
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('75400', 'Zvornik');
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('72230', 'Žepče');
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('75270', 'Živinice');
+
+
+/* -- -- -- autobuska_stanica -- -- -- */
+INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Autobuska Stanica Banja Luka');
+INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78400', 'Autobuska Stanica Gradiška');
+INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('79102', 'Autobuska Stanica Prijedor');
+INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('74400', 'Autobuska Stanica Derventa');
+INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('70260', 'Autobuska Stanica Mrkonjić Grad');
+
+INSERT INTO `bus`.`autobuska_stanica` (`JIBStanice`, `Naziv`, `Adresa`, `PostanskiBroj`, `BrojTelefona`, `BrojPerona`, `WebStranica`, `Email`,`IdStajalista`, `Stanje`) VALUES ('1111111111111', 'Autobuska Stanica Banja Luka', 'Braće Podgornika', '78000', '+387 51 922 000', '30', 'www.asbanjaluka.com', 'asbanjaluka@mail.com','120', 'Aktivno');
+INSERT INTO `bus`.`autobuska_stanica` (`JIBStanice`, `Naziv`, `Adresa`, `PostanskiBroj`, `BrojTelefona`, `BrojPerona`, `WebStranica`, `Email`,`IdStajalista`, `Stanje`) VALUES ('2222222222222', 'Autobuska Stanica Gradiška', 'Vuka Karadžića', '78400', '+387 51 813 500', '24', 'www.asgradiska.com', 'asgradiska@mail.com','121', 'Aktivno');
+INSERT INTO `bus`.`autobuska_stanica` (`JIBStanice`, `Naziv`, `Adresa`, `PostanskiBroj`, `BrojTelefona`, `BrojPerona`, `WebStranica`, `Email`,`IdStajalista`, `Stanje`) VALUES ('3333333333333 ', 'Autobuska Stanica Prijedor', 'Petra Petrovića Njegoša', '79102', '+387 52 240 150', '20', 'www.asprijedor.com', 'asprijedor@gmail.com','122', 'Aktivno');
+INSERT INTO `bus`.`autobuska_stanica` (`JIBStanice`, `Naziv`, `Adresa`, `PostanskiBroj`, `BrojTelefona`, `BrojPerona`, `WebStranica`, `Email`,`IdStajalista`, `Stanje`) VALUES ('4444444444444', 'Autobuska Stanica Derventa', 'Milovana Bjeloševića Belog bb', '74400', '+387 53 333 499', '16', 'www.asderventa.com', 'asderventa@mail.com','123', 'Aktivno');
+INSERT INTO `bus`.`autobuska_stanica` (`JIBStanice`, `Naziv`, `Adresa`, `PostanskiBroj`, `BrojTelefona`, `BrojPerona`, `WebStranica`, `Email`,`IdStajalista`, `Stanje`) VALUES ('5555555555555', 'Autobuska Stanica Mrkonjić Grad', 'Sportska', '70260', '+387 50 211 093', '16', 'www.asmrkonjicgrad.com', 'asmrkonjicgrad@mail.com','124', 'Aktivno');
+
+
+/* -- -- -- zaposleni -- -- -- */
+INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('1506988192664', 'Marko', 'Knežić', 'Dragočaj bb', '+387 65 764 748', 'SSS', 'mknezic88@gmail.com', '78215', 'Aktivno', 'Muški');
+INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('1210993101010', 'Milan', 'Paspalj', 'Čatrnja bb', '+387 65 123 321', 'SSS', 'milanp93@hotmail.com', '78400', 'Aktivno', 'Muški');
+INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('1304993125942', 'Vanja ', 'Ćulum', 'Mrkonjić Grad', '+387 66 951 426', 'SSS', 'vanjaculum@mail.com', '70260', 'Aktivno', 'Muški');
+INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('2506985192448', 'Dragan', 'Savić', 'Brčko', '+387 65 879 875', 'VSS', 'ddragansavic@mail.com', '76100', 'Aktivno', 'Muški');
+INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('1803001418963', 'Sanja ', 'Pavlović', 'Prijedor', '+387 66 123 123', 'SSS', 'pavlovicsanja01@gmail.com', '79102', 'Aktivno', 'Ženski');
+INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('1408991685365', 'Ana', 'Lujić', 'Novi Grad', '+387 66 884 966', 'SSS', 'annalujic@gmail.com', '79220', 'Aktivno', 'Ženski');
+INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('2902990369852', 'Anela ', 'Crljenković', 'Prijedor', '+387 66 322 988', 'SSS', 'anelacrljenkovic@yahoo.com', '79102', 'Aktivno', 'Ženski');
+INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('3012987446113', 'Mitar', 'Žigić', 'Banja Luka', '+387 65 118 956', 'VSS', 'zigam44@mail.ru', '78000', 'Aktivno', 'Muški');
+INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('0908954146698', 'Nikola', 'Balaban', 'Teslić', '+387 65 489 321', 'SSS', 'nindzobalaban@yahoo.com', '74270', 'Aktivno', 'Muški');
+INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('1807992412396', 'Maja ', 'Jandrić', 'Mostar', '+387 65 976 496', 'SSS', 'mayajandric86@gmail,com', '88000', 'Aktivno', 'Ženski');
+
+
+/* -- -- -- nalog -- -- -- */
+INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `JIBStanice`, `Stanje`) VALUES ('mknezic', '1506988192664', '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8', 'Administrativni radnik', '1111111111111', 'Aktivno');
+INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `Stanje`) VALUES ('mcfc93', '1210993101010', '264C8C381BF16C982A4E59B0DD4C6F7808C51A05F64C35DB42CC78A2A72875BB', 'Administrator', 'Aktivno');
+INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `JIBStanice`, `Stanje`) VALUES ('vculum', '1304993125942', '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8', 'Šalterski radnik', '1111111111111', 'Aktivno');
+INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `JIBStanice`, `Stanje`) VALUES ('alujic', '1408991685365', '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8', 'Administrativni radnik', '2222222222222', 'Aktivno');
+INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `JIBStanice`, `Stanje`) VALUES ('spavlovic', '1803001418963', '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8', 'Šalterski radnik', '2222222222222', 'Aktivno');
+INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `JIBStanice`, `Stanje`) VALUES ('mjandric', '1807992412396', '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8', 'Administrativni radnik', '3333333333333', 'Aktivno');
+INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `JIBStanice`, `Stanje`) VALUES ('canela', '2902990369852', '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8', 'Šalterski radnik', '3333333333333', 'Aktivno');
+
+
+/* -- -- -- praznik -- -- -- */
+INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('1', '1-1', 'Nova Godina');
+INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('2', '1-2', 'Nova Godina');
+INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('3', '1-14', 'Pravoslavna Nova Godina');
+INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('4', '5-1', 'Međunarodni praznik rada');
+INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('5', '5-2', 'Međunarodni praznik rada');
+INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('6', '5-9', 'Dan pobjede nad fašizmom');
+INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('7', '11-21', 'Dejtonski mirovni sporazum');
+INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('8', '1-7', 'Pravoslavni Božić');
+INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('9', '4-28', 'Pravoslavni Vaskrs');
+INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('10', '4-26', 'Pravoslavni Veliki petak');
+INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('11', '4-27', 'Pravoslavna Velika subota');
+INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('12', '4-29', 'Pravoslavni Vaskršnji ponedeljak');
+
+
+/* -- -- -- dani -- -- -- */
+INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('1', 'Pondeljak');
+INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('2', 'Utorak');
+INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('3', 'Srijeda');
+INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('4', 'Čektvrtak');
+INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('5', 'Petak');
+INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('6', 'Subota');
+INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('7', 'Nedelja');
+INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('8', 'Bez izmjene');
+INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('9', 'Ne vozi');
+
+
+/* -- -- -- prevoznik -- -- -- */
+INSERT INTO `bus`.`prevoznik` (`JIBPrevoznika`, `NazivPrevoznika`, `Telefon`, `Email`, `WebAdresa`, `TekuciRacun`, `Adresa`, `PostanskiBroj`, `Stanje`) VALUES ('1000000000001', 'Pavlović Tours', '+387 51 219 600', 'pavlovictours@mail.com', 'www.pavlovic-tours.com', '590000033889654231', 'Vidovdanska bb', '78000', 'Aktivno');
+INSERT INTO `bus`.`prevoznik` (`JIBPrevoznika`, `NazivPrevoznika`, `Telefon`, `Email`, `WebAdresa`, `TekuciRacun`, `Adresa`, `PostanskiBroj`, `Stanje`) VALUES ('2000000000002', 'AD Autoprevoz', '+387 51 222 456', 'adautoprevoz@gmail.com', 'www.autoprevozbl.com', '120000056569993145', 'Miloša Obilića 10', '78000', 'Aktivno');
+INSERT INTO `bus`.`prevoznik` (`JIBPrevoznika`, `NazivPrevoznika`, `Telefon`, `Email`, `WebAdresa`, `TekuciRacun`, `Adresa`, `PostanskiBroj`, `Stanje`) VALUES ('3000000000003', 'Golubić ', '+387 51 114 433', 'golubic@yahoo.com', 'www.golubic.com', '343400000988574124', 'Vuka Karadžića 55', '78000', 'Aktivno');
+INSERT INTO `bus`.`prevoznik` (`JIBPrevoznika`, `NazivPrevoznika`, `Telefon`, `Email`, `WebAdresa`, `TekuciRacun`, `Adresa`, `PostanskiBroj`, `Stanje`) VALUES ('1111111111111', 'Smiljić Travel', '+387 51 218 610', 'smiljictravel@gmail.com', 'www.smiljictravel.com', '950157033759653431', 'Patrijarha Makarija Sokolovića', '78000', 'Aktivno');
+INSERT INTO `bus`.`prevoznik` (`JIBPrevoznika`, `NazivPrevoznika`, `Telefon`, `Email`, `WebAdresa`, `TekuciRacun`, `Adresa`, `PostanskiBroj`, `Stanje`) VALUES ('2222222222222', 'Bočac Tours', '+387 51 215 725', 'bocactours@gmail.com', 'www.bocactours.com', '570023056569443175', 'Bulevar cara Dušana 1', '78000', 'Aktivno');
+
+
+/* -- -- -- popust_prevoznika -- -- -- */
+INSERT INTO `bus`.`popust_prevoznika` (`IdPopust`, `DjackiPopust`, `PenzionerskiPopust`, `RadnickiPopust`, `JIBPrevoznika`) VALUES ('1', '0.9', '0.95', '1.0', '1000000000001');
+INSERT INTO `bus`.`popust_prevoznika` (`IdPopust`, `DjackiPopust`, `PenzionerskiPopust`, `RadnickiPopust`, `JIBPrevoznika`) VALUES ('2', '0.8', '0.85', '1.0', '2000000000002');
+INSERT INTO `bus`.`popust_prevoznika` (`IdPopust`, `DjackiPopust`, `PenzionerskiPopust`, `RadnickiPopust`, `JIBPrevoznika`) VALUES ('3', '0.85', '0.9', '1.0', '3000000000003');
+INSERT INTO `bus`.`popust_prevoznika` (`IdPopust`, `DjackiPopust`, `PenzionerskiPopust`, `RadnickiPopust`, `JIBPrevoznika`) VALUES ('4', '0.9', '0.9', '1.0', '1111111111111');
+INSERT INTO `bus`.`popust_prevoznika` (`IdPopust`, `DjackiPopust`, `PenzionerskiPopust`, `RadnickiPopust`, `JIBPrevoznika`) VALUES ('5', '0.85', '0.8', '1.0', '2222222222222');
+
+/* -- -- -- OSTALA STAJALISTA -- -- -- */
+INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('21000', 'Novi Sad');
+INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('22251', 'Batrovci');
+INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('22402', 'Ruma');
+INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('11000', 'Beograd');
+INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('10000', 'Zagreb');
+INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('1010', 'Beč');
+INSERT INTO `bus`.`mjesto` (`PostanskiBroj`, `Naziv`) VALUES ('1000', 'Ljubljana');
+INSERT INTO `bus`.`autobusko_stajaliste` (`Naziv`, `PostanskiBroj`) VALUES ('Laminci', '78400');
+INSERT INTO `bus`.`autobusko_stajaliste` (`Naziv`, `PostanskiBroj`) VALUES ('Nova Topola', '78400');
+INSERT INTO `bus`.`autobusko_stajaliste` (`Naziv`, `PostanskiBroj`) VALUES ('Aleksandrovac', '78250');
+INSERT INTO `bus`.`autobusko_stajaliste` (`Naziv`, `PostanskiBroj`) VALUES ('Trn', '78250');
+INSERT INTO `bus`.`autobusko_stajaliste` (`Naziv`, `PostanskiBroj`) VALUES ('Novi Sad', '21000');
+INSERT INTO `bus`.`autobusko_stajaliste` (`Naziv`, `PostanskiBroj`) VALUES ('Batrovci', '22251');
+INSERT INTO `bus`.`autobusko_stajaliste` (`Naziv`, `PostanskiBroj`) VALUES ('Ruma', '22402');
+INSERT INTO `bus`.`autobusko_stajaliste` (`Naziv`, `PostanskiBroj`) VALUES ('Beograd', '11000');
+INSERT INTO `bus`.`autobusko_stajaliste` (`Naziv`, `PostanskiBroj`) VALUES ('Zagreb', '10000');
+INSERT INTO `bus`.`autobusko_stajaliste` (`Naziv`, `PostanskiBroj`) VALUES ('Beč', '1010');
+INSERT INTO `bus`.`autobusko_stajaliste` (`Naziv`, `PostanskiBroj`) VALUES ('Ljubljana', '1000');
+
+
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Mađir');
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Ortopedija');
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Nova bolnica');
@@ -260,7 +362,7 @@ INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('780
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Obilićevo');
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Paprikovac(Vidik)');
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Lazarevo');
-INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Centra(Vidovdanska)');
+INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Centar(Vidovdanska)');
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Zalužani');
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Novo groblje');
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Lazarevo(Poslovna škola)');
@@ -273,64 +375,3 @@ INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('780
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Drakulić(vrtače)');
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Drakulić(Avion)');
 INSERT INTO `bus`.`autobusko_stajaliste` (`PostanskiBroj`, `Naziv`) VALUES ('78000', 'Rakovačke bare');
-
-
-/*---------------- autobuske stanice ----------------------------------------------*/
-INSERT INTO `bus`.`autobuska_stanica` (`JIBStanice`, `Naziv`, `Adresa`, `PostanskiBroj`, `BrojTelefona`, `BrojPerona`, `WebStranica`, `Email`,`IdStajalista`, `Stanje`) VALUES ('1111111111111', 'AS Banja Luka', 'Petra Kocica 23', '78000', '051/344-214', '18', 'www.asbanjaluka.com', 'asbanjaluka@mail.com','1', 'Aktivno');
-INSERT INTO `bus`.`autobuska_stanica` (`JIBStanice`, `Naziv`, `Adresa`, `PostanskiBroj`, `BrojTelefona`, `BrojPerona`, `WebStranica`, `Email`,`IdStajalista`, `Stanje`) VALUES ('2222222222222', 'AS Prijedor', 'Branka Copica 35', '79102', '052/654-654', '15', 'www.asprijedor.com', 'asprijedo@mail.com','1', 'Aktivno');
-INSERT INTO `bus`.`autobuska_stanica` (`JIBStanice`, `Naziv`, `Adresa`, `PostanskiBroj`, `BrojTelefona`, `BrojPerona`, `WebStranica`, `Email`,`IdStajalista`, `Stanje`) VALUES ('3333333333333 ', 'AS Gradiska', 'Nikole Tesle 105', '78400', '051/122-233', '20', 'www.asgradiska.com', 'asgradiska@gmail.com','2', 'Aktivno');
-INSERT INTO `bus`.`autobuska_stanica` (`JIBStanice`, `Naziv`, `Adresa`, `PostanskiBroj`, `BrojTelefona`, `BrojPerona`, `WebStranica`, `Email`,`IdStajalista`, `Stanje`) VALUES ('4444444444444', 'AS Prnjavor', 'Mihajla Pupina 12', '78430', '051/335-355', '12', 'www.asprnjavor.com', 'asprnjavor@gmail.com','2', 'Aktivno');
-INSERT INTO `bus`.`autobuska_stanica` (`JIBStanice`, `Naziv`, `Adresa`, `PostanskiBroj`, `BrojTelefona`, `BrojPerona`, `WebStranica`, `Email`,`IdStajalista`, `Stanje`) VALUES ('5555555555555', 'AS Mrkonjic Grad', 'Sime Solaje 45', '70260', '050/456-456', '16', 'www.assipovo.com', 'assipovo@mail.com','3', 'Aktivno');
-
-/*--------------Zaposleni----------------------------------------------------------*/
-INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('1506988192664', 'Marko', 'Knežić', 'Dragočaj bb', '+38765764748', 'sss', 'mknezic88@gmail.com', '78215', 'Aktivno', 'Muški');
-INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('1210993256987', 'Milan', 'Paspalj', 'Čatrnja bb', '+38765452965', 'vss', 'mpaspalj@yahoo.com', '78400', 'Aktivno', 'Muški');
-INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('1304993125942', 'Vanja ', 'Ćulum', 'Mrkonjić Grad', '+38766951426', 'sss', 'vanjaculum@mail.com', '70260', 'Aktivno', 'Muški');
-INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('2506985192448', 'Dragan', 'Savić', 'Brčko', '+38765879875', 'vss', 'ddragansavic@mail.com', '76100', 'Aktivno', 'Muški');
-INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('1803001418963', 'Sanja ', 'Pavlović', 'Prijedor', '+3866123123', 'sss', 'pavlovicsanja01@gmail.com', '79102', 'Aktivno', 'Ženski');
-INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('1408991685365', 'Ana', 'Lujić', 'Novi Grad', '+38766884966', 'sss', 'annalujic@gmail.com', '79220', 'Aktivno', 'Ženski');
-INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('2902990369852', 'Anela ', 'Crljenković', 'Prijedor', '+38766322988', 'sss', 'anelacrljenkovic@yahoo.com', '79102', 'Aktivno', 'Ženski');
-INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('3012987446113', 'Mitar', 'Žigić', 'Banja Luka', '+38765118956', 'vss', 'zigam44@mail.ru', '78000', 'Aktivno', 'Muški');
-INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('0908954146698', 'Nikola', 'Balaban', 'Teslić', '+38765489321', 'sss', 'nindzobalaban@yahoo.com', '74270', 'Aktivno', 'Muški');
-INSERT INTO `bus`.`zaposleni` (`JMBG`, `Ime`, `Prezime`, `Adresa`, `BrojTelefona`, `StrucnaSprema`, `Email`, `PostanskiBroj`, `Stanje`, `Pol`) VALUES ('1807992412396', 'Maja ', 'Jandrić', 'Mostar', '+38765976496', 'sss', 'mayajandric86@gmail,com', '88000', 'Aktivno', 'Ženski');
-
-/*------------Nalog-------------------------------------------------------------*/
-INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `Stanje`) VALUES ('mknezic', '1506988192664', '264C8C381BF16C982A4E59B0DD4C6F7808C51A05F64C35DB42CC78A2A72875BB', 'Administrator', 'Aktivno');
-INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `Stanje`) VALUES ('mcfc93', '1210993256987', '264C8C381BF16C982A4E59B0DD4C6F7808C51A05F64C35DB42CC78A2A72875BB', 'Administrator', 'Aktivno');
-INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `Stanje`) VALUES ('vculum', '1304993125942', '264C8C381BF16C982A4E59B0DD4C6F7808C51A05F64C35DB42CC78A2A72875BB', 'Administrator', 'Aktivno');
-INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `JIBStanice`, `Stanje`) VALUES ('alujic', '1408991685365', '264C8C381BF16C982A4E59B0DD4C6F7808C51A05F64C35DB42CC78A2A72875BB', 'Administrativni radnik', '1111111111111', 'Aktivno');
-INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `JIBStanice`, `Stanje`) VALUES ('canela', '2902990369852', '264C8C381BF16C982A4E59B0DD4C6F7808C51A05F64C35DB42CC78A2A72875BB', 'Šalterski radnik', '1111111111111', 'Aktivno');
-INSERT INTO `bus`.`nalog` (`KorisnickoIme`, `JMBG`, `Lozinka`, `Tip`, `JIBStanice`, `Stanje`) VALUES ('mjandric', '1807992412396', '264C8C381BF16C982A4E59B0DD4C6F7808C51A05F64C35DB42CC78A2A72875BB', 'Šalterski radnik', '1111111111111', 'Aktivno');
-
-/*-----------Praznik------------------------------------------------------------*/
-INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('1', '1-1', 'Nova Godina');
-INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('2', '1-2', 'Nova Godina');
-INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('3', '1-14', 'Srpska Nova Godina');
-INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('4', '5-1', 'Međunarodni praznik rada');
-INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('5', '5-2', 'Medjunarodni praznik rada');
-INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('6', '5-9', 'Dan pobjede nad fašizmom');
-INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('7', '11-21', 'Dejtonski mirovni sporazum');
-INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('8', '1-7', 'Pravoslavni Božić');
-INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('9', '4-28', 'Pravoslavni Vaskrs');
-INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('10', '4-26', 'Pravoslavni Veliki petak');
-INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('11', '4-27', 'Pravoslavna Velika Subota');
-INSERT INTO `bus`.`praznik` (`IdPraznika`, `Datum`, `Opis`) VALUES ('12', '4-29', 'Pravoslavni Uskrsni ponedeljak');
-
-/*----------Prevoznik-----------------------------------------------------------*/
-INSERT INTO `bus`.`prevoznik` (`JIBPrevoznika`, `NazivPrevoznika`, `Telefon`, `Email`, `WebAdresa`, `TekuciRacun`, `Adresa`, `PostanskiBroj`, `Stanje`) VALUES ('1000000000001', 'Pavlović Tours', '+387 51 663 995', 'pavlovictours@mail.com', 'www.pavlovictours.com', '590000033889654231', 'Neznanih junaka 25', '78400', 'Aktivno');
-INSERT INTO `bus`.`prevoznik` (`JIBPrevoznika`, `NazivPrevoznika`, `Telefon`, `Email`, `WebAdresa`, `TekuciRacun`, `Adresa`, `PostanskiBroj`, `Stanje`) VALUES ('2000000000002', 'AD Autoprevoz', '+387 51 222 456', 'adautoprevoz@gmail.com', 'www.autoprevozbl.com', '120000056569993145', 'Miloša Obilića 10', '78000', 'Aktivno');
-INSERT INTO `bus`.`prevoznik` (`JIBPrevoznika`, `NazivPrevoznika`, `Telefon`, `Email`, `WebAdresa`, `TekuciRacun`, `Adresa`, `PostanskiBroj`, `Stanje`) VALUES ('3000000000003', 'Golubić ', '+387 51 114 433', 'golubic@yahoo.com', 'www.golubic.com', '343400000988574124', 'Vuka Karadžića 55', '78000', 'Aktivno');
-
-
-/*--------Dani-----------------------------------------------------------------*/
-INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('1', 'Pondeljak');
-INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('2', 'Utorak');
-INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('3', 'Srijeda');
-INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('4', 'Čektvrt');
-INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('5', 'Petak');
-INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('6', 'Subota');
-INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('7', 'Nedelja');
-INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('8', 'Bez izmjene');
-INSERT INTO `bus`.`dani` (`Id`, `Opis`) VALUES ('9', 'Ne vozi');
-
-
