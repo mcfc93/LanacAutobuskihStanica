@@ -506,50 +506,26 @@ public class Karta {
 	    	s.setInt(2, PrijavaController.autobuskaStanica.getIdStajalista());
 	       	r = s.executeQuery();
 	        while(r.next()) {
-	        	/*
-	        	System.out.println("vrijeme polaska: " + r.getTime("VrijemePolaska"));
-	        	System.out.println("vrijeme polaska povratno: " + r.getTime("VrijemePolaskaPovratna"));
-	        	System.out.println("vrijeme dolaska: " + r.getTime("VrijemeDolaska"));
-	        	System.out.println("vrijeme dolaska povratno: " + r.getTime("VrijemeDolaskaPovratna"));
-	        	*/
 	        	Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
 				Linija linija = new Linija(0, r.getString("NazivLinije"), r.getInt("Peron"), prevoznik, r.getInt("VoznjaPraznikom"));
 				Relacija relacija = new Relacija(0, linija, prevoznik, null, null);
-				Relacija relacijaP = new Relacija(0, linija, prevoznik, null, null);
-				
 				Karta karta = new Karta(relacija);
-				Karta kartaP = new Karta(relacijaP);
-				
 				karta.getRelacija().setDani(r.getString("Dani"));
 				/*
 				 * polasci*/
 				if(polazakDolazak.equals("POLASCI")) {
-					System.out.println("vrijeme polaska: " + r.getTime("VrijemePolaska"));
-		        	System.out.println("vrijeme polaska povratno: " + r.getTime("VrijemePolaskaPovratna"));
 					karta.getRelacija().setVrijemePolaska(r.getTime("VrijemePolaska")); 
 					if(karta.getRelacija().getDani().contains(String.valueOf(LocalDate.now().getDayOfWeek().getValue()))) {
 						if(karta.getRelacija().getVrijemePolaska().toLocalTime().isAfter(LocalTime.now())) {
 							karteList.add(karta);			
 						}
-						kartaP.getRelacija().setVrijemePolaska(r.getTime("VrijemePolaskaPovratna"));
-						if(kartaP.getRelacija().getVrijemePolaska().toLocalTime().isAfter(LocalTime.now())) {
-							karteList.add(kartaP);
-						}	
 					}
 				}
-				/*
-				 * dolasci*/
 				else {
-					System.out.println("vrijeme dolaska: " + r.getTime("VrijemeDolaska"));
-		        	System.out.println("vrijeme dolaska povratno: " + r.getTime("VrijemeDolaskaPovratna"));
 					karta.getRelacija().setVrijemeDolaska(r.getTime("VrijemeDolaska"));
 					if(karta.getRelacija().getDani().contains(String.valueOf(LocalDate.now().getDayOfWeek().getValue()))) {
 						if(karta.getRelacija().getVrijemeDolaska().toLocalTime().isAfter(LocalTime.now())) {
 							karteList.add(karta);			
-						}
-						kartaP.getRelacija().setVrijemeDolaska(r.getTime("VrijemeDolaskaPovratna"));
-						if(kartaP.getRelacija().getVrijemeDolaska().toLocalTime().isAfter(LocalTime.now())) {
-							karteList.add(kartaP);
 						}
 					}
 				}
