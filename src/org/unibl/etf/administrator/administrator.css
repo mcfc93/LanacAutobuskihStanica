@@ -1,6 +1,7 @@
 .root {
 	
 	-fx-border-color: BLACK;
+	/*-fx-border-color: linear-gradient(black 10%, #ff0095 90%);*/
 	-fx-border-width: 2px;
 	-fx-background-color: white;
 	/*
@@ -14,7 +15,7 @@
 }
 
 .anchorMenu {
-	-fx-background-color: linear-gradient(black 20%, #ff0095 80%);
+	-fx-background-color: linear-gradient(black 10%, #ff0095 90%);
 }
 
 #dataAnchorPane {
@@ -27,7 +28,6 @@
 
 #menuLine {
 	-fx-background-color: black;
-	/*-fx-background-color: white;*/
 }
 
 /* * * * * * *
@@ -579,15 +579,15 @@
 }
 
 .mjesecnaDjacka {
-	-fx-background-color: blue;
+	-fx-background-color: #303f9f;
 }
 
 .mjesecnaPenzionerska {
-	-fx-background-color: red;
+	-fx-background-color: #f50057;
 }
 
 .mjesecnaRadnicka {
-	-fx-background-color: pink;
+	-fx-background-color: #d50000;
 }
 
 /* * * * * * *

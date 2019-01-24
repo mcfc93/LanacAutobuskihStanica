@@ -304,6 +304,31 @@ public class Prevoznik {
 	public String toString() {
 		return naziv;
 	}
-	
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((JIBPrevoznika == null) ? 0 : JIBPrevoznika.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Prevoznik other = (Prevoznik) obj;
+		if (JIBPrevoznika == null) {
+			if (other.JIBPrevoznika != null)
+				return false;
+		} else if (!JIBPrevoznika.equals(other.JIBPrevoznika))
+			return false;
+		return true;
+	}
 	
 }

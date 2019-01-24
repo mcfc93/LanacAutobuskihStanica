@@ -274,10 +274,11 @@ public class ProdajaKarataController implements Initializable {
 	
 					kupovinaButton.setDisable(false);
 					karteObs.clear();
-					for (Karta karta : Karta.getKarteList(InformacijeController.pocetnoStajaliste, odrediste,"POLASCI")) {
+					for (Karta karta : Karta.getKarteList(InformacijeController.pocetnoStajaliste, odrediste)) {
 						daniUSedmici = karta.getRelacija().getDani();
 						if(Praznik.getHolidayList().stream().noneMatch(p -> p.getDan()==datum.getValue().getDayOfMonth() & p.getMjesec()==datum.getValue().getMonthValue())) 
 						{	
+							System.out.println(daniUSedmici + karta.getRelacija().getVrijemePolaska());
 							if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
 								if(povratnaKartaCheckBox.isSelected())
 									karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format("%.2f", 2*karta.getRelacija().getCijenaJednokratna()*0.8)));
@@ -312,17 +313,18 @@ public class ProdajaKarataController implements Initializable {
 							
 							//sve relacije gdje je odrediste neka od stanica u mjestu odredista
 							//[MJESTO - AS]
-							System.out.println("");
+							System.out.println("[MJESTO - AS]");
 							if(odrediste.getNazivStajalista().equals(odrediste.getNaziv())) {
 				       			for(Stajaliste stajaliste : InformacijeController.stajalistaStanica) {
 				       				if(stajaliste.getPostanskiBroj()==odrediste.getPostanskiBroj()) {
 				       					tmp.clear();
 				       					tmp.addAll(MjesecnaKarta.getMjesecneKarteList(polaziste, stajaliste));
-				       					System.out.println(tmp);
+				       					//System.out.println(tmp);
 				       					for(Karta karta: tmp) {
+				       						System.out.println(polaziste.getNazivStajalista() + " - " + stajaliste.getNazivStajalista());
 					       					if(!karte.stream().anyMatch(k -> k.getRelacija().getLinija().getIdLinije()==karta.getRelacija().getLinija().getIdLinije())) {
 					       						karte.add(karta);
-						       					System.out.println("[AS - MJESTO]" + stajaliste.getNazivStajalista());
+						       					System.out.println("\t" + stajaliste.getNazivStajalista());
 					       					}
 				       					}
 				       				}
@@ -338,16 +340,18 @@ public class ProdajaKarataController implements Initializable {
 		       				
 		       				//sve relacije gdje je polaziste neka od stanica u mjestu polazista
 							//[AS - MJESTO]
+							System.out.println("[AS - MJESTO]");
 							if(polaziste.getNazivStajalista().equals(polaziste.getNaziv())) {
 				       			for(Stajaliste stajaliste : InformacijeController.stajalistaStanica) {
 				       				if(stajaliste.getPostanskiBroj()==polaziste.getPostanskiBroj()) {
 				       					tmp.clear();
 				       					tmp.addAll(MjesecnaKarta.getMjesecneKarteList(stajaliste, odrediste));
-				       					System.out.println(tmp);
+				       					//System.out.println(tmp);
 				       					for(Karta karta: tmp) {
+				       						System.out.println(stajaliste.getNazivStajalista() + " - " + odrediste.getNazivStajalista());
 					       					if(!karte.stream().anyMatch(k -> k.getRelacija().getLinija().getIdLinije()==karta.getRelacija().getLinija().getIdLinije())) {
 					       						karte.add(karta);
-						       					System.out.println("[MJESTO - AS]" + stajaliste.getNazivStajalista());
+						       					System.out.println("\t" + stajaliste.getNazivStajalista());
 					       					}
 				       					}
 				       				}
@@ -364,18 +368,19 @@ public class ProdajaKarataController implements Initializable {
 							//sve relacije gdje je odrediste neka od stanica u mjestu odredista
 							// i polaziste neka od stanica u mjestu polazista
 							//[AS - AS]
-							System.out.println("");
+							System.out.println("[AS - AS]");
 							if(odrediste.getNazivStajalista().equals(odrediste.getNaziv()) && polaziste.getNazivStajalista().equals(polaziste.getNaziv())) {
 				       			for(Stajaliste stajalisteO : InformacijeController.stajalistaStanica) {
 				       				for(Stajaliste stajalisteP : InformacijeController.stajalistaStanica) {
 				       					if(stajalisteO.getPostanskiBroj()==odrediste.getPostanskiBroj() && stajalisteP.getPostanskiBroj()==polaziste.getPostanskiBroj()) {					       					tmp.clear();
 					       					tmp.clear();
 				       						tmp.addAll(MjesecnaKarta.getMjesecneKarteList(stajalisteP, stajalisteO));
-					       					System.out.println(tmp);
+					       					//System.out.println(tmp);
 					       					for(Karta karta: tmp) {
+					       						System.out.println(stajalisteP.getNazivStajalista() + " - " + stajalisteO.getNazivStajalista());
 						       					if(!karte.stream().anyMatch(k -> k.getRelacija().getLinija().getIdLinije()==karta.getRelacija().getLinija().getIdLinije())) {
 						       						karte.add(karta);
-						         					System.out.println("[AS - AS]" + stajalisteP.getNazivStajalista() + " # " + stajalisteO.getNazivStajalista());
+						         					System.out.println("\t" + stajalisteP.getNazivStajalista() + " # " + stajalisteO.getNazivStajalista());
 						       					}
 					       					}
 					       				}
