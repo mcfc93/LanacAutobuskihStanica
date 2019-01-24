@@ -73,7 +73,7 @@ public class UnosRelacijaController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		timePicker.setIs24HourView(true);
 		timePicker.converterProperty().set(new LocalTimeStringConverter(FormatStyle.SHORT, Locale.UK));
-		
+		daljeButton.setDefaultButton(true);
 		//DragAndDrop
 		menuLine.setOnMousePressed(event -> {
 			if(event.getButton().equals(MouseButton.PRIMARY)) {

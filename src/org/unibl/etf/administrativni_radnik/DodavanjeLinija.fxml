@@ -74,8 +74,8 @@
                   <TableColumn fx:id="cijenaMjesecnaColumn" prefWidth="75.0" text="Cijena (mjesecna)" />
                   <TableColumn fx:id="vrijemePolaskaColumn" prefWidth="75.0" text="Vrijeme polaska" />
                   <TableColumn fx:id="vrijemeDolaskaColumn" prefWidth="75.0" text="Vrijeme dolaska" />
-                  <TableColumn fx:id="vrijemePolaskaPovratakColumn" prefWidth="75.0" text="Vrijeme polaska (povratno)" />
                   <TableColumn fx:id="vrijemeDolaskaPovratakColumn" prefWidth="75.0" text="Vrijeme dolaska (povratno)" />
+                  <TableColumn fx:id="vrijemePolaskaPovratakColumn" prefWidth="75.0" text="Vrijeme polaska (povratno)" />
                </columns>
             </TableView>
             <JFXTextField fx:id="cijenaJednokratnaTextField" promptText="Cijena obične karte" GridPane.columnIndex="5" GridPane.rowIndex="6" />

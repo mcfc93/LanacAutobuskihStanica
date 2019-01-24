@@ -288,7 +288,39 @@ public class DodavanjeLinijaController implements Initializable {
 				/* povratni smjer
 				 * unos vremena polazaka i dolazaka za lancane relacije*/
 				if(newValue != null) {
-				UnosRelacijaController.relacijeList.get(0).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaska2TimePicker.getValue()));
+				UnosRelacijaController.relacijeList.get(UnosRelacijaController.brojRelacija-1).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaska2TimePicker.getValue()));	
+				LocalTime vrijemeDolaskaPovratnaPlusHours = UnosRelacijaController.relacijeList.get(UnosRelacijaController.brojRelacija-1).getVrijemePolaskaPovratna().toLocalTime().plusHours(UnosRelacijaController.relacijeList.get(UnosRelacijaController.brojRelacija-1).getDuzinaPuta().getHour());
+				LocalTime vrijemeDolaskaPovratnaPlusMinutes = vrijemeDolaskaPovratnaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(UnosRelacijaController.brojRelacija-1).getDuzinaPuta().getMinute());
+				UnosRelacijaController.relacijeList.get(UnosRelacijaController.brojRelacija-1).setVrijemeDolaskaPovratna(Time.valueOf(vrijemeDolaskaPovratnaPlusMinutes));
+				
+				for(int i=UnosRelacijaController.brojRelacija-2; i>=0; --i) {
+					final int x = i;
+					UnosRelacijaController.relacijeList.get(x).setVrijemePolaskaPovratna(UnosRelacijaController.relacijeList.get(x+1).getVrijemeDolaskaPovratna());
+					LocalTime vrijemePolaskaPovratna = UnosRelacijaController.relacijeList.get(x+1).getVrijemeDolaskaPovratna().toLocalTime();
+					LocalTime vrijemePolaskaPlusHours = vrijemePolaskaPovratna.plusHours(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getHour());
+					LocalTime vrijemePolaskaPlusMinutes = vrijemePolaskaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
+					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPlusMinutes));
+				}
+				
+				for(int i=UnosRelacijaController.brojRelacija;i<UnosRelacijaController.relacijeList.size();++i) {
+					final int x = i;
+					System.out.println("Medjurelacija: " + UnosRelacijaController.relacijeList.get(x));
+					UnosRelacijaController.relacijeList.get(x).setVrijemePolaskaPovratna(UnosRelacijaController.relacijeList.stream().filter(r -> r.getOdrediste().equals(UnosRelacijaController.relacijeList.get(x).getOdrediste())).findFirst().get().getVrijemePolaskaPovratna());
+					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaskaPovratna(UnosRelacijaController.relacijeList.stream().filter(r -> r.getPolaziste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaskaPovratna());
+					/*LocalTime vrijemeDolaskaPovratna = UnosRelacijaController.relacijeList.stream().filter(r -> r.getPolaziste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaskaPovratna().toLocalTime();
+					UnosRelacijaController.relacijeList.get(x).setVrijemePolaskaPovratna(Time.valueOf(vrijemeDolaskaPovratna));
+					LocalTime vrijemeDolaskaMinusHours = vrijemeDolaskaPovratna.minusHours(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getHour());
+					LocalTime vrijemeDolaskaMinusMinutes = vrijemeDolaskaMinusHours.minusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
+					UnosRelacijaController.relacijeList.get(x).setVrijemePolaskaPovratna(Time.valueOf(vrijemeDolaskaMinusMinutes));
+					 */
+				/*	LocalTime vrijemePolaskaPovratnaPlusHours = vrijemeDolaskaPovratna.plusHours(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getHour());
+					LocalTime vrijemePolaskaPovratnaPlusMinutes = vrijemePolaskaPovratnaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
+					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPovratnaPlusMinutes));
+					*/
+				}
+					
+					
+				/*UnosRelacijaController.relacijeList.get(0).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaska2TimePicker.getValue()));
 				LocalTime vrijemeDolaskaPovratnaPlusHours = UnosRelacijaController.relacijeList.get(0).getVrijemePolaskaPovratna().toLocalTime().plusHours(UnosRelacijaController.relacijeList.get(0).getDuzinaPuta().getHour());
 				LocalTime vrijemeDolaskaPovratnaPlusMinutes = vrijemeDolaskaPovratnaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(0).getDuzinaPuta().getMinute());
 				UnosRelacijaController.relacijeList.get(0).setVrijemeDolaskaPovratna(Time.valueOf(vrijemeDolaskaPovratnaPlusMinutes));
@@ -299,17 +331,19 @@ public class DodavanjeLinijaController implements Initializable {
 					LocalTime vrijemePolaskaPovratnaPlusHours = vrijemePolaskaPovratna.plusHours(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getHour());
 					LocalTime vrijemePolaskaPovratnaPlusMinutes = vrijemePolaskaPovratnaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
 					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPovratnaPlusMinutes));
-				}
+				}*/
 				/*
 				 * unos vremena za medjurelacije*/
-				for(int i=UnosRelacijaController.brojRelacija;i<UnosRelacijaController.relacijeList.size();++i) {
+				/*for(int i=UnosRelacijaController.brojRelacija;i<UnosRelacijaController.relacijeList.size();++i) {
 					final int x = i;
 					LocalTime vrijemePolaskaPovratna = UnosRelacijaController.relacijeList.stream().filter(r -> r.getPolaziste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemePolaskaPovratna().toLocalTime();
 					UnosRelacijaController.relacijeList.get(x).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaskaPovratna));
 					LocalTime vrijemePolaskaPovratnaPlusHours = vrijemePolaskaPovratna.plusHours(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getHour());
 					LocalTime vrijemePolaskaPovratnaPlusMinutes = vrijemePolaskaPovratnaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
 					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPovratnaPlusMinutes));
-				}
+				}*/
+				
+				
 				relacijeTableView.refresh();	
 				}
 			}
