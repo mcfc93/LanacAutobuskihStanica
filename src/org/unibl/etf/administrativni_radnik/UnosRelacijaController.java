@@ -119,8 +119,6 @@ public class UnosRelacijaController implements Initializable {
 		ValidatorBase psValidator = new ValidatorBase("Stajalište već dodano") {
 			@Override
 			protected void eval() {
-				System.out.println("===========");
-				relacijeList.forEach(r -> System.out.println(r.getPolaziste().toString() + "->" +r.getOdrediste().toString()));
 				if(!relacijeList.isEmpty()
 	        			&& relacijeList.stream().anyMatch(r -> r.getPolaziste().toString().equals(textField.getText()) || r.getOdrediste().toString().equals(textField.getText()))) {
 	        		hasErrors.set(true);
@@ -194,7 +192,6 @@ public class UnosRelacijaController implements Initializable {
 	    			relacijeList.add(novaMedjuRelacija);
 	    		}
 	    	}
-	    	relacijeList.forEach(r -> System.out.println(r + ", " + r.getDuzinaPuta()));
 	    	((Stage)((Node)event.getSource()).getScene().getWindow()).close();
     	
     }
