@@ -302,10 +302,10 @@ public class MjesecnaKarta extends Karta {
 		PreparedStatement s = null;
 		ResultSet r = null;
 		String sql = "select * from cijena_mjesecne_karte join (relacija,linija,prevoznik,popust_prevoznika) on (cijena_mjesecne_karte.IdRelacije=relacija.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) "
-				+ "where relacija.Polaziste=? and relacija.Odrediste=? group by prevoznik.JIBPrevoznika";
+				+ "where ((relacija.Polaziste=? and relacija.Odrediste=?) or (relacija.Polaziste=? and relacija.Odrediste=?)) and linija.Stanje='Aktivno' group by prevoznik.JIBPrevoznika";
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false, polaziste.getIdStajalista(), odrediste.getIdStajalista());
+			s = Util.prepareStatement(c, sql, false, polaziste.getIdStajalista(), odrediste.getIdStajalista(), odrediste.getIdStajalista(), polaziste.getIdStajalista());
 			r = s.executeQuery();
 			while(r.next()) {
 	       		Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"), r.getString("prevoznik.Email"), r.getString("prevoznik.Telefon"), r.getString("prevoznik.JIBPrevoznika"), r.getDouble("DjackiPopust"), r.getDouble("RadnickiPopust"), r.getDouble("PenzionerskiPopust"));
@@ -320,10 +320,10 @@ public class MjesecnaKarta extends Karta {
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 			Util.showBugAlert();
+			return karteList;
+		} finally {
+			Util.close(r, s, c);
 		}
-		
-		
-		return null;
 	}
 	
 	public Double getCijena() {

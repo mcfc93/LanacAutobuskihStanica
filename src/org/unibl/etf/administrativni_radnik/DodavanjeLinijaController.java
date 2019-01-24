@@ -219,6 +219,10 @@ public class DodavanjeLinijaController implements Initializable {
 		});
     	
     	relacijeTableView.setPlaceholder(new Label("Prvo dodajte liniju."));
+    	for(TableColumn<?,?> column:relacijeTableView.getColumns()) {
+        	column.setReorderable(false);
+        	column.setSortable(false);
+        }
     	
 		relacijeTableView.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 
@@ -547,11 +551,12 @@ public class DodavanjeLinijaController implements Initializable {
 					cijenaJednokratnaTextField.setVisible(false);
 					cijenaMjesecnaTextField.setVisible(false);
 					sacuvajButton.setVisible(false);
-
+					cijenaJednokratnaTextField.requestFocus();
 				}
 			}
 			else {
 				relacijeTableView.getSelectionModel().selectNext();
+				cijenaJednokratnaTextField.requestFocus();
 			}
 	}
 	}
@@ -632,6 +637,7 @@ public class DodavanjeLinijaController implements Initializable {
 		cijenaMjesecnaTextField.resetValidation();
 		sacuvajButton.setVisible(true);
 		sljedeciPolazakButton.setVisible(false);
+		linijaDodata=false;
 	}
 
 }

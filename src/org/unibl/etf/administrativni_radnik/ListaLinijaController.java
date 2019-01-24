@@ -60,8 +60,6 @@ public class ListaLinijaController implements Initializable {
 	@FXML
 	private TableColumn<Linija,Integer> peronLinijeColumn = new TableColumn<Linija, Integer>();
 	@FXML
-	private TableColumn<Linija,String> daniUSedmiciColumn = new TableColumn<Linija, String>();
-	@FXML
 	private TableColumn<Linija,Linija> blokirajColumn = new TableColumn<Linija,Linija>();
 	@FXML
 	private TableColumn<Linija,Linija> izmjeniColumn = new TableColumn<Linija,Linija>();
@@ -78,7 +76,6 @@ public class ListaLinijaController implements Initializable {
     	idLinijeLinijeColumn.setCellValueFactory(new PropertyValueFactory<>("idLinije"));
     	nazivPrevoznikaColumn.setCellValueFactory(new PropertyValueFactory<>("nazivPrevoznika"));
     	peronLinijeColumn.setCellValueFactory(new PropertyValueFactory<>("peron"));
-    	//daniUSedmiciColumn.setCellValueFactory(new PropertyValueFactory<>("daniUSedmici"));
     	
     	blokirajColumn.setCellValueFactory(
                 param -> new ReadOnlyObjectWrapper<>(param.getValue())

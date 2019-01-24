@@ -10,7 +10,6 @@
         <columns>
           <TableColumn fx:id="nazivLinijeColumn" prefWidth="75.0" text="Naziv linije" />
             <TableColumn fx:id="nazivPrevoznikaColumn" prefWidth="75.0" text="Naziv prevoznika" />
-            <TableColumn fx:id="daniUSedmiciColumn" prefWidth="75.0" text="Dani" />
           <TableColumn fx:id="idLinijeLinijeColumn" prefWidth="75.0" text="ID linije" />
             <TableColumn fx:id="peronLinijeColumn" prefWidth="75.0" text="Peron" />
             <TableColumn fx:id="blokirajColumn" prefWidth="75.0" text="BLOCKED" />

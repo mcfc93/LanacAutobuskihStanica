@@ -241,7 +241,8 @@ System.out.println(PROPERTY);
 			
 			@Override
 			protected void eval() {
-				if(!textField.getText().isEmpty() && !textField.getText().matches("^([1-9][0-9]?|100)$"))
+				if(!textField.getText().isEmpty()
+						&& !textField.getText().matches("^(0|[1-9][0-9]?|100)$"))
 					hasErrors.set(true);
 				else
 					hasErrors.set(false);
@@ -600,7 +601,7 @@ System.out.println(PROPERTY);
 		Alert alert=new Alert(AlertType.ERROR);
 		alert.setTitle("Greška");
 		alert.setHeaderText("NEOČEKIVANO PONAŠANJE!");
-		alert.setContentText("Popunite podatke ponovo, a u slučaju iste greške kontakrirajte Administratora sistema.");
+		alert.setContentText("Kontakrirajte Administratora sistema.");
 		
 		alert.getDialogPane().getStylesheets().add(Util.class.getResource("/org/unibl/etf/application.css").toExternalForm());
 		alert.getDialogPane().getStyleClass().addAll("alert", "alertBug");
