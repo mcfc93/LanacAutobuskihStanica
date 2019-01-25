@@ -57,7 +57,7 @@ public class DodavanjeLinijaController implements Initializable {
 	public static int idLinije;
 	
 	public static boolean dodaj=false;
-	
+	private int idPolaska;
 	@FXML
 	private AnchorPane anchorPane;
 	@FXML
@@ -149,7 +149,7 @@ public class DodavanjeLinijaController implements Initializable {
     @Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
     	UnosRelacijaController.relacijeList.clear();
-   
+    	idPolaska=1;
     	dodajLinijuButton.setDefaultButton(true);
     	dodajLinijuButton.disabledProperty().addListener((observable, oldValue, newValue) -> {
     		if(newValue) {
@@ -231,7 +231,6 @@ public class DodavanjeLinijaController implements Initializable {
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				if(!relacijeTableView.getItems().isEmpty()) {
 					Relacija odabranaRelacija = UnosRelacijaController.relacijeList.get((int) newValue);
-					relacijeTableView.scrollTo((int)newValue);
 					if(odabranaRelacija.getCijenaJednokratna()==null)
 						cijenaJednokratnaTextField.clear();
 					else
@@ -495,21 +494,33 @@ public class DodavanjeLinijaController implements Initializable {
 					& vrijemePolaska2TimePicker.validate()) 
 		{
 			if(showDaLiSteSigurni()) {
-				if(!linijaDodata)
-					linija.setIdLinije(Linija.dodajLiniju(linija));
+				if(!linijaDodata) {
+					linija.setIdLinije(Linija.dodajLiniju(linija,UnosRelacijaController.relacijeList.get(0).getPolaziste().getIdStajalista(), UnosRelacijaController.relacijeList.get(UnosRelacijaController.brojRelacija-1).getOdrediste().getIdStajalista()));
+					UnosRelacijaController.relacijeList.forEach(r -> r.setLinija(linija));
+					String dani = mapiranjeDana();
+					String dani2 = dani.substring(0, dani.length()-1);
+					UnosRelacijaController.relacijeList.forEach(r -> r.setDani(dani2));
+					UnosRelacijaController.relacijeList.forEach(r -> {System.out.println(r.getLinija().getIdLinije()); System.out.println(r.getDani());});
+
+					UnosRelacijaController.relacijeList.forEach(r -> r.setIdRelacije(Relacija.dodajRelaciju(r)));
+					UnosRelacijaController.relacijeList.forEach(r -> System.out.println("ID relacije: " + r.getIdRelacije()));
+				}
 				linijaDodata = true;
-				UnosRelacijaController.relacijeList.forEach(r -> r.setLinija(linija));
-				String dani = mapiranjeDana();
-				String dani2 = dani.substring(0, dani.length()-1);
-				UnosRelacijaController.relacijeList.forEach(r -> r.setDani(dani2));
+				
+				
 				MaskerPane progressPane = Util.getMaskerPane(anchorPane);
 				Task<Void> task = new Task<Void>() {
+					
 		            @Override
 		            protected Void call() /*throws Exception*/ {
 		                progressPane.setVisible(true);
+		                String dani = mapiranjeDana();
+						String dani2 = dani.substring(0, dani.length()-1);
+						UnosRelacijaController.relacijeList.forEach(r -> r.setDani(dani2));
 		                for (Relacija r : UnosRelacijaController.relacijeList) {
-							System.out.println(Relacija.dodajRelaciju(r));
+							System.out.println(Relacija.dodajRedVoznje(r,idPolaska));
 						}
+		                ++idPolaska;
 		                return null;
 		            }
 		            @Override
@@ -593,6 +604,8 @@ public class DodavanjeLinijaController implements Initializable {
 			}
 			else {
 				relacijeTableView.getSelectionModel().selectNext();
+				relacijeTableView.scrollTo(relacijeTableView.getSelectionModel().getSelectedIndex());
+
 				cijenaJednokratnaTextField.requestFocus();
 			}
 	}
@@ -675,6 +688,7 @@ public class DodavanjeLinijaController implements Initializable {
 		sacuvajButton.setVisible(true);
 		sljedeciPolazakButton.setVisible(false);
 		linijaDodata=false;
+		idPolaska=1;
 	}
 
 }

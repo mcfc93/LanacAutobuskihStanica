@@ -17,7 +17,22 @@ public class Linija {
 	private Prevoznik prevoznik;
 	private String stanje;
 	private int voznjaPraznikom;
-
+	private int pStajaliste;
+	private int oStajaliste;
+	
+	
+	public int getpStajaliste() {
+		return pStajaliste;
+	}
+	public void setpStajaliste(int pStajaliste) {
+		this.pStajaliste = pStajaliste;
+	}
+	public int getoStajaliste() {
+		return oStajaliste;
+	}
+	public void setoStajaliste(int oStajaliste) {
+		this.oStajaliste = oStajaliste;
+	}
 	/*
 	 * konstruktor za ucitavanje relacije*/
 	public Linija(int idLinije) {
@@ -111,14 +126,14 @@ public class Linija {
 		return "Linija [idLinije=" + idLinije + ", nazivLinije=" + nazivLinije + ", peron=" + peron + ", prevoznik="
 				+ prevoznik + ", stanje=" + stanje + ", voznjaPraznikom=" + voznjaPraznikom + "]";
 	}
-	public static int dodajLiniju(Linija linija) {
-		String sql = "insert into linija value (default,?,?,?,default,?)";
+	public static int dodajLiniju(Linija linija,int pStajaliste,int oStajaliste) {
+		String sql = "insert into linija value (default,?,?,?,default,?,?,?)";
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, true, linija.getNazivLinije(),linija.getPeron(),linija.getPrevoznik().getJIBPrevoznika(),linija.getVoznjaPraznikom());
+			s = Util.prepareStatement(c, sql, true, linija.getNazivLinije(),linija.getPeron(),linija.getPrevoznik().getJIBPrevoznika(),linija.getVoznjaPraznikom(),pStajaliste,oStajaliste);
 			if(s.executeUpdate()==1) { 
 				r = s.getGeneratedKeys();
 				if(r.next()) 
@@ -213,7 +228,7 @@ public class Linija {
 	}
 
 	public static List<Linija> getLinije() {
-		String sqlQuery = "select IdLinije,NazivLinije,Peron,NazivPrevoznika,linija.Stanje,VoznjaPraznikom from linija join prevoznik on (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where linija.Stanje!='Izbrisano'";
+		String sqlQuery = "select PStajaliste,OStajaliste,IdLinije,NazivLinije,Peron,prevoznik.JIBPrevoznika,NazivPrevoznika,linija.Stanje,VoznjaPraznikom from linija join prevoznik on (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where linija.Stanje!='Izbrisano'";
     	Connection c = null;
     	ResultSet r = null;
     	PreparedStatement s = null;
@@ -224,7 +239,11 @@ public class Linija {
 			r = s.executeQuery();
 			while(r.next()) {
 				Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"));
-				linijeList.add(new Linija(r.getInt("IdLinije"), r.getString("NazivLinije"), r.getInt("Peron"),prevoznik, r.getInt("VoznjaPraznikom"), r.getString("Stanje")));	
+				prevoznik.setJIBPrevoznika(r.getString("JIBPrevoznika"));
+				Linija linija = new Linija(r.getInt("IdLinije"), r.getString("NazivLinije"), r.getInt("Peron"),prevoznik, r.getInt("VoznjaPraznikom"), r.getString("Stanje"));	
+				linija.setpStajaliste(r.getInt("PStajaliste"));
+				linija.setoStajaliste(r.getInt("OStajaliste"));
+				linijeList.add(linija);
 			}
 			return linijeList;
 		} catch (SQLException e) {

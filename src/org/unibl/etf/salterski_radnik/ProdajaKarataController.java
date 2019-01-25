@@ -842,7 +842,6 @@ public class ProdajaKarataController implements Initializable {
 		imeTextField.resetValidation();
 		prezimeTextField.resetValidation();
 		brojTelefonaTextField.resetValidation();
-		
 	}
 
 	public void tipKarteSetUp() {

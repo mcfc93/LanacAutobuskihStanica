@@ -275,7 +275,7 @@ public class MjesecnaKarta extends Karta {
 	
 	}
 	
-	public static int dodajMjesecnuCijenu(Relacija relacija) {
+	/*public static int dodajMjesecnuCijenu(Relacija relacija) {
 		Connection c = null;
 		ResultSet r =null;
 		PreparedStatement s = null;
@@ -292,7 +292,7 @@ public class MjesecnaKarta extends Karta {
 			Util.showBugAlert();
 		}
 		return 0;
-	}
+	}*/
 	
 	
 	
@@ -301,7 +301,7 @@ public class MjesecnaKarta extends Karta {
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
-		String sql = "select * from cijena_mjesecne_karte join (relacija,linija,prevoznik,popust_prevoznika) on (cijena_mjesecne_karte.IdRelacije=relacija.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) "
+		String sql = "select * from relacija join (red_voznje,linija,prevoznik,popust_prevoznika) on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) "
 				+ "where ((relacija.Polaziste=? and relacija.Odrediste=?) or (relacija.Polaziste=? and relacija.Odrediste=?)) and linija.Stanje='Aktivno' group by prevoznik.JIBPrevoznika";
 		try {
 			c = Util.getConnection();
@@ -311,7 +311,7 @@ public class MjesecnaKarta extends Karta {
 	       		Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"), r.getString("prevoznik.Email"), r.getString("prevoznik.Telefon"), r.getString("prevoznik.JIBPrevoznika"), r.getDouble("DjackiPopust"), r.getDouble("RadnickiPopust"), r.getDouble("PenzionerskiPopust"));
 	       		Linija linija = new Linija(r.getInt("linija.IdLinije"), r.getString("linija.NazivLinije"), r.getInt("linija.Peron"), prevoznik, r.getInt("linija.VoznjaPraznikom"));
 	       		Relacija relacija = new Relacija(r.getInt("relacija.IdRelacije"), linija, polaziste, odrediste, r.getTime("VrijemePolaska"), r.getTime("VrijemeDolaska"), r.getDouble("CijenaJednokratna"), r.getString("Dani"));
-	       		Karta karta = new Karta(relacija, r.getDouble("cijena_mjesecne_karte.CijenaMjesecna"));
+	       		Karta karta = new Karta(relacija, r.getDouble("CijenaMjesecna"));
 	       		karteList.add(karta);
 	       		
 			}

@@ -75,8 +75,8 @@
                   <TableColumn fx:id="cijenaMjesecnaColumn" prefWidth="75.0" text="Cijena (mjesecna)" />
                   <TableColumn fx:id="vrijemePolaskaColumn" prefWidth="75.0" text="Vrijeme polaska" />
                   <TableColumn fx:id="vrijemeDolaskaColumn" prefWidth="75.0" text="Vrijeme dolaska" />
-                  <TableColumn fx:id="vrijemePolaskaPovratakColumn" prefWidth="75.0" text="Vrijeme polaska (povratno)" />
                   <TableColumn fx:id="vrijemeDolaskaPovratakColumn" prefWidth="75.0" text="Vrijeme dolaska (povratno)" />
+                  <TableColumn fx:id="vrijemePolaskaPovratakColumn" prefWidth="75.0" text="Vrijeme polaska (povratno)" />
                </columns>
             </TableView>
             <JFXTextField fx:id="cijenaJednokratnaTextField" promptText="Cijena obične karte" GridPane.columnIndex="5" GridPane.rowIndex="6" />
@@ -112,8 +112,9 @@
             <JFXTimePicker fx:id="vrijemePolaska2TimePicker" maxWidth="140.0" minWidth="140.0" promptText="Vrijeme povratka" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="7" />
             <JFXComboBox fx:id="zadrzavanjeComboBox" prefWidth="105.0" promptText="Zadržavanje (min)" GridPane.columnIndex="5" GridPane.rowIndex="7" />
             <JFXButton fx:id="sacuvajButton" onAction="#sacuvaj" prefHeight="25.0" prefWidth="110.0" text="Sačuvaj" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
-            <JFXButton fx:id="sljedeciPolazakButton" onAction="#sledeciPolazak" prefHeight="25.0" prefWidth="110.0" text="Sledeći polazak" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
+            <JFXButton fx:id="sljedeciPolazakButton" onAction="#sledeciPolazak" prefHeight="25.0" prefWidth="110.0" text="Sledeći polazak" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
             <JFXButton fx:id="krajUnosaButton" onAction="#krajUnosa" prefHeight="25.0" prefWidth="110.0" text="Kraj unosa" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="8" GridPane.valignment="BOTTOM" />
+            <JFXComboBox fx:id="vremenaPolazaka" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
       <AnchorPane fx:id="menuLine" onMouseClicked="#doubleClick" prefHeight="30.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

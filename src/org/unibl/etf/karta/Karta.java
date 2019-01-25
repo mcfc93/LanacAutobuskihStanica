@@ -298,12 +298,12 @@ public class Karta {
 		
 		
 		
-		String sql = "select VrijemeDolaska,VrijemePolaska,CijenaJednokratna,Dani,relacija.IdRelacije,linija.IdLinije,linija.NazivLinije,linija.Peron,linija.VoznjaPraznikom,NazivPrevoznika,Email,Telefon,prevoznik.JIBPrevoznika,DjackiPopust from relacija join (linija,prevoznik,popust_prevoznika)" + 
-				" on (relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno')" + 
+		String sql = "select VrijemeDolaska,VrijemePolaska,CijenaJednokratna,Dani,relacija.IdRelacije,linija.IdLinije,linija.NazivLinije,linija.Peron,linija.VoznjaPraznikom,NazivPrevoznika,Email,Telefon,prevoznik.JIBPrevoznika,DjackiPopust from relacija join (linija,prevoznik,popust_prevoznika,red_voznje)" + 
+				" on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno')" + 
 				" where (Polaziste=? and Odrediste=?) group by VrijemeDolaska" + 
 				" union" + 
-				" select VrijemeDolaskaPovratna,VrijemePolaskaPovratna,CijenaJednokratna,Dani,relacija.IdRelacije,linija.IdLinije,linija.NazivLinije,linija.Peron,linija.VoznjaPraznikom,NazivPrevoznika,prevoznik.Email,prevoznik.Telefon,prevoznik.JIBPrevoznika,DjackiPopust from relacija join (linija,prevoznik,popust_prevoznika)" + 
-				" on (relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno')" + 
+				" select VrijemeDolaskaPovratna,VrijemePolaskaPovratna,CijenaJednokratna,Dani,relacija.IdRelacije,linija.IdLinije,linija.NazivLinije,linija.Peron,linija.VoznjaPraznikom,NazivPrevoznika,prevoznik.Email,prevoznik.Telefon,prevoznik.JIBPrevoznika,DjackiPopust from relacija join (red_voznje,linija,prevoznik,popust_prevoznika)" + 
+				" on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno')" + 
 				" where (Polaziste=? and Odrediste=?) group by VrijemeDolaskaPovratna order by VrijemeDolaska;";
 		try {
 			c = Util.getConnection();
@@ -364,12 +364,12 @@ public class Karta {
 		//String sql = "select * from linija join (relacija,prevoznik,popust_prevoznika) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika)"
 		//		+ "and (prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and ((Polaziste=? and Odrediste=?) or (Polaziste=? and Odrediste=?)) and (linija.Stanje='Aktivno') order by VrijemePolaska";
 		
-		String sql = "select VrijemePolaska,VrijemeDolaska,CijenaJednokratna,Dani,relacija.IdRelacije,linija.IdLinije,linija.NazivLinije,linija.Peron,linija.VoznjaPraznikom,NazivPrevoznika,Email,Telefon,prevoznik.JIBPrevoznika,DjackiPopust from relacija join (linija,prevoznik,popust_prevoznika)" + 
-				" on (relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno')" + 
+		String sql = "select VrijemePolaska,VrijemeDolaska,CijenaJednokratna,Dani,relacija.IdRelacije,linija.IdLinije,linija.NazivLinije,linija.Peron,linija.VoznjaPraznikom,NazivPrevoznika,Email,Telefon,prevoznik.JIBPrevoznika,DjackiPopust from relacija join (red_voznje,linija,prevoznik,popust_prevoznika)" + 
+				" on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno')" + 
 				" where (Polaziste=? and Odrediste=?) group by VrijemePolaska" + 
 				" union" + 
-				" select VrijemePolaskaPovratna,VrijemeDolaskaPovratna,CijenaJednokratna,Dani,relacija.IdRelacije,linija.IdLinije,linija.NazivLinije,linija.Peron,linija.VoznjaPraznikom,NazivPrevoznika,prevoznik.Email,prevoznik.Telefon,prevoznik.JIBPrevoznika,DjackiPopust from relacija join (linija,prevoznik,popust_prevoznika)" + 
-				" on (relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno')" + 
+				" select VrijemePolaskaPovratna,VrijemeDolaskaPovratna,CijenaJednokratna,Dani,relacija.IdRelacije,linija.IdLinije,linija.NazivLinije,linija.Peron,linija.VoznjaPraznikom,NazivPrevoznika,prevoznik.Email,prevoznik.Telefon,prevoznik.JIBPrevoznika,DjackiPopust from relacija join (red_voznje,linija,prevoznik,popust_prevoznika)" + 
+				" on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno')" + 
 				" where (Polaziste=? and Odrediste=?) group by VrijemePolaskaPovratna order by VrijemePolaska;";
 		try {
 			c = Util.getConnection();

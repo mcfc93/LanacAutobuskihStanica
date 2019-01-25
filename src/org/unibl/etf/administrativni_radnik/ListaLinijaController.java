@@ -302,7 +302,9 @@ public class ListaLinijaController implements Initializable {
 			stage.initStyle(StageStyle.UNDECORATED);
 			stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle(linija.getNazivLinije());
-            stage.setScene(new Scene(root1));  
+            Scene scene = new Scene(root1);
+            scene.getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+            stage.setScene(scene);  
             stage.showAndWait();
             int index = linijeObsList.indexOf(linija);
             linijeObsList.remove(linija);

@@ -1,5 +1,6 @@
 package org.unibl.etf.karta;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +14,9 @@ import java.util.logging.Level;
 import org.unibl.etf.administrativni_radnik.ListaLinijaController;
 import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Relacija {
 	
@@ -38,7 +42,7 @@ public class Relacija {
 	
 
 
-	public Relacija(int idRelacije, int idLinije, Stajaliste polaziste, Stajaliste odrediste, double cijenaJednokratna, double cijenaMjesecna) {
+	public Relacija(int idRelacije, int idLinije, Stajaliste polaziste, Stajaliste odrediste, double cijenaJednokratna, Double cijenaMjesecna) {
 		this.idRelacije = idRelacije;
 		this.linija = new Linija(idLinije);
 		this.polaziste = polaziste;
@@ -259,61 +263,112 @@ public class Relacija {
 	
 
 	public static int dodajRelaciju(Relacija relacija) {
+		/*Connection c = null;
+		CallableStatement s = null;
+	    try {
+	       	c = Util.getConnection();
+	    	s = c.prepareCall("{call dodajRelaciju(?,?,?,?,?,?,?,?,?,?,?,?)}");
+	    	System.out.println("ID: " +relacija.getLinija().getIdLinije());
+	    	System.out.println("polaziste: " + relacija.getPolaziste());
+	    	System.out.println("odrediste: " +relacija.getOdrediste());
+	    	System.out.println("trajanje puta: " + relacija.getDuzinaPuta().toString());
+	    	System.out.println("vrijeme polaska: " +relacija.getVrijemePolaska());
+	    	System.out.println("vrijeme dolaska: "+relacija.getVrijemeDolaska() );
+	    	System.out.println("vrijeme polaska povratak: "+  relacija.getVrijemePolaskaPovratna());
+	    	System.out.println("vrijeme dolaska povratak: " +   relacija.getVrijemeDolaskaPovratna());
+	    	System.out.println("dani: " +relacija.getDani());
+	    	System.out.println("id polaska: " + idPolaska );
+	    	System.out.println("cijena: "+ relacija.getCijenaJednokratna());
+	    	System.out.println("cijena mjesecna: " + relacija.getCijenaMjesecna());
+	    	
+	    	s.setInt(1, relacija.getLinija().getIdLinije());
+	    	s.setInt(2, relacija.getPolaziste().getIdStajalista());
+	    	s.setInt(3, relacija.getOdrediste().getIdStajalista());
+	    	s.setDouble(4, relacija.getCijenaJednokratna());
+	    	s.setTime(5, Time.valueOf(relacija.getDuzinaPuta()));
+	    	s.setTime(6, relacija.getVrijemePolaska());
+	    	s.setTime(7, relacija.getVrijemeDolaska());
+	    	s.setTime(8, relacija.getVrijemePolaskaPovratna());
+	    	s.setTime(9, relacija.getVrijemeDolaskaPovratna());
+	    	s.setString(10, relacija.getDani());
+	    	s.setInt(11, idPolaska);
+	    	s.setDouble(12, relacija.getCijenaMjesecna()==null? 0.0 : relacija.getCijenaMjesecna());
+	    	s.execute();
+	       	return true;
+	    } catch(SQLException e) {
+	    	//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    	e.printStackTrace();
+	    } finally {
+	    	Util.close(s,c);
+	    }
+	    return false;*/
+		
+		String sql = "INSERT INTO relacija VALUE (default,?,?,?,?,?,?)";
 		Connection c = null;
-		ResultSet r =null;
 		PreparedStatement s = null;
-		String sql = "insert into relacija value (default,?,?,?,?,?,?,?,?,?)";
-		String sqlCijenaMjesecna = "insert into cijena_mjesecne_karte value (default,?,?)";
+		ResultSet r =null;
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, true, relacija.getLinija().getIdLinije(), relacija.getPolaziste().getIdStajalista(), relacija.getOdrediste().getIdStajalista(), relacija.getVrijemePolaska(),relacija.getVrijemeDolaska(), relacija.getVrijemePolaskaPovratna(),relacija.getVrijemeDolaskaPovratna(), relacija.getCijenaJednokratna(), relacija.getDani());
-			System.out.println(s.executeUpdate());
+			s = Util.prepareStatement(c, sql, true, relacija.getLinija().getIdLinije(), relacija.getPolaziste().getIdStajalista(), relacija.getOdrediste().getIdStajalista(), relacija.getCijenaJednokratna(),Time.valueOf(relacija.getDuzinaPuta()),relacija.getCijenaMjesecna());
+			s.executeUpdate();
 			r = s.getGeneratedKeys();
+
 			if(r.next()) {
-				if(relacija.getCijenaMjesecna()==null)
-					return r.getInt(1);
-				s = Util.prepareStatement(c, sqlCijenaMjesecna, false, r.getInt(1), relacija.getCijenaMjesecna());
-				System.out.println("Mjesecne:" + s.executeUpdate());
+				System.out.println("op");
 				return r.getInt(1);
 			}
 		} catch (SQLException e) {
-			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-			Util.showBugAlert();
+			// TODO Auto-generated catch block
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}
+		finally {
+			Util.close(r, s, c);
+		}
+		return 0;
+	}
+	
+	public static int dodajRedVoznje(Relacija relacija, int idPolaska) {
+		String sql = "INSERT INTO red_voznje VALUE (default,?,?,?,?,?,?,?)"; 
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet r =null;
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, true, relacija.getVrijemePolaska(), relacija.getVrijemeDolaska(), relacija.getVrijemePolaskaPovratna(), relacija.getVrijemeDolaskaPovratna(), relacija.getDani(), relacija.getIdRelacije(), idPolaska);
+			s.executeUpdate();
+			r = s.getGeneratedKeys();
+
+			if(r.next()) {
+				return r.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		}finally {
+			Util.close(r, s, c);
 		}
 		return 0;
 	}
 	
 	public static boolean izmijeniRelaciju(Relacija relacija) {
 		Connection c = null;
-		ResultSet r =null;
+		String sql = "update relacija set CijenaJednokratna=?,CijenaMjesecna=? where IdRelacije=?";
 		PreparedStatement s = null;
-		String sql = "update relacija set CijenaJednokratna=?, VrijemePolaska=?, VrijemeDolaska=? where IdRelacije=?";
-		String sqlPolazak = "update relacija set relacija.VrijemePolaska=? where relacija.IdLinije=? and relacija.Polaziste=?";
-		String sqlDolazak = "update relacija set relacija.VrijemeDolaska=? where relacija.IdLinije=? and relacija.Odrediste=?";
-		String sqlCijenaMjesecna = "update cijena_mjesecne_karte set CijenaMjesecna=12 where IdRelacije=?";
-		try {
-			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false, relacija.getCijenaJednokratna(), relacija.getVrijemePolaska(),
-					relacija.getVrijemeDolaska(), relacija.getIdRelacije());
-			s.executeUpdate();
-			s = Util.prepareStatement(c, sqlPolazak, false, relacija.getVrijemePolaska(), relacija.getLinija().getIdLinije(), relacija.getPolaziste().getIdStajalista());
-			s.executeUpdate();
-			s = Util.prepareStatement(c, sqlDolazak, false, relacija.getVrijemeDolaska(), relacija.getLinija().getIdLinije(), relacija.getPolaziste().getIdStajalista());
-			s.executeUpdate();
-			s = Util.prepareStatement(c, sqlCijenaMjesecna, false, relacija.getLinija().getIdLinije());
-			s.executeUpdate();
-			return true;
-		} catch (SQLException e) {
-			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-			Util.showBugAlert();
-		}
-		finally {
-			Util.close(r, s, c);
-		}
-		return false;
+	    try {
+	       	c = Util.getConnection();
+	    	s = Util.prepareStatement(c, sql, false, relacija.getCijenaJednokratna(), relacija.getCijenaMjesecna(), relacija.getIdRelacije());
+	    	if(s.executeUpdate()==1) {
+	    		return true;
+	    	}
+	    } catch(SQLException e) {
+	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+	    } finally {
+	    	Util.close(s,c);
+	    }
+	    return false;
 	}
 	
-	public static List<Relacija> getRelacije(int idLinije) {
+	/*public static List<Relacija> getRelacije(int idLinije) {
 		List<Relacija> relacijeList = new ArrayList<>();
 		Connection c = null;
 		ResultSet r =null;
@@ -343,8 +398,68 @@ public class Relacija {
 			Util.showBugAlert();
 		}
 		return null;
-	}
+	}*/
 
+	public static ObservableList<String> getVremenaPolazaka(int pStajaliste, int oStajaliste) {
+		ObservableList<String> datumList = FXCollections.observableArrayList();
+		Connection c = null;
+		ResultSet r =null;
+		PreparedStatement s = null;
+		String sql = "select VrijemePolaska,VrijemePolaskaPovratna from linija join (red_voznje,relacija) on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and Polaziste=PStajaliste and Odrediste=OStajaliste) where PStajaliste=? and OStajaliste=?";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, pStajaliste, oStajaliste);
+			r = s.executeQuery();
+			while(r.next()) {
+				datumList.add( r.getTime("VrijemePolaska").toLocalTime().toString() + " - " + r.getTime("VrijemePolaskaPovratna").toLocalTime().toString());
+			}
+			return datumList;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
+			return datumList;
+		}
+		finally {
+			Util.close(r, s, c);
+		}
+
+	}
+	public static List<Relacija> getRelacije(int idLinije, int idPolaska) {
+		List<Relacija> relacijeList = new ArrayList<>();
+		Connection c = null;
+		ResultSet r =null;
+		PreparedStatement s = null;
+		String sql = "select relacija.IdRelacije,Dani,Polaziste,Odrediste,VrijemePolaska,VrijemeDolaska,VrijemePolaskaPovratna,VrijemeDolaskaPovratna,CijenaJednokratna,CijenaMjesecna,TrajanjePuta from relacija left join (red_voznje,linija) on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije) where relacija.IdLinije=? and IdPolaska=?";
+		try {
+			c = Util.getConnection();
+			s = Util.prepareStatement(c, sql, false, idLinije, idPolaska);
+			r = s.executeQuery();
+			while(r.next()) {
+				
+				int idPolazista = r.getInt("Polaziste");
+				int idOdredista = r.getInt("Odrediste");
+				Stajaliste polaziste = ListaLinijaController.stajalistaList.stream().filter(x -> x.getIdStajalista()==idPolazista).findFirst().get();
+				System.out.println(polaziste);
+				Stajaliste odrediste = ListaLinijaController.stajalistaList.stream().filter(y -> y.getIdStajalista()==idOdredista).findFirst().get();
+				System.out.println(odrediste);
+
+				Relacija relacija = new Relacija(r.getInt("IdRelacije"), idLinije, polaziste, odrediste, r.getDouble("CijenaJednokratna"), (r.getDouble("CijenaMjesecna")==0.0)? null:r.getDouble("CijenaMjesecna"));
+				relacija.setVrijemeDolaska(r.getTime("VrijemeDolaska"));
+				relacija.setVrijemePolaska(r.getTime("VrijemePolaska"));
+				relacija.setVrijemeDolaskaPovratna(r.getTime("VrijemeDolaskaPovratna"));
+				relacija.setVrijemePolaskaPovratna(r.getTime("VrijemePolaskaPovratna"));
+				relacija.setDani(r.getString("Dani"));
+				relacija.setDuzinaPuta(r.getTime("TrajanjePuta").toLocalTime());
+				relacijeList.add(relacija);
+			}
+			return relacijeList;
+		} catch (SQLException e) {
+			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+			Util.showBugAlert();
+		}
+		return null;
+	}
 
 
 	public Double getCijenaJednokratna() {
