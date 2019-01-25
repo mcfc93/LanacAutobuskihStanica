@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.prijava.PrijavaController;
@@ -303,7 +304,7 @@ public class Karta {
 				" union" + 
 				" select VrijemeDolaskaPovratna,VrijemePolaskaPovratna,CijenaJednokratna,Dani,relacija.IdRelacije,linija.IdLinije,linija.NazivLinije,linija.Peron,linija.VoznjaPraznikom,NazivPrevoznika,prevoznik.Email,prevoznik.Telefon,prevoznik.JIBPrevoznika,DjackiPopust from relacija join (linija,prevoznik,popust_prevoznika)" + 
 				" on (relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno')" + 
-				" where (Polaziste=? and Odrediste=?) group by VrijemeDolaskaPovratna;";
+				" where (Polaziste=? and Odrediste=?) group by VrijemeDolaskaPovratna order by VrijemeDolaska;";
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, polaziste.getIdStajalista(), odrediste.getIdStajalista(), odrediste.getIdStajalista(), polaziste.getIdStajalista());
@@ -311,7 +312,7 @@ public class Karta {
 			while(r.next()) {
 	       		Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"), r.getString("Email"), r.getString("Telefon"),  r.getString("JIBPrevoznika"), r.getDouble("DjackiPopust"));
 	       		Linija linija = new Linija(r.getInt("IdLinije"), r.getString("NazivLinije"), r.getInt("Peron"), prevoznik, r.getInt("VoznjaPraznikom"));
-	       		Relacija relacija = new Relacija(r.getInt("IdRelacije"), linija, polaziste, odrediste, r.getTime("VrijemeDolaska"), r.getTime("VrijemePolaska"), r.getDouble("CijenaJednokratna"), r.getString("Dani"));
+	       		Relacija relacija = new Relacija(r.getInt("IdRelacije"), linija, polaziste, odrediste, r.getTime("VrijemePolaska"), r.getTime("VrijemeDolaska"), r.getDouble("CijenaJednokratna"), r.getString("Dani"));
 	       		Karta karta = new Karta(relacija);
 	       		karteList.add(karta);
 	       	}
@@ -327,7 +328,7 @@ public class Karta {
        			       		Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"), r.getString("Email"), r.getString("Telefon"),  r.getString("JIBPrevoznika"), r.getDouble("DjackiPopust"));
        			       		Linija linija = new Linija(r.getInt("IdLinije"), r.getString("NazivLinije"), r.getInt("Peron"), prevoznik, r.getInt("VoznjaPraznikom"));
        			       		// -- PREPRAVITI
-       			       		Relacija relacija = new Relacija(r.getInt("IdRelacije"), linija, polaziste, stajaliste, r.getTime("VrijemeDolaska"), r.getTime("VrijemePolaska"), r.getDouble("CijenaJednokratna"), r.getString("Dani"));
+       			       		Relacija relacija = new Relacija(r.getInt("IdRelacije"), linija, polaziste, stajaliste, r.getTime("VrijemePolaska"), r.getTime("VrijemeDolaska"), r.getDouble("CijenaJednokratna"), r.getString("Dani"));
        			       		Karta karta = new Karta(relacija);
        			       		System.out.println(karta);
        			       		
@@ -369,7 +370,7 @@ public class Karta {
 				" union" + 
 				" select VrijemePolaskaPovratna,VrijemeDolaskaPovratna,CijenaJednokratna,Dani,relacija.IdRelacije,linija.IdLinije,linija.NazivLinije,linija.Peron,linija.VoznjaPraznikom,NazivPrevoznika,prevoznik.Email,prevoznik.Telefon,prevoznik.JIBPrevoznika,DjackiPopust from relacija join (linija,prevoznik,popust_prevoznika)" + 
 				" on (relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno')" + 
-				" where (Polaziste=? and Odrediste=?) group by VrijemePolaskaPovratna;";
+				" where (Polaziste=? and Odrediste=?) group by VrijemePolaskaPovratna order by VrijemePolaska;";
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, polaziste.getIdStajalista(), odrediste.getIdStajalista(), odrediste.getIdStajalista(), polaziste.getIdStajalista());
@@ -406,7 +407,7 @@ public class Karta {
        		} else {
 				System.out.println("ODREDISTE NIJE STANICA");
 			}
-			return karteList;
+			return karteList/*.stream().sorted((k1,k2) -> k1.getVrijemePolaska().toLocalTime().compareTo(k2.getVrijemePolaska().toLocalTime())).collect(Collectors.toList())*/;
 		}
 		catch(SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);

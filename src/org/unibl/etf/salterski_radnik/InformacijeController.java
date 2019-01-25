@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.controlsfx.control.MaskerPane;
@@ -211,6 +212,9 @@ public class InformacijeController implements Initializable{
 		});
 		
 		
+		vrijemeDolaskaColumn.setVisible(false);
+		cijenaColumn.setVisible(false);
+		
 		kraj=false;
 		progressPane = Util.getMaskerPane(tableAnchorPane);
 		progressPane.setVisible(false);
@@ -255,11 +259,20 @@ public class InformacijeController implements Initializable{
 								System.out.println("SLEEP_5 - CONTINUE");
 							}
 		    				
+		    				
+	    					karteObs.clear();
+		    				karteObs.addAll(Karta.getInfoList(polasciDolasciComboBox.getValue()));
+		    				
 		    				Platform.runLater(() -> {
-		    					karteObs.clear();
-		    					
-			    				karteObs.addAll(Karta.getInfoList(polasciDolasciComboBox.getValue()));
 			    				karteTable.refresh();
+								cijenaColumn.setVisible(false);
+								if(polasciDolasciComboBox.getSelectionModel().isSelected(0)) {
+									vrijemePolaskaColumn.setVisible(true);
+									vrijemeDolaskaColumn.setVisible(false);
+								} else {
+									vrijemePolaskaColumn.setVisible(false);
+									vrijemeDolaskaColumn.setVisible(true);
+								}
 								progressPane.setVisible(false);
 							});
 	    				}
@@ -360,9 +373,15 @@ public class InformacijeController implements Initializable{
 			    					}
 			    					System.out.println("NASTAVAK");
 								}
+								karteObs.clear();
+								karteObs.addAll(tmp);
+								
 								Platform.runLater(() -> {
-									karteObs.clear();
-									karteObs.addAll(tmp);
+									vrijemePolaskaColumn.setVisible(true);
+									vrijemeDolaskaColumn.setVisible(true);
+									cijenaColumn.setVisible(true);
+									//karteTable.getSortOrder().s
+									karteTable.refresh();
 									if(karteObs.isEmpty()) {
 										Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
 									}

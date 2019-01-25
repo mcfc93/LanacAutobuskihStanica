@@ -240,6 +240,7 @@ public class ProdajaKarataController implements Initializable {
 		//autoComplete();    
 		validationSetUp();
 		
+		datum.setValue(LocalDate.now());
 		
 		datum.setDayCellFactory(datePicker -> new DateCell() {
             @Override
@@ -256,6 +257,11 @@ public class ProdajaKarataController implements Initializable {
             }
         });
         datum.setEditable(false);
+        
+        datum.valueProperty().addListener((observable, oldValue, newValue) -> {
+        	System.out.println("DATUM PROMJENJEN");
+        	//odredisteTextField.fireEvent(new KeyEvent(KeyEvent.KEY_RELEASED, KeyCode.ENTER.toString(), KeyCode.ENTER.toString(), KeyCode.ENTER, false, false, false, false));
+        });
 	}
 	
 
