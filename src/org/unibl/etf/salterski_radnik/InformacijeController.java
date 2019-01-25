@@ -335,13 +335,15 @@ public class InformacijeController implements Initializable{
 								System.out.println("UCITAVANJE: " + Thread.currentThread());
 								List<Karta> tmp = new ArrayList<>();
 								if(polasciDolasciComboBox.getSelectionModel().isSelected(0)) {
-									for(Karta karta : Karta.getKarteList(polaziste,odrediste,polasciDolasciComboBox.getValue())) {
+									//POLASCI
+									for(Karta karta : Karta.getKarteList(polaziste,odrediste)) {
 										if(karta.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue()))) {
 											tmp.add(karta);
 										}
 									}
 								} else {
-									for(Karta karta : Karta.getKarteList(odrediste, polaziste, polasciDolasciComboBox.getValue())) {
+									//DOLASCI
+									for(Karta karta : Karta.getKarteListDolasci(polaziste,odrediste)) {
 										if(karta.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue()))) {
 											tmp.add(karta);
 										}
