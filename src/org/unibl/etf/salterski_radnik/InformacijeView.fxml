@@ -44,9 +44,9 @@
                 <TableColumn fx:id="nazivLinijeColumn" prefWidth="76.0" text="Linija" />
                 <TableColumn fx:id="vrijemePolaskaColumn" prefWidth="74.0" text="Polazak" />
                   <TableColumn fx:id="vrijemeDolaskaColumn" prefWidth="75.0" text="Dolazak" />
-                  <TableColumn fx:id="cijenaColumn" prefWidth="75.0" text="Cijena" />
-                  <TableColumn fx:id="prevoznikColumn" prefWidth="75.0" text="Prevoznik" />
+                  <TableColumn fx:id="cijenaColumn" prefWidth="75.0" text="Cijena [KM]" />
                   <TableColumn fx:id="peronColumn" prefWidth="75.0" text="Peron" />
+                  <TableColumn fx:id="prevoznikColumn" prefWidth="75.0" text="Prevoznik" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -54,9 +54,9 @@
             </TableView>
          </children>
       </AnchorPane>
-      <Label prefHeight="30.0" prefWidth="124.0" text="DATUM I VRIJEME" wrapText="true" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+      <Label fx:id="vrijemeLabel" alignment="BOTTOM_RIGHT" prefHeight="30.0" prefWidth="100.0" text="VRIJEME" wrapText="true" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
          <font>
-            <Font name="System Bold" size="14.0" />
+            <Font name="Arial Bold" size="14.0" />
          </font>
       </Label>
       <JFXComboBox fx:id="polasciDolasciComboBox" maxWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP" />

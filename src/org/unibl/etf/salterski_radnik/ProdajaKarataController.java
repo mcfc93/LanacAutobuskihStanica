@@ -37,6 +37,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -226,6 +227,23 @@ public class ProdajaKarataController implements Initializable {
 		prevoznikColumn.setCellValueFactory(new PropertyValueFactory<>("nazivPrevoznika"));
 		cijenaColumn.setCellValueFactory(new PropertyValueFactory<>("cijena"));
 		peronColumn.setCellValueFactory(new PropertyValueFactory<>("peron"));
+		
+		nazivRelacijeColumn.setMinWidth(150);
+		
+		prevoznikColumn.setMinWidth(80);
+		prevoznikColumn.setMinWidth(120);
+        
+        vrijemePolaskaColumn.setMinWidth(70);
+        vrijemePolaskaColumn.setMaxWidth(70);
+        
+        vrijemeDolaskaColumn.setMinWidth(70);
+        vrijemeDolaskaColumn.setMaxWidth(70);
+        
+        cijenaColumn.setMinWidth(75);
+        cijenaColumn.setMaxWidth(75);
+        
+        peronColumn.setMinWidth(40);
+        peronColumn.setMaxWidth(40);
 		/*
 		datum.setDayCellFactory(picker -> new DateCell() {
 	        public void updateItem(LocalDate date, boolean empty) {
@@ -261,6 +279,7 @@ public class ProdajaKarataController implements Initializable {
         datum.valueProperty().addListener((observable, oldValue, newValue) -> {
         	System.out.println("DATUM PROMJENJEN");
         	//odredisteTextField.fireEvent(new KeyEvent(KeyEvent.KEY_RELEASED, KeyCode.ENTER.toString(), KeyCode.ENTER.toString(), KeyCode.ENTER, false, false, false, false));
+        	pretragaButton.fireEvent(new ActionEvent());
         });
 	}
 	

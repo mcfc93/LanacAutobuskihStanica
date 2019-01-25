@@ -4,6 +4,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.MonthDay;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -27,6 +28,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DateCell;
@@ -98,6 +100,9 @@ public class InformacijeController implements Initializable{
     @FXML
     private JFXComboBox<String> polasciDolasciComboBox;
     
+    @FXML
+    private Label vrijemeLabel;
+    
     
     private static Thread thread;
 	private static MaskerPane progressPane;
@@ -106,6 +111,8 @@ public class InformacijeController implements Initializable{
 	private static volatile boolean cekaj=false;
 	public static Object lock=new Object();
 	
+	
+	private static Thread vrijemeThread;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -172,6 +179,10 @@ public class InformacijeController implements Initializable{
 		
 		karteTable.setItems(karteObs);
 		datum.setValue(LocalDate.now());
+		datum.valueProperty().addListener((observable, oldValue, newValue) -> {
+        	System.out.println("DATUM PROMJENJEN");
+        	ucitajLinije(new KeyEvent(KeyEvent.KEY_RELEASED, KeyCode.ENTER.toString(), KeyCode.ENTER.toString(), KeyCode.ENTER, false, false, false, false));
+        });
 		//nazivMjesta = getNazivMjesta();
 	//	ucitajMjesta();
 		karteTable.setPlaceholder(new Label("Odaberite relaciju i datum"));
@@ -183,6 +194,23 @@ public class InformacijeController implements Initializable{
 		prevoznikColumn.setCellValueFactory(new PropertyValueFactory<>("nazivPrevoznika"));
 		cijenaColumn.setCellValueFactory(new PropertyValueFactory<>("cijena"));
 		peronColumn.setCellValueFactory(new PropertyValueFactory<>("peron"));
+		
+		nazivLinijeColumn.setMinWidth(150);
+		
+		prevoznikColumn.setMinWidth(80);
+		prevoznikColumn.setMinWidth(120);
+        
+        vrijemePolaskaColumn.setMinWidth(70);
+        vrijemePolaskaColumn.setMaxWidth(70);
+        
+        vrijemeDolaskaColumn.setMinWidth(70);
+        vrijemeDolaskaColumn.setMaxWidth(70);
+        
+        cijenaColumn.setMinWidth(75);
+        cijenaColumn.setMaxWidth(75);
+        
+        peronColumn.setMinWidth(40);
+        peronColumn.setMaxWidth(40);
 		
 		Util.setAutocompleteList(mjestoTextField, stajalistaBezStanica.stream().map(Stajaliste::toString).collect(Collectors.toList()));
 		//mjestoTextField.getValidators().addAll(Util.requredFieldValidator(mjestoTextField),Util.collectionValidator(mjestoTextField, mjestaSet, true, "Unesite mjesto"));
@@ -308,6 +336,30 @@ public class InformacijeController implements Initializable{
 	        thread = new Thread(task);
 	        thread.setDaemon(true);
 	        thread.start();
+		}
+		
+		
+		if(vrijemeThread==null || !vrijemeThread.isAlive()) {
+			System.out.println("START [vrijeme] - " + (vrijemeThread==null? "NULL": vrijemeThread.getState()));
+			vrijemeThread=new Thread() {
+				@Override
+				public void run() {
+					while(!kraj) {
+						System.out.println("Azuriranje vremena");
+						String vrijeme = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")).toString();
+						Platform.runLater(() -> {
+							vrijemeLabel.setText(vrijeme);
+						});
+						try {
+							Thread.sleep(1000);
+						}catch (InterruptedException e) {
+							Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+						}
+					}
+					System.out.println("STOP [vrijeme]");
+				}
+			};
+			vrijemeThread.start();
 		}
         
 	}
