@@ -523,22 +523,3 @@ end$$
 
 DELIMITER ;
 
-
-delimiter $$
-CREATE PROCEDURE dodajRelaciju(in pIdLinije INT(11), in pPolaziste INT(11), in pOdrediste INT(11), in pCijenaJednokratna DOUBLE, in pTrajanjePuta TIME, in pVrijemePolaska TIME, in pVrijemeDolaska TIME, 
-in pVrijemePolaskaPovratna TIME, in pVrijemeDolaskaPovratna TIME, in pDani varchar(45), in pIdPolaska INT(11), in pCijenaMjesecna DOUBLE)
-begin
-    INSERT INTO relacija VALUE (default,pIdLinije,pPolaziste,pOdrediste,pCijenaJednokratna,pTrajanjePuta,pCijenaMjesecna);
-	INSERT INTO red_voznje VALUE (default,pVrijemePolaska,pVrijemeDolaska,pVrijemePolaskaPovratna,pVrijemeDolaskaPovratna,pDani,LAST_INSERT_ID(), pIdPolaska);
-end $$
-delimiter ;
-
-
-delimiter $$
-CREATE PROCEDURE izmijeniRelaciju(in pIdRelacije INT(11), in pCijenaJednokratna DOUBLE, in pVrijemePolaska TIME, in pVrijemeDolaska TIME, 
-in pVrijemePolaskaPovratna TIME, in pVrijemeDolaskaPovratna TIME, in pDani varchar(45), in pIdPolaska INT(11), in pCijenaMjesecna DOUBLE)
-begin
-update relacija set CijenaJednokratna=pCijenaJednokratna,CijenaMjesecna=pCijenaMjesecna where IdRelacije=pIdRelacije;
-update red_voznje set VrijemePolaska=pVrijemePolaska,VrijemeDolaska=pVrijemeDolaska,VrijemeDolaskaPovratna=pVrijemeDolaskaPovratna,VrijemePolaskaPovratna=pVrijemePolaskaPovratna,Dani where IdRelacije=pIdRelacije and IdPolaska=pIdPolaska;
-end $$
-delimiter ;
