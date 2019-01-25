@@ -29,6 +29,7 @@ import com.jfoenix.validation.IntegerValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
 import com.jfoenix.validation.base.ValidatorBase;
 
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -598,15 +599,17 @@ System.out.println(PROPERTY);
 	}
 
 	public static void showBugAlert() {
-		Alert alert=new Alert(AlertType.ERROR);
-		alert.setTitle("Greška");
-		alert.setHeaderText("NEOČEKIVANO PONAŠANJE!");
-		alert.setContentText("Kontakrirajte Administratora sistema.");
-		
-		alert.getDialogPane().getStylesheets().add(Util.class.getResource("/org/unibl/etf/application.css").toExternalForm());
-		alert.getDialogPane().getStyleClass().addAll("alert", "alertBug");
-		
-		alert.showAndWait();
+		Platform.runLater(() -> {
+			Alert alert=new Alert(AlertType.ERROR);
+			alert.setTitle("Greška");
+			alert.setHeaderText("NEOČEKIVANO PONAŠANJE!");
+			alert.setContentText("Kontakrirajte Administratora sistema.");
+			
+			alert.getDialogPane().getStylesheets().add(Util.class.getResource("/org/unibl/etf/application.css").toExternalForm());
+			alert.getDialogPane().getStyleClass().addAll("alert", "alertBug");
+			
+			alert.showAndWait();
+		});
 	}
 	
 	public static MaskerPane getMaskerPane(AnchorPane anchorPane) {

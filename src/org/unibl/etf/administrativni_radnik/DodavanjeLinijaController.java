@@ -21,6 +21,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -514,8 +515,10 @@ public class DodavanjeLinijaController implements Initializable {
 		            @Override
 		            protected void succeeded(){
 		                super.succeeded();
-		                progressPane.setVisible(false);
-				        Util.getNotifications("Obavještenje", "Relacije dodane.", "Information").show();
+		                Platform.runLater(() -> {
+		                	progressPane.setVisible(false);
+		                	Util.getNotifications("Obavještenje", "Relacije dodane.", "Information").show();
+		                });
 		            }
 		        };
 		        new Thread(task).start();

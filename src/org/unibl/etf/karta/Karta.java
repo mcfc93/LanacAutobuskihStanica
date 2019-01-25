@@ -26,6 +26,8 @@ import org.unibl.etf.salterski_radnik.ProdajaKarataController;
 import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 
+import javafx.application.Platform;
+
 public class Karta {
 	protected int serijskiBroj;
 	protected Relacija relacija;

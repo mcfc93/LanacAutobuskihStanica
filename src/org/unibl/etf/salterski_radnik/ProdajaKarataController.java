@@ -31,6 +31,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -547,8 +548,10 @@ public class ProdajaKarataController implements Initializable {
 				            @Override
 				            protected void succeeded(){
 				                super.succeeded();
-				                progressPane.setVisible(false);
-						    	Util.getNotifications("Obavještenje", "Karte napravljene.", "Information").show();
+				                Platform.runLater(() -> {
+					                progressPane.setVisible(false);
+							    	Util.getNotifications("Obavještenje", "Karte napravljene.", "Information").show();
+				                });
 				            }
 				        };
 				        new Thread(task).start();
@@ -578,8 +581,10 @@ public class ProdajaKarataController implements Initializable {
 			            @Override
 			            protected void succeeded(){
 			                super.succeeded();
-			                progressPane.setVisible(false);
-					    	Util.getNotifications("Obavještenje", "Karte napravljene.", "Information").show();
+			                Platform.runLater(() -> {
+				                progressPane.setVisible(false);
+						    	Util.getNotifications("Obavještenje", "Karte napravljene.", "Information").show();
+			                });
 			            }
 			        };
 			        new Thread(task).start();
