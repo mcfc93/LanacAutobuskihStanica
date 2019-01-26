@@ -200,13 +200,11 @@ public class IzmjenaLinijeController implements Initializable {
 		vremenaPolazaka.valueProperty().addListener((observable,oldValue,newValue) -> {
 			relacijeObsList.clear();
 			if(newValue!=null) {
-				System.out.println("new:" + newValue);
 				relacijeObsList.setAll(Relacija.getRelacije(ListaLinijaController.odabranaLinija.getIdLinije(),idPolaskaList.get(vremenaPolazaka.getSelectionModel().getSelectedIndex())));
-				System.out.println("aa");
-				cijenaJednokratnaTextField.clear();
-				cijenaMjesecnaTextField.clear();
-				cijenaJednokratnaTextField.resetValidation();
-				cijenaMjesecnaTextField.resetValidation();
+				//cijenaJednokratnaTextField.clear();
+				//cijenaMjesecnaTextField.clear();
+				//cijenaJednokratnaTextField.resetValidation();
+				//cijenaMjesecnaTextField.resetValidation();
 				vrijemePolaska1TimePicker.setValue(null);
 				vrijemePolaska2TimePicker.setValue(null);
 				vrijemePolaska1TimePicker.resetValidation();
@@ -220,6 +218,7 @@ public class IzmjenaLinijeController implements Initializable {
 				if(!relacijeObsList.isEmpty()) {
 					
 					relacijeTableView.getSelectionModel().selectFirst();
+					cijenaJednokratnaTextField.setText(Double.toString(relacijeTableView.getSelectionModel().getSelectedItem().getCijenaJednokratna()));
 					vrijemePolaska1TimePicker.setValue(LocalTime.parse(vremenaPolazaka.getValue().split(" - ")[0], DateTimeFormatter.ofPattern("HH:mm")));
 					vrijemePolaska2TimePicker.setValue(LocalTime.parse(vremenaPolazaka.getValue().split(" - ")[1], DateTimeFormatter.ofPattern("HH:mm")));
 					postavljanjeCheckBox(relacijeTableView.getSelectionModel().getSelectedItem().getDani());
@@ -530,7 +529,7 @@ public class IzmjenaLinijeController implements Initializable {
 			else
 				relacijeTableView.getSelectionModel().getSelectedItem().setCijenaMjesecna(null);
 			
-			Relacija novaRelacija = relacijeTableView.getSelectionModel().getSelectedItem();
+			//Relacija novaRelacija = relacijeTableView.getSelectionModel().getSelectedItem();
 			
 			MaskerPane progressPane = Util.getMaskerPane(anchorPane);
 			Task<Void> task = new Task<Void>() {
@@ -542,13 +541,14 @@ public class IzmjenaLinijeController implements Initializable {
 					String dani2 = dani.substring(0, dani.length()-1);
 					relacijeObsList.forEach(r -> r.setDani(dani2));
 					
-					if(Relacija.izmijeniRelaciju(novaRelacija)) {
-						Platform.runLater(() -> {
-							Util.getNotifications("Obavještenje", "Relacija izmjenjena.", "Information").show();
-							relacijeTableView.refresh();
+					relacijeObsList.forEach(r -> Relacija.izmijeniRelaciju(r, idPolaskaList.get(vremenaPolazaka.getSelectionModel().getSelectedIndex()))); 
+						
+					Platform.runLater(() -> {
+						Util.getNotifications("Obavještenje", "Relacije izmjenjene.", "Information").show();
+						relacijeTableView.refresh();
 							
 						});
-					}
+					
 	                return null;
 	            }
 	            @Override

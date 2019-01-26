@@ -175,7 +175,7 @@ public class DodavanjeLinijaController implements Initializable {
 		vrijemePolaska2TimePicker.setIs24HourView(true);
 		vrijemePolaska2TimePicker.converterProperty().set(new LocalTimeStringConverter(FormatStyle.SHORT, Locale.UK));
 		
-		nazivLinijeTextField.getValidators().addAll(Util.requiredFieldValidator(nazivLinijeTextField),Util.lengthValidator(nazivLinijeTextField, 45));
+		nazivLinijeTextField.getValidators().addAll(Util.requiredFieldValidator(nazivLinijeTextField),Util.lengthValidator(nazivLinijeTextField, 200));
 		prevoznikComboBox.getValidators().add(Util.requiredFieldValidator(prevoznikComboBox));
 		peronComboBox.getValidators().add(Util.requiredFieldValidator(peronComboBox));
 		prazniciComboBox.getValidators().add(Util.requiredFieldValidator(prazniciComboBox));

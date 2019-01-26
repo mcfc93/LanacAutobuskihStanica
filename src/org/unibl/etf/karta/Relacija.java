@@ -354,13 +354,17 @@ public class Relacija {
 		return 0;
 	}
 	
-	public static boolean izmijeniRelaciju(Relacija relacija) {
+	public static boolean izmijeniRelaciju(Relacija relacija, int idPolaska) {
 		Connection c = null;
 		String sql = "update relacija set CijenaJednokratna=?,CijenaMjesecna=? where IdRelacije=?";
+		String sqlRedVoznje = "update red_voznje set Dani=?,VrijemePolaska=?,VrijemeDolaska=?, VrijemePolaskaPovratna=?,VrijemeDolaskaPovratna=? where IdRelacije=? and IdPolaska=?";
 		PreparedStatement s = null;
 	    try {
 	       	c = Util.getConnection();
 	    	s = Util.prepareStatement(c, sql, false, relacija.getCijenaJednokratna(), relacija.getCijenaMjesecna(), relacija.getIdRelacije());
+	    	s.executeUpdate();
+	    	s.close();
+	    	s = Util.prepareStatement(c, sqlRedVoznje, false, relacija.getDani(), relacija.getVrijemePolaska(), relacija.getVrijemeDolaska(), relacija.getVrijemePolaskaPovratna(), relacija.getVrijemeDolaskaPovratna(), relacija.getIdRelacije(), idPolaska);
 	    	if(s.executeUpdate()==1) {
 	    		return true;
 	    	}
