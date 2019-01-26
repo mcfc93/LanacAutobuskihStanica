@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.controlsfx.control.MaskerPane;
@@ -28,7 +27,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DateCell;
@@ -226,7 +224,7 @@ public class InformacijeController implements Initializable{
 //			} else {
 				mjestoTextField.clear();
 				thread.interrupt();
-				System.out.println("INTERRUPT");
+				System.out.println("INTERRUPT - ComboBox");
 //			}
 		});
 		
@@ -254,69 +252,74 @@ public class InformacijeController implements Initializable{
 	            	System.out.println(Thread.currentThread());
 	                //progressPane.setVisible(true);
 	                //thread.start();
-	                
 	                while(!kraj) {
-	    				if(pauza) {
-	    					System.out.println("PAUZA");
-	    					synchronized(lock) {
-	    						try {
-	    							lock.wait();
-	    						} catch(InterruptedException e) {
-	    							//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-	    							System.out.println("WAIT - CONTINUE");
-	    						}
-	    					}
-	    					System.out.println("NASTAVAK");
-	    				}
-	    				cekaj=true;
-	    				
-	    				Platform.runLater(() -> {
-	    					progressPane.setVisible(true);
-	    				});
-	    				
-	    				/**
-	    				 * UCITAVANJE
-	    				 */
-	    				
-	    				synchronized(karteObs) {
-		    				System.out.println("UCITAVANJE: " +polasciDolasciComboBox.getValue());
-		    				try {
-								Thread.sleep(5000);
-							}catch (InterruptedException e) {
-								//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-								System.out.println("SLEEP_5 - CONTINUE");
-							}
-		    				
-		    				
-	    					karteObs.clear();
-		    				karteObs.addAll(Karta.getInfoList(polasciDolasciComboBox.getValue()));
+	                	//try {
+		    				if(pauza) {
+		    					System.out.println("PAUZA");
+		    					synchronized(lock) {
+		    						try {
+		    							lock.wait();
+		    						} catch(InterruptedException e) {
+		    							//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		    							//System.out.println("WAIT - CONTINUE");
+		    						}
+		    					}
+		    					System.out.println("NASTAVAK");
+		    				}
+		    				cekaj=true;
 		    				
 		    				Platform.runLater(() -> {
-			    				karteTable.refresh();
-								cijenaColumn.setVisible(false);
-								if(polasciDolasciComboBox.getSelectionModel().isSelected(0)) {
-									vrijemePolaskaColumn.setVisible(true);
-									vrijemeDolaskaColumn.setVisible(false);
-								} else {
-									vrijemePolaskaColumn.setVisible(false);
-									vrijemeDolaskaColumn.setVisible(true);
+		    					progressPane.setVisible(true);
+		    				});
+		    				
+		    				synchronized(karteObs) {
+			    				System.out.println("UCITAVANJE: " + polasciDolasciComboBox.getValue());
+			    				try {
+									Thread.sleep(5000);
+								}catch (InterruptedException e) {
+									//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+									System.out.println("SLEEP_5 - CONTINUE");
 								}
+			    				
+			    				
+		    					List<Karta> tmpKarte=Karta.getInfoList(polasciDolasciComboBox.getValue());
+			    				
+			    				Platform.runLater(() -> {
+			    					karteObs.clear();
+				    				karteObs.addAll(tmpKarte);
+									cijenaColumn.setVisible(false);
+									if(polasciDolasciComboBox.getSelectionModel().isSelected(0)) {
+										vrijemePolaskaColumn.setVisible(true);
+										vrijemeDolaskaColumn.setVisible(false);
+									} else {
+										vrijemePolaskaColumn.setVisible(false);
+										vrijemeDolaskaColumn.setVisible(true);
+									}
+									progressPane.setVisible(false);
+								});
+		    				}
+		    				
+		    				synchronized(lock) {
+		    					cekaj=false;
+		    					lock.notify();
+		    				}
+		    				
+		    				try {
+		    					Thread.sleep(2000);
+		    				}catch (InterruptedException e) {
+		    					//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+		    					//System.out.println("SLEEP_2 - CONTINUE");
+		    				}
+		    			/*
+	                	} catch(InterruptedException e) {
+							//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+							System.out.println("CATCH - INTERRUPT");
+							Platform.runLater(() -> {
 								progressPane.setVisible(false);
 							});
-	    				}
-	    				synchronized(lock) {
-	    					cekaj=false;
-	    					lock.notify();
-	    				}
-	    				
-	    				try {
-	    					Thread.sleep(2000);
-	    				}catch (InterruptedException e) {
-	    					//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-	    					System.out.println("SLEEP_2 - CONTINUE");
-	    				}
+						}
+						*/
 	    			}
-	                
 	                return null;
 	            }
 	            @Override
@@ -345,7 +348,7 @@ public class InformacijeController implements Initializable{
 				@Override
 				public void run() {
 					while(!kraj) {
-						System.out.println("Azuriranje vremena");
+						//System.out.println("Azuriranje vremena");
 						String vrijeme = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")).toString();
 						Platform.runLater(() -> {
 							vrijemeLabel.setText(vrijeme);
@@ -396,24 +399,43 @@ public class InformacijeController implements Initializable{
 					new Thread() {
 						@Override
 						public void run() {
+							//pauza=true;
+							//thread.interrupt();
 							synchronized(karteObs) {
 								System.out.println("UCITAVANJE: " + Thread.currentThread());
 								List<Karta> tmp = new ArrayList<>();
 								if(polasciDolasciComboBox.getSelectionModel().isSelected(0)) {
 									//POLASCI
-									for(Karta karta : Karta.getKarteList(polaziste,odrediste)) {
-										if(karta.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue()))) {
-											tmp.add(karta);
-										}
+									/*
+									for(Praznik p: Praznik.getHolidayList()) {
+						                if (MonthDay.from(datum.getValue()).equals(MonthDay.of(p.getMjesec(), p.getDan()))) {
+						                	
+						                }
+									}
+									*/
+									tmp.addAll(Karta.getKarteList(polaziste,odrediste));
+									if(Praznik.getHolidayList().stream().anyMatch(p -> MonthDay.from(datum.getValue()).equals(MonthDay.of(p.getMjesec(), p.getDan())))) {
+										tmp.removeIf(k -> k.getRelacija().getLinija().getVoznjaPraznikom() == 9 || !k.getRelacija().getDani().contains(k.getRelacija().getLinija().getVoznjaPraznikom() + ""));
+									} else {
+										tmp.removeIf(k -> !k.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue())));
 									}
 								} else {
 									//DOLASCI
-									for(Karta karta : Karta.getKarteListDolasci(polaziste,odrediste)) {
-										if(karta.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue()))) {
-											tmp.add(karta);
-										}
+									//for(Karta karta : Karta.getKarteListDolasci(polaziste,odrediste, "6")) {
+										//if(karta.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue()))) {
+									tmp.addAll(Karta.getKarteListDolasci(polaziste,odrediste));
+									if(Praznik.getHolidayList().stream().anyMatch(p -> MonthDay.from(datum.getValue()).equals(MonthDay.of(p.getMjesec(), p.getDan())))) {
+										System.out.println("JESTE PRAZNIK - DOLASCI");
+										tmp.forEach(k -> System.out.println(k.getRelacija().getLinija().getVoznjaPraznikom() + " " + k.getRelacija().getDani()));
+										tmp.removeIf(k -> k.getRelacija().getLinija().getVoznjaPraznikom() == 9 || !k.getRelacija().getDani().contains(k.getRelacija().getLinija().getVoznjaPraznikom() + ""));
+										System.out.println("NAKON BRISANJA");
+										tmp.forEach(k -> System.out.println(k.getRelacija().getLinija().getVoznjaPraznikom() + " " + k.getRelacija().getDani()));
+									} else {
+										System.out.println("NIJE PRAZNIK - DOLASCI");
+										tmp.removeIf(k -> !k.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue())));
 									}
 								}
+								
 								if(cekaj) {
 			    					System.out.println("CEKANJE");
 			    					synchronized(lock) {
@@ -425,17 +447,16 @@ public class InformacijeController implements Initializable{
 			    					}
 			    					System.out.println("NASTAVAK");
 								}
-								karteObs.clear();
-								karteObs.addAll(tmp);
 								
 								Platform.runLater(() -> {
 									vrijemePolaskaColumn.setVisible(true);
 									vrijemeDolaskaColumn.setVisible(true);
 									cijenaColumn.setVisible(true);
 									//karteTable.getSortOrder().s
-									karteTable.refresh();
+									karteObs.clear();
+									karteObs.addAll(tmp);
 									if(karteObs.isEmpty()) {
-										Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
+										Util.getNotifications("Obavještenje", "Nema linija za odabranu relaciju i dan!", "Information").show();
 									}
 								});
 							}
@@ -448,33 +469,6 @@ public class InformacijeController implements Initializable{
 		}
     }
 	
-	
-	
-	
-	/*
-	public void toggleSetUp() {
-		toggleGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
-		    if (newValue == null) {
-		        oldValue.setSelected(true);
-		    }
-		    else
-		    	if(newValue.equals(polasciRadioButton)) {
-		    		karteObs.clear();
-		    		mjestoTextField.clear();
-		    		mjestoTextField.setPromptText("Destinacija");
-		    		mjestoTextField.resetValidation();
-		    		
-		    	}
-		    	else {
-		    		mjestoTextField.clear();
-		    		karteObs.clear();
-		    		mjestoTextField.setPromptText("Polaziste");		    		
-		    		mjestoTextField.resetValidation();
-		    	}
-		});	
-	}
-	*/
-	
 	/*
 	public boolean zadovoljavaDatumVrijeme(String daniUSedmici,Time vrijemePolaska) {
 		LocalTime localTime = LocalTime.now();
@@ -483,49 +477,6 @@ public class InformacijeController implements Initializable{
 			}
 		else
 			return (daniUSedmici.contains(datum.getValue().getDayOfWeek().toString())) && daniUSedmici.contains(datum.getValue().getDayOfWeek().toString());
-	}*/
-	/*
-	@FXML
-	public void getKarte() {
-		if(mjestoTextField.validate()){
-			karteObs.clear();
-			if(polasciRadioButton.isSelected()) {
-					for(Karta karta : Karta.getKarteList(nazivMjesta, mjestoTextField.getText())) {
-						daniUSedmici = karta.getLinija().getDaniUSedmici();
-						if(daniUSedmici.contains(datum.getValue().getDayOfWeek().toString()))
-							karteObs.add(karta);
-					}	
-			}
-			else {
-				for(Karta karta : Karta.getKarteList(mjestoTextField.getText(),nazivMjesta)) {
-					daniUSedmici = karta.getLinija().getDaniUSedmici();
-					karteObs.add(karta);
-				}
-			}
-			if(karteObs.isEmpty())
-				showPrazanSetAlert();
-		}
-	}
-	*/
-	/*public void ucitajMjesta() {
-		Connection c = null;
-		PreparedStatement s = null;
-		ResultSet r = null;
-		String sql = "select distinct Naziv from mjesto where Naziv!=?";
-		try {
-			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false, nazivMjesta);
-			r = s.executeQuery();
-			while(r.next()) {
-				mjestaSet.add(r.getString(1));
-			}
-	
-		} catch (SQLException e) {
-			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-		}
-		finally {
-			Util.close(r, s, c);
-		}
 	}*/
 
 }

@@ -146,7 +146,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 			if(showPotvrda()) {
 				
 				if(Karta.stornirajKartu(jednokratnaKarta.getSerijskiBroj()))
-					Util.getNotifications("Obavještenje", "Karta spješno stornirana.", "Information").show();
+					Util.getNotifications("Obavještenje", "Karta uspješno stornirana.", "Information").show();
 					cijenaTextField.clear();
 					relacijaTextField.clear();
 					datumTextField.clear();

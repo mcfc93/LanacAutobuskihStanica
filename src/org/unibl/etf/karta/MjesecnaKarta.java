@@ -275,34 +275,13 @@ public class MjesecnaKarta extends Karta {
 	
 	}
 	
-	/*public static int dodajMjesecnuCijenu(Relacija relacija) {
-		Connection c = null;
-		ResultSet r =null;
-		PreparedStatement s = null;
-		String sql = "insert into cijena_mjesecne_karte value (?,?)";
-		try {
-			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, true, relacija.getIdRelacije(), relacija.getCijenaMjesecna());
-			System.out.println(s.executeUpdate());
-			r = s.getGeneratedKeys();
-			if(r.next())
-				return r.getInt(1);
-		} catch (SQLException e) {
-			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-			Util.showBugAlert();
-		}
-		return 0;
-	}*/
-	
-	
-	
 	public static List<Karta> getMjesecneKarteList(Stajaliste polaziste, Stajaliste odrediste) {
 		List<Karta> karteList = new ArrayList<>();
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
 		String sql = "select * from relacija join (red_voznje,linija,prevoznik,popust_prevoznika) on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) "
-				+ "where ((relacija.Polaziste=? and relacija.Odrediste=?) or (relacija.Polaziste=? and relacija.Odrediste=?)) and linija.Stanje='Aktivno' group by prevoznik.JIBPrevoznika";
+				+ "where ((relacija.Polaziste=? and relacija.Odrediste=?) or (relacija.Polaziste=? and relacija.Odrediste=?)) and linija.Stanje='Aktivno' and red_voznje.Stanje='Aktivno' group by prevoznik.JIBPrevoznika";
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, polaziste.getIdStajalista(), odrediste.getIdStajalista(), odrediste.getIdStajalista(), polaziste.getIdStajalista());

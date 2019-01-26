@@ -82,7 +82,7 @@ public class DodajStanicuController implements Initializable {
 					Integer.parseInt(brojPeronaTextField.getText().trim()),
 					webStranicaTextField.getText().trim(),
 					emailTextField.getText().trim())) {
-				AutobuskaStanica.getJibList().add(jibTextField.getText().trim());
+				AutobuskaStanica.getActiveJibList().add(jibTextField.getText().trim());
 				
 				/*
 				Alert alert=new Alert(AlertType.INFORMATION);

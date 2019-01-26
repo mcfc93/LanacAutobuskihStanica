@@ -78,7 +78,8 @@ public class Praznik {
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, "select IdPraznika, Datum, Opis from praznik", false);
-			r = s.executeQuery();			while(r.next()) {
+			r = s.executeQuery();
+			while(r.next()) {
 				getHolidayList().add(new Praznik(r.getInt(1), Integer.valueOf(r.getString(2).split("-")[1]), Integer.valueOf(r.getString(2).split("-")[0]), r.getString(3)));
 			}
 		} catch (SQLException e) {

@@ -302,17 +302,22 @@ public class ProdajaKarataController implements Initializable {
 					karteObs.clear();
 					for (Karta karta : Karta.getKarteList(InformacijeController.pocetnoStajaliste, odrediste)) {
 						daniUSedmici = karta.getRelacija().getDani();
-						if(Praznik.getHolidayList().stream().noneMatch(p -> p.getDan()==datum.getValue().getDayOfMonth() & p.getMjesec()==datum.getValue().getMonthValue())) 
-						{	
+						//if(Praznik.getHolidayList().stream().noneMatch(p -> p.getDan()==datum.getValue().getDayOfMonth() & p.getMjesec()==datum.getValue().getMonthValue())) 
+						//{	
 							System.out.println(daniUSedmici + karta.getRelacija().getVrijemePolaska());
-							if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
+							//if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
 								if(povratnaKartaCheckBox.isSelected())
 									karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format("%.2f", 2*karta.getRelacija().getCijenaJednokratna()*0.8)));
 								if(studentskaCheckBox.isSelected())
 									karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format("%.2f", karta.getRelacija().getCijenaJednokratna()*karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust())));
 								karteObs.add(karta);
-							}
-						}
+							//}
+						//}
+					}
+					if(Praznik.getHolidayList().stream().anyMatch(p -> MonthDay.from(datum.getValue()).equals(MonthDay.of(p.getMjesec(), p.getDan())))) {
+						karteObs.removeIf(k -> k.getRelacija().getLinija().getVoznjaPraznikom() == 9 || !k.getRelacija().getDani().contains(k.getRelacija().getLinija().getVoznjaPraznikom() + ""));
+					} else {
+						karteObs.removeIf(k -> !k.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue())));
 					}
 					if(karteObs.isEmpty())
 				    	Util.getNotifications("Greška", "Nema linija za odabranu relaciju i dan!", "Error").show();
