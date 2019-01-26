@@ -10,9 +10,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -21,7 +25,10 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.controlsfx.control.MaskerPane;
@@ -48,8 +55,8 @@ public class IzmjenaLinijeController implements Initializable {
 	
 	public static ObservableList<Prevoznik> prevozniciObs = FXCollections.observableArrayList();
 	private ObservableList<Relacija> relacijeObsList = FXCollections.observableArrayList();
-	
-	
+	public static List<Integer> idPolaskaList = new ArrayList<>();
+	private static int brojStajalistaULiniji;
 	
 	@FXML
 	private AnchorPane anchorPane;
@@ -100,6 +107,8 @@ public class IzmjenaLinijeController implements Initializable {
     
     @FXML
     private JFXButton sacuvajButton;
+    @FXML
+    private JFXButton izbrisiButton;
     
     @FXML
     private JFXButton krajUnosaButton;
@@ -149,7 +158,8 @@ public class IzmjenaLinijeController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		relacijeTableView.setItems(relacijeObsList);
-
+		idPolaskaList.clear();
+		vremenaPolazaka.getItems().clear();
 		//DragAndDrop
 		menuLine.setOnMousePressed(event -> {
 			if(event.getButton().equals(MouseButton.PRIMARY)) {
@@ -169,7 +179,7 @@ public class IzmjenaLinijeController implements Initializable {
 			    }
 			}
 		});
-						
+				
 		menuLine.setOnMouseReleased(event -> {
 			if(event.getButton().equals(MouseButton.PRIMARY)) {
 				Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
@@ -181,16 +191,41 @@ public class IzmjenaLinijeController implements Initializable {
 		
 		vremenaPolazaka.setItems(Relacija.getVremenaPolazaka(ListaLinijaController.odabranaLinija.getpStajaliste(), ListaLinijaController.odabranaLinija.getoStajaliste()));
 		
+		if(vremenaPolazaka.getItems().isEmpty()) {
+			relacijeObsList.setAll(Relacija.getPrveUneseneRelacije(ListaLinijaController.odabranaLinija.getIdLinije()));
+			vremenaPolazaka.getSelectionModel().selectFirst();
+		}
+		
+		
 		vremenaPolazaka.valueProperty().addListener((observable,oldValue,newValue) -> {
 			relacijeObsList.clear();
-			relacijeObsList.setAll(Relacija.getRelacije(ListaLinijaController.odabranaLinija.getIdLinije(), vremenaPolazaka.getSelectionModel().getSelectedIndex()+1));
-			relacijeTableView.getSelectionModel().selectFirst();
-			//relacijeTableView.refresh();
-			vrijemePolaska1TimePicker.setValue(LocalTime.parse(vremenaPolazaka.getValue().split(" - ")[0], DateTimeFormatter.ofPattern("HH:mm")));
-			vrijemePolaska2TimePicker.setValue(LocalTime.parse(vremenaPolazaka.getValue().split(" - ")[1], DateTimeFormatter.ofPattern("HH:mm")));
-			postavljanjeCheckBox(relacijeTableView.getSelectionModel().getSelectedItem().getDani());
-			System.out.println(relacijeTableView.getSelectionModel().getSelectedItem().getDani());
-
+			if(newValue!=null) {
+				System.out.println("new:" + newValue);
+				relacijeObsList.setAll(Relacija.getRelacije(ListaLinijaController.odabranaLinija.getIdLinije(),idPolaskaList.get(vremenaPolazaka.getSelectionModel().getSelectedIndex())));
+				System.out.println("aa");
+				cijenaJednokratnaTextField.clear();
+				cijenaMjesecnaTextField.clear();
+				cijenaJednokratnaTextField.resetValidation();
+				cijenaMjesecnaTextField.resetValidation();
+				vrijemePolaska1TimePicker.setValue(null);
+				vrijemePolaska2TimePicker.setValue(null);
+				vrijemePolaska1TimePicker.resetValidation();
+				vrijemePolaska2TimePicker.resetValidation();
+				relacijeTableView.refresh();
+				if(vremenaPolazaka.getItems().isEmpty()) {
+					relacijeObsList.setAll(Relacija.getPrveUneseneRelacije(ListaLinijaController.odabranaLinija.getIdLinije()));
+					vremenaPolazaka.getSelectionModel().selectFirst();
+					//relacijeObsList.forEach(r -> System.out.println("vremena:" + r.getVrijemePolaska() + ", " + r.getVrijemeDolaska()));
+				}
+				if(!relacijeObsList.isEmpty()) {
+					
+					relacijeTableView.getSelectionModel().selectFirst();
+					vrijemePolaska1TimePicker.setValue(LocalTime.parse(vremenaPolazaka.getValue().split(" - ")[0], DateTimeFormatter.ofPattern("HH:mm")));
+					vrijemePolaska2TimePicker.setValue(LocalTime.parse(vremenaPolazaka.getValue().split(" - ")[1], DateTimeFormatter.ofPattern("HH:mm")));
+					postavljanjeCheckBox(relacijeTableView.getSelectionModel().getSelectedItem().getDani());
+				}
+			}
+			
 		});
 		
 		vremenaPolazaka.getSelectionModel().selectFirst();
@@ -253,34 +288,44 @@ public class IzmjenaLinijeController implements Initializable {
 			}
 		});
     	
+    	brojStajalistaULiniji = Relacija.getBrojStajalistaLinije(ListaLinijaController.odabranaLinija.getIdLinije());
+    	System.out.println("broj stajalista: " + brojStajalistaULiniji);
+    	
     	vrijemePolaska1TimePicker.valueProperty().addListener(new ChangeListener<LocalTime>() {
 
 			@Override
 			public void changed(ObservableValue<? extends LocalTime> observable, LocalTime oldValue,
 					LocalTime newValue) {
-				if(newValue != null) {
+				if(!relacijeObsList.isEmpty() && newValue != null) {		
 					relacijeObsList.get(0).setVrijemePolaska(Time.valueOf(vrijemePolaska1TimePicker.getValue()));
-				LocalTime vrijemeDolaskaPlusHours = relacijeObsList.get(0).getVrijemePolaska().toLocalTime().plusHours(relacijeObsList.get(0).getDuzinaPuta().getHour());
-				LocalTime vrijemeDolaskaPlusMinutes = vrijemeDolaskaPlusHours.plusMinutes(relacijeObsList.get(0).getDuzinaPuta().getMinute());
-				relacijeObsList.get(0).setVrijemeDolaska(Time.valueOf(vrijemeDolaskaPlusMinutes));
-				for(int i=1; i< UnosRelacijaController.brojRelacija; ++i) {
-					final int x = i;
-					LocalTime vrijemePolaska = relacijeObsList.stream().filter(r -> r.getOdrediste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaska().toLocalTime();
-					relacijeObsList.get(x).setVrijemePolaska(Time.valueOf(vrijemePolaska));
-					LocalTime vrijemePolaskaPlusHours = vrijemePolaska.plusHours(relacijeObsList.get(x).getDuzinaPuta().getHour());
-					LocalTime vrijemePolaskaPlusMinutes = vrijemePolaskaPlusHours.plusMinutes(relacijeObsList.get(x).getDuzinaPuta().getMinute());
-					relacijeObsList.get(x).setVrijemeDolaska(Time.valueOf(vrijemePolaskaPlusMinutes));
-				}
-				for(int i=UnosRelacijaController.brojRelacija;i<relacijeObsList.size();++i) {
-					final int x = i;
-					LocalTime vrijemePolaska = relacijeObsList.stream().filter(r -> r.getPolaziste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemePolaska().toLocalTime();
-					relacijeObsList.get(x).setVrijemePolaska(Time.valueOf(vrijemePolaska));
-					LocalTime vrijemePolaskaPlusHours = vrijemePolaska.plusHours(relacijeObsList.get(x).getDuzinaPuta().getHour());
-					LocalTime vrijemePolaskaPlusMinutes = vrijemePolaskaPlusHours.plusMinutes(relacijeObsList.get(x).getDuzinaPuta().getMinute());
-					relacijeObsList.get(x).setVrijemeDolaska(Time.valueOf(vrijemePolaskaPlusMinutes));
-				}
-				relacijeTableView.refresh();
-				}
+					LocalTime vrijemeDolaskaPlusHours = relacijeObsList.get(0).getVrijemePolaska().toLocalTime().plusHours(relacijeObsList.get(0).getDuzinaPuta().getHour());
+					LocalTime vrijemeDolaskaPlusMinutes = vrijemeDolaskaPlusHours.plusMinutes(relacijeObsList.get(0).getDuzinaPuta().getMinute());
+					relacijeObsList.get(0).setVrijemeDolaska(Time.valueOf(vrijemeDolaskaPlusMinutes));
+					for(int i=1; i< brojStajalistaULiniji; ++i) {
+						final int x = i;
+						LocalTime vrijemePolaska = relacijeObsList.stream().filter(r -> r.getOdrediste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaska().toLocalTime();
+						relacijeObsList.get(x).setVrijemePolaska(Time.valueOf(vrijemePolaska));
+						LocalTime vrijemePolaskaPlusHours = vrijemePolaska.plusHours(relacijeObsList.get(x).getDuzinaPuta().getHour());
+						LocalTime vrijemePolaskaPlusMinutes = vrijemePolaskaPlusHours.plusMinutes(relacijeObsList.get(x).getDuzinaPuta().getMinute());
+						relacijeObsList.get(x).setVrijemeDolaska(Time.valueOf(vrijemePolaskaPlusMinutes));
+						
+					}
+					for(int i=brojStajalistaULiniji;i<relacijeObsList.size();++i) {
+						final int x = i;
+						//relacijeObsList.get(x).setVrijemeDolaska(relacijeObsList.stream().filter(r -> r.getPolaziste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaska());
+						//relacijeObsList.get(x).setVrijemePolaska(relacijeObsList.stream().filter(r -> r.getOdrediste().equals(relacijeObsList.get(x).getOdrediste())).findFirst().get().getVrijemePolaska());
+						relacijeObsList.get(x).setVrijemePolaska(relacijeObsList.stream().filter(r -> r.getOdrediste().equals(relacijeObsList.get(x).getOdrediste())).findFirst().get().getVrijemePolaska());
+						relacijeObsList.get(x).setVrijemeDolaska(relacijeObsList.stream().filter(r -> r.getPolaziste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaska());
+					
+						/*LocalTime vrijemePolaska = relacijeObsList.stream().filter(r -> r.getPolaziste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemePolaska().toLocalTime();
+						relacijeObsList.get(x).setVrijemePolaska(Time.valueOf(vrijemePolaska));
+						LocalTime vrijemePolaskaPlusHours = vrijemePolaska.plusHours(relacijeObsList.get(x).getDuzinaPuta().getHour());
+						LocalTime vrijemePolaskaPlusMinutes = vrijemePolaskaPlusHours.plusMinutes(relacijeObsList.get(x).getDuzinaPuta().getMinute());
+						relacijeObsList.get(x).setVrijemeDolaska(Time.valueOf(vrijemePolaskaPlusMinutes));
+					*/
+					}
+					relacijeTableView.refresh();
+					}
 			}
 		});
 		
@@ -289,30 +334,40 @@ public class IzmjenaLinijeController implements Initializable {
 			@Override
 			public void changed(ObservableValue<? extends LocalTime> observable, LocalTime oldValue,
 					LocalTime newValue) {
-			
-				if(newValue != null) {
-				relacijeObsList.get(0).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaska2TimePicker.getValue()));
-				LocalTime vrijemeDolaskaPovratnaPlusHours = relacijeObsList.get(0).getVrijemePolaskaPovratna().toLocalTime().plusHours(relacijeObsList.get(0).getDuzinaPuta().getHour());
-				LocalTime vrijemeDolaskaPovratnaPlusMinutes = vrijemeDolaskaPovratnaPlusHours.plusMinutes(relacijeObsList.get(0).getDuzinaPuta().getMinute());
-				relacijeObsList.get(0).setVrijemeDolaskaPovratna(Time.valueOf(vrijemeDolaskaPovratnaPlusMinutes));
-				for(int i=1; i< UnosRelacijaController.brojRelacija; ++i) {
-					final int x = i;
-					LocalTime vrijemePolaskaPovratna = relacijeObsList.stream().filter(r -> r.getOdrediste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaskaPovratna().toLocalTime();
-					relacijeObsList.get(x).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaskaPovratna));
-					LocalTime vrijemePolaskaPovratnaPlusHours = vrijemePolaskaPovratna.plusHours(relacijeObsList.get(x).getDuzinaPuta().getHour());
-					LocalTime vrijemePolaskaPovratnaPlusMinutes = vrijemePolaskaPovratnaPlusHours.plusMinutes(relacijeObsList.get(x).getDuzinaPuta().getMinute());
-					relacijeObsList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPovratnaPlusMinutes));
-				}
-				for(int i=UnosRelacijaController.brojRelacija;i<relacijeObsList.size();++i) {
-					final int x = i;
-					LocalTime vrijemePolaskaPovratna = relacijeObsList.stream().filter(r -> r.getPolaziste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemePolaskaPovratna().toLocalTime();
-					relacijeObsList.get(x).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaskaPovratna));
-					LocalTime vrijemePolaskaPovratnaPlusHours = vrijemePolaskaPovratna.plusHours(relacijeObsList.get(x).getDuzinaPuta().getHour());
-					LocalTime vrijemePolaskaPovratnaPlusMinutes = vrijemePolaskaPovratnaPlusHours.plusMinutes(relacijeObsList.get(x).getDuzinaPuta().getMinute());
-					relacijeObsList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPovratnaPlusMinutes));
-				}
-				relacijeTableView.refresh();	
-				}
+				if(!relacijeObsList.isEmpty() && newValue != null) {
+					relacijeObsList.get(brojStajalistaULiniji-1).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaska2TimePicker.getValue()));	
+					LocalTime vrijemeDolaskaPovratnaPlusHours = relacijeObsList.get(brojStajalistaULiniji-1).getVrijemePolaskaPovratna().toLocalTime().plusHours(relacijeObsList.get(brojStajalistaULiniji-1).getDuzinaPuta().getHour());
+					LocalTime vrijemeDolaskaPovratnaPlusMinutes = vrijemeDolaskaPovratnaPlusHours.plusMinutes(relacijeObsList.get(brojStajalistaULiniji-1).getDuzinaPuta().getMinute());
+					relacijeObsList.get(brojStajalistaULiniji-1).setVrijemeDolaskaPovratna(Time.valueOf(vrijemeDolaskaPovratnaPlusMinutes));
+					
+					for(int i=brojStajalistaULiniji-2; i>=0 ; --i) {
+						final int x = i;
+						relacijeObsList.get(x).setVrijemePolaskaPovratna(relacijeObsList.get(x+1).getVrijemeDolaskaPovratna());
+						LocalTime vrijemePolaskaPovratna = relacijeObsList.get(x+1).getVrijemeDolaskaPovratna().toLocalTime();
+						LocalTime vrijemePolaskaPlusHours = vrijemePolaskaPovratna.plusHours(relacijeObsList.get(x).getDuzinaPuta().getHour());
+						LocalTime vrijemePolaskaPlusMinutes = vrijemePolaskaPlusHours.plusMinutes(relacijeObsList.get(x).getDuzinaPuta().getMinute());
+						relacijeObsList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPlusMinutes));
+						
+						/*LocalTime vrijemePolaskaPovratna = relacijeObsList.stream().filter(r -> r.getOdrediste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaskaPovratna().toLocalTime();
+						relacijeObsList.get(x).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaskaPovratna));
+						LocalTime vrijemePolaskaPovratnaPlusHours = vrijemePolaskaPovratna.plusHours(relacijeObsList.get(x).getDuzinaPuta().getHour());
+						LocalTime vrijemePolaskaPovratnaPlusMinutes = vrijemePolaskaPovratnaPlusHours.plusMinutes(relacijeObsList.get(x).getDuzinaPuta().getMinute());
+						relacijeObsList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPovratnaPlusMinutes));*/
+					}
+					for(int i=brojStajalistaULiniji;i<relacijeObsList.size();++i) {
+						final int x = i;
+						//relacijeObsList.get(x).setVrijemeDolaskaPovratna(relacijeObsList.stream().filter(r -> r.getPolaziste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaskaPovratna());
+						//relacijeObsList.get(x).setVrijemePolaskaPovratna(relacijeObsList.stream().filter(r -> r.getOdrediste().equals(relacijeObsList.get(x).getOdrediste())).findFirst().get().getVrijemePolaskaPovratna());
+						relacijeObsList.get(x).setVrijemePolaskaPovratna(relacijeObsList.stream().filter(r -> r.getOdrediste().equals(relacijeObsList.get(x).getOdrediste())).findFirst().get().getVrijemePolaskaPovratna());
+						relacijeObsList.get(x).setVrijemeDolaskaPovratna(relacijeObsList.stream().filter(r -> r.getPolaziste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaskaPovratna());
+						
+						/*relacijeObsList.get(x).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaskaPovratna));
+						LocalTime vrijemePolaskaPovratnaPlusHours = vrijemePolaskaPovratna.plusHours(relacijeObsList.get(x).getDuzinaPuta().getHour());
+						LocalTime vrijemePolaskaPovratnaPlusMinutes = vrijemePolaskaPovratnaPlusHours.plusMinutes(relacijeObsList.get(x).getDuzinaPuta().getMinute());
+						relacijeObsList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPovratnaPlusMinutes));*/
+					}
+					relacijeTableView.refresh();	
+					}
 			}
 		});
 		
@@ -456,8 +511,13 @@ public class IzmjenaLinijeController implements Initializable {
 	
 	@FXML
 	public void sacuvaj(ActionEvent event) {
+		if(vremenaPolazaka.getItems().isEmpty()) {
+			Util.getNotifications("Greška", "Unesite bar jedan polazak.", "Error").show();
+			return;
+		}
 		if(cijenaMjesecnaTextField.validate()
 					& cijenaJednokratnaTextField.validate()) {
+			
 			relacijeTableView.getSelectionModel().getSelectedItem().setCijenaJednokratna(Double.parseDouble(cijenaJednokratnaTextField.getText()));
 			
 			if(!cijenaMjesecnaTextField.getText().isEmpty()) 
@@ -475,7 +535,7 @@ public class IzmjenaLinijeController implements Initializable {
 	                progressPane.setVisible(true);
 	                String dani = mapiranjeDana();
 					String dani2 = dani.substring(0, dani.length()-1);
-					UnosRelacijaController.relacijeList.forEach(r -> r.setDani(dani2));
+					relacijeObsList.forEach(r -> r.setDani(dani2));
 					
 					if(Relacija.izmijeniRelaciju(novaRelacija)) {
 						Platform.runLater(() -> {
@@ -501,10 +561,44 @@ public class IzmjenaLinijeController implements Initializable {
 	
 	@FXML
     void sledeciPolazak(ActionEvent event) {
-		if(anyCheckBoxSelected()
+		if(showDaLiSteSigurni()) {
+			if(anyCheckBoxSelected()
 				& vrijemePolaska1TimePicker.validate()
 					& vrijemePolaska2TimePicker.validate()) {
-			
+				MaskerPane progressPane = Util.getMaskerPane(anchorPane);
+				Task<Void> task = new Task<Void>() {
+				
+	            @Override
+	            protected Void call() /*throws Exception*/ {
+	                progressPane.setVisible(true);
+	                String dani = mapiranjeDana();
+					String dani2 = dani.substring(0, dani.length()-1);
+					relacijeObsList.forEach(r -> r.setDani(dani2));		
+					System.out.println("lista linija contrl pstaja: " + ListaLinijaController.odabranaLinija.getpStajaliste() );
+					System.out.println("lista linija contrl ostaja: " + ListaLinijaController.odabranaLinija.getoStajaliste() );
+					
+					int idSljedecegPolaska = 1+ Relacija.getSljedeciIdPolaska(ListaLinijaController.odabranaLinija.getpStajaliste(),ListaLinijaController.odabranaLinija.getoStajaliste());
+					System.out.println("ID sljedeceg polaska: "+ idSljedecegPolaska);
+					for (Relacija r : relacijeObsList) {
+						System.out.println(Relacija.dodajRedVoznje(r,idSljedecegPolaska,zadrzavanjeComboBox.getValue()));
+					}
+	                idPolaskaList.add(idSljedecegPolaska);
+	                System.out.println("nakon dodavanja:" + idPolaskaList);
+	                return null;
+	            }
+	            @Override
+	            protected void succeeded(){
+	                super.succeeded();
+	                Platform.runLater(() -> {
+	                	progressPane.setVisible(false);
+	                	Util.getNotifications("Obavještenje", "Relacije dodane.", "Information").show();
+		                vremenaPolazaka.getItems().add(vrijemePolaska1TimePicker.getValue().format(DateTimeFormatter.ofPattern("HH:mm")) + " - " + vrijemePolaska2TimePicker.getValue().format(DateTimeFormatter.ofPattern("HH:mm")));
+		                vremenaPolazaka.getSelectionModel().selectLast();
+	                });
+	            }
+	        };
+	        new Thread(task).start();
+		}
 		}
 	}
 	
@@ -548,6 +642,68 @@ public class IzmjenaLinijeController implements Initializable {
         }
 	}
 	
-
+	@FXML
+	void izbrisi(ActionEvent event) {
+		if(!vremenaPolazaka.getItems().isEmpty() && showDaLiSteSigurni()) {
+			
+			MaskerPane progressPane = Util.getMaskerPane(anchorPane);
+			Task<Void> task = new Task<Void>() {
+			
+            @Override
+            protected Void call() /*throws Exception*/ {
+                progressPane.setVisible(true);
+                relacijeObsList.forEach(r -> Relacija.izbrisiRedVoznje(r, idPolaskaList.get(vremenaPolazaka.getSelectionModel().getSelectedIndex())));
+                return null;
+            }
+            @Override
+            protected void succeeded(){
+                super.succeeded();
+                Platform.runLater(() -> {
+                	progressPane.setVisible(false);
+                	Util.getNotifications("Obavještenje", "Relacije izbrisane.", "Information").show();
+                	idPolaskaList.remove(vremenaPolazaka.getSelectionModel().getSelectedIndex());
+                	System.out.println("Nakon brisanja:" + idPolaskaList);
+                	vremenaPolazaka.getItems().remove(vremenaPolazaka.getSelectionModel().getSelectedIndex());
+                	if(vremenaPolazaka.getItems().isEmpty()) {
+                		cijenaJednokratnaTextField.clear();
+        				cijenaMjesecnaTextField.clear();
+        				cijenaJednokratnaTextField.resetValidation();
+        				cijenaMjesecnaTextField.resetValidation();
+        				vrijemePolaska1TimePicker.setValue(null);
+        				vrijemePolaska2TimePicker.setValue(null);
+        				vrijemePolaska1TimePicker.resetValidation();
+        				vrijemePolaska2TimePicker.resetValidation();
+        				postavljanjeCheckBox("");
+        				
+                	}
+                	vremenaPolazaka.getSelectionModel().selectFirst();
+                	relacijeTableView.refresh();
+                });
+            }
+        };
+        	new Thread(task).start();
+			//vremenaPolazaka.getItems().remove(vremenaPolazaka.getSelectionModel().getSelectedIndex());
+		}
+	}
+	public boolean showDaLiSteSigurni() {
+		Alert alert=new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Unos vremena relacija");
+		alert.setHeaderText(null);
+		alert.setContentText("Potvrdi unos?");
+		alert.getButtonTypes().clear();
+		alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+		Button yesButton=(Button)alert.getDialogPane().lookupButton(ButtonType.YES);
+		yesButton.setText("Da");
+		yesButton.setDefaultButton(false);
+		Button noButton=(Button)alert.getDialogPane().lookupButton(ButtonType.NO);
+		noButton.setText("Ne");
+		noButton.setDefaultButton(true);
+		
+		alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/unibl/etf/application.css").toExternalForm());
+		//alert.getDialogPane().getStyleClass().addAll("alert", "alertConfirmation");
+		
+		Optional<ButtonType> action = alert.showAndWait();
+		return action.get().equals(ButtonType.YES);
+	}
 	
 }

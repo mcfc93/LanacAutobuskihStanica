@@ -153,12 +153,16 @@ public class DodavanjeLinijaController implements Initializable {
     	dodajLinijuButton.setDefaultButton(true);
     	dodajLinijuButton.disabledProperty().addListener((observable, oldValue, newValue) -> {
     		if(newValue) {
-    			System.out.println("disa");
-    			sacuvajButton.setDefaultButton(true);
+    			if(dodajLinijuButton.isDisabled()) {
+    				sacuvajButton.setDefaultButton(true);
+    				System.out.println("dodaj disabled");
+    			}
+    			else {
+        			dodajLinijuButton.setDefaultButton(true);
+        			System.out.println("dodaj enabled");
+    			}
     		}
-    		else
-    			dodajLinijuButton.setDefaultButton(true);
-    			
+    		
 		});
     	
     	disableRelacija(true);
@@ -269,11 +273,20 @@ public class DodavanjeLinijaController implements Initializable {
 				 * unos vremena za medjurelacije*/
 				for(int i=UnosRelacijaController.brojRelacija;i<UnosRelacijaController.relacijeList.size();++i) {
 					final int x = i;
-					LocalTime vrijemePolaska = UnosRelacijaController.relacijeList.stream().filter(r -> r.getPolaziste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemePolaska().toLocalTime();
+					
+					UnosRelacijaController.relacijeList.get(x).setVrijemePolaska(UnosRelacijaController.relacijeList.stream().filter(r -> r.getOdrediste().equals(UnosRelacijaController.relacijeList.get(x).getOdrediste())).findFirst().get().getVrijemePolaska());
+					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaska(UnosRelacijaController.relacijeList.stream().filter(r -> r.getPolaziste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaska());
+				
+					
+					//LocalTime vrijemePolaska = UnosRelacijaController.relacijeList.stream().findFirst(r -> r.);
+					//System.out.println("trajanje puta: " + UnosRelacijaController.relacijeList.get(x).getDuzinaPuta());
+					//UnosRelacijaController.relacijeList.get(x).setVrijemePolaska(UnosRelacijaController.relacijeList.stream().filter(r -> r.getPolaziste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemePolaska());
+					//UnosRelacijaController.relacijeList.get(x).setVrijemeDolaska(UnosRelacijaController.relacijeList.stream().filter(r -> r.getOdrediste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaska());
+					/*LocalTime vrijemePolaska = UnosRelacijaController.relacijeList.stream().filter(r -> r.getPolaziste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemePolaska().toLocalTime();
 					UnosRelacijaController.relacijeList.get(x).setVrijemePolaska(Time.valueOf(vrijemePolaska));
 					LocalTime vrijemePolaskaPlusHours = vrijemePolaska.plusHours(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getHour());
 					LocalTime vrijemePolaskaPlusMinutes = vrijemePolaskaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
-					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaska(Time.valueOf(vrijemePolaskaPlusMinutes));
+					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaska(Time.valueOf(vrijemePolaskaPlusMinutes));*/
 				}
 				relacijeTableView.refresh();
 				}
@@ -304,45 +317,9 @@ public class DodavanjeLinijaController implements Initializable {
 				
 				for(int i=UnosRelacijaController.brojRelacija;i<UnosRelacijaController.relacijeList.size();++i) {
 					final int x = i;
-					System.out.println("Medjurelacija: " + UnosRelacijaController.relacijeList.get(x));
 					UnosRelacijaController.relacijeList.get(x).setVrijemePolaskaPovratna(UnosRelacijaController.relacijeList.stream().filter(r -> r.getOdrediste().equals(UnosRelacijaController.relacijeList.get(x).getOdrediste())).findFirst().get().getVrijemePolaskaPovratna());
 					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaskaPovratna(UnosRelacijaController.relacijeList.stream().filter(r -> r.getPolaziste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaskaPovratna());
-					/*LocalTime vrijemeDolaskaPovratna = UnosRelacijaController.relacijeList.stream().filter(r -> r.getPolaziste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaskaPovratna().toLocalTime();
-					UnosRelacijaController.relacijeList.get(x).setVrijemePolaskaPovratna(Time.valueOf(vrijemeDolaskaPovratna));
-					LocalTime vrijemeDolaskaMinusHours = vrijemeDolaskaPovratna.minusHours(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getHour());
-					LocalTime vrijemeDolaskaMinusMinutes = vrijemeDolaskaMinusHours.minusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
-					UnosRelacijaController.relacijeList.get(x).setVrijemePolaskaPovratna(Time.valueOf(vrijemeDolaskaMinusMinutes));
-					 */
-				/*	LocalTime vrijemePolaskaPovratnaPlusHours = vrijemeDolaskaPovratna.plusHours(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getHour());
-					LocalTime vrijemePolaskaPovratnaPlusMinutes = vrijemePolaskaPovratnaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
-					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPovratnaPlusMinutes));
-					*/
-				}
-					
-					
-				/*UnosRelacijaController.relacijeList.get(0).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaska2TimePicker.getValue()));
-				LocalTime vrijemeDolaskaPovratnaPlusHours = UnosRelacijaController.relacijeList.get(0).getVrijemePolaskaPovratna().toLocalTime().plusHours(UnosRelacijaController.relacijeList.get(0).getDuzinaPuta().getHour());
-				LocalTime vrijemeDolaskaPovratnaPlusMinutes = vrijemeDolaskaPovratnaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(0).getDuzinaPuta().getMinute());
-				UnosRelacijaController.relacijeList.get(0).setVrijemeDolaskaPovratna(Time.valueOf(vrijemeDolaskaPovratnaPlusMinutes));
-				for(int i=1; i< UnosRelacijaController.brojRelacija; ++i) {
-					final int x = i;
-					LocalTime vrijemePolaskaPovratna = UnosRelacijaController.relacijeList.stream().filter(r -> r.getOdrediste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaskaPovratna().toLocalTime();
-					UnosRelacijaController.relacijeList.get(x).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaskaPovratna));
-					LocalTime vrijemePolaskaPovratnaPlusHours = vrijemePolaskaPovratna.plusHours(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getHour());
-					LocalTime vrijemePolaskaPovratnaPlusMinutes = vrijemePolaskaPovratnaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
-					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPovratnaPlusMinutes));
-				}*/
-				/*
-				 * unos vremena za medjurelacije*/
-				/*for(int i=UnosRelacijaController.brojRelacija;i<UnosRelacijaController.relacijeList.size();++i) {
-					final int x = i;
-					LocalTime vrijemePolaskaPovratna = UnosRelacijaController.relacijeList.stream().filter(r -> r.getPolaziste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemePolaskaPovratna().toLocalTime();
-					UnosRelacijaController.relacijeList.get(x).setVrijemePolaskaPovratna(Time.valueOf(vrijemePolaskaPovratna));
-					LocalTime vrijemePolaskaPovratnaPlusHours = vrijemePolaskaPovratna.plusHours(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getHour());
-					LocalTime vrijemePolaskaPovratnaPlusMinutes = vrijemePolaskaPovratnaPlusHours.plusMinutes(UnosRelacijaController.relacijeList.get(x).getDuzinaPuta().getMinute());
-					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaskaPovratna(Time.valueOf(vrijemePolaskaPovratnaPlusMinutes));
-				}*/
-				
+				}	
 				
 				relacijeTableView.refresh();	
 				}
@@ -497,6 +474,7 @@ public class DodavanjeLinijaController implements Initializable {
 				if(!linijaDodata) {
 					linija.setIdLinije(Linija.dodajLiniju(linija,UnosRelacijaController.relacijeList.get(0).getPolaziste().getIdStajalista(), UnosRelacijaController.relacijeList.get(UnosRelacijaController.brojRelacija-1).getOdrediste().getIdStajalista()));
 					UnosRelacijaController.relacijeList.forEach(r -> r.setLinija(linija));
+					
 					String dani = mapiranjeDana();
 					String dani2 = dani.substring(0, dani.length()-1);
 					UnosRelacijaController.relacijeList.forEach(r -> r.setDani(dani2));
@@ -518,7 +496,7 @@ public class DodavanjeLinijaController implements Initializable {
 						String dani2 = dani.substring(0, dani.length()-1);
 						UnosRelacijaController.relacijeList.forEach(r -> r.setDani(dani2));
 		                for (Relacija r : UnosRelacijaController.relacijeList) {
-							System.out.println(Relacija.dodajRedVoznje(r,idPolaska));
+							System.out.println(Relacija.dodajRedVoznje(r,idPolaska,zadrzavanjeComboBox.getValue()));
 						}
 		                ++idPolaska;
 		                return null;

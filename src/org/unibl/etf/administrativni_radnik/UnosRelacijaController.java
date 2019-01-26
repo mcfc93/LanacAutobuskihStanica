@@ -73,7 +73,7 @@ public class UnosRelacijaController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		timePicker.setIs24HourView(true);
 		timePicker.converterProperty().set(new LocalTimeStringConverter(FormatStyle.SHORT, Locale.UK));
-		daljeButton.setDefaultButton(true);
+		//daljeButton.setDefaultButton(true);
 		//DragAndDrop
 		menuLine.setOnMousePressed(event -> {
 			if(event.getButton().equals(MouseButton.PRIMARY)) {
@@ -154,6 +154,7 @@ public class UnosRelacijaController implements Initializable {
 	    		return false;
 	    	}
 	    	relacijeList.add(new Relacija(polaziste,odrediste,timePicker.getValue()));
+	    	System.out.println("trajanje puta: " + timePicker.getValue());
 	    	polazisteTextField.setText(odrediste.toString());
 	    	polazisteTextField.setDisable(true);
 	    	Util.setAutocompleteList(polazisteTextField, new ArrayList<>());
@@ -189,6 +190,7 @@ public class UnosRelacijaController implements Initializable {
 	    				newTime = LocalTime.of(plusMinutes.getHour(), plusMinutes.getMinute());
 	    			}
 	    			novaMedjuRelacija.setDuzinaPuta(LocalTime.of(newTime.getHour(), newTime.getMinute()));
+	    			System.out.println("medjurelacija, polaziste: " + novaMedjuRelacija.getPolaziste() +" , odrediste:" + novaMedjuRelacija.getOdrediste() + ", trajanje puta:"+ novaMedjuRelacija.getDuzinaPuta());
 	    			relacijeList.add(novaMedjuRelacija);
 	    		}
 	    	}
