@@ -306,12 +306,13 @@ public class ProdajaKarataController implements Initializable {
 						//{	
 							System.out.println(daniUSedmici + karta.getRelacija().getVrijemePolaska());
 							//if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
+							if(zadovoljavaVrijeme(karta.getRelacija().getVrijemePolaska())) {
 								if(povratnaKartaCheckBox.isSelected())
 									karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format("%.2f", 2*karta.getRelacija().getCijenaJednokratna()*0.8)));
 								if(studentskaCheckBox.isSelected())
 									karta.getRelacija().setCijenaJednokratna(Double.valueOf(String.format("%.2f", karta.getRelacija().getCijenaJednokratna()*karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust())));
 								karteObs.add(karta);
-							//}
+							}
 						//}
 					}
 					if(Praznik.getHolidayList().stream().anyMatch(p -> MonthDay.from(datum.getValue()).equals(MonthDay.of(p.getMjesec(), p.getDan())))) {
@@ -906,6 +907,10 @@ public class ProdajaKarataController implements Initializable {
 			}
 		else
 			return (daniUSedmici.contains(String.valueOf(datum.getValue().getDayOfWeek().getValue())));
+	}
+	
+	public boolean zadovoljavaVrijeme(Time vrijemePolaska) {
+		return (LocalTime.now().compareTo(vrijemePolaska.toLocalTime())<0);
 	}
 	
 	public boolean showPotvrda() {
