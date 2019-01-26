@@ -307,7 +307,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `bus`.`red_voznje`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bus`.`red_voznje` (
-  `IdRed_voznje` INT(11) NOT NULL AUTO_INCREMENT,
+  `IdRedVoznje` INT(11) NOT NULL AUTO_INCREMENT,
   `VrijemePolaska` TIME NULL DEFAULT NULL,
   `VrijemeDolaska` TIME NULL DEFAULT NULL,
   `VrijemePolaskaPovratna` TIME NULL DEFAULT NULL,
@@ -315,7 +315,7 @@ CREATE TABLE IF NOT EXISTS `bus`.`red_voznje` (
   `Dani` VARCHAR(15) NULL DEFAULT NULL,
   `IdRelacije` INT(11) NULL DEFAULT NULL,
   `IdPolaska` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`idred_voznje`),
+  PRIMARY KEY (`IdRedVoznje`),
   INDEX `IdRelacijeRedVoznje_idx` (`IdRelacije` ASC) VISIBLE,
   CONSTRAINT `IdRelacijeRedVoznje`
     FOREIGN KEY (`IdRelacije`)
@@ -344,6 +344,8 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+ALTER TABLE `bus`.`red_voznje` 
+ADD COLUMN `Stanje` SET('Aktivno', 'Izbrisano') NULL DEFAULT 'Aktivno' AFTER `IdPolaska`;
 
 ALTER TABLE autobusko_stajaliste AUTO_INCREMENT = 1;
 ALTER TABLE linija AUTO_INCREMENT = 1;
@@ -412,23 +414,25 @@ DELIMITER ;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getInfoList`(in pPolasciIliDolasci int(1), in pIdStajalista int(11))
 begin 
-	if (pPolasciIliDolasci=1) then
-		select Dani,VoznjaPraznikom,linija.Peron,prevoznik.NazivPrevoznika,NazivLinije,VrijemePolaska from relacija join (linija,prevoznik,red_voznje) 
-			on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno') 
-				where Polaziste=pIdStajalista group by VrijemePolaska 
-        union
-        select Dani,VoznjaPraznikom,linija.Peron,prevoznik.NazivPrevoznika,NazivLinije,VrijemePolaskaPovratna from relacija join (linija,prevoznik,red_voznje) 
-			on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno')
-				where Odrediste=pIdStajalista group by VrijemePolaskaPovratna order by VrijemePolaska;
-	else
-		select Dani,VoznjaPraznikom,linija.Peron,prevoznik.NazivPrevoznika,NazivLinije,VrijemeDolaska from relacija join (linija,prevoznik,red_voznje) 
-			on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno')
-				 where Odrediste=pIdStajalista group by VrijemeDolaska
-		union
-        select Dani,VoznjaPraznikom,linija.Peron,prevoznik.NazivPrevoznika,NazivLinije,VrijemeDolaskaPovratna from relacija join (linija,prevoznik,red_voznje) 
-			on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno') 
-				where Polaziste=pIdStajalista group by VrijemeDolaskaPovratna order by VrijemeDolaska;
-  end if;
+if (pPolasciIliDolasci=1) then
+select Dani,VoznjaPraznikom,linija.Peron,prevoznik.NazivPrevoznika,NazivLinije,VrijemePolaska from relacija join (linija,prevoznik,red_voznje) 
+on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno') 
+where Polaziste=pIdStajalista
+union
+select Dani,VoznjaPraznikom,linija.Peron,prevoznik.NazivPrevoznika,NazivLinije,VrijemePolaskaPovratna from relacija join (linija,prevoznik,red_voznje) 
+on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno')
+where Odrediste=pIdStajalista
+order by VrijemePolaska;
+else
+select Dani,VoznjaPraznikom,linija.Peron,prevoznik.NazivPrevoznika,NazivLinije,VrijemeDolaska from relacija join (linija,prevoznik,red_voznje) 
+on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno')
+where Odrediste=pIdStajalista
+union
+select Dani,VoznjaPraznikom,linija.Peron,prevoznik.NazivPrevoznika,NazivLinije,VrijemeDolaskaPovratna from relacija join (linija,prevoznik,red_voznje) 
+on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and linija.Stanje='Aktivno') 
+where Polaziste=pIdStajalista
+order by VrijemeDolaska;
+end if;
 end$$
 
 DELIMITER ;
