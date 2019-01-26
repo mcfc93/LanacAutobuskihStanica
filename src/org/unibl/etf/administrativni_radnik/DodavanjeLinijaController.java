@@ -54,7 +54,7 @@ public class DodavanjeLinijaController implements Initializable {
 	public static ObservableList<Prevoznik> prevozniciObs = FXCollections.observableArrayList();
 	private ObservableList<Relacija> relacijeObsList = FXCollections.observableArrayList();
 	public static Linija linija;
-	public static int idLinije;
+	public static int idLinije ;
 	
 	public static boolean dodaj=false;
 	private int idPolaska;
