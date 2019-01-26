@@ -314,9 +314,14 @@ public class IzmjenaLinijeController implements Initializable {
 						final int x = i;
 						//relacijeObsList.get(x).setVrijemeDolaska(relacijeObsList.stream().filter(r -> r.getPolaziste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaska());
 						//relacijeObsList.get(x).setVrijemePolaska(relacijeObsList.stream().filter(r -> r.getOdrediste().equals(relacijeObsList.get(x).getOdrediste())).findFirst().get().getVrijemePolaska());
-						relacijeObsList.get(x).setVrijemePolaska(relacijeObsList.stream().filter(r -> r.getOdrediste().equals(relacijeObsList.get(x).getOdrediste())).findFirst().get().getVrijemePolaska());
-						relacijeObsList.get(x).setVrijemeDolaska(relacijeObsList.stream().filter(r -> r.getPolaziste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemeDolaska());
+						relacijeObsList.get(x).setVrijemePolaska(relacijeObsList.stream().filter(r -> r.getPolaziste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemePolaska());
+						relacijeObsList.get(x).setVrijemeDolaska(relacijeObsList.stream().filter(r -> r.getOdrediste().equals(relacijeObsList.get(x).getOdrediste())).findFirst().get().getVrijemeDolaska());
+					/*
+				    UnosRelacijaController.relacijeList.get(x).setVrijemePolaska(UnosRelacijaController.relacijeList.stream().filter(r -> r.getPolaziste().equals(UnosRelacijaController.relacijeList.get(x).getPolaziste())).findFirst().get().getVrijemePolaska());
+					UnosRelacijaController.relacijeList.get(x).setVrijemeDolaska(UnosRelacijaController.relacijeList.stream().filter(r -> r.getOdrediste().equals(UnosRelacijaController.relacijeList.get(x).getOdrediste())).findFirst().get().getVrijemeDolaska());	
 					
+						
+						*/
 						/*LocalTime vrijemePolaska = relacijeObsList.stream().filter(r -> r.getPolaziste().equals(relacijeObsList.get(x).getPolaziste())).findFirst().get().getVrijemePolaska().toLocalTime();
 						relacijeObsList.get(x).setVrijemePolaska(Time.valueOf(vrijemePolaska));
 						LocalTime vrijemePolaskaPlusHours = vrijemePolaska.plusHours(relacijeObsList.get(x).getDuzinaPuta().getHour());
