@@ -33,6 +33,7 @@ import java.util.ResourceBundle;
 
 import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
+import org.unibl.etf.karta.Linija;
 import org.unibl.etf.karta.Prevoznik;
 import org.unibl.etf.karta.Relacija;
 import org.unibl.etf.util.Stajaliste;
@@ -516,12 +517,19 @@ public class IzmjenaLinijeController implements Initializable {
 	@FXML
 	public void sacuvaj(ActionEvent event) {
 		if(vremenaPolazaka.getItems().isEmpty()) {
-			Util.getNotifications("Greška", "Unesite bar jedan polazak.", "Error").show();
+			Util.getNotifications("Greška", "Unesite bar jedan polazak.", "Warning").show();
+			return;
+		}
+		if(!anyCheckBoxSelected()) {
+			Util.getNotifications("Greška", "Odaberite bar jedan dan!", "Warning");
 			return;
 		}
 		if(cijenaMjesecnaTextField.validate()
-					& cijenaJednokratnaTextField.validate()) {
-			
+				& cijenaJednokratnaTextField.validate()
+					& nazivLinijeTextField.validate()
+						& prevoznikComboBox.validate()
+							& peronComboBox.validate()
+								& prazniciComboBox.validate()) {
 			relacijeTableView.getSelectionModel().getSelectedItem().setCijenaJednokratna(Double.parseDouble(cijenaJednokratnaTextField.getText()));
 			
 			if(!cijenaMjesecnaTextField.getText().isEmpty()) 
@@ -541,7 +549,13 @@ public class IzmjenaLinijeController implements Initializable {
 					String dani2 = dani.substring(0, dani.length()-1);
 					relacijeObsList.forEach(r -> r.setDani(dani2));
 					
-					relacijeObsList.forEach(r -> Relacija.izmijeniRelaciju(r, idPolaskaList.get(vremenaPolazaka.getSelectionModel().getSelectedIndex()))); 
+					ListaLinijaController.odabranaLinija.setNazivLinije(nazivLinijeTextField.getText().trim());
+					ListaLinijaController.odabranaLinija.setStanje(linijaAktivnaCheckBox.isSelected()?"Aktivno":"Blokirano");
+					ListaLinijaController.odabranaLinija.setPrevoznik(prevoznikComboBox.getSelectionModel().getSelectedItem());
+					ListaLinijaController.odabranaLinija.setPeron(peronComboBox.getSelectionModel().getSelectedIndex() + 1);
+					ListaLinijaController.odabranaLinija.setVoznjaPraznikom(prazniciComboBox.getSelectionModel().getSelectedIndex() + 1);
+					
+					relacijeObsList.forEach(r -> Relacija.izmijeniRelaciju(r, idPolaskaList.get(vremenaPolazaka.getSelectionModel().getSelectedIndex()), ListaLinijaController.odabranaLinija)); 
 						
 					Platform.runLater(() -> {
 						Util.getNotifications("Obavještenje", "Relacije izmjenjene.", "Information").show();

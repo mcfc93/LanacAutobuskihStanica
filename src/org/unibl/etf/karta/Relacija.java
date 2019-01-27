@@ -354,20 +354,23 @@ public class Relacija {
 		return 0;
 	}
 	
-	public static boolean izmijeniRelaciju(Relacija relacija, int idPolaska) {
+	public static boolean izmijeniRelaciju(Relacija relacija, int idPolaska, Linija linija) {
 		Connection c = null;
-		String sql = "update relacija set CijenaJednokratna=?,CijenaMjesecna=? where IdRelacije=?";
+		String sqlRelacija = "update relacija set CijenaJednokratna=?,CijenaMjesecna=? where IdRelacije=?";
 		String sqlRedVoznje = "update red_voznje set Dani=?,VrijemePolaska=?,VrijemeDolaska=?, VrijemePolaskaPovratna=?,VrijemeDolaskaPovratna=? where IdRelacije=? and IdPolaska=?";
+		String sqlLinija = "update Linija set Stanje=?,NazivLinije=?,JIBPrevoznika=?,Peron=?,VoznjaPraznikom=? where IdLinije=?;";
 		PreparedStatement s = null;
 	    try {
 	       	c = Util.getConnection();
-	    	s = Util.prepareStatement(c, sql, false, relacija.getCijenaJednokratna(), relacija.getCijenaMjesecna(), relacija.getIdRelacije());
+	    	s = Util.prepareStatement(c, sqlRelacija, false, relacija.getCijenaJednokratna(), relacija.getCijenaMjesecna(), relacija.getIdRelacije());
 	    	s.executeUpdate();
 	    	s.close();
 	    	s = Util.prepareStatement(c, sqlRedVoznje, false, relacija.getDani(), relacija.getVrijemePolaska(), relacija.getVrijemeDolaska(), relacija.getVrijemePolaskaPovratna(), relacija.getVrijemeDolaskaPovratna(), relacija.getIdRelacije(), idPolaska);
-	    	if(s.executeUpdate()==1) {
-	    		return true;
-	    	}
+	    	s.executeUpdate();
+	    	s.close();
+	    	s = Util.prepareStatement(c, sqlLinija, false, linija.getStanje(), linija.getNazivLinije(), linija.getPrevoznik().getJIBPrevoznika(), linija.getPeron(), linija.getVoznjaPraznikom(), linija.getIdLinije());
+	    	s.executeUpdate();
+	    	return true;
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 	    } finally {
@@ -430,7 +433,7 @@ public class Relacija {
 		Connection c = null;
 		ResultSet r =null;
 		PreparedStatement s = null;
-		String sql = "select IdPolaska,VrijemePolaska,VrijemePolaskaPovratna from linija join (red_voznje,relacija) on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and Polaziste=PStajaliste and Odrediste=OStajaliste) where PStajaliste=? and OStajaliste=? and linija.Stanje='Aktivno' and red_voznje.Stanje='Aktivno'";
+		String sql = "select IdPolaska,VrijemePolaska,VrijemePolaskaPovratna from linija join (red_voznje,relacija) on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and Polaziste=PStajaliste and Odrediste=OStajaliste) where PStajaliste=? and OStajaliste=? and linija.Stanje!='Izbrisano' and red_voznje.Stanje='Aktivno'";
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, pStajaliste, oStajaliste);
@@ -457,7 +460,7 @@ public class Relacija {
 		Connection c = null;
 		ResultSet r =null;
 		PreparedStatement s = null;
-		String sql = "select count(IdPolaska) from linija join (red_voznje,relacija) on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and Polaziste=PStajaliste and Odrediste=OStajaliste) where PStajaliste=? and OStajaliste=? and linija.Stanje='Aktivno'";
+		String sql = "select count(IdPolaska) from linija join (red_voznje,relacija) on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and Polaziste=PStajaliste and Odrediste=OStajaliste) where PStajaliste=? and OStajaliste=? and linija.Stanje!='Izbrisano'";
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, pStajaliste, oStajaliste);
