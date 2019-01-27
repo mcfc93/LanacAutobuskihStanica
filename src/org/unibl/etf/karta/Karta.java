@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.MonthDay;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.salterski_radnik.InformacijeController;
 import org.unibl.etf.salterski_radnik.ProdajaKarataController;
+import org.unibl.etf.util.Praznik;
 import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 
@@ -533,22 +535,29 @@ public class Karta {
 				 * polasci*/
 				if(polazakDolazak.equals("POLASCI")) {
 					karta.getRelacija().setVrijemePolaska(r.getTime("VrijemePolaska")); 
-					if(karta.getRelacija().getDani().contains(String.valueOf(LocalDate.now().getDayOfWeek().getValue()))) {
-						if(karta.getRelacija().getVrijemePolaska().toLocalTime().isAfter(LocalTime.now())) {
+					//if(karta.getRelacija().getDani().contains(String.valueOf(LocalDate.now().getDayOfWeek().getValue()))) {
+						//if(karta.getRelacija().getVrijemePolaska().toLocalTime().isAfter(LocalTime.now())) {
 							karteList.add(karta);			
-						}
-					}
+						//}
+					//}
 				}
 				else {
 					karta.getRelacija().setVrijemeDolaska(r.getTime("VrijemeDolaska"));
-					if(karta.getRelacija().getDani().contains(String.valueOf(LocalDate.now().getDayOfWeek().getValue()))) {
-						if(karta.getRelacija().getVrijemeDolaska().toLocalTime().isAfter(LocalTime.now())) {
+					//if(karta.getRelacija().getDani().contains(String.valueOf(LocalDate.now().getDayOfWeek().getValue()))) {
+						//if(karta.getRelacija().getVrijemeDolaska().toLocalTime().isAfter(LocalTime.now())) {
 							karteList.add(karta);			
-						}
-					}
+						//}
+					//}
 				}
-				
+				/*
+				if(Praznik.getHolidayList().stream().anyMatch(p -> MonthDay.from(LocalDate.now()).equals(MonthDay.of(p.getMjesec(), p.getDan())))) {
+					karteList.removeIf(k -> k.getRelacija().getLinija().getVoznjaPraznikom() == 9 || !k.getRelacija().getDani().contains(k.getRelacija().getLinija().getVoznjaPraznikom() + ""));
+				} else {
+					karteList.removeIf(k -> !k.getRelacija().getDani().contains(String.valueOf(LocalDate.now().getDayOfWeek().getValue())));
+				}
+				*/
 	        }
+	        
 	       // return karteList;
 	    } catch(SQLException e) {
 	    	Util.LOGGER.log(Level.SEVERE, e.toString(), e);

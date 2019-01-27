@@ -1,6 +1,7 @@
 package org.unibl.etf.salterski_radnik;
 
 import java.net.URL;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.MonthDay;
@@ -275,15 +276,32 @@ public class InformacijeController implements Initializable{
 		    				synchronized(karteObs) {
 			    				System.out.println("UCITAVANJE: " + polasciDolasciComboBox.getValue());
 			    				try {
-									Thread.sleep(5000);
+									Thread.sleep(1000);
 								}catch (InterruptedException e) {
 									//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 									System.out.println("SLEEP_5 - CONTINUE");
 								}
 			    				
 			    				
-		    					List<Karta> tmpKarte=Karta.getInfoList(polasciDolasciComboBox.getValue());
-			    				
+		    					List<Karta> tmpKarte=new ArrayList<>();
+		    					
+		    					for (Karta karta : Karta.getInfoList(polasciDolasciComboBox.getValue())) {
+		    						if(polasciDolasciComboBox.getSelectionModel().getSelectedIndex() == 0) {
+		    							if(zadovoljavaVrijeme(karta.getRelacija().getVrijemePolaska())) {
+		    								tmpKarte.add(karta);
+		    							}
+		    						} else {
+		    							if(zadovoljavaVrijeme(karta.getRelacija().getVrijemeDolaska())) {
+		    								tmpKarte.add(karta);
+		    							}
+		    						}
+		    					}
+		    					if(Praznik.getHolidayList().stream().anyMatch(p -> MonthDay.from(datum.getValue()).equals(MonthDay.of(p.getMjesec(), p.getDan())))) {
+		    						tmpKarte.removeIf(k -> k.getRelacija().getLinija().getVoznjaPraznikom() == 9 || !k.getRelacija().getDani().contains(k.getRelacija().getLinija().getVoznjaPraznikom() + ""));
+		    					} else {
+		    						tmpKarte.removeIf(k -> !k.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue())));
+		    					}
+		    					
 			    				Platform.runLater(() -> {
 			    					karteObs.clear();
 				    				karteObs.addAll(tmpKarte);
@@ -305,7 +323,7 @@ public class InformacijeController implements Initializable{
 		    				}
 		    				
 		    				try {
-		    					Thread.sleep(2000);
+		    					Thread.sleep(10000);
 		    				}catch (InterruptedException e) {
 		    					//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		    					//System.out.println("SLEEP_2 - CONTINUE");
@@ -405,15 +423,14 @@ public class InformacijeController implements Initializable{
 								System.out.println("UCITAVANJE: " + Thread.currentThread());
 								List<Karta> tmp = new ArrayList<>();
 								if(polasciDolasciComboBox.getSelectionModel().isSelected(0)) {
-									//POLASCI
-									/*
-									for(Praznik p: Praznik.getHolidayList()) {
-						                if (MonthDay.from(datum.getValue()).equals(MonthDay.of(p.getMjesec(), p.getDan()))) {
-						                	
-						                }
-									}
-									*/
-									tmp.addAll(Karta.getKarteList(polaziste,odrediste));
+			    					//POLASCI
+			    					for (Karta karta : Karta.getKarteList(polaziste,odrediste)) {
+		    							if(zadovoljavaVrijeme(karta.getRelacija().getVrijemePolaska())) {
+		    								tmp.add(karta);
+		    							}
+			    					}
+									
+									//tmp.addAll(Karta.getKarteList(polaziste,odrediste));
 									if(Praznik.getHolidayList().stream().anyMatch(p -> MonthDay.from(datum.getValue()).equals(MonthDay.of(p.getMjesec(), p.getDan())))) {
 										tmp.removeIf(k -> k.getRelacija().getLinija().getVoznjaPraznikom() == 9 || !k.getRelacija().getDani().contains(k.getRelacija().getLinija().getVoznjaPraznikom() + ""));
 									} else {
@@ -421,17 +438,21 @@ public class InformacijeController implements Initializable{
 									}
 								} else {
 									//DOLASCI
-									//for(Karta karta : Karta.getKarteListDolasci(polaziste,odrediste, "6")) {
-										//if(karta.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue()))) {
-									tmp.addAll(Karta.getKarteListDolasci(polaziste,odrediste));
+									for (Karta karta : Karta.getKarteList(polaziste,odrediste)) {
+										if(zadovoljavaVrijeme(karta.getRelacija().getVrijemeDolaska())) {
+		    								tmp.add(karta);
+		    							}
+									}
+									
+									//tmp.addAll(Karta.getKarteListDolasci(polaziste,odrediste));
 									if(Praznik.getHolidayList().stream().anyMatch(p -> MonthDay.from(datum.getValue()).equals(MonthDay.of(p.getMjesec(), p.getDan())))) {
-										System.out.println("JESTE PRAZNIK - DOLASCI");
-										tmp.forEach(k -> System.out.println(k.getRelacija().getLinija().getVoznjaPraznikom() + " " + k.getRelacija().getDani()));
+										//System.out.println("JESTE PRAZNIK - DOLASCI");
+										//tmp.forEach(k -> System.out.println(k.getRelacija().getLinija().getVoznjaPraznikom() + " " + k.getRelacija().getDani()));
 										tmp.removeIf(k -> k.getRelacija().getLinija().getVoznjaPraznikom() == 9 || !k.getRelacija().getDani().contains(k.getRelacija().getLinija().getVoznjaPraznikom() + ""));
-										System.out.println("NAKON BRISANJA");
-										tmp.forEach(k -> System.out.println(k.getRelacija().getLinija().getVoznjaPraznikom() + " " + k.getRelacija().getDani()));
+										//System.out.println("NAKON BRISANJA");
+										//tmp.forEach(k -> System.out.println(k.getRelacija().getLinija().getVoznjaPraznikom() + " " + k.getRelacija().getDani()));
 									} else {
-										System.out.println("NIJE PRAZNIK - DOLASCI");
+										//System.out.println("NIJE PRAZNIK - DOLASCI");
 										tmp.removeIf(k -> !k.getRelacija().getDani().contains(String.valueOf(datum.getValue().getDayOfWeek().getValue())));
 									}
 								}
@@ -469,14 +490,11 @@ public class InformacijeController implements Initializable{
 		}
     }
 	
-	/*
-	public boolean zadovoljavaDatumVrijeme(String daniUSedmici,Time vrijemePolaska) {
-		LocalTime localTime = LocalTime.now();
+	public boolean zadovoljavaVrijeme(Time vrijemePolaska) {
 		if(datum.getValue().equals(LocalDate.now())) {
-			return (localTime.compareTo(vrijemePolaska.toLocalTime())<0);
-			}
-		else
-			return (daniUSedmici.contains(datum.getValue().getDayOfWeek().toString())) && daniUSedmici.contains(datum.getValue().getDayOfWeek().toString());
-	}*/
-
+			return (LocalTime.now().compareTo(vrijemePolaska.toLocalTime())<0);
+		}
+		return true;
+	}
+	
 }

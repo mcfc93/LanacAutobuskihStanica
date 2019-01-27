@@ -181,7 +181,7 @@ public class MjesecnaKarta extends Karta {
 
 	public static void stampajKartu(Karta karta, int i, LocalDate value, String naziv, TipKarte tip) {
 		LocalDate localDate = LocalDate.now();
-		int mjesecVazenja = (localDate.getDayOfMonth()>25) ? localDate.getMonthValue()+1: localDate.getMonthValue();
+		//int mjesecVazenja = (localDate.getDayOfMonth()>25) ? localDate.getMonthValue()+1: localDate.getMonthValue();
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(PrijavaController.autobuskaStanica.getGrad() + System.lineSeparator());
@@ -281,7 +281,7 @@ public class MjesecnaKarta extends Karta {
 		PreparedStatement s = null;
 		ResultSet r = null;
 		String sql = "select * from relacija join (red_voznje,linija,prevoznik,popust_prevoznika) on (relacija.IdRelacije=red_voznje.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) "
-				+ "where ((relacija.Polaziste=? and relacija.Odrediste=?) or (relacija.Polaziste=? and relacija.Odrediste=?)) and linija.Stanje='Aktivno' and red_voznje.Stanje='Aktivno' group by prevoznik.JIBPrevoznika";
+				+ "where ((relacija.Polaziste=? and relacija.Odrediste=?) or (relacija.Polaziste=? and relacija.Odrediste=?)) and CijenaMjesecna is not NULL and linija.Stanje='Aktivno' and red_voznje.Stanje='Aktivno' group by prevoznik.JIBPrevoznika";
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, polaziste.getIdStajalista(), odrediste.getIdStajalista(), odrediste.getIdStajalista(), polaziste.getIdStajalista());

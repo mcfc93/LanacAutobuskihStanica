@@ -74,7 +74,7 @@ public class ProdajaKarataController implements Initializable {
 	
 	public static Set<String> relacijeSet = new HashSet<>();
 	public static ObservableList<Karta> karteObs = FXCollections.observableArrayList();
-	public static String daniUSedmici;
+	//public static String daniUSedmici;
 	public static File odabranaSlika = null;
 	public static boolean kupovinaMjesecne=false;
 	private int brojKarataZaKupovinu;
@@ -301,10 +301,10 @@ public class ProdajaKarataController implements Initializable {
 					kupovinaButton.setDisable(false);
 					karteObs.clear();
 					for (Karta karta : Karta.getKarteList(InformacijeController.pocetnoStajaliste, odrediste)) {
-						daniUSedmici = karta.getRelacija().getDani();
+						//daniUSedmici = karta.getRelacija().getDani();
 						//if(Praznik.getHolidayList().stream().noneMatch(p -> p.getDan()==datum.getValue().getDayOfMonth() & p.getMjesec()==datum.getValue().getMonthValue())) 
 						//{	
-							System.out.println(daniUSedmici + karta.getRelacija().getVrijemePolaska());
+							System.out.println(karta.getRelacija().getDani() + karta.getRelacija().getVrijemePolaska());
 							//if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
 							if(zadovoljavaVrijeme(karta.getRelacija().getVrijemePolaska())) {
 								if(povratnaKartaCheckBox.isSelected())
@@ -910,7 +910,10 @@ public class ProdajaKarataController implements Initializable {
 	}
 	
 	public boolean zadovoljavaVrijeme(Time vrijemePolaska) {
-		return (LocalTime.now().compareTo(vrijemePolaska.toLocalTime())<0);
+		if(datum.getValue().equals(LocalDate.now())) {
+			return (LocalTime.now().compareTo(vrijemePolaska.toLocalTime())<0);
+		}
+		return true;
 	}
 	
 	public boolean showPotvrda() {
