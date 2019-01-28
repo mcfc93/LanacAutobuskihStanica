@@ -218,7 +218,7 @@ public class Karta {
 		sb.append(String.format("Biletar: %s%s%s", PrijavaController.nalog.getZaposleni().getIme(), System.lineSeparator(), System.lineSeparator()));
 		sb.append(String.format("%10sHvala na povjerenju!%s%s", " ", " ", System.lineSeparator()));
 		System.out.println(sb.toString());
-		File file = new File("karte\\karta" + String.format("%06d", serijskiBroj)+".txt");
+		File file = new File("karte\\karta" + String.format("%013d", serijskiBroj)+".txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 		    writer.append(sb);
 		} catch (IOException e) {
@@ -233,13 +233,14 @@ public class Karta {
 		PreparedStatement s = null;
 		ResultSet r = null;
 		//String sql = "select * from linija join (relacija,prevoznik) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno')";
-		String sql = "select * from linija join (relacija,prevoznik) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno')";
+		String sql = "select * from linija join (relacija,prevoznik,popust_prevoznika) on (linija.IdLinije=relacija.IdLinije) and (linija.JIBPrevoznika=prevoznik.JIBPrevoznika)"
+				+ "and (prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where (linija.IdLinije=relacija.IdLinije) and (Polaziste=? && Odrediste=?) and (linija.Stanje='Aktivno')";
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, polaziste.getIdStajalista(), odrediste.getIdStajalista());
 			r = s.executeQuery();		
 	       	while(r.next()) {
-	       		Prevoznik prevoznik = new Prevoznik(r.getString("JIBPrevoznika"), r.getString("prevoznik.NazivPrevoznika"), r.getString("prevoznik.Telefon"), r.getString("prevoznik.Email"));
+	       		Prevoznik prevoznik = new Prevoznik(r.getString("JIBPrevoznika"), r.getString("prevoznik.NazivPrevoznika"), r.getString("prevoznik.Telefon"), r.getString("prevoznik.Email"), r.getDouble("DjackiPopust"));
 	       		Linija linija = new Linija(r.getInt("linija.IdLinije"), r.getString("linija.NazivLinije"), r.getInt("linija.Peron"), prevoznik, r.getInt("linija.VoznjaPraznikom"));
 	       		// -- PREPRAVITI
 	       		Relacija relacija = new Relacija(r.getInt("relacija.IdRelacije"), linija, polaziste, odrediste, r.getTime("VrijemePolaska"), r.getTime("VrijemeDolaska"), r.getDouble("CijenaJednokratna"), r.getString("Dani"));
@@ -264,6 +265,7 @@ public class Karta {
 		ResultSet r = null;
 		try {
 			c = Util.getConnection();
+			System.out.println("ID relacije: " + karta.getRelacija().getIdRelacije());
 			s = Util.prepareStatement(c, sql, true, karta.getRelacija().getIdRelacije(), Date.valueOf(datum), Date.valueOf(LocalDate.now()),karta.getBrojSjedista(), karta.getJIBStanice(),karta.getCijena());
 			System.out.println(s.executeUpdate());
 			r = s.getGeneratedKeys();
@@ -299,7 +301,7 @@ public class Karta {
 		PreparedStatement s = null;
 		ResultSet r = null;
 		String sql = "select linija.NazivLinije, karta.Cijena, relacija.Polaziste, relacija.Odrediste, karta.DatumIzdavanja from karta join (relacija,linija) on "
-				+ "(karta.IdRelacije=relacija.IdRelacije) and (relacija.IdLinije=linija.IdLinije) where karta.SerijskiBroj=?";
+				+ "(karta.IdRelacije=relacija.IdRelacije) and (relacija.IdLinije=linija.IdLinije) where karta.SerijskiBroj=? and karta.Stanje='Aktivno'";
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, serijskiBroj);
@@ -327,33 +329,18 @@ public class Karta {
 	public static boolean stornirajKartu(int serijskiBroj) {
 		Connection c = null;
 		PreparedStatement s1 = null;
-		PreparedStatement s2 = null;
-		PreparedStatement s3 = null;
-		String sqlKarta = "update karta,rezervacija set karta.Stanje='Stornirano',rezervacija.Stanje='Stornirano' where karta.SerijskiBroj=? and rezervacija.SerijskiBroj=karta.SerijskiBroj";
-		//String sqlRezervacija = "update rezervacija set Stanje='Stornirano' where SerijskiBroj=?";
-		//String sqlMjesecna = "update mjesecna_karta set Stanje='Stornirano' where IdMjesecneKarte=?";
+		String sqlKarta = "update karta set karta.Stanje='Stornirano' where karta.SerijskiBroj=?";
+		String sqlRezervacija = "update rezervacija set Stanje='Stornirano' where SerijskiBroj=?";
 		try {
 			c = Util.getConnection();
 			s1 = Util.prepareStatement(c, sqlKarta, false, serijskiBroj);
-		//	s2 = Util.prepareStatement(c, sqlRezervacija, false, serijskiBroj);
-		//	s3 = Util.prepareStatement(c, sqlMjesecna, false, serijskiBroj);
-			//System.out.println(s2.executeUpdate());
-			
-			if(s1.executeUpdate()>0) {
-			//	s2.close();
-			//	s3.close();
-				File file = new File("src\\jednokratnekarte\\karta" + String.format("%06d", serijskiBroj)+".txt");
-				//File file2 = new File("src\\mjesecnekarte\\karta" + String.format("%06d", serijskiBroj)+".txt");
-				//if(file2.exists())
-					//file2.delete();
-				if(file.exists())
-					System.out.println(file.delete());
-				return true;
-			}
-			//s2.close();
-		//	s3.close();
-			return false;
-
+			s1.executeUpdate();
+			s1 = Util.prepareStatement(c, sqlRezervacija, false, serijskiBroj);
+			s1.executeUpdate();
+			File file = new File("karte\\karta" + String.format("%013d", serijskiBroj)+".txt");
+			if(file.exists())
+				file.delete();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -1,12 +1,15 @@
 package org.unibl.etf.administrativni_radnik;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 import org.controlsfx.control.MaskerPane;
 import org.unibl.etf.karta.Linija;
+import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -37,6 +40,7 @@ import javafx.util.Duration;
 public class ListaLinijaController implements Initializable {
 
 	public static ObservableList<Linija> linijeObsList;
+	public static List<Stajaliste> stajalistaList = new ArrayList<>();
 	public static Linija odabranaLinija;
 	public static int idLinije;
 
@@ -60,15 +64,17 @@ public class ListaLinijaController implements Initializable {
 	private TableColumn<Linija,Linija> izbrisiColumn = new TableColumn<Linija,Linija>();
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		stajalistaList = Stajaliste.getStajalisteList();
+		
 		linijeObsList = FXCollections.observableArrayList();
-		//linijeObsList.setAll(Linija.getLinije());
+		linijeObsList.setAll(Linija.getLinije());
 		linijeTableView.setItems(linijeObsList);
 		linijeTableView.setPlaceholder(new Label("Nema linija u tabeli."));
     	nazivLinijeColumn.setCellValueFactory(new PropertyValueFactory<>("nazivLinije"));
     	idLinijeLinijeColumn.setCellValueFactory(new PropertyValueFactory<>("idLinije"));
     	nazivPrevoznikaColumn.setCellValueFactory(new PropertyValueFactory<>("nazivPrevoznika"));
     	peronLinijeColumn.setCellValueFactory(new PropertyValueFactory<>("peron"));
-    	daniUSedmiciColumn.setCellValueFactory(new PropertyValueFactory<>("daniUSedmici"));
+    	//daniUSedmiciColumn.setCellValueFactory(new PropertyValueFactory<>("daniUSedmici"));
     	izmijeniColumn.setCellValueFactory(
                 param -> new ReadOnlyObjectWrapper<>(param.getValue())
             );

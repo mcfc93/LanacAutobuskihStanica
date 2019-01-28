@@ -215,7 +215,22 @@ System.out.println(PROPERTY);
 	    */
 	    return integerValidator;
 	}
-	
+	public static ValidatorBase popustValidator(JFXTextField textField) {
+		ValidatorBase popustValidator = new ValidatorBase("Unos ne pripada 0-100") {
+			
+			@Override
+			protected void eval() {
+				// TODO Auto-generated method stub
+				if(!textField.getText().isEmpty() && !textField.getText().matches("^([1-9][0-9]?|100)$"))
+					hasErrors.set(true);
+				else
+					hasErrors.set(false);
+			}
+		};
+		
+		popustValidator.setIcon(new ImageView());
+		return popustValidator;
+	}
 	public static ValidatorBase doubleValidator(JFXTextField textField) {
 		ValidatorBase doubleValidator = new DoubleValidator();
 		doubleValidator.setMessage("Nije broj");

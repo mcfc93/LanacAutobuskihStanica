@@ -8,6 +8,8 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.unibl.etf.administrativni_radnik.ListaLinijaController;
+import org.unibl.etf.salterski_radnik.InformacijeController;
 import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
 
@@ -102,8 +104,9 @@ public class Relacija {
 
 	/*
 	 * konstruktor za produzavanje karte*/
-	public Relacija(Linija linija, Prevoznik prevoznik, Stajaliste polaziste, Stajaliste odrediste) {
+	public Relacija(int idRelacije,Linija linija, Prevoznik prevoznik, Stajaliste polaziste, Stajaliste odrediste) {
 		// TODO Auto-generated constructor stub
+		this.idRelacije = idRelacije;
 		this.linija = linija;
 		this.linija.setPrevoznik(prevoznik);
 		this.polaziste = polaziste;
@@ -264,15 +267,24 @@ public class Relacija {
 		Connection c = null;
 		ResultSet r =null;
 		PreparedStatement s = null;
-		String sql = "select * from relacija join cijena_mjesecne_karte where relacija.IdLinije=161 and relacija.IdRelacije=cijena_mjesecne_karte.IdRelacije";
+		String sql = "select * from relacija left join (linija,cijena_mjesecne_karte) on (relacija.IdLinije=linija.IdLinije and relacija.IdRelacije=cijena_mjesecne_karte.IdRelacije) "
+				+ "where relacija.IdLinije=?";
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, idLinije);
 			r = s.executeQuery();
 			while(r.next()) {
-				Stajaliste polaziste = new Stajaliste(r.getInt("Polaziste"));
-				Stajaliste odrediste = new Stajaliste(r.getInt("Odrediste"));
-				relacijeList.add(new Relacija(r.getInt("IdRelacije"), r.getInt("IdLinije"), polaziste, odrediste, r.getDouble("CijenaJednokratna"), r.getDouble("CijenaMjesecna")));
+				
+				int idPolazista = r.getInt("Polaziste");
+				int idOdredista = r.getInt("Odrediste");
+				System.out.println("Cijena mjesecna:" + r.getDouble("CijenaMjesecna"));
+				Stajaliste polaziste = ListaLinijaController.stajalistaList.stream().filter(x -> x.getIdStajalista()==idPolazista).findFirst().get();
+				System.out.println(polaziste);
+				Stajaliste odrediste = ListaLinijaController.stajalistaList.stream().filter(y -> y.getIdStajalista()==idOdredista).findFirst().get();
+				System.out.println(odrediste);
+
+				Relacija relacija = new Relacija(r.getInt("IdRelacije"), idLinije, polaziste, odrediste, r.getDouble("CijenaJednokratna"), r.getDouble("CijenaMjesecna"));
+				System.out.println(relacijeList.add(relacija));
 			}
 			return relacijeList;
 		} catch (SQLException e) {

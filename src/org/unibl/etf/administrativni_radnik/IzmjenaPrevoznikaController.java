@@ -7,6 +7,7 @@ import org.unibl.etf.util.Mjesto;
 import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.base.ValidatorBase;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -39,6 +40,13 @@ public class IzmjenaPrevoznikaController implements Initializable{
 	private JFXTextField postanskiBrojTextField = new JFXTextField();
 	@FXML
 	private JFXTextField jibTextField = new JFXTextField();
+	@FXML
+	private JFXTextField djackiPopustTextField = new JFXTextField();
+	@FXML
+	private JFXTextField penzionerskiPopustTextField = new JFXTextField();
+	@FXML
+	private JFXTextField radnickiPopustTextField = new JFXTextField();
+	
 	@FXML
 	private JFXButton okButton = new JFXButton();
 	
@@ -86,6 +94,14 @@ public class IzmjenaPrevoznikaController implements Initializable{
 		webAdresaTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getWebAdresa());
 		tekuciRacunTextField.setText(ListaPrevoznikaController.odabraniPrevoznik.getRacun());
 		postanskiBrojTextField.setText(String.valueOf(ListaPrevoznikaController.odabraniPrevoznik.getMjesto().getPostanskiBroj() + " - " + Mjesto.getPlaceList().stream().filter(m -> m.getPostanskiBroj()==ListaPrevoznikaController.odabraniPrevoznik.getMjesto().getPostanskiBroj()).findFirst().get().getNaziv()));
+		int djackiPopust = (int) (100 - 100*ListaPrevoznikaController.odabraniPrevoznik.getDjackiPopust());
+		int penzionerskiPopust = (int) (100 - 100*ListaPrevoznikaController.odabraniPrevoznik.getPenzionerskiPopust());
+		int radnickiPopust = (int) (100 - 100*ListaPrevoznikaController.odabraniPrevoznik.getRadnickiPopust());
+		
+		djackiPopustTextField.setText(Integer.toString(djackiPopust));
+		penzionerskiPopustTextField.setText(Integer.toString(penzionerskiPopust));
+		radnickiPopustTextField.setText(Integer.toString(radnickiPopust));
+		
 		
 		
 		//Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());	
@@ -99,6 +115,10 @@ public class IzmjenaPrevoznikaController implements Initializable{
 		postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
 		webAdresaTextField.getValidators().addAll(Util.requiredFieldValidator(webAdresaTextField), Util.webValidator(webAdresaTextField), Util.lengthValidator(webAdresaTextField, 35));
 		emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField), Util.emailValidator(emailTextField), Util.lengthValidator(emailTextField, 35));
+		djackiPopustTextField.getValidators().addAll(Util.requiredFieldValidator(djackiPopustTextField), Util.popustValidator(djackiPopustTextField));
+		penzionerskiPopustTextField.getValidators().addAll(Util.requiredFieldValidator(penzionerskiPopustTextField), Util.popustValidator(penzionerskiPopustTextField));
+		radnickiPopustTextField.getValidators().addAll(Util.requiredFieldValidator(radnickiPopustTextField), Util.popustValidator(radnickiPopustTextField));
+		
 	}
 
 	@FXML
@@ -108,6 +128,9 @@ public class IzmjenaPrevoznikaController implements Initializable{
 	
 	@FXML
 	public void izmjeniPrevoznika(ActionEvent event) {
+		int djackiPopust = Integer.parseInt(djackiPopustTextField.getText());
+		int penzionerskiPopust = Integer.parseInt(penzionerskiPopustTextField.getText());
+		int radnickiPopust = Integer.parseInt(radnickiPopustTextField.getText());
 		if(jibTextField.validate()
 				& nazivTextField.validate()
 					& adresaTextField.validate()
@@ -115,10 +138,14 @@ public class IzmjenaPrevoznikaController implements Initializable{
 							& telefonTextField.validate()
 								& webAdresaTextField.validate()
 									& postanskiBrojTextField.validate()
-										& tekuciRacunTextField.validate()) {
+										& tekuciRacunTextField.validate()
+											& djackiPopustTextField.validate()
+												& radnickiPopustTextField.validate()
+													& penzionerskiPopustTextField.validate()
+													) {
 			if(Prevoznik.izmjeniPrevoznika(nazivTextField.getText(), telefonTextField.getText(), emailTextField.getText(), webAdresaTextField.getText(), 
 										tekuciRacunTextField.getText(), adresaTextField.getText(),postanskiBrojTextField.getText().split("-")[0].trim(), 
-										ListaPrevoznikaController.odabraniPrevoznik.getJIBPrevoznika())) {
+										ListaPrevoznikaController.odabraniPrevoznik.getJIBPrevoznika(),djackiPopust,penzionerskiPopust,radnickiPopust)) {
 				ListaPrevoznikaController.odabraniPrevoznik.setAdresa(adresaTextField.getText());
 				ListaPrevoznikaController.odabraniPrevoznik.setNaziv(nazivTextField.getText());
 				ListaPrevoznikaController.odabraniPrevoznik.setTelefon(telefonTextField.getText());
@@ -126,6 +153,9 @@ public class IzmjenaPrevoznikaController implements Initializable{
 				ListaPrevoznikaController.odabraniPrevoznik.setWebAdresa(webAdresaTextField.getText());
 				ListaPrevoznikaController.odabraniPrevoznik.setRacun(tekuciRacunTextField.getText());
 				ListaPrevoznikaController.odabraniPrevoznik.getMjesto().setPostanskiBroj(Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()));
+				ListaPrevoznikaController.odabraniPrevoznik.setDjackiPopust((100-djackiPopust)/100 );
+				ListaPrevoznikaController.odabraniPrevoznik.setPenzionerskiPopust( (100-penzionerskiPopust)/100 );
+				ListaPrevoznikaController.odabraniPrevoznik.setRadnickiPopust( (100-radnickiPopust)/100 );
 				Platform.runLater(() -> {
 		    		Util.getNotifications("Obavještenje", "Prevoznik izmjenjen.", "Information").show();
 		    	});

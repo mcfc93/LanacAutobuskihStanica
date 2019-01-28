@@ -118,6 +118,5 @@
             <JFXComboBox fx:id="prazniciComboBox" prefWidth="500.0" promptText="Praznici" GridPane.columnIndex="6" GridPane.halignment="LEFT" />
          </children>
       </GridPane>
-      <JFXButton fx:id="novoStajalisteButton" onAction="#novoStajaliste" text="Novo stajaliste" GridPane.columnIndex="6" GridPane.rowIndex="7" />
    </children>
 </GridPane>

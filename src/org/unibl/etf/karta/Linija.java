@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.unibl.etf.util.Util;
 
 public class Linija {
@@ -92,7 +91,9 @@ public class Linija {
 	public void setVoznjaPraznikom(int voznjaPraznikom) {
 		this.voznjaPraznikom = voznjaPraznikom;
 	}
-
+	public String getNazivPrevoznika() {
+		return prevoznik.getNaziv();
+	}
 
 	@Override
 	public String toString() {
@@ -100,7 +101,7 @@ public class Linija {
 				+ prevoznik + ", stanje=" + stanje + ", voznjaPraznikom=" + voznjaPraznikom + "]";
 	}
 	public static int dodajLiniju(Linija linija) {
-		String sql = "insert into linija value (default,?,?,?,?,default)";
+		String sql = "insert into linija value (default,?,?,?,default,?)";
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;

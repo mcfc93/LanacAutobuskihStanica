@@ -78,19 +78,19 @@ public class ProdajaKarataController implements Initializable {
 	private int brojKarataZaKupovinu;
 	private static final int MAX_BROJ_KARATA=10;
 	public static boolean povratna=false;
-	private static final double POPUST_PENZIONERSKA = 0.75;
-	private static final double POPUST_DJACKA = 0.80;
 	private static final double POPUST_POVRATNA = 0.85;
 	public static final double REZERVACIJA = 2.5;
 	public static final double STANICNA_USLUGA = 0.5;
 	public static int idKarte;
 	public static int idMjesecneKarte;
-	
-	@FXML
-	private AnchorPane tableAnchorPane;
 	public static boolean potvrda;
 	public static boolean produzavanjeKarte;
-	public static int x;
+	//public static int x;
+	
+	@FXML
+	private JFXCheckBox studentskaCheckBox;
+	@FXML
+	private AnchorPane tableAnchorPane;
 	@FXML
 	private JFXRadioButton produziMjesecnuRadioButton;
 	@FXML
@@ -229,9 +229,10 @@ public class ProdajaKarataController implements Initializable {
 	@FXML
 	public void pretragaRelacija() {
 		Stajaliste polaziste = InformacijeController.stajalistaList.stream().filter(s -> s.getIdStajalista()==PrijavaController.autobuskaStanica.getIdStajalista()).findFirst().get();
-		Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(odredisteTextField.getText())).findFirst().get();
 		if(radioButtonObicna.isSelected()) {
 			if(odredisteTextField.validate()) {
+				Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(odredisteTextField.getText())).findFirst().get();
+
 				kupovinaButton.setDisable(false);
 				karteObs.clear();
 				Praznik.getHolidayList().stream().forEach(p -> System.out.println("Dan:" +p.getDan() +", mjesec:" + p.getMjesec()));
@@ -254,16 +255,19 @@ public class ProdajaKarataController implements Initializable {
 		else {
 			if(odredisteTextField.validate() & polazisteTextField.validate())
 			{
+				Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(s -> s.toString().equals(odredisteTextField.getText())).findFirst().get();
+
 					karteObs.clear();
 					if(kupovinaMjesecne) {
 						for (Karta karta : MjesecnaKarta.getMjesecneKarteList(polaziste, odrediste)) {
 							//daniUSedmici = karta.getLinija().getDaniUSedmici();
 								switch(tipKarteComboBox.getValue()) {
 								case DJACKA:
-									karta.getRelacija().setCijenaMjesecna(POPUST_DJACKA * karta.getRelacija().getCijenaMjesecna());
+									//karta.getRelacija().setCijenaMjesecna(POPUST_DJACKA * karta.getRelacija().getCijenaMjesecna());
+									karta.setCijena(karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust());
 									break;
 								case PENZIONERSKA:
-									karta.getRelacija().setCijenaMjesecna(POPUST_PENZIONERSKA * karta.getRelacija().getCijenaMjesecna());
+									karta.setCijena(karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust());
 									break;
 								case OBICNA:
 									break;
@@ -299,27 +303,32 @@ public class ProdajaKarataController implements Initializable {
 	
 	@FXML
 	public void kupovina() {
-		if(karteTable.getSelectionModel().getSelectedItem()==null) {
-	    	Util.getNotifications("Greška", "Odaberite liniju iz tabele.", "Warning").show();
-			return;
-		}
-		Karta karta = karteTable.getSelectionModel().getSelectedItem();
 		
+		Karta karta = karteTable.getSelectionModel().getSelectedItem();
 		if(radioButtonMjesecna.isSelected()) {
 			// PRODUZAVANJE MJESECNE KARTE
 			if(produziMjesecnuRadioButton.isSelected()) {
 				if(serijskiBrojTextField.validate()) {
 					MjesecnaKartaController.karta = MjesecnaKarta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
+
 					if(MjesecnaKartaController.karta==null) {
 				    	Util.getNotifications("Greška", "Pogrešan serijski broj.", "Error").show();
 						return;
 					}
-					//showPotvrda();
+					MjesecnaKartaController.karta.setJIBStanice(PrijavaController.autobuskaStanica.getJib());
+
+					MjesecnaKartaController.datum = LocalDate.now();
+
+					showPotvrda();
 				}
 				return;
 			}
 			// KUPOVINA MJESECNE KARTE
 			else {
+				if(karteTable.getSelectionModel().getSelectedItem()==null) {
+			    	Util.getNotifications("Greška", "Odaberite liniju iz tabele.", "Warning").show();
+					return;
+				}
 				if(odabranaSlika==null) {
 			    	Util.getNotifications("Greška", "Odaberite sliku.", "Warning").show();
 					return;
@@ -335,8 +344,9 @@ public class ProdajaKarataController implements Initializable {
 						imeTextField.validate() & prezimeTextField.validate()) { 
 					
 					MjesecnaKartaController.karta = new MjesecnaKarta(karta.getRelacija(),imeTextField.getText(),prezimeTextField.getText(),odabranaSlika,karta.getRelacija().getLinija().getPrevoznik().getNaziv(),tipKarteComboBox.getValue());
-					MjesecnaKartaController.datum = datum.getValue();
-					
+					// izmjena komentar
+					//MjesecnaKartaController.datum = datum.getValue();
+					MjesecnaKartaController.datum = LocalDate.now();
 					if(showPotvrda()) {
 						Util.getNotifications("Potvrda", "Karte napravljene.", "Confirmation").show();
 						imeTextField.resetValidation();		
@@ -351,6 +361,10 @@ public class ProdajaKarataController implements Initializable {
 		}
 		// KUPOVINA OBICNIH KARATA
 		else {
+			if(karta==null) {
+		    	Util.getNotifications("Greška", "Odaberite liniju iz tabele.", "Warning").show();
+		    	return;
+			}
 			karta.setDatumPolaska(Date.valueOf(datum.getValue()));
 			brojKarataZaKupovinu = brojKarataComboBox.getValue();
 
@@ -454,6 +468,10 @@ public class ProdajaKarataController implements Initializable {
 		    }
 		    else
 		    	if(newValue.equals(produziMjesecnuRadioButton)) {
+		    		/*
+		    		 * novi dio, vjerovatno ne radi*/
+		    		cijenaColumn.setCellValueFactory(new PropertyValueFactory<>("cijena"));
+		    		karteTable.refresh();
 		    		serijskiBrojTextField.clear();
 		    		serijskiBrojTextField.resetValidation();
 		    		polazisteTextField.clear();
@@ -476,6 +494,10 @@ public class ProdajaKarataController implements Initializable {
 		    		kupovinaButton.setDisable(false);
 		    	}
 		    	else { // KUPOVINA MJESECNE KARTE
+		    		/*
+		    		 * novi dio, vjerovatno ne radi*/
+		    		cijenaColumn.setCellValueFactory(new PropertyValueFactory<>("cijena"));
+		    		karteTable.refresh();
 		    		imeTextField.clear();
 		    		imeTextField.resetValidation();
 		    		prezimeTextField.clear();
@@ -505,6 +527,10 @@ public class ProdajaKarataController implements Initializable {
 		    }
 		    else
 		    	if(newValue.equals(radioButtonObicna)) {
+		    		studentskaCheckBox.setVisible(true);
+		    		studentskaCheckBox.setSelected(false);
+
+		    		
 		    		kupiMjesecnuRadioButton.setVisible(false);
 		    		produziMjesecnuRadioButton.setVisible(false);
 		    		resetValidation();
@@ -538,7 +564,9 @@ public class ProdajaKarataController implements Initializable {
 		    		karteObs.clear();
 		    	}
 		    	else { // KUPOVINA MJESECNE KARTE
-
+		    		studentskaCheckBox.setVisible(false);
+		    		studentskaCheckBox.setSelected(false);
+		    		
 		    		kupiMjesecnuRadioButton.setVisible(true);
 		    		produziMjesecnuRadioButton.setVisible(true);
 		    		resetValidation();
@@ -642,15 +670,16 @@ public class ProdajaKarataController implements Initializable {
 				// TODO Auto-generated method stub
 				if(oldValue==TipKarte.OBICNA) {
 					
-					if(newValue==TipKarte.DJACKA) 
+					if(newValue==TipKarte.DJACKA)  {
 						for (Karta karta : karteObs) 
-							karta.getRelacija().setCijenaMjesecna( karta.getRelacija().getCijenaMjesecna() * POPUST_DJACKA);
-						
+							karta.setCijena( karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust());
+
+					}
 					else
 						if(newValue==TipKarte.PENZIONERSKA) {
 							for (Karta karta : karteObs)
-								karta.getRelacija().setCijenaMjesecna( karta.getRelacija().getCijenaMjesecna() * POPUST_PENZIONERSKA);
-								
+								karta.setCijena( karta.getRelacija().getCijenaMjesecna() * karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust());
+
 					}
 					karteTable.refresh();
 				}
@@ -659,12 +688,12 @@ public class ProdajaKarataController implements Initializable {
 					
 						if(newValue==TipKarte.OBICNA)
 							for (Karta karta : karteObs) {
-								karta.getRelacija().setCijenaMjesecna( karta.getCijena() / POPUST_DJACKA);
+								karta.getRelacija().setCijenaMjesecna( karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust());
 							}
 						else
 							if(newValue==TipKarte.PENZIONERSKA)
 								for (Karta karta : karteObs) {
-									karta.setCijena( karta.getCijena() / POPUST_DJACKA * POPUST_PENZIONERSKA);
+									karta.setCijena( karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust() * karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust());
 								}
 					}
 					else
@@ -672,12 +701,12 @@ public class ProdajaKarataController implements Initializable {
 							
 							if(newValue==TipKarte.DJACKA)
 								for (Karta karta : karteObs) {
-									karta.setCijena( karta.getCijena() / POPUST_PENZIONERSKA * POPUST_DJACKA);
+									karta.setCijena( karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust() * karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust());
 								}
 							else
 								if(newValue==TipKarte.OBICNA)
 									for (Karta karta : karteObs) {
-										karta.setCijena( karta.getCijena() / POPUST_PENZIONERSKA);
+										karta.setCijena( karta.getCijena() / karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust());
 									}
 						}
 				karteTable.refresh();	
@@ -687,7 +716,7 @@ public class ProdajaKarataController implements Initializable {
 	
 
 
-	public void ucitajRelacije() {
+	/*public void ucitajRelacije() {
 		// TODO Auto-generated method stub
 		Connection c = null;
 		PreparedStatement s = null;
@@ -708,7 +737,7 @@ public class ProdajaKarataController implements Initializable {
 		finally {
 			Util.close(r, s, c);
 		}
-	}
+	}*/
 
 	
 	/*public void showPrazanSetAlert() {
@@ -802,12 +831,12 @@ public class ProdajaKarataController implements Initializable {
 	}
 
 
-	public void showNedovoljnoMjesta() {
+	/*public void showNedovoljnoMjesta() {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("GRESKA");
 		alert.setHeaderText("Nedovoljno mjesta u autobusu");
 		alert.showAndWait();
-	}
+	}*/
 	
 	@FXML
 	public void odaberiSliku() {
@@ -824,10 +853,10 @@ public class ProdajaKarataController implements Initializable {
 		}
 	}
 	
-	@FXML
+/*	@FXML
 	public void produziKartu(ActionEvent e) {
 
 
-	}
+	}*/
 
 }

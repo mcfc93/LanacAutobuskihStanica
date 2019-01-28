@@ -73,9 +73,17 @@ public class MjesecnaKarta extends Karta {
 		this.relacija.getLinija().getPrevoznik().setNaziv(nazivPrevoznika);
 		this.tip = tip;
 	}
-
-	public MjesecnaKarta(Relacija relacija, int serijskiBroj, String tip, String ime, String prezime, String slikaPath) {
+	
+	@Override
+	public void setCijena(double cijenaMjesecna) {
+		relacija.setCijenaMjesecna(cijenaMjesecna);
+	}
+	public MjesecnaKarta(double cijenaMjesecna,Date datumIzdavanja,int idMjesecneKarte,Relacija relacija, int serijskiBroj, String tip, String ime, String prezime, String slikaPath) {
 		// TODO Auto-generated constructor stub
+		this.setCijena(cijenaMjesecna);
+		System.out.println("cijena mjese iz konst" + cijenaMjesecna);
+		this.datumIzdavanja = datumIzdavanja;
+		this.idMjesecneKarte = idMjesecneKarte;
 		this.relacija = relacija;
 		this.serijskiBroj = serijskiBroj;
 		this.tip = TipKarte.valueOf(tip);
@@ -156,7 +164,9 @@ public class MjesecnaKarta extends Karta {
 		try {
 			c = Util.getConnection();
 			//s = Util.prepareStatement(c, sql, true, karta.getCijena(), ime, prezime, slikaPath, tip.toString(), ProdajaKarataController.idKarte);
-			s = Util.prepareStatement(c, sql, true, karta.getCijena(), karta.getIme(), karta.getPrezime(), karta.getSlika().getAbsolutePath(), karta.getTip().toString(),ProdajaKarataController.idKarte);
+		//	s = Util.prepareStatement(c, sql, true, karta.getCijena(), karta.getIme(), karta.getPrezime(), karta.getSlika().getAbsolutePath(), karta.getTip().toString(),ProdajaKarataController.idKarte);
+			s = Util.prepareStatement(c, sql, true, karta.getCijena(), karta.getIme(), karta.getPrezime(), karta.getSlika().getAbsolutePath(), karta.getTip().toString(),karta.getSerijskiBroj());
+
 			s.executeUpdate();
 			r = s.getGeneratedKeys();
 			if(r.next()) 
@@ -196,12 +206,24 @@ public class MjesecnaKarta extends Karta {
 		sb.append("Izdata: " + LocalDate.now() + " " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")) + System.lineSeparator());
 		sb.append(String.format("Mjesec vazenja: %02d/%d%s", mjesecVazenja, localDate.getYear(), System.lineSeparator()));
 		sb.append(String.format("Tip: %s%s", tip.toString(),System.lineSeparator())); 
+		switch(tip) {
+		case DJACKA:
+			sb.append(String.format("Popust: %f%%%s", karta.getRelacija().getLinija().getPrevoznik().getDjackiPopust(), System.lineSeparator()));
+		case PENZIONERSKA:
+			sb.append(String.format("Popust: %f%%%s", karta.getRelacija().getLinija().getPrevoznik().getPenzionerskiPopust(), System.lineSeparator()));
+		default:
+			break;
+			
+		};
 		sb.append(String.format("%20s %.2f KM%s%s", "Cijena:", karta.getRelacija().getCijenaMjesecna(), System.lineSeparator(),System.lineSeparator()));
 		sb.append(String.format("Na zahtjev kontrolora pokazati kartu!%s", System.lineSeparator()));
 		sb.append(String.format("Biletar: %s%s%s", PrijavaController.nalog.getZaposleni().getIme(), System.lineSeparator(),System.lineSeparator()));
 		sb.append(String.format("%10sHvala na povjerenju!", " "));
-		System.out.println("Scrrenshot, id mjesecne: " + ProdajaKarataController.idMjesecneKarte);
-		File file = new File("karte\\karta" + String.format("%013d", ProdajaKarataController.idMjesecneKarte) + ".txt");
+		String mjesecVazenjaString =
+	    		(localDate.getDayOfMonth() >= 25?
+	    			(((localDate.getMonthValue()+1)%12) + "-" + (localDate.getMonthValue()==1?localDate.getYear()+1:localDate.getYear())):
+	    				(localDate.getMonthValue() + "-" + localDate.getYear()));
+		File file = new File("karte\\mjesecna_" + String.format("%013d", ProdajaKarataController.idMjesecneKarte) + "-" + mjesecVazenjaString + ".txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 		    writer.append(sb);
 		    
@@ -211,25 +233,30 @@ public class MjesecnaKarta extends Karta {
 		}
 	}
 	
-	public static void storniraj(int serijskiBroj) {
+	public static void storniraj(MjesecnaKarta mjesecnaKarta) {
 		Connection c = null;
 		PreparedStatement s = null;
-		ResultSet r = null;
-		String sql = "update mjesecna_karta,karta set karta.Stanje='Stornirano',mjesecna_karta.Stanje='Stornirano' where mjesecna_karta.IdMjesecneKarte=? and karta.SerijskiBroj=mjesecna_karta.SerijskiBroj";
+		String sql = "update karta set karta.Stanje='Stornirano' where SerijskiBroj=?";
+		String sqlMjesecna = "update mjesecna_karta set Stanje='Stornirano' where IdMjesecneKarte=?";
 		try {
 			c = Util.getConnection();
-			s = Util.prepareStatement(c, sql, false, serijskiBroj);
+			s = Util.prepareStatement(c, sql, false, mjesecnaKarta.getSerijskiBroj());
 			s.executeUpdate();
-			File file = new File("src\\mjesecnekarte\\karta" + String.format("%013d", serijskiBroj)+".txt");
+			s.close();
+			s = Util.prepareStatement(c, sqlMjesecna, false, mjesecnaKarta.getIdMjesecneKarte());
+			 s.executeUpdate();
+			File file = new File("karte\\karta" + String.format("%013d", mjesecnaKarta.getIdMjesecneKarte())+".txt");
 			if(file.exists())
 				System.out.println(file.delete());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		finally {
+			Util.close(s, c);
+		}
 	
 	}
-	
 	
 	public static int dodajMjesecnuCijenu(Relacija relacija) {
 		Connection c = null;
@@ -257,14 +284,14 @@ public class MjesecnaKarta extends Karta {
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet r = null;
-		String sql = "select * from cijena_mjesecne_karte join (relacija,linija,prevoznik) on (cijena_mjesecne_karte.IdRelacije=relacija.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika) "
+		String sql = "select * from cijena_mjesecne_karte join (relacija,linija,prevoznik,popust_prevoznika) on (cijena_mjesecne_karte.IdRelacije=relacija.IdRelacije and relacija.IdLinije=linija.IdLinije and linija.JIBPrevoznika=prevoznik.JIBPrevoznika and prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) "
 				+ "where relacija.Polaziste=? and relacija.Odrediste=? group by prevoznik.JIBPrevoznika";
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, polaziste.getIdStajalista(), odrediste.getIdStajalista());
 			r = s.executeQuery();
 			while(r.next()) {
-	       		Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"), r.getString("prevoznik.Email"), r.getString("prevoznik.Telefon"), r.getString("prevoznik.JIBPrevoznika"));
+	       		Prevoznik prevoznik = new Prevoznik(r.getString("NazivPrevoznika"), r.getString("prevoznik.Email"), r.getString("prevoznik.Telefon"), r.getString("prevoznik.JIBPrevoznika"), r.getDouble("DjackiPopust"), r.getDouble("RadnickiPopust"), r.getDouble("PenzionerskiPopust"));
 	       		Linija linija = new Linija(r.getInt("linija.IdLinije"), r.getString("linija.NazivLinije"), r.getInt("linija.Peron"), prevoznik, r.getInt("linija.VoznjaPraznikom"));
 	       		Relacija relacija = new Relacija(r.getInt("relacija.IdRelacije"), linija, polaziste, odrediste, r.getTime("VrijemePolaska"), r.getTime("VrijemeDolaska"), r.getDouble("CijenaJednokratna"), r.getString("Dani"));
 	       		Karta karta = new Karta(relacija, r.getDouble("cijena_mjesecne_karte.CijenaMjesecna"));
@@ -281,6 +308,9 @@ public class MjesecnaKarta extends Karta {
 		return null;
 	}
 	
+	public double getCijena() {
+		return relacija.getCijenaMjesecna();
+	}
 	
 	public static MjesecnaKarta pronadjiKartu(int idMjesecneKarte) {
 		Connection c = null;
@@ -288,21 +318,23 @@ public class MjesecnaKarta extends Karta {
 		ResultSet r = null;
 		String sql = "select * from mjesecna_karta join (karta,relacija,prevoznik,linija) on (mjesecna_karta.SerijskiBroj=karta.SerijskiBroj "
 				+ "and karta.IdRelacije=relacija.IdRelacije and relacija.IdLinije=linija.IdLinije and "
-				+ "linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where mjesecna_karta.IdMjesecneKarte=?";
+				+ "linija.JIBPrevoznika=prevoznik.JIBPrevoznika) where mjesecna_karta.IdMjesecneKarte=? and mjesecna_karta.Stanje='Aktivno'";
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, idMjesecneKarte);
 			r = s.executeQuery();
 			if(r.next()) {
+				System.out.println("Ucitavanje cijena: " + r.getDouble("karta.Cijena"));
 				Prevoznik prevoznik = new Prevoznik(r.getString("prevoznik.NazivPrevoznika"));
 				int idPolazista = r.getInt("Polaziste");
 				int idOdredista = r.getInt("Odrediste");
 				Stajaliste polaziste = InformacijeController.stajalistaList.stream().filter(p -> p.getIdStajalista()==idPolazista).findFirst().get();
 				Stajaliste odrediste = InformacijeController.stajalistaList.stream().filter(o -> o.getIdStajalista()==idOdredista).findFirst().get();
 				Linija linija = new Linija(r.getInt("linija.IdLinije"), r.getString("linija.NazivLinije"), r.getInt("linija.Peron"), prevoznik, r.getInt("VoznjaPraznikom"));
-				Relacija relacija = new Relacija(linija,prevoznik,polaziste,odrediste);
-				MjesecnaKarta mjesecnaKarta = new MjesecnaKarta(relacija, r.getInt("karta.SerijskiBroj"), r.getString("Tip"), r.getString("Ime"), r.getString("Prezime"), r.getString("Slika"));
-				System.out.println(mjesecnaKarta);
+				Relacija relacija = new Relacija(r.getInt("relacija.IdRelacije"),linija,prevoznik,polaziste,odrediste);
+				MjesecnaKarta mjesecnaKarta = new MjesecnaKarta(r.getDouble("karta.Cijena"), r.getDate("DatumIzdavanja"),r.getInt("IdMjesecneKarte"),relacija, r.getInt("karta.SerijskiBroj"), r.getString("Tip"), r.getString("Ime"), r.getString("Prezime"), r.getString("Slika"));
+				mjesecnaKarta.getRelacija().setCijenaMjesecna(r.getDouble("karta.Cijena"));		
+				mjesecnaKarta.setSerijskiBroj(r.getInt("karta.SerijskiBroj"));
 				return mjesecnaKarta;
 			}
 		} catch (SQLException e) {

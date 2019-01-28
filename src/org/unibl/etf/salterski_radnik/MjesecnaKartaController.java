@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import org.unibl.etf.karta.Karta;
 import org.unibl.etf.karta.MjesecnaKarta;
+import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
 import com.jfoenix.controls.JFXButton;
 
@@ -128,9 +129,10 @@ public class MjesecnaKartaController implements Initializable {
     		(localDate.getDayOfMonth() >= 25?
     			(((localDate.getMonthValue()+1)%12) + "-" + (localDate.getMonthValue()==DECEMBAR?localDate.getYear()+1:localDate.getYear())):
     				(localDate.getMonthValue() + "-" + localDate.getYear()));
-    	
+		prevoznikLabel.setText(karta.getRelacija().getLinija().getPrevoznik().getNaziv());
+
     	if(!ProdajaKarataController.produzavanjeKarte) {
-    		prevoznikLabel.setText(karta.getRelacija().getLinija().getPrevoznik().getNaziv());
+    		//prevoznikLabel.setText(karta.getRelacija().getLinija().getPrevoznik().getNaziv());
     		try {
     			slika.setImage(new Image(ProdajaKarataController.odabranaSlika.toURI().toString()));
     		} catch (Exception e) {
@@ -139,7 +141,6 @@ public class MjesecnaKartaController implements Initializable {
     		}
     	}
     	else {
-    		prevoznikLabel.setText(karta.getRelacija().getLinija().getPrevoznik().getNaziv());
     		try {
     			slika.setImage(new Image(karta.getSlika().toURI().toString()));
     		} catch (Exception e) {
@@ -172,7 +173,6 @@ public class MjesecnaKartaController implements Initializable {
     	//prevoznikLabel.setText(karta.getNazivPrevoznika());
     	//prevoznikLabel.setText(karta.getPrevoznik().getNaziv());
     	
-    	System.out.println("Prevoznik=" + karta.getRelacija().getLinija().getPrevoznik().getNaziv());
     	
     	//linijaLabel.setText(karta.getNazivLinije());
     	linijaLabel.setText(karta.getRelacija().getLinija().getNazivLinije());
@@ -230,6 +230,15 @@ public class MjesecnaKartaController implements Initializable {
     		ProdajaKarataController.potvrda = true;
     		//MjesecnaKarta.produziKartu(karta);
     		
+    		/*
+    		 * novi dio*/
+    		ProdajaKarataController.idKarte = Karta.kreirajKartu(karta, datum);
+    		System.out.println("Serijski broj kreirane karte: " + ProdajaKarataController.idKarte);
+    		karta.setSerijskiBroj(ProdajaKarataController.idKarte);
+			//ProdajaKarataController.idMjesecneKarte = MjesecnaKarta.kreirajKartu(karta);
+		//novi dio
+    		MjesecnaKarta.stampajKartu(karta, 0, datum, karta.getIme() + " " + karta.getPrezime(), karta.getTip());
+    		
     		BarcodeEAN codeEAN = new BarcodeEAN();
     		System.out.println(String.format("%013d", karta.getSerijskiBroj()));
 	    	codeEAN.setCode(String.format("%013d", karta.getSerijskiBroj()));
@@ -262,7 +271,7 @@ public class MjesecnaKartaController implements Initializable {
 	        
 			WritableImage image = mjesecnaAnchorPane.snapshot(parameters, null);
         	
-        	File file = new File("karte\\slike\\mjesecna_" + String.format("%013d", karta.getSerijskiBroj()) + "-" + mjesecVazenjaString + ".png");
+        	File file = new File("karte\\slike\\mjesecna_" + String.format("%013d",karta.getIdMjesecneKarte()) + "-" + mjesecVazenjaString + ".png");
 			try {
 				ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
 			}catch (IOException e) {
@@ -316,13 +325,16 @@ public class MjesecnaKartaController implements Initializable {
 
 	    	barcodeLabel.setVisible(true);
 	    	barcodeLabel.setText(String.valueOf(karta.getSerijskiBroj()));
-	    	int brojKarata = Karta.provjeriBrojKarata(karta, karta.getDatumPolaska());
-			// ------------------------------ Karta.kreirajKartu(karta, brojKarata+1, datum);
+	    	//int brojKarata = Karta.provjeriBrojKarata(karta, karta.getDatumPolaska());
+			karta.setJIBStanice(PrijavaController.autobuskaStanica.getJib());
+
+	    	Karta.kreirajKartu(karta, datum);
+	    	karta.setSerijskiBroj(ProdajaKarataController.idKarte);
 			ProdajaKarataController.idMjesecneKarte = MjesecnaKarta.kreirajKartu(karta);
 			serijskiBroj = ProdajaKarataController.idKarte;
 			System.out.println("SERIJSKI BROJ: " + ProdajaKarataController.idKarte);
 			System.out.println("Serijski mjesecne: " + ProdajaKarataController.idMjesecneKarte);
-			MjesecnaKarta.stampajKartu(karta, brojKarata+1, datum, karta.getIme() + " " + karta.getPrezime(), karta.getTip());
+			MjesecnaKarta.stampajKartu(karta, 0, datum, karta.getIme() + " " + karta.getPrezime(), karta.getTip());
 			barcodeLabel.setText(String.format("%013d",ProdajaKarataController.idMjesecneKarte));
 			ProdajaKarataController.potvrda = true;
 			

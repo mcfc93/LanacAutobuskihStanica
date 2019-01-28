@@ -452,7 +452,8 @@ public class DodavanjeLinijaController implements Initializable {
 	}
 	*/
 	public static ObservableList<Prevoznik> prevozniciObs = FXCollections.observableArrayList();
-	
+	public static Linija linija;
+	public static int idLinije;
 	@FXML
     private GridPane gridPane;
 	
@@ -469,7 +470,7 @@ public class DodavanjeLinijaController implements Initializable {
     private JFXComboBox<Integer> peronComboBox;
     
     @FXML
-    private JFXComboBox<?> prazniciComboBox;
+    private JFXComboBox<String> prazniciComboBox;
 
     @FXML
     private JFXButton dodajLinijuButton;
@@ -552,9 +553,11 @@ public class DodavanjeLinijaController implements Initializable {
 			peronComboBox.getItems().add(i);
 		prevozniciObs.setAll(Prevoznik.getPrevozniciList());
 		prevoznikComboBox.setItems(prevozniciObs);
+		prazniciComboBox.getItems().addAll("Ponedjeljak","Utorak","Srijeda","Cetvrtak","Petak","Subota","Nedjelja","Bez izmjene","Ne vozi");
 	}
     
-    @FXML
+
+	@FXML
     void odaberiSveCheckBox(MouseEvent event) {
 		if (event.getSource() instanceof JFXCheckBox) {
 			if(odaberiSveCheckBox.isSelected()) {
@@ -606,8 +609,12 @@ public class DodavanjeLinijaController implements Initializable {
 		if(nazivLinijeTextField.validate()
 				& prevoznikComboBox.validate()
 					& peronComboBox.validate()) {
-			
+			linija = new Linija(0, nazivLinijeTextField.getText(), (int)peronComboBox.getValue(), prevoznikComboBox.getValue(), prazniciComboBox.getSelectionModel().getSelectedIndex());
+			idLinije = Linija.dodajLiniju(linija);
+			linija.setIdLinije(idLinije);
+			System.out.println("Id kreirane linije: " +linija.getIdLinije());
 			Util.getNotifications("Obavještenje", "Linija dodana.", "Information").show();
+			
 		}
 	}
 	
@@ -625,27 +632,5 @@ public class DodavanjeLinijaController implements Initializable {
 	void krajUnosa(ActionEvent event) {
 		
 	}
-	
-	
-	
-	
-	@FXML
-    private JFXButton novoStajalisteButton;
-    
-    @FXML
-    void novoStajaliste(ActionEvent event) {
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/DodavanjeStajalista.fxml"));
-			Scene scene = new Scene(root);
-			Stage stage=new Stage();
-			stage.setScene(scene);
-			stage.setResizable(false);
-			stage.initStyle(StageStyle.UNDECORATED);
-			stage.initModality(Modality.APPLICATION_MODAL);
-			stage.showAndWait();
-		} catch (IOException e) {
-			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-		}
-		
-    }
+
 }

@@ -33,14 +33,19 @@ public class DodavanjePrevoznikaController implements Initializable {
 	private JFXTextField postanskiBrojTextField = new JFXTextField();
 	@FXML
 	private JFXTextField adresaTextField = new JFXTextField();
-	
+	@FXML
+	private JFXTextField djackiPopustTextField = new JFXTextField();
+	@FXML
+	private JFXTextField penzionerskiPopustTextField = new JFXTextField();
+	@FXML
+	private JFXTextField radnickiPopustTextField = new JFXTextField();
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		dodajPrevoznikaButton.setDefaultButton(true);
 		Util.setAutocompleteList(postanskiBrojTextField, Mjesto.getCityPostalCodeList());
 
-jibTextField.getValidators().addAll(Util.requiredFieldValidator(jibTextField), Util.jibValidator(jibTextField), Util.jibValidator(jibTextField)/*, Util.collectionValidator(jibTextField, Prevoznik.getJibList(), false, "Zauzeto")*/);
+		jibTextField.getValidators().addAll(Util.requiredFieldValidator(jibTextField), Util.jibValidator(jibTextField), Util.jibValidator(jibTextField)/*, Util.collectionValidator(jibTextField, Prevoznik.getJibList(), false, "Zauzeto")*/);
 		nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), Util.lengthValidator(nazivTextField, 35));
 		tekuciRacunTextField.getValidators().addAll(Util.requiredFieldValidator(tekuciRacunTextField), Util.iinValidator(tekuciRacunTextField));
 		telefonTextField.getValidators().addAll(Util.requiredFieldValidator(telefonTextField), Util.phoneValidator(telefonTextField), Util.lengthValidator(telefonTextField, 16));
@@ -48,10 +53,17 @@ jibTextField.getValidators().addAll(Util.requiredFieldValidator(jibTextField), U
 		postanskiBrojTextField.getValidators().addAll(Util.requiredFieldValidator(postanskiBrojTextField), Util.collectionValidator(postanskiBrojTextField, Mjesto.getCityPostalCodeList(), true, "Nekorektan unos"));
 		webAdresaTextField.getValidators().addAll(Util.requiredFieldValidator(webAdresaTextField), Util.webValidator(webAdresaTextField), Util.lengthValidator(webAdresaTextField, 35));
 		emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField), Util.emailValidator(emailTextField), Util.lengthValidator(emailTextField, 35));
+		djackiPopustTextField.getValidators().addAll(Util.requiredFieldValidator(djackiPopustTextField), Util.popustValidator(djackiPopustTextField));
+		penzionerskiPopustTextField.getValidators().addAll(Util.requiredFieldValidator(penzionerskiPopustTextField), Util.popustValidator(penzionerskiPopustTextField));
+		radnickiPopustTextField.getValidators().addAll(Util.requiredFieldValidator(radnickiPopustTextField), Util.popustValidator(radnickiPopustTextField));
+		
 	}
 	
 	@FXML
 	public void dodajPrevoznika() {
+		int djackiPopust = Integer.parseInt(djackiPopustTextField.getText());
+		int radnickiPopust = Integer.parseInt(radnickiPopustTextField.getText());
+		int penzionerskiPopust = Integer.parseInt(penzionerskiPopustTextField.getText());
 		if(jibTextField.validate() &
 				nazivTextField.validate() &
 					telefonTextField.validate() &
@@ -59,9 +71,13 @@ jibTextField.getValidators().addAll(Util.requiredFieldValidator(jibTextField), U
 							tekuciRacunTextField.validate() &
 								adresaTextField.validate() &
 									webAdresaTextField.validate() &
-										postanskiBrojTextField.validate()) {
+										postanskiBrojTextField.validate() &
+											djackiPopustTextField.validate() &
+												penzionerskiPopustTextField.validate() &
+													radnickiPopustTextField.validate()) {
 			if(Prevoznik.dodajPrevoznika(jibTextField.getText(),nazivTextField.getText(),telefonTextField.getText(),emailTextField.getText(),
-					webAdresaTextField.getText(),tekuciRacunTextField.getText(),adresaTextField.getText(),Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()))) {
+					webAdresaTextField.getText(),tekuciRacunTextField.getText(),adresaTextField.getText(),Integer.parseInt(postanskiBrojTextField.getText().split("-")[0].trim()),
+						djackiPopust, radnickiPopust, penzionerskiPopust)) {
 //Prevoznik.getJibList().add(jibTextField.getText().trim());
 				Util.getNotifications("Obavještenje", "Prevoznik dodan.", "Information").show();
 				

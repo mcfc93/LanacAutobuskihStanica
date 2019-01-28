@@ -32,7 +32,8 @@ import javafx.util.Duration;
 
 public class OtkazivanjeRezervacijeController implements Initializable {
 
-	private static Karta trazenaKarta;
+	private static Karta jednokratnaKarta;
+	private static MjesecnaKarta mjesecnaKarta;
 	@FXML
 	private JFXTextField serijskiBrojTextField = new JFXTextField();
 	@FXML
@@ -69,23 +70,31 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 		{
 			//otkazivanje jednokratne
 			if(jednokratnaKartaRadioButton.isSelected()) {
-				trazenaKarta = Karta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
-				if(trazenaKarta==null) {
-			    	Util.getNotifications("Gre�ka", "Pogre�an serijski broj.", "Error").show();
+				jednokratnaKarta = Karta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
+				if(jednokratnaKarta==null) {
+			    	Util.getNotifications("Greška", "Pogrešan serijski broj ili karta već stornirana.", "Error").show();
 					return;
 				}
 				stornirajButton.setDisable(false);
-				cijenaTextField.setText(trazenaKarta.getCijena()  + "KM");
-				relacijaTextField.setText(trazenaKarta.getRelacija().getPolaziste().getNazivStajalista() + " - " + trazenaKarta.getRelacija().getOdrediste().getNazivStajalista());
-				datumTextField.setText(trazenaKarta.getDatumIzdavanja().toString());
-				linijaTextField.setText(trazenaKarta.getRelacija().getLinija().getNazivLinije());		
+				cijenaTextField.setText(jednokratnaKarta.getCijena()  + "KM");
+				relacijaTextField.setText(jednokratnaKarta.getRelacija().getPolaziste().getNazivStajalista() + " - " + jednokratnaKarta.getRelacija().getOdrediste().getNazivStajalista());
+				datumTextField.setText(jednokratnaKarta.getDatumIzdavanja().toString());
+				linijaTextField.setText(jednokratnaKarta.getRelacija().getLinija().getNazivLinije());		
 				// otkazivanje jednokratne
 			}
 			else {
 				System.out.println("Storniranje mjesecne");
-				MjesecnaKarta mjesecnaKarta = MjesecnaKarta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
+				mjesecnaKarta = MjesecnaKarta.pronadjiKartu(Integer.parseInt(serijskiBrojTextField.getText()));
+				if(mjesecnaKarta==null) {
+			    	Util.getNotifications("Greška", "Pogrešan serijski broj ili karta već stornirana.", "Error").show();
+			    	return;
+				}
+				System.out.println("Mjesecna cijena: " + mjesecnaKarta.getCijena());
+				System.out.println(mjesecnaKarta.getRelacija().getCijenaJednokratna());
+				System.out.println(mjesecnaKarta.getRelacija().getCijenaMjesecna());
+				
 				stornirajButton.setDisable(false);
-				cijenaTextField.setText(mjesecnaKarta.getCijena()  + "KM");
+				cijenaTextField.setText(mjesecnaKarta.getRelacija().getCijenaMjesecna() + "KM");
 				relacijaTextField.setText(mjesecnaKarta.getRelacija().getPolaziste() + " - " + mjesecnaKarta.getRelacija().getOdrediste());
 				datumTextField.setText(mjesecnaKarta.getDatumIzdavanja().toString());
 				linijaTextField.setText(mjesecnaKarta.getRelacija().getLinija().getNazivLinije());		
@@ -93,7 +102,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 			
 		}
 		else 
-	    	Util.getNotifications("Gre�ka", "Pogre�an serijski broj.", "Error").show();
+	    	Util.getNotifications("Greška", "Pogrešan serijski broj.", "Error").show();
 	
 	
 	}
@@ -119,9 +128,8 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 		if(jednokratnaKartaRadioButton.isSelected()) {
 			if(showPotvrda()) {
 				
-				if(Karta.stornirajKartu(Integer.parseInt(serijskiBrojTextField.getText())))
-			    System.out.println("aa");
-					Util.getNotifications("Uspjeh", "Uspje�no stornirana karta.", "Confirmation").show();
+				if(Karta.stornirajKartu(jednokratnaKarta.getSerijskiBroj()))
+					Util.getNotifications("Uspjeh", "Uspješno stornirana karta.", "Confirmation").show();
 					cijenaTextField.clear();
 					relacijaTextField.clear();
 					datumTextField.clear();
@@ -134,9 +142,8 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 			else {
 				System.out.println("Storniraj mjesecnu...");
 				if(showPotvrda()) {
-
-					 MjesecnaKarta.storniraj(Integer.parseInt(serijskiBrojTextField.getText()));
-				    	Util.getNotifications("Gre�ka", "Uspje�no stornirana karta.", "Confirmation").show();
+						MjesecnaKarta.storniraj(mjesecnaKarta);
+				    	Util.getNotifications("Uspjeh", "Uspješno stornirana mjesečna karta.", "Confirmation").show();
 				    	cijenaTextField.clear();
 						relacijaTextField.clear();
 						datumTextField.clear();
@@ -148,7 +155,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
 	
 	}
 
-	@FXML
+	/*@FXML
 	public void pregledMjesecneKarte() {
 		try {
 	        Parent root = FXMLLoader.load(getClass().getResource("/org/unibl/etf/administrativni_radnik/MjesecnaKartaView.fxml"));
@@ -162,7 +169,7 @@ public class OtkazivanjeRezervacijeController implements Initializable {
         } catch(Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	/*public void showCheckMark() {
 		// TODO Auto-generated method stub
 		checkMarkImageView.setVisible(true);

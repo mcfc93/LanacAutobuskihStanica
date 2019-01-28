@@ -21,13 +21,47 @@ public class Prevoznik {
 	private String webAdresa;
 	private String JIBPrevoznika;
 	private String racun;
-
+	private double djackiPopust;
+	private double penzionerskiPopust;
+	private double radnickiPopust;
+	
+	
 
 	/*
 	 * konstruktor za ucitavanje linije
 	 * 
 	 */
 	
+	public double getPenzionerskiPopust() {
+		return penzionerskiPopust;
+	}
+
+
+	public void setPenzionerskiPopust(double penzionerskiPopust) {
+		this.penzionerskiPopust = penzionerskiPopust;
+	}
+
+
+	public double getRadnickiPopust() {
+		return radnickiPopust;
+	}
+
+
+	public void setRadnickiPopust(double radnickiPopust) {
+		this.radnickiPopust = radnickiPopust;
+	}
+
+
+	public double getDjackiPopust() {
+		return djackiPopust;
+	}
+
+
+	public void setDjackiPopust(double djackiPopust) {
+		this.djackiPopust = djackiPopust;
+	}
+
+
 	public Prevoznik(String naziv) {
 		super();
 		this.naziv = naziv;
@@ -39,12 +73,27 @@ public class Prevoznik {
 	 * 
 	 */
 	
-	public Prevoznik(String naziv, String email, String telefon, String jIBPrevoznika) {
+	public Prevoznik(String naziv, String email, String telefon, String jIBPrevoznika, double djackiPopust) {
 		super();
 		this.naziv = naziv;
 		this.email = email;
 		this.telefon = telefon;
-		JIBPrevoznika = jIBPrevoznika;
+		this.JIBPrevoznika = jIBPrevoznika;
+		this.djackiPopust = djackiPopust;
+	}
+	
+	/*
+	 * konstruktor za mjesecnu kartu*/
+	
+	public Prevoznik(String naziv, String email, String telefon, String jIBPrevoznika, double djackiPopust, double radnickiPopust, double penzionerskiPopust) {
+		super();
+		this.naziv = naziv;
+		this.email = email;
+		this.telefon = telefon;
+		this.JIBPrevoznika = jIBPrevoznika;
+		this.djackiPopust = djackiPopust;
+		this.radnickiPopust = radnickiPopust;
+		this.penzionerskiPopust = penzionerskiPopust;
 	}
 	
 	/*
@@ -72,23 +121,28 @@ public class Prevoznik {
 		PreparedStatement s = null;
 		ResultSet r = null;
 		List<Prevoznik> prevoznikList = new ArrayList<>();
-		String sql =  "select JIBPrevoznika,NazivPrevoznika,Telefon,Email,WebAdresa,TekuciRacun,Adresa,prevoznik.PostanskiBroj,mjesto.Naziv from prevoznik join mjesto where Stanje='Aktivno'";
+		String sql =  "select * from prevoznik join (mjesto,popust_prevoznika) on (prevoznik.PostanskiBroj=mjesto.PostanskiBroj and prevoznik.JIBPrevoznika=popust_prevoznika.JIBPrevoznika) where Stanje='Aktivno'";
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false);
 			r = s.executeQuery();
 			while(r.next()) {
 			//	prevoznikList.add(new Prevoznik(r.getString("NazivPrevoznika"), r.getString("Email"), r.getString("Adresa"), r.getString("Telefon"), r.getInt("prevoznik.PostanskiBroj"), r.getString("WebAdresa"), r.getString("JIBPrevoznika"), r.getString("TekuciRacun")));
-				Mjesto mjesto = new Mjesto(r.getString("mjesto.Naziv"), r.getInt("mjesto.PostanskiBroj"));
-				prevoznikList.add(new Prevoznik(r.getString("JIBPrevoznika"), r.getString("NazivPrevoznika"), r.getString("Telefon"), r.getString("Email"), r.getString("WEBAdresa"), r.getString("TekuciRacun"), r.getString("Adresa"), mjesto));
+				Mjesto mjesto = new Mjesto(r.getString("mjesto.Naziv"), r.getInt("prevoznik.PostanskiBroj"));
+				Prevoznik prevoznik = new Prevoznik(r.getString("JIBPrevoznika"), r.getString("NazivPrevoznika"), r.getString("Telefon"), r.getString("Email"), r.getString("WEBAdresa"), r.getString("TekuciRacun"), r.getString("Adresa"), mjesto);
+				prevoznik.setDjackiPopust(r.getDouble("DjackiPopust"));
+				prevoznik.setPenzionerskiPopust(r.getDouble("PenzionerskiPopust"));
+				prevoznik.setRadnickiPopust(r.getDouble("RadnickiPopust"));
+				prevoznikList.add(prevoznik);
 			}
+			return prevoznikList;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		finally {
 			Util.close(r, s, c);
 		}
-		return prevoznikList;
+		return null;
 	}
 
 
@@ -194,18 +248,23 @@ public class Prevoznik {
 	    return false;*/
 	}
 	
-	public static boolean izmjeniPrevoznika(String naziv,String telefon,String email,String webAdresa,String tekuciRacun,String adresa,String postanskiBroj,String jib) {
+	public static boolean izmjeniPrevoznika(String naziv,String telefon,String email,String webAdresa,String tekuciRacun,String adresa,String postanskiBroj,String jib, int djackiPopust, int penzionerskiPopust, int radnickiPopust) {
 		Connection c = null;
 		String sql = "update prevoznik "
 				+ "set NazivPrevoznika=?,Telefon=?,Email=?,WebAdresa=?,TekuciRacun=?,Adresa=?,PostanskiBroj=? "
 				+ "where JIBPrevoznika=?";
+		String sqlPopust = "update popust_prevoznika set DjackiPopust=?,RadnickiPopust=?,PenzionerskiPopust=? where JIBPrevoznika=?";
 		PreparedStatement s = null;
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, naziv,telefon,email,
 					webAdresa,tekuciRacun,adresa,Integer.parseInt(postanskiBroj),jib);
-			if(s.executeUpdate()==1)
+			if(s.executeUpdate()==1) {
+				s.close();
+				s = Util.prepareStatement(c, sqlPopust, false, (double)(100-djackiPopust)/100, (double)(100-radnickiPopust)/100, (double)(100-penzionerskiPopust)/100, jib);
+				System.out.println(s.executeUpdate());
 				return true;
+			}
 			return false;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -217,22 +276,31 @@ public class Prevoznik {
 	}
 
 	public static boolean dodajPrevoznika(String jib, String naziv, String telefon, String email, String webAdresa,
-			String tekuciRacun, String adresa, int postanskiBroj) {
+			String tekuciRacun, String adresa, int postanskiBroj, int djackiPopust, int radnickiPopust, int penzionerskiPopust) {
 		
 		String sql = "insert into prevoznik value (?,?,?,?,?,?,?,?,default)";
+		String sqlPopust = "insert into popust_prevoznika value (default,?,?,?,?)";
 		Connection c = null;
 		PreparedStatement s = null;
 		try {
 			c = Util.getConnection();
 			s = Util.prepareStatement(c, sql, false, jib, naziv, telefon, email, webAdresa, tekuciRacun, adresa, postanskiBroj);
 			s.execute();
+			s.close();
+			s = Util.prepareStatement(c, sqlPopust, false, (double)(100-djackiPopust)/100, (double)(100-penzionerskiPopust)/100, (double)(100-radnickiPopust)/100, jib);
+			System.out.println(s.executeUpdate());
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		
 		return false;
 	}
+
+
+	@Override
+	public String toString() {
+		return naziv;
+	}
+	
 	
 }

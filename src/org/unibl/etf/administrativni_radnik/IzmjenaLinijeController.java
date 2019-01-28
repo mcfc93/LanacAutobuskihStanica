@@ -136,7 +136,7 @@ public class IzmjenaLinijeController implements Initializable {
 		nazivLinijeTextField.setText(ListaLinijaController.odabranaLinija.getNazivLinije());
 		relacijeObs.addAll(Relacija.getRelacije(ListaLinijaController.odabranaLinija.getIdLinije()));
 		if(!relacijeObs.isEmpty()) {
-			relacijeComboBox.setItems(relacijeObs);
+			/*relacijeComboBox.setItems(relacijeObs);
 			relacijeComboBox.getSelectionModel().selectFirst();
 			polazisteTextField.setText(relacijeComboBox.getValue().getPolaziste().getNaziv());
 			odredisteTextField.setText(relacijeComboBox.getValue().getOdrediste().getNaziv());
@@ -146,7 +146,7 @@ public class IzmjenaLinijeController implements Initializable {
 			if(relacijeComboBox.getValue().getCijenaMjesecna()==0)
 				cijenaMjesecnaTextField.clear();
 			else
-				cijenaMjesecnaTextField.setText(Double.toString(relacijeComboBox.getValue().getCijenaMjesecna()));
+				cijenaMjesecnaTextField.setText(Double.toString(relacijeComboBox.getValue().getCijenaMjesecna()));*/
 		}
 		peroni = AutobuskaStanica.getBrojPeronaStanice();
 		for(int i=1;i<=peroni;++i)
