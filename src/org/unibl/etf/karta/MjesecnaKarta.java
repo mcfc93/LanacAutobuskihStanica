@@ -77,7 +77,6 @@ public class MjesecnaKarta extends Karta {
 	}
 	public MjesecnaKarta(double cijenaMjesecna,Date datumIzdavanja,int idMjesecneKarte,Relacija relacija, int serijskiBroj, String tip, String ime, String prezime, String slikaPath) {
 		this.setCijena(cijenaMjesecna);
-		System.out.println("cijena mjese iz konst" + cijenaMjesecna);
 		this.datumIzdavanja = datumIzdavanja;
 		this.idMjesecneKarte = idMjesecneKarte;
 		this.relacija = relacija;
@@ -262,7 +261,6 @@ public class MjesecnaKarta extends Karta {
 		    				(localDate.getMonthValue() + "-" + localDate.getYear()));
 			System.out.println(mjesecVazenjaString);
 			File file = new File("karte\\mjesecna_" + String.format("%013d", mjesecnaKarta.getIdMjesecneKarte()) + "-" + mjesecVazenjaString +".txt");
-			System.out.println(file.exists());
 			if(file.exists())
 				file.renameTo(new File("karte\\mjesecna_" + String.format("%013d", mjesecnaKarta.getIdMjesecneKarte()) + "-" + mjesecVazenjaString + "_STORNIRANO.txt"));
 		} catch (SQLException e) {
@@ -321,7 +319,6 @@ public class MjesecnaKarta extends Karta {
 			s = Util.prepareStatement(c, sql, false, idMjesecneKarte);
 			r = s.executeQuery();
 			if(r.next()) {
-				System.out.println("Ucitavanje cijena: " + r.getDouble("karta.Cijena"));
 				Prevoznik prevoznik = new Prevoznik(r.getString("prevoznik.NazivPrevoznika"));
 				int idPolazista = r.getInt("Polaziste");
 				int idOdredista = r.getInt("Odrediste");

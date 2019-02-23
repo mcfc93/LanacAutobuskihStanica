@@ -2,13 +2,8 @@ package org.unibl.etf.karta;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.nio.charset.Charset;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -19,22 +14,16 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.MonthDay;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
-import org.unibl.etf.autobuska_stanica.AutobuskaStanica;
 import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.salterski_radnik.InformacijeController;
 import org.unibl.etf.salterski_radnik.ProdajaKarataController;
-import org.unibl.etf.util.Praznik;
 import org.unibl.etf.util.Stajaliste;
 import org.unibl.etf.util.Util;
-
-import javafx.application.Platform;
 
 public class Karta {
 	protected int serijskiBroj;
@@ -210,13 +199,7 @@ public class Karta {
 		sb.append("Prevoznik: " + relacija.getLinija().getPrevoznik().getNaziv() + System.lineSeparator());
 		sb.append("Linija: " + relacija.getLinija().getNazivLinije() + System.lineSeparator() + System.lineSeparator());
 		sb.append("            AUTOBUSKA  KARTA" + System.lineSeparator());
-		/*
-		String temp = povratna? "(povratna)":"(jednosmjerna)";
-		String temp2 = "%"+( (int)(40-temp.length())/2)+"s%s%s";
-		System.out.println(temp2);
-		sb.append(String.format(temp2," ", temp, System.lineSeparator()));
-		sb.append(System.lineSeparator());
-		*/
+	
 		sb.append((povratna? "               (povratna)":"             (jednosmjerna)") + System.lineSeparator() + System.lineSeparator());
 		
 		sb.append("Prodajno mjesto: " + PrijavaController.autobuskaStanica.getNaziv() + System.lineSeparator());
@@ -243,7 +226,6 @@ public class Karta {
 		sb.append("Na zahtjev kontrolora pokazati kartu!" + System.lineSeparator());
 		sb.append("Biletar: " + PrijavaController.nalog.getZaposleni().getIme() + System.lineSeparator() + System.lineSeparator());
 		sb.append(String.format("%40s%s", "Hvala na povjerenju!", System.lineSeparator()));
-		//System.out.println(sb.toString());
 		String value = new String(sb.toString().getBytes(Charset.forName("UTF-8")));
 		System.out.println(value);
 		File file = new File("karte\\karta_" + String.format("%013d", serijskiBroj)+".txt");
@@ -254,23 +236,7 @@ public class Karta {
 		} catch (IOException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
-		
-		/*
-		try (Writer out = new BufferedWriter(
-				new OutputStreamWriter(
-						new FileOutputStream(
-								"karte\\karta_" + String.format("%013d", serijskiBroj)+".txt"), "UTF-8")
-				)
-			) {
-			    out.write(value);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
+	
 	}
 
 	public static List<Karta> getKarteListDolasci(Stajaliste polaziste, Stajaliste odrediste) {

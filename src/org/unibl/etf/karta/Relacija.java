@@ -1,6 +1,5 @@
 package org.unibl.etf.karta;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -264,46 +263,6 @@ public class Relacija {
 	
 
 	public static int dodajRelaciju(Relacija relacija) {
-		/*Connection c = null;
-		CallableStatement s = null;
-	    try {
-	       	c = Util.getConnection();
-	    	s = c.prepareCall("{call dodajRelaciju(?,?,?,?,?,?,?,?,?,?,?,?)}");
-	    	System.out.println("ID: " +relacija.getLinija().getIdLinije());
-	    	System.out.println("polaziste: " + relacija.getPolaziste());
-	    	System.out.println("odrediste: " +relacija.getOdrediste());
-	    	System.out.println("trajanje puta: " + relacija.getDuzinaPuta().toString());
-	    	System.out.println("vrijeme polaska: " +relacija.getVrijemePolaska());
-	    	System.out.println("vrijeme dolaska: "+relacija.getVrijemeDolaska() );
-	    	System.out.println("vrijeme polaska povratak: "+  relacija.getVrijemePolaskaPovratna());
-	    	System.out.println("vrijeme dolaska povratak: " +   relacija.getVrijemeDolaskaPovratna());
-	    	System.out.println("dani: " +relacija.getDani());
-	    	System.out.println("id polaska: " + idPolaska );
-	    	System.out.println("cijena: "+ relacija.getCijenaJednokratna());
-	    	System.out.println("cijena mjesecna: " + relacija.getCijenaMjesecna());
-	    	
-	    	s.setInt(1, relacija.getLinija().getIdLinije());
-	    	s.setInt(2, relacija.getPolaziste().getIdStajalista());
-	    	s.setInt(3, relacija.getOdrediste().getIdStajalista());
-	    	s.setDouble(4, relacija.getCijenaJednokratna());
-	    	s.setTime(5, Time.valueOf(relacija.getDuzinaPuta()));
-	    	s.setTime(6, relacija.getVrijemePolaska());
-	    	s.setTime(7, relacija.getVrijemeDolaska());
-	    	s.setTime(8, relacija.getVrijemePolaskaPovratna());
-	    	s.setTime(9, relacija.getVrijemeDolaskaPovratna());
-	    	s.setString(10, relacija.getDani());
-	    	s.setInt(11, idPolaska);
-	    	s.setDouble(12, relacija.getCijenaMjesecna()==null? 0.0 : relacija.getCijenaMjesecna());
-	    	s.execute();
-	       	return true;
-	    } catch(SQLException e) {
-	    	//Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-	    	e.printStackTrace();
-	    } finally {
-	    	Util.close(s,c);
-	    }
-	    return false;*/
-		
 		String sql = "INSERT INTO relacija VALUE (default,?,?,?,?,?,?)";
 		Connection c = null;
 		PreparedStatement s = null;
@@ -313,9 +272,7 @@ public class Relacija {
 			s = Util.prepareStatement(c, sql, true, relacija.getLinija().getIdLinije(), relacija.getPolaziste().getIdStajalista(), relacija.getOdrediste().getIdStajalista(), relacija.getCijenaJednokratna(),Time.valueOf(relacija.getDuzinaPuta()),relacija.getCijenaMjesecna());
 			s.executeUpdate();
 			r = s.getGeneratedKeys();
-
 			if(r.next()) {
-				System.out.println("op");
 				return r.getInt(1);
 			}
 		} catch (SQLException e) {
@@ -442,7 +399,6 @@ public class Relacija {
 				datumList.add( r.getTime("VrijemePolaska").toLocalTime().toString() + " - " + r.getTime("VrijemePolaskaPovratna").toLocalTime().toString());
 				IzmjenaLinijeController.idPolaskaList.add(r.getInt("IdPolaska"));
 			}
-			System.out.println(IzmjenaLinijeController.idPolaskaList);
 			return datumList;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -466,7 +422,6 @@ public class Relacija {
 			s = Util.prepareStatement(c, sql, false, pStajaliste, oStajaliste);
 			r = s.executeQuery();
 			while(r.next()) {
-				System.out.println("sfa");
 				return r.getInt(1);
 			}
 		} catch (SQLException e) {

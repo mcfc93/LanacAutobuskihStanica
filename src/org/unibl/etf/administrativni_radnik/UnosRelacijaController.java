@@ -73,7 +73,9 @@ public class UnosRelacijaController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		timePicker.setIs24HourView(true);
 		timePicker.converterProperty().set(new LocalTimeStringConverter(FormatStyle.SHORT, Locale.UK));
-		//daljeButton.setDefaultButton(true);
+		daljeButton.setDefaultButton(true);
+		
+		
 		//DragAndDrop
 		menuLine.setOnMousePressed(event -> {
 			if(event.getButton().equals(MouseButton.PRIMARY)) {
@@ -102,6 +104,8 @@ public class UnosRelacijaController implements Initializable {
 		});
 		
 		timePicker.getValidators().add(Util.timeValidator(timePicker));
+
+		
 		Util.setAutocompleteList(polazisteTextField, ListaLinijaController.stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()));
 		Util.setAutocompleteList(odredisteTextField, ListaLinijaController.stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()));
 		polazisteValidator=Util.collectionValidator(polazisteTextField, ListaLinijaController.stajalistaList.stream().map(Stajaliste::toString).collect(Collectors.toList()), true, "Unesite polazište");
@@ -142,6 +146,13 @@ public class UnosRelacijaController implements Initializable {
 	
     @FXML
     public boolean dalje(ActionEvent e) {
+	    if(timePicker.isFocused() && timePicker.getEditor().getText().matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")) {
+	    		timePicker.setValue(LocalTime.parse(timePicker.getEditor().getText()));
+		}
+		else {
+			timePicker.setValue(null);
+		}
+    	
     	if(timePicker.validate()
     			& polazisteTextField.validate() 
     				& odredisteTextField.validate()) {
@@ -176,6 +187,7 @@ public class UnosRelacijaController implements Initializable {
     public void gotovUnos(ActionEvent event) {
     	dalje(event);
 	    	brojRelacija = relacijeList.size();
+	    	System.out.println("broj relacija: " + brojRelacija);
 	    	// dvostruka petlja kreiranja medjurelacija
 	    	for(int i=0;i<brojRelacija-1;++i) {
 	    		for(int j=i+1;j<brojRelacija;++j) {
@@ -190,7 +202,6 @@ public class UnosRelacijaController implements Initializable {
 	    				newTime = LocalTime.of(plusMinutes.getHour(), plusMinutes.getMinute());
 	    			}
 	    			novaMedjuRelacija.setDuzinaPuta(LocalTime.of(newTime.getHour(), newTime.getMinute()));
-	    			System.out.println("medjurelacija, polaziste: " + novaMedjuRelacija.getPolaziste() +" , odrediste:" + novaMedjuRelacija.getOdrediste() + ", trajanje puta:"+ novaMedjuRelacija.getDuzinaPuta());
 	    			relacijeList.add(novaMedjuRelacija);
 	    		}
 	    	}

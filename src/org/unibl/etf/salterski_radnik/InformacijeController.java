@@ -131,7 +131,6 @@ public class InformacijeController implements Initializable{
 		*/
 		// stajaliste = stajalistaList.stream().filter(s -> s.get()==)
 		
-		System.out.println("stajaliste stanice: " + PrijavaController.autobuskaStanica.getIdStajalista());
 		clearImageView.setVisible(false);
 		
 		mjestoTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {

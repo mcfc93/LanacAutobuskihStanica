@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Properties;
 import java.util.logging.FileHandler;
@@ -557,7 +558,12 @@ System.out.println(PROPERTY);
 			@Override
 			protected void eval() {
 				if(timePicker.getValue() == null) {
-					 hasErrors.set(true);
+					if(!timePicker.getEditor().getText().matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")) {
+						hasErrors.set(true);
+					} else {
+						timePicker.setValue(LocalTime.parse(timePicker.getEditor().getText()));
+						hasErrors.set(false);
+					}
 			    } else {
 			    	 hasErrors.set(false);
 			    }
@@ -565,9 +571,12 @@ System.out.println(PROPERTY);
 		};
 		timeValidator.setIcon(new ImageView());
 		timePicker.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
-	        if(!newValue)
+	        if(!newValue) {
+	        	
 	        	timePicker.validate();
+	        }
 	    });
+		
 		return timeValidator;
 	}
 	

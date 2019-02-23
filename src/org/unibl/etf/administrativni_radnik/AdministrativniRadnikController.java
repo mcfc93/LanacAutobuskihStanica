@@ -8,7 +8,6 @@ import org.unibl.etf.prijava.PrijavaController;
 import org.unibl.etf.util.Util;
 
 import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

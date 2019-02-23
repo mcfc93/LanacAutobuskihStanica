@@ -304,7 +304,6 @@ public class ProdajaKarataController implements Initializable {
 						//daniUSedmici = karta.getRelacija().getDani();
 						//if(Praznik.getHolidayList().stream().noneMatch(p -> p.getDan()==datum.getValue().getDayOfMonth() & p.getMjesec()==datum.getValue().getMonthValue())) 
 						//{	
-							System.out.println(karta.getRelacija().getDani() + karta.getRelacija().getVrijemePolaska());
 							//if(zadovoljavaDatumVrijeme(daniUSedmici, karta.getRelacija().getVrijemePolaska())) {
 							if(zadovoljavaVrijeme(karta.getRelacija().getVrijemePolaska())) {
 								if(povratnaKartaCheckBox.isSelected())
@@ -502,7 +501,7 @@ public class ProdajaKarataController implements Initializable {
 					}
 					MjesecnaKartaController.karta.setJIBStanice(PrijavaController.autobuskaStanica.getJib());
 
-					MjesecnaKartaController.datum = LocalDate.now();
+				//	MjesecnaKartaController.datum = LocalDate.now();
 
 					showPotvrda();
 				}
@@ -531,7 +530,7 @@ public class ProdajaKarataController implements Initializable {
 					MjesecnaKartaController.karta = new MjesecnaKarta(karta.getRelacija(),imeTextField.getText(),prezimeTextField.getText(),odabranaSlika,karta.getRelacija().getLinija().getPrevoznik().getNaziv(),tipKarteComboBox.getValue());
 					// izmjena komentar
 					//MjesecnaKartaController.datum = datum.getValue();
-					MjesecnaKartaController.datum = LocalDate.now();
+				//	MjesecnaKartaController.datum = LocalDate.now();
 					if(showPotvrda()) {
 						Util.getNotifications("Obavještenje", "Karte napravljene.", "Information").show();
 						imeTextField.resetValidation();		

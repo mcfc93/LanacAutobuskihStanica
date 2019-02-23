@@ -263,7 +263,7 @@ public class Prevoznik {
 			if(s.executeUpdate()==1) {
 				s.close();
 				s = Util.prepareStatement(c, sqlPopust, false, (double)(100-djackiPopust)/100, (double)(100-radnickiPopust)/100, (double)(100-penzionerskiPopust)/100, jib);
-				System.out.println(s.executeUpdate());
+				s.executeUpdate();
 				return true;
 			}
 			return false;
@@ -290,7 +290,7 @@ public class Prevoznik {
 			s.execute();
 			s.close();
 			s = Util.prepareStatement(c, sqlPopust, false, (double)(100-djackiPopust)/100, (double)(100-penzionerskiPopust)/100, (double)(100-radnickiPopust)/100, jib);
-			System.out.println(s.executeUpdate());
+			s.executeUpdate();
 			return true;
 		} catch (SQLException e) {
 			Util.LOGGER.log(Level.SEVERE, e.toString(), e);
