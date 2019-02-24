@@ -147,7 +147,7 @@ public class UnosRelacijaController implements Initializable {
     @FXML
     public boolean dalje(ActionEvent e) {
 	    if(timePicker.isFocused() && timePicker.getEditor().getText().matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")) {
-	    		timePicker.setValue(LocalTime.parse(timePicker.getEditor().getText()));
+	    		timePicker.setValue(LocalTime.of(Integer.valueOf(timePicker.getEditor().getText().split(":")[0]), Integer.valueOf(timePicker.getEditor().getText().split(":")[1])));
 		}
 		else {
 			timePicker.setValue(null);
